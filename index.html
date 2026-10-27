@@ -395,7 +395,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 </script>
 <script>
 /* E-posta adresi sayfada yazılı değil; tıklanınca parçalardan birleştirilir (otomatik adres toplayan botlara karşı). */
-document.querySelectorAll(".yaz").forEach((a) => a.addEventListener("click", (e) => {
+document.querySelectorAll(".yaz[data-k]").forEach((a) => a.addEventListener("click", (e) => {
   e.preventDefault();
   location.href = "mailto:" + a.dataset.k + "@" + a.dataset.a + "?subject=" + encodeURIComponent(a.dataset.konu || "");
 }));
