@@ -24,12 +24,12 @@
 /* Kâğıt: kareli defter. Mürekkep: mavi tükenmez. Vurgu: kırmızı başlık kalemi. */
 :root {
   --kagit: #f5f7fa; --kare: #dde5ef; --kare-kalin: #c9d5e4;
-  --murekkep: #1d3b8b; --metin: #1b2433; --kursun: #5c6778; --kirmizi: #c8323b;
+  --murekkep: #1d3b8b; --metin: #1b2433; --kursun: #5c6778; --kirmizi: #c8323b; --turuncu: #e08a1e;
   --yazi: "Onest", "Segoe UI", system-ui, sans-serif; --baslik: "Bricolage", "Arial Black", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; color-scheme: dark; } }
-:root[data-theme="dark"] { --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; color-scheme: dark; }
+  --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --turuncu: #ffb04a; color-scheme: dark; } }
+:root[data-theme="dark"] { --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --turuncu: #ffb04a; color-scheme: dark; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -64,10 +64,12 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 .d-mavi { color: var(--murekkep); } .d-kirmizi { color: var(--kirmizi); } .d-kursun { color: var(--kursun); font-weight: 400; }
 .d1 { top: 4%; left: 2%; font-size: clamp(1.05rem, 2.4vw, 1.5rem); transform: rotate(-4deg); }
 .d2 { top: 9%; right: 0; font-size: clamp(.95rem, 2vw, 1.25rem); transform: rotate(3deg); }
-.d3 { bottom: 13%; left: 0; font-size: clamp(.95rem, 2vw, 1.2rem); transform: rotate(2deg); }
+.d3 { bottom: 15%; right: 3%; font-size: clamp(.95rem, 2vw, 1.2rem); transform: rotate(2deg); }
 .d4 { bottom: 4%; right: 2%; font-size: clamp(1.05rem, 2.4vw, 1.45rem); transform: rotate(-3deg); }
 .d5 { top: 47%; right: -2%; font-size: clamp(.85rem, 1.7vw, 1rem); transform: rotate(90deg); transform-origin: right center; }
-.d6 { top: 40%; left: -1%; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-6deg); }
+.d6 { top: 30%; left: 0; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-6deg); }
+.medar-ad { position: absolute; left: 23%; bottom: 1%; transform: translateX(-50%); font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: clamp(.95rem, 2vw, 1.15rem); color: var(--metin); white-space: nowrap; pointer-events: none; letter-spacing: .04em; }
+.medar-ad small { display: block; font-style: normal; font-family: var(--yazi); font-size: .62em; letter-spacing: .02em; color: var(--kursun); text-align: center; margin-top: 2px; }
 figure { margin: 0; }
 figcaption { font-size: .9rem; color: var(--kursun); margin-top: 6px; }
 figcaption a { color: var(--murekkep); }
@@ -100,6 +102,7 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 .adres { grid-row: span 2; font-size: .95rem; color: var(--murekkep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; white-space: nowrap; }
 .durum { grid-row: span 2; font-size: .95rem; color: var(--kirmizi); white-space: nowrap; }
 .proje.yakinda h3 { color: var(--kursun); }
+.proje p a { color: var(--murekkep); text-underline-offset: 3px; }
 
 footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
 
@@ -120,10 +123,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <div>
     <h1>Muhsin <span>ENGİN</span></h1>
     <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
-    <p class="tanitim-ek">BİLSEM'de öğrencilerle bilim projeleri yürütüyor, proje yazım süreçlerinde danışmanlık yapıyorum. Buradaki her şey ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
+    <p class="tanitim-ek">BİLSEM'de öğrencilerle bilim projeleri yürütüyor, proje yazım süreçlerinde danışmanlık yapıyorum. Buradaki eğitim araçları ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
   <figure class="cizim-kutu">
-    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler. Sürükleyerek çevrilebilir.">
+    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler; köşede üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
       <canvas id="tuval"></canvas>
       <span class="denklem d1 d-mavi">e<sup>iπ</sup> + 1 = 0</span>
       <span class="denklem d2 d-kirmizi">V − E + F = 2</span>
@@ -131,14 +134,15 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <span class="denklem d4 d-mavi">∑ 1/n² = π²/6</span>
       <span class="denklem d5 d-kursun">20 − 30 + 12 = 2</span>
       <span class="denklem d6 d-kirmizi">a² + b² = c²</span>
+      <span class="medar-ad">MEDAR<small>Dynamic Array Rotation</small></span>
     </div>
-    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Şekli sürükleyerek çevirebilirsin.</figcaption>
+    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Köşedeki altıgen, üçgenleri 120° dönen oyunum MEDAR'ın tahtası. Cismi sürükleyerek çevirebilirsin.</figcaption>
   </figure>
 </header>
 
 <main class="icindekiler">
   <h2>Projeler</h2>
-  <p class="aciklama">Hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir.</p>
+  <p class="aciklama">Araçların hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir.</p>
   <ul class="liste">
     <li class="proje"><a href="https://masterclass.muhsinengin.com/">
       <svg viewBox="14 8 34 34" aria-hidden="true"><circle class="dolu" cx="28" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="22" r="2.6"/><circle class="dolu" cx="28" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="22" r="2.6"/><circle class="dolu" cx="22" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="34" r="2.6"/><circle class="dolu" cx="28" cy="34" r="2.6"/><circle class="dolu" cx="34" cy="34" r="2.6"/><circle class="dolu" cx="40" cy="34" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="28" r="2.6"/><circle class="dolu" cx="40" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="16" r="2.6"/><path d="M28 28 h6 v-6 h-12 v12 h18 v-18"/></svg>
@@ -156,6 +160,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
       <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
       <p>Telefonun mikrofonuyla topun yere çarpma seslerini dinleyip sekme katsayısını ölçen bir saha aracı. Fizik dersinde deney defteri gibi kullanılır.</p></a></li>
+    <li class="proje"><div>
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L47 17 V39 L28 50 L9 39 V17 Z"/><path d="M28 28 L28 6 M28 28 L47 17 M28 28 L47 39 M28 28 L28 50 M28 28 L9 39 M28 28 L9 17"/><path class="kirmizi" d="M44 26 A 9 9 0 1 1 40 20"/><path class="dolu kirmizi" d="M37.6 16.4 l5.6 1.4 -3.2 4.6 z"/><circle class="dolu" cx="20" cy="21" r="2.6"/><circle class="dolu" cx="21" cy="37" r="2.6"/><circle class="dolu kirmizi" cx="33" cy="43" r="2.6"/></svg>
+      <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
+      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. Yayıncılar ve iş birliği için: <a href="mailto:enginmuhsin@gmail.com?subject=MEDAR">enginmuhsin@gmail.com</a></p></div></li>
     <li class="proje yakinda"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 8 h26 l8 8 v32 h-34 z"/><path d="M38 8 v8 h8"/><path d="M19 26 h18 M19 33 h18 M19 40 h11"/><circle class="dolu kirmizi" cx="42" cy="42" r="4"/></svg>
       <h3>PİKRAM</h3><span class="durum">Hazırlanıyor</span>
@@ -187,8 +195,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   function don(p) {
     let [x, y, z] = p; const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
     [x, z] = [x * cy + z * sy, -x * sy + z * cy]; [y, z] = [y * cx - z * sx, y * sx + z * cx];
-    const s = Math.min(W, H) * .2, p3 = 5 / (5 - z * .55);
-    return { x: W / 2 + x * s * p3, y: H / 2 + y * s * p3, z };
+    const s = Math.min(W, H) * .16, p3 = 5 / (5 - z * .55);
+    return { x: W * .6 + x * s * p3, y: H * .37 + y * s * p3, z };
   }
   function ciz(V, E, rk, kalin) {
     const P = V.map(don);
@@ -205,8 +213,65 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     const P = ciz(D, DE, mavi, 2.4); ciz(kup, KE, kirmizi, 2.2);
     g.globalAlpha = 1; g.fillStyle = mavi; P.forEach((p) => { g.globalAlpha = .3 + .7 * (p.z + f) / (2 * f); g.beginPath(); g.arc(p.x, p.y, 2.6, 0, 7); g.fill(); });
     g.globalAlpha = 1;
+    medar(mavi, kirmizi, renk("--turuncu"));
   }
+
+  /* MEDAR tahtası: altıgen, merkezde buluşan 6 eşkenar üçgen, her üçgende 3 delik + ortada sabit pim.
+     Masaya yatırılmış gibi eğik görünür; sırayla bir üçgen kendi pimi etrafında 120° döner, taşlar da onunla. */
+  const ucgenler = [];
+  for (let i = 0; i < 6; i++) {
+    const a1 = (i * 60 - 90) * Math.PI / 180, a2 = ((i + 1) * 60 - 90) * Math.PI / 180;
+    const V = [[0, 0], [Math.cos(a1), Math.sin(a1)], [Math.cos(a2), Math.sin(a2)]];
+    const G = [(V[1][0] + V[2][0]) / 3, (V[1][1] + V[2][1]) / 3];
+    ucgenler.push({ V, G, tas: [null, null, null, null] });
+  }
+  // Örnek dizilim (sadece görsel): m = mavi, b = boş halka (beyaz taş), t = turuncu tarafsız
+  [[null, "m", null, "b"], [null, null, "m", null], ["t", "b", null, null], [null, "m", null, "b"], [null, null, "b", null], [null, "t", "m", null]]
+    .forEach((d, i) => { ucgenler[i].tas = d; });
+  const deliklerOf = (u) => [u.G, ...u.V.map((v) => [u.G[0] + (v[0] - u.G[0]) * .62, u.G[1] + (v[1] - u.G[1]) * .62])];
+  let tahtaAci = 0, donen = 0, donus = 0, bekle = 40;
+  function medar(mavi, kirmizi, turuncu) {
+    const R = Math.min(W, H) * .2, cx = W * .23, cy = H * .73, egim = .58;
+    const yer = (x, y) => { const c = Math.cos(tahtaAci), s = Math.sin(tahtaAci); return [cx + (x * c - y * s) * R, cy + (x * s + y * c) * R * egim]; };
+    const cevir = (p, G, a) => { const c = Math.cos(a), s = Math.sin(a), x = p[0] - G[0], y = p[1] - G[1]; return [G[0] + x * c - y * s, G[1] + x * s + y * c]; };
+    g.lineJoin = "round";
+    // dış altıgen gölgesi
+    g.globalAlpha = .1; g.fillStyle = mavi; g.beginPath();
+    for (let i = 0; i < 6; i++) { const a = (i * 60 - 90) * Math.PI / 180, q = yer(Math.cos(a) * 1.08, Math.sin(a) * 1.08); i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]); }
+    g.closePath(); g.fill();
+    ucgenler.forEach((u, i) => {
+      const a = i === donen ? yumusak(donus) * 2 * Math.PI / 3 : 0, aktif = i === donen && donus > 0 && donus < 1;
+      const nok = u.V.map((v) => yer(...cevir(v, u.G, a)));
+      g.globalAlpha = aktif ? 1 : .8; g.strokeStyle = aktif ? kirmizi : mavi; g.lineWidth = aktif ? 2.4 : 1.8;
+      g.beginPath(); g.moveTo(...nok[0]); g.lineTo(...nok[1]); g.lineTo(...nok[2]); g.closePath(); g.stroke();
+      const delikler = deliklerOf(u);
+      delikler.forEach((d, j) => {
+        const [x, y] = yer(...cevir(d, u.G, a)), r = R * .075;
+        g.globalAlpha = .55; g.strokeStyle = mavi; g.lineWidth = 1;
+        g.beginPath(); g.ellipse(x, y, r, r * egim, 0, 0, 7); g.stroke();
+        const t = u.tas[j]; if (!t) return;
+        g.globalAlpha = 1; const tr = R * .1;
+        if (t === "b") { g.fillStyle = getComputedStyle(document.body).backgroundColor; g.strokeStyle = mavi; g.lineWidth = 1.8; g.beginPath(); g.ellipse(x, y - 1.5, tr, tr * egim, 0, 0, 7); g.fill(); g.stroke(); }
+        else { g.fillStyle = t === "t" ? turuncu : mavi; g.beginPath(); g.ellipse(x, y - 1.5, tr, tr * egim, 0, 0, 7); g.fill(); }
+      });
+    });
+    g.globalAlpha = 1;
+  }
+  function medarIlerle() {
+    tahtaAci += .0016;
+    if (bekle > 0) { bekle--; return; }
+    donus = Math.min(1, donus + .022);
+    if (donus >= 1) {
+      // 120° dönüşte her delik başka bir deliğin yerine oturur; taşları o deliğe taşı
+      const u = ucgenler[donen], D = deliklerOf(u), c = Math.cos(2 * Math.PI / 3), s = Math.sin(2 * Math.PI / 3), yeni = [null, null, null, null];
+      D.forEach((d, j) => { const x = u.G[0] + (d[0] - u.G[0]) * c - (d[1] - u.G[1]) * s, y = u.G[1] + (d[0] - u.G[0]) * s + (d[1] - u.G[1]) * c;
+        let k = 0, en = 9; D.forEach((e, m) => { const h = Math.hypot(e[0] - x, e[1] - y); if (h < en) { en = h; k = m; } }); yeni[k] = u.tas[j]; });
+      u.tas = yeni; donus = 0; donen = (donen + 1) % 6; bekle = 55;
+    }
+  }
+  const yumusak = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function dongu() {
+    if (!az.matches) medarIlerle();
     if (!surukle) { ay += vy; ax += vx; vx *= .96; if (Math.abs(vy) > .0035) vy *= .97; else if (!az.matches) vy = .0035; else vy = 0; }
     kare(); if (!az.matches || surukle || Math.abs(vy) > 1e-4 || Math.abs(vx) > 1e-4) requestAnimationFrame(dongu); else bekliyor = true;
   }
