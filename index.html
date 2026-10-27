@@ -71,14 +71,14 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 .d4 { bottom: 3%; right: 1%; font-size: clamp(1.05rem, 2.4vw, 1.4rem); transform: rotate(-3deg); }
 .d5 { top: 8%; left: 1%; font-size: clamp(.8rem, 1.6vw, .95rem); transform: rotate(-2deg); }
 .d6 { top: 1%; left: 31%; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-5deg); }
-.medar { position: absolute; left: -4%; bottom: 9%; width: 50%; aspect-ratio: 1; perspective: 900px; pointer-events: none; }
-.medar-egim { width: 100%; height: 100%; transform: rotateX(44deg); transform-style: preserve-3d; }
+/* MEDAR tahtası: koordinat sisteminin orijininde, cismin arkasında. Dış çemberi birim çemberle çakışır. */
+.medar { position: absolute; left: 31.25%; top: 14.25%; width: 57.5%; aspect-ratio: 1; pointer-events: none; opacity: .42; }
+.medar .disk { fill: color-mix(in srgb, #1f2a5c 10%, transparent); stroke-width: 4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .medar { opacity: .5; } :root:not([data-theme="light"]) .medar .disk { fill: url(#mWo); stroke-width: 2.5; } }
+:root[data-theme="dark"] .medar { opacity: .5; } :root[data-theme="dark"] .medar .disk { fill: url(#mWo); stroke-width: 2.5; }
 .medar-tahta { width: 100%; height: 100%; display: block; overflow: visible; }
-.medar-golge { position: absolute; left: 6%; right: 6%; top: 34%; bottom: 20%; border-radius: 50%; background: radial-gradient(closest-side, rgba(8, 14, 40, .38), transparent); filter: blur(6px); transform: translateY(14%); }
-@media (prefers-reduced-motion: no-preference) { .medar-tahta { animation: medarDon 80s linear infinite; } }
+@media (prefers-reduced-motion: no-preference) { .medar-tahta { animation: medarDon 90s linear infinite; } }
 @keyframes medarDon { to { transform: rotate(360deg); } }
-.medar-ad { position: absolute; left: 22%; bottom: 0; transform: translateX(-50%); font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: clamp(.95rem, 2vw, 1.15rem); color: var(--metin); white-space: nowrap; pointer-events: none; letter-spacing: .04em; }
-.medar-ad small { display: block; font-style: normal; font-family: var(--yazi); font-size: .62em; letter-spacing: .02em; color: var(--kursun); text-align: center; margin-top: 2px; }
 @media (prefers-reduced-motion: no-preference) {
   .denklem { animation: suz 7s ease-in-out infinite; }
   .d2 { animation-duration: 8.5s; animation-delay: -2s; } .d3 { animation-duration: 6.5s; animation-delay: -4s; }
@@ -92,6 +92,12 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 .proje .yaz:not(.yaz-dolu):hover { background: var(--murekkep); color: var(--kagit); }
 .proje .yaz.yaz-dolu svg * { fill: currentColor; stroke: none; }
 .dugmeler { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 8px; }
+.posta { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 12px; border: 1.5px dashed var(--murekkep); border-radius: 12px; background: color-mix(in srgb, var(--kagit) 88%, var(--murekkep)); }
+.posta[hidden] { display: none; }
+.posta-adres { color: var(--metin); font-weight: 700; user-select: all; overflow-wrap: anywhere; }
+.posta-satir { display: flex; flex-wrap: wrap; gap: 6px; }
+.proje .posta-btn { font: inherit; font-size: .88rem; font-weight: 700; color: var(--murekkep); background: none; border: 1.5px solid var(--murekkep); border-radius: 999px; padding: 2px 11px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.proje .posta-btn:hover { background: var(--murekkep); color: var(--kagit); }
 .soluk-not { margin-left: 4px; }
 .proje .yaz svg { width: 15px; height: 15px; grid-row: auto; flex: none; }
 .proje .yaz svg * { stroke: currentColor; stroke-width: 2; fill: none; }
@@ -154,7 +160,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <p class="tanitim-ek">BİLSEM'de öğrencilerle bilim projeleri yürütüyor, proje yazım süreçlerinde danışmanlık yapıyorum. Buradaki eğitim araçları ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
   <figure class="cizim-kutu">
-    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler; köşede üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
+    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler; arkada üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
+      <div class="medar" aria-hidden="true"><svg class="medar-tahta" id="medarTahta" viewBox="110 90 600 600"></svg></div>
       <canvas id="tuval"></canvas>
       <span class="denklem d1 d-mavi">e<sup>iπ</sup> + 1 = 0</span>
       <span class="denklem d2 d-kirmizi">V − E + F = 2</span>
@@ -162,10 +169,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <span class="denklem d4 d-mavi">∑ 1/n² = π²/6</span>
       <span class="denklem d5 d-kursun">20 − 30 + 12 = 2</span>
       <span class="denklem d6 d-kirmizi">a² + b² = c²</span>
-      <div class="medar" aria-hidden="true"><div class="medar-golge"></div><div class="medar-egim"><svg class="medar-tahta" id="medarTahta" viewBox="110 90 600 600"></svg></div></div>
-      <span class="medar-ad">MEDAR<small>Dynamic Array Rotation</small></span>
     </div>
-    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Köşedeki tahta, üçgenleri 120° dönen oyunum MEDAR. Cismi sürükleyerek çevirebilirsin.</figcaption>
+    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Cismin arkasında, kenarı birim çembere oturan tahta da oyunum MEDAR; üçgenleri sırayla 120° döner. Cismi sürükleyerek çevirebilirsin.</figcaption>
   </figure>
 </header>
 
@@ -341,7 +346,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <linearGradient id="mNa" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f7c6d9" stop-opacity="0"/><stop offset=".35" stop-color="#f2c9dc" stop-opacity=".55"/><stop offset=".6" stop-color="#bfe7ea" stop-opacity=".6"/><stop offset="1" stop-color="#d9d2ff" stop-opacity="0"/></linearGradient>
   </defs>`;
   const PIRINC = "#c9a24b", P1 = "#ff7a66", P2 = "#4cc3b5";
-  el("circle", { cx: O[0], cy: O[1], r: 292, fill: "url(#mWo)", stroke: PIRINC, "stroke-width": 2.5 });
+  el("circle", { class: "disk", cx: O[0], cy: O[1], r: 292, fill: "url(#mWo)", stroke: PIRINC, "stroke-width": 2.5 });
   el("circle", { cx: O[0], cy: O[1], r: 284, fill: "none", stroke: PIRINC, "stroke-opacity": .35 });
   el("circle", { cx: O[0], cy: O[1], r: 254, fill: "none", stroke: PIRINC, "stroke-opacity": .25 });
   // dış halkadaki elmas işaretler (hamle sayacı gibi): ilk yarısı oyuncu renkleriyle dolu
@@ -395,10 +400,28 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 </script>
 <script>
 /* E-posta adresi sayfada yazılı değil; tıklanınca parçalardan birleştirilir (otomatik adres toplayan botlara karşı). */
-document.querySelectorAll(".yaz[data-k]").forEach((a) => a.addEventListener("click", (e) => {
-  e.preventDefault();
-  location.href = "mailto:" + a.dataset.k + "@" + a.dataset.a + "?subject=" + encodeURIComponent(a.dataset.konu || "");
-}));
+/* Tıklayınca küçük bir pencere açılır: adresi kopyala, Gmail'de yaz ya da bilgisayardaki e-posta uygulamasıyla aç. */
+document.querySelectorAll(".yaz[data-k]").forEach((a) => {
+  const kutu = document.createElement("span"); kutu.className = "posta"; kutu.hidden = true; kutu.setAttribute("role", "dialog"); kutu.setAttribute("aria-label", "E-posta adresi");
+  a.after(kutu);
+  a.setAttribute("aria-expanded", "false");
+  a.addEventListener("click", (e) => {
+    e.preventDefault();
+    const adres = a.dataset.k + "@" + a.dataset.a, konu = encodeURIComponent(a.dataset.konu || "");
+    if (!kutu.firstChild) {
+      kutu.innerHTML = `<b class="posta-adres"></b><span class="posta-satir"><button type="button" class="posta-btn" data-is="kopya">Adresi kopyala</button><a class="posta-btn" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&fs=1&to=${adres}&su=${konu}">Gmail ile yaz</a><a class="posta-btn" href="mailto:${adres}?subject=${konu}">E-posta uygulaması</a></span>`;
+      kutu.querySelector(".posta-adres").textContent = adres;
+      kutu.querySelector("[data-is=kopya]").addEventListener("click", async (ev) => {
+        const b = ev.currentTarget;
+        try { await navigator.clipboard.writeText(adres); b.textContent = "Kopyalandı ✓"; }
+        catch { const r = document.createRange(); r.selectNodeContents(kutu.querySelector(".posta-adres")); const sec = getSelection(); sec.removeAllRanges(); sec.addRange(r); b.textContent = "Seçildi, Ctrl+C"; }
+        setTimeout(() => { b.textContent = "Adresi kopyala"; }, 2200);
+      });
+    }
+    kutu.hidden = !kutu.hidden; a.setAttribute("aria-expanded", String(!kutu.hidden));
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !kutu.hidden) { kutu.hidden = true; a.setAttribute("aria-expanded", "false"); a.focus(); } });
+});
 </script>
 </body>
 </html>
