@@ -55,6 +55,13 @@ a { color: inherit; }
 #zemin { position: absolute; z-index: -1; top: 0; left: 0; width: 100%; height: calc(100% + 20px); pointer-events: none;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); }
 body { overflow-x: clip; }
+/* Defter ayracı gibi üst sekmeler */
+.ayrac { display: flex; justify-content: flex-end; gap: 6px; padding-top: 18px; flex-wrap: wrap; }
+.ayrac a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep);
+  background: var(--kagit); color: var(--murekkep); }
+.ayrac a[aria-current="page"] { border-bottom-color: var(--kirmizi); color: var(--metin); }
+.ayrac a:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
+@media (max-width: 760px) { .ayrac { justify-content: flex-start; padding-left: 14px; } }
 h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 500; font-style: italic; font-size: clamp(2.8rem, 8vw, 5.6rem); line-height: 1; letter-spacing: -.01em; margin: 0 0 22px; color: var(--metin); font-variation-settings: "SOFT" 100; }
 h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: .06em; color: var(--murekkep); margin-top: .04em; }
 .tanitim { font-size: clamp(1.05rem, 2.2vw, 1.3rem); max-width: 34ch; margin: 0 0 14px; }
@@ -152,6 +159,11 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <body>
 <div class="sayfa"><div class="ic">
 
+<nav class="ayrac" aria-label="Bölümler">
+  <a href="#projeler" aria-current="page">Projeler</a>
+  <a href="https://masterclass.muhsinengin.com/bilsem/">BİLSEM Öğretmenleri <span aria-hidden="true">↗</span></a>
+</nav>
+
 <header class="acilis">
   <canvas id="zemin" aria-hidden="true"></canvas>
   <div>
@@ -174,7 +186,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   </figure>
 </header>
 
-<main class="icindekiler">
+<main class="icindekiler" id="projeler">
   <h2>Projeler</h2>
   <p class="aciklama">Araçların hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir.</p>
   <ul class="liste">
@@ -182,6 +194,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="14 8 34 34" aria-hidden="true"><circle class="dolu" cx="28" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="22" r="2.6"/><circle class="dolu" cx="28" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="22" r="2.6"/><circle class="dolu" cx="22" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="34" r="2.6"/><circle class="dolu" cx="28" cy="34" r="2.6"/><circle class="dolu" cx="34" cy="34" r="2.6"/><circle class="dolu" cx="40" cy="34" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="28" r="2.6"/><circle class="dolu" cx="40" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="16" r="2.6"/><path d="M28 28 h6 v-6 h-12 v12 h18 v-18"/></svg>
       <h3>Master Class: Sayılar ve DNA'ları</h3><span class="adres">masterclass.muhsinengin.com</span>
       <p>Asal sayıları, bölenleri ve fonksiyonların büyümesini oyunlarla, 3B görsellerle ve sıralama tablosuyla keşfetmek için.</p></a></li>
+    <li class="proje"><a href="https://masterclass.muhsinengin.com/bilsem/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M10 8 h30 a4 4 0 0 1 4 4 v36 h-30 a4 4 0 0 1 -4 -4 z"/><path d="M10 40 a4 4 0 0 1 4 -4 h30"/><path class="kirmizi" d="M18 16 h18 M18 23 h12"/><path class="kirmizi" d="M44 16 l6 -4 v14 l-6 -4"/><circle class="dolu" cx="20" cy="30" r="2"/></svg>
+      <h3>BİLSEM Öğretmen Masası</h3><span class="adres">masterclass.muhsinengin.com/bilsem</span>
+      <p>Destek, BYF, ÖYG ve PÜY yıllık planlarındaki her kazanım için akıllı tahtada açılan etkinlik ve ders akışı. Kazanımı deftere kopyala, etkinliğe tek dokunuşla geç.</p></a></li>
     <li class="proje"><a href="https://masterclass.muhsinengin.com/geometri/">
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 8 L16 46 M28 8 L40 46 M21 30 h14"/><circle class="dolu" cx="28" cy="8" r="2.4"/><path class="kirmizi" d="M10 46 A 30 30 0 0 1 46 46"/></svg>
       <h3>Geometri Atölyesi</h3><span class="adres">masterclass.muhsinengin.com/geometri</span>
