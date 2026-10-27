@@ -51,7 +51,10 @@ a { color: inherit; }
 .ic { padding-left: 40px; }
 
 /* ---------- Açılış ---------- */
-.acilis { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px 40px; align-items: center; min-height: min(70vh, 600px); padding-top: 40px; }
+.acilis { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px 40px; align-items: center; min-height: min(70vh, 600px); padding-top: 40px; }
+#zemin { position: absolute; z-index: -1; top: 0; left: 0; width: 100%; height: calc(100% + 20px); pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); }
+body { overflow-x: clip; }
 h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 500; font-style: italic; font-size: clamp(2.8rem, 8vw, 5.6rem); line-height: 1; letter-spacing: -.01em; margin: 0 0 22px; color: var(--metin); font-variation-settings: "SOFT" 100; }
 h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: .06em; color: var(--murekkep); margin-top: .04em; }
 .tanitim { font-size: clamp(1.05rem, 2.2vw, 1.3rem); max-width: 34ch; margin: 0 0 14px; }
@@ -62,14 +65,30 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 .denklem { position: absolute; font-family: var(--baslik); font-weight: 700; white-space: nowrap; pointer-events: none; line-height: 1; letter-spacing: -.01em; }
 .denklem sup { font-size: .62em; vertical-align: .62em; line-height: 0; }
 .d-mavi { color: var(--murekkep); } .d-kirmizi { color: var(--kirmizi); } .d-kursun { color: var(--kursun); font-weight: 400; }
-.d1 { top: 4%; left: 2%; font-size: clamp(1.05rem, 2.4vw, 1.5rem); transform: rotate(-4deg); }
-.d2 { top: 9%; right: 0; font-size: clamp(.95rem, 2vw, 1.25rem); transform: rotate(3deg); }
-.d3 { bottom: 15%; right: 3%; font-size: clamp(.95rem, 2vw, 1.2rem); transform: rotate(2deg); }
-.d4 { bottom: 4%; right: 2%; font-size: clamp(1.05rem, 2.4vw, 1.45rem); transform: rotate(-3deg); }
-.d5 { top: 47%; right: -2%; font-size: clamp(.85rem, 1.7vw, 1rem); transform: rotate(90deg); transform-origin: right center; }
-.d6 { top: 30%; left: 0; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-6deg); }
-.medar-ad { position: absolute; left: 23%; bottom: 1%; transform: translateX(-50%); font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: clamp(.95rem, 2vw, 1.15rem); color: var(--metin); white-space: nowrap; pointer-events: none; letter-spacing: .04em; }
+.d1 { top: 0; left: 1%; font-size: clamp(1.05rem, 2.4vw, 1.45rem); transform: rotate(-4deg); }
+.d2 { top: 0; right: 0; font-size: clamp(.95rem, 2vw, 1.25rem); transform: rotate(3deg); }
+.d3 { bottom: 15%; right: 4%; font-size: clamp(.95rem, 2vw, 1.15rem); transform: rotate(2deg); }
+.d4 { bottom: 3%; right: 1%; font-size: clamp(1.05rem, 2.4vw, 1.4rem); transform: rotate(-3deg); }
+.d5 { top: 8%; left: 1%; font-size: clamp(.8rem, 1.6vw, .95rem); transform: rotate(-2deg); }
+.d6 { top: 1%; left: 31%; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-5deg); }
+.medar { position: absolute; left: -4%; bottom: 9%; width: 50%; aspect-ratio: 1; perspective: 900px; pointer-events: none; }
+.medar-egim { width: 100%; height: 100%; transform: rotateX(44deg); transform-style: preserve-3d; }
+.medar-tahta { width: 100%; height: 100%; display: block; overflow: visible; }
+.medar-golge { position: absolute; left: 6%; right: 6%; top: 34%; bottom: 20%; border-radius: 50%; background: radial-gradient(closest-side, rgba(8, 14, 40, .38), transparent); filter: blur(6px); transform: translateY(14%); }
+@media (prefers-reduced-motion: no-preference) { .medar-tahta { animation: medarDon 80s linear infinite; } }
+@keyframes medarDon { to { transform: rotate(360deg); } }
+.medar-ad { position: absolute; left: 22%; bottom: 0; transform: translateX(-50%); font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: clamp(.95rem, 2vw, 1.15rem); color: var(--metin); white-space: nowrap; pointer-events: none; letter-spacing: .04em; }
 .medar-ad small { display: block; font-style: normal; font-family: var(--yazi); font-size: .62em; letter-spacing: .02em; color: var(--kursun); text-align: center; margin-top: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .denklem { animation: suz 7s ease-in-out infinite; }
+  .d2 { animation-duration: 8.5s; animation-delay: -2s; } .d3 { animation-duration: 6.5s; animation-delay: -4s; }
+  .d4 { animation-duration: 9s; animation-delay: -1s; } .d6 { animation-duration: 7.5s; animation-delay: -3s; } .d5 { animation-duration: 8s; animation-delay: -5s; }
+}
+@keyframes suz { 50% { translate: 0 -7px; } }
+.yaz { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 1px 12px 2px; border: 1.5px solid var(--murekkep); border-radius: 999px; color: var(--murekkep); text-decoration: none; font-weight: 700; font-size: .92rem; white-space: nowrap; }
+.yaz:hover { background: var(--murekkep); color: var(--kagit); }
+.proje .yaz svg { width: 15px; height: 15px; grid-row: auto; flex: none; }
+.proje .yaz svg * { stroke: currentColor; stroke-width: 2; fill: none; }
 figure { margin: 0; }
 figcaption { font-size: .9rem; color: var(--kursun); margin-top: 6px; }
 figcaption a { color: var(--murekkep); }
@@ -109,6 +128,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 @media (max-width: 760px) {
   body { font-size: 17px; }
   .acilis { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-top: 36px; }
+  #zemin { -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 46%, #000 54%); mask-image: linear-gradient(180deg, transparent 0, transparent 46%, #000 54%); }
   .cizim-kutu { max-width: 420px; }
   .proje > a, .proje > div { grid-template-columns: 48px minmax(0, 1fr); padding: 16px 4px; }
   .proje svg { width: 44px; height: 44px; }
@@ -120,6 +140,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <div class="sayfa"><div class="ic">
 
 <header class="acilis">
+  <canvas id="zemin" aria-hidden="true"></canvas>
   <div>
     <h1>Muhsin <span>ENGİN</span></h1>
     <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
@@ -134,9 +155,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <span class="denklem d4 d-mavi">∑ 1/n² = π²/6</span>
       <span class="denklem d5 d-kursun">20 − 30 + 12 = 2</span>
       <span class="denklem d6 d-kirmizi">a² + b² = c²</span>
+      <div class="medar" aria-hidden="true"><div class="medar-golge"></div><div class="medar-egim"><svg class="medar-tahta" id="medarTahta" viewBox="110 90 600 600"></svg></div></div>
       <span class="medar-ad">MEDAR<small>Dynamic Array Rotation</small></span>
     </div>
-    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Köşedeki altıgen, üçgenleri 120° dönen oyunum MEDAR'ın tahtası. Cismi sürükleyerek çevirebilirsin.</figcaption>
+    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Köşedeki tahta, üçgenleri 120° dönen oyunum MEDAR. Cismi sürükleyerek çevirebilirsin.</figcaption>
   </figure>
 </header>
 
@@ -163,7 +185,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <li class="proje"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L47 17 V39 L28 50 L9 39 V17 Z"/><path d="M28 28 L28 6 M28 28 L47 17 M28 28 L47 39 M28 28 L28 50 M28 28 L9 39 M28 28 L9 17"/><path class="kirmizi" d="M44 26 A 9 9 0 1 1 40 20"/><path class="dolu kirmizi" d="M37.6 16.4 l5.6 1.4 -3.2 4.6 z"/><circle class="dolu" cx="20" cy="21" r="2.6"/><circle class="dolu" cx="21" cy="37" r="2.6"/><circle class="dolu kirmizi" cx="33" cy="43" r="2.6"/></svg>
       <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
-      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. Yayıncılar ve iş birliği için: <a href="mailto:enginmuhsin@gmail.com?subject=MEDAR">enginmuhsin@gmail.com</a></p></div></li>
+      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. Yayıncılar ve iş birliği için <a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></p></div></li>
     <li class="proje yakinda"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 8 h26 l8 8 v32 h-34 z"/><path d="M38 8 v8 h8"/><path d="M19 26 h18 M19 33 h18 M19 40 h11"/><circle class="dolu kirmizi" cx="42" cy="42" r="4"/></svg>
       <h3>PİKRAM</h3><span class="durum">Hazırlanıyor</span>
@@ -195,8 +217,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   function don(p) {
     let [x, y, z] = p; const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
     [x, z] = [x * cy + z * sy, -x * sy + z * cy]; [y, z] = [y * cx - z * sx, y * sx + z * cx];
-    const s = Math.min(W, H) * .16, p3 = 5 / (5 - z * .55);
-    return { x: W * .6 + x * s * p3, y: H * .37 + y * s * p3, z };
+    const s = Math.min(W, H) * .145, p3 = 5 / (5 - z * .55);
+    return { x: W * .6 + x * s * p3, y: H * .43 + y * s * p3, z };
   }
   function ciz(V, E, rk, kalin) {
     const P = V.map(don);
@@ -210,65 +232,73 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   function kare() {
     g.clearRect(0, 0, W, H); g.lineCap = "round";
     const mavi = renk("--murekkep"), kirmizi = renk("--kirmizi");
+    zeminCiz(mavi, kirmizi, renk("--kursun"));
     const P = ciz(D, DE, mavi, 2.4); ciz(kup, KE, kirmizi, 2.2);
     g.globalAlpha = 1; g.fillStyle = mavi; P.forEach((p) => { g.globalAlpha = .3 + .7 * (p.z + f) / (2 * f); g.beginPath(); g.arc(p.x, p.y, 2.6, 0, 7); g.fill(); });
     g.globalAlpha = 1;
-    medar(mavi, kirmizi, renk("--turuncu"));
   }
 
-  /* MEDAR tahtası: altıgen, merkezde buluşan 6 eşkenar üçgen, her üçgende 3 delik + ortada sabit pim.
-     Masaya yatırılmış gibi eğik görünür; sırayla bir üçgen kendi pimi etrafında 120° döner, taşlar da onunla. */
-  const ucgenler = [];
-  for (let i = 0; i < 6; i++) {
-    const a1 = (i * 60 - 90) * Math.PI / 180, a2 = ((i + 1) * 60 - 90) * Math.PI / 180;
-    const V = [[0, 0], [Math.cos(a1), Math.sin(a1)], [Math.cos(a2), Math.sin(a2)]];
-    const G = [(V[1][0] + V[2][0]) / 3, (V[1][1] + V[2][1]) / 3];
-    ucgenler.push({ V, G, tas: [null, null, null, null] });
-  }
-  // Örnek dizilim (sadece görsel): m = mavi, b = boş halka (beyaz taş), t = turuncu tarafsız
-  [[null, "m", null, "b"], [null, null, "m", null], ["t", "b", null, null], [null, "m", null, "b"], [null, null, "b", null], [null, "t", "m", null]]
-    .forEach((d, i) => { ucgenler[i].tas = d; });
-  const deliklerOf = (u) => [u.G, ...u.V.map((v) => [u.G[0] + (v[0] - u.G[0]) * .62, u.G[1] + (v[1] - u.G[1]) * .62])];
-  let tahtaAci = 0, donen = 0, donus = 0, bekle = 40;
-  function medar(mavi, kirmizi, turuncu) {
-    const R = Math.min(W, H) * .2, cx = W * .23, cy = H * .73, egim = .58;
-    const yer = (x, y) => { const c = Math.cos(tahtaAci), s = Math.sin(tahtaAci); return [cx + (x * c - y * s) * R, cy + (x * s + y * c) * R * egim]; };
-    const cevir = (p, G, a) => { const c = Math.cos(a), s = Math.sin(a), x = p[0] - G[0], y = p[1] - G[1]; return [G[0] + x * c - y * s, G[1] + x * s + y * c]; };
-    g.lineJoin = "round";
-    // dış altıgen gölgesi
-    g.globalAlpha = .1; g.fillStyle = mavi; g.beginPath();
-    for (let i = 0; i < 6; i++) { const a = (i * 60 - 90) * Math.PI / 180, q = yer(Math.cos(a) * 1.08, Math.sin(a) * 1.08); i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]); }
-    g.closePath(); g.fill();
-    ucgenler.forEach((u, i) => {
-      const a = i === donen ? yumusak(donus) * 2 * Math.PI / 3 : 0, aktif = i === donen && donus > 0 && donus < 1;
-      const nok = u.V.map((v) => yer(...cevir(v, u.G, a)));
-      g.globalAlpha = aktif ? 1 : .8; g.strokeStyle = aktif ? kirmizi : mavi; g.lineWidth = aktif ? 2.4 : 1.8;
-      g.beginPath(); g.moveTo(...nok[0]); g.lineTo(...nok[1]); g.lineTo(...nok[2]); g.closePath(); g.stroke();
-      const delikler = deliklerOf(u);
-      delikler.forEach((d, j) => {
-        const [x, y] = yer(...cevir(d, u.G, a)), r = R * .075;
-        g.globalAlpha = .55; g.strokeStyle = mavi; g.lineWidth = 1;
-        g.beginPath(); g.ellipse(x, y, r, r * egim, 0, 0, 7); g.stroke();
-        const t = u.tas[j]; if (!t) return;
-        g.globalAlpha = 1; const tr = R * .1;
-        if (t === "b") { g.fillStyle = getComputedStyle(document.body).backgroundColor; g.strokeStyle = mavi; g.lineWidth = 1.8; g.beginPath(); g.ellipse(x, y - 1.5, tr, tr * egim, 0, 0, 7); g.fill(); g.stroke(); }
-        else { g.fillStyle = t === "t" ? turuncu : mavi; g.beginPath(); g.ellipse(x, y - 1.5, tr, tr * egim, 0, 0, 7); g.fill(); }
-      });
-    });
-    g.globalAlpha = 1;
-  }
-  function medarIlerle() {
-    tahtaAci += .0016;
-    if (bekle > 0) { bekle--; return; }
-    donus = Math.min(1, donus + .022);
-    if (donus >= 1) {
-      // 120° dönüşte her delik başka bir deliğin yerine oturur; taşları o deliğe taşı
-      const u = ucgenler[donen], D = deliklerOf(u), c = Math.cos(2 * Math.PI / 3), s = Math.sin(2 * Math.PI / 3), yeni = [null, null, null, null];
-      D.forEach((d, j) => { const x = u.G[0] + (d[0] - u.G[0]) * c - (d[1] - u.G[1]) * s, y = u.G[1] + (d[0] - u.G[0]) * s + (d[1] - u.G[1]) * c;
-        let k = 0, en = 9; D.forEach((e, m) => { const h = Math.hypot(e[0] - x, e[1] - y); if (h < en) { en = h; k = m; } }); yeni[k] = u.tas[j]; });
-      u.tas = yeni; donus = 0; donen = (donen + 1) % 6; bekle = 55;
+  let teta = .9;
+  /* Zemin: kahramanın arkasında, ekranın sağ kenarına kadar uzanan koordinat düzlemi.
+     Orijin onikiyüzlünün merkezinde; birim çember cismi çevreler. Çemberde dönen noktanın yüksekliği sağa taşınır
+     ve sinüs eğrisini kalemle çiziyormuş gibi koyulaştırır. Ayrıca y = cos x ve y = ½ sin 2x. */
+  const zemin = document.getElementById("zemin"), z = zemin.getContext("2d"), acilis = zemin.parentElement;
+  let ZW = 0, ZH = 0;
+  function zeminBoyut() { zemin.style.width = (document.documentElement.clientWidth - acilis.getBoundingClientRect().left) + "px"; const r = zemin.getBoundingClientRect(); ZW = r.width; ZH = r.height; zemin.width = ZW * oran; zemin.height = ZH * oran; z.setTransform(oran, 0, 0, oran, 0, 0); }
+  function zeminCiz(mavi, kirmizi, kursun) {
+    z.clearRect(0, 0, ZW, ZH); if (!ZW) return;
+    const zr = zemin.getBoundingClientRect(), sr = sahne.getBoundingClientRect();
+    const ox = sr.left - zr.left + W * .6, oy = sr.top - zr.top + H * .43, A = Math.min(W, H) * .28, dar = ZW < 600;
+    const x1 = ZW - 26, u = Math.max(30, (x1 - ox) / (2 * Math.PI)), tMin = -ox / u;
+    const X = (t) => ox + t * u, Y = (v) => oy - v * A, yazi = Math.max(10, Math.min(13, W / 38));
+    z.save(); z.lineCap = "round"; z.lineJoin = "round";
+    // kılavuz çizgileri
+    z.strokeStyle = kursun; z.lineWidth = 1; z.globalAlpha = .16; z.setLineDash([2, 6]);
+    for (let k = Math.ceil(tMin / (Math.PI / 2)); k <= 4; k++) { if (!k) continue; const x = X(k * Math.PI / 2); z.beginPath(); z.moveTo(x, Y(1.3)); z.lineTo(x, Y(-1.3)); z.stroke(); }
+    for (const v of [1, -1]) { z.beginPath(); z.moveTo(0, Y(v)); z.lineTo(x1, Y(v)); z.stroke(); }
+    z.setLineDash([]);
+    // eksenler
+    z.globalAlpha = .5; z.lineWidth = 1.4; z.fillStyle = kursun; const yUst = Math.max(8, Y(1.6)), yAlt = Math.min(ZH - 4, Y(-1.5));
+    z.beginPath(); z.moveTo(0, oy); z.lineTo(x1 + 12, oy); z.moveTo(ox, yAlt); z.lineTo(ox, yUst); z.stroke();
+    z.beginPath(); z.moveTo(x1 + 18, oy); z.lineTo(x1 + 8, oy - 4.5); z.lineTo(x1 + 8, oy + 4.5); z.fill();
+    z.beginPath(); z.moveTo(ox, yUst - 6); z.lineTo(ox - 4.5, yUst + 4); z.lineTo(ox + 4.5, yUst + 4); z.fill();
+    z.globalAlpha = .7; z.font = `italic 500 ${yazi + 2}px Fraunces, Georgia, serif`;
+    z.fillText("x", x1 + 4, oy + yazi + 9); z.fillText("y", ox + 9, yUst + 6);
+    z.globalAlpha = .55; z.font = `${yazi}px Onest, system-ui, sans-serif`; z.textAlign = "center";
+    const ad = dar ? { "-2": "−π", 2: "π", 4: "2π" } : { "-4": "−2π", "-3": "−3π/2", "-2": "−π", "-1": "−π/2", 1: "π/2", 2: "π", 3: "3π/2", 4: "2π" };
+    for (let k = Math.ceil(tMin / (Math.PI / 2)); k <= 4; k++) { if (!k || !ad[k]) continue; const x = X(k * Math.PI / 2); z.beginPath(); z.moveTo(x, oy - 4); z.lineTo(x, oy + 4); z.stroke(); z.fillText(ad[k], x, oy + yazi + 8); }
+    z.textAlign = "right"; z.fillText("1", ox - 7, Y(1) - 4); z.fillText("−1", ox - 7, Y(-1) + yazi + 2); z.textAlign = "left";
+    // eğriler
+    const egri = (fn, rk, alfa, kalin, bas, son, kesik) => {
+      z.strokeStyle = rk; z.globalAlpha = alfa; z.lineWidth = kalin; z.setLineDash(kesik || []); z.beginPath();
+      for (let t = bas, i = 0; t <= son + 1e-9; t += 2 / u, i++) { const x = X(t), y = Y(fn(t)); i ? z.lineTo(x, y) : z.moveTo(x, y); }
+      z.stroke(); z.setLineDash([]);
+    };
+    egri((t) => Math.sin(2 * t) / 2, kursun, .35, 1.3, tMin, 2 * Math.PI, [1, 5]);
+    egri(Math.cos, kirmizi, .3, 1.7, tMin, 2 * Math.PI);
+    egri(Math.sin, mavi, .25, 1.7, tMin, 2 * Math.PI);
+    egri(Math.sin, mavi, .7, 2.6, 0, teta);
+    z.font = `italic 500 ${yazi + 3}px Fraunces, Georgia, serif`;
+    z.globalAlpha = .8; z.fillStyle = mavi; z.fillText("y = sin x", X(Math.PI / 2) + 10, Y(1) - 6);
+    if (!dar) {
+      z.textAlign = "right"; z.fillStyle = kirmizi; z.globalAlpha = .7; z.fillText("y = cos x", x1 + 6, Y(1) - 8);
+      z.fillStyle = kursun; z.globalAlpha = .65; z.textAlign = "left"; z.fillText("y = ½ sin 2x", X(5 * Math.PI / 4) - 20, Y(.5) - 10);
     }
+    // birim çember ve onu dolaşan nokta
+    const px = ox + A * Math.cos(teta), py = oy - A * Math.sin(teta), qx = X(teta);
+    z.strokeStyle = kursun; z.globalAlpha = .38; z.lineWidth = 1.3; z.setLineDash([6, 6]); z.beginPath(); z.arc(ox, oy, A, 0, 7); z.stroke(); z.setLineDash([]);
+    z.strokeStyle = kirmizi; z.globalAlpha = .7; z.lineWidth = 1.6; z.beginPath(); z.arc(ox, oy, A * .2, 0, -teta, true); z.stroke();
+    z.font = `italic 500 ${yazi + 1}px Fraunces, Georgia, serif`; z.fillStyle = kirmizi; z.globalAlpha = .85;
+    z.fillText("θ", ox + A * .29 * Math.cos(-teta / 2) - 4, oy + A * .29 * Math.sin(-teta / 2) + 5);
+    z.strokeStyle = kirmizi; z.globalAlpha = .55; z.lineWidth = 1.8; z.beginPath(); z.moveTo(ox, oy); z.lineTo(px, py); z.stroke();
+    z.strokeStyle = mavi; z.globalAlpha = .55; z.lineWidth = 1.2; z.setLineDash([4, 5]);
+    z.beginPath(); z.moveTo(px, py); z.lineTo(qx, py); z.moveTo(qx, py); z.lineTo(qx, oy); z.stroke(); z.setLineDash([]);
+    z.globalAlpha = 1; z.fillStyle = kirmizi; z.beginPath(); z.arc(px, py, 4.5, 0, 7); z.fill();
+    z.fillStyle = mavi; z.beginPath(); z.arc(qx, py, 5, 0, 7); z.fill();
+    z.globalAlpha = .25; z.beginPath(); z.arc(qx, py, 10, 0, 7); z.fill();
+    z.restore();
   }
+  function medarIlerle() { teta += .009; if (teta > 2 * Math.PI) teta -= 2 * Math.PI; }
   const yumusak = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function dongu() {
     if (!az.matches) medarIlerle();
@@ -279,9 +309,89 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   sahne.addEventListener("pointerdown", (e) => { surukle = { x: e.clientX, y: e.clientY }; sahne.setPointerCapture(e.pointerId); uyandir(); });
   sahne.addEventListener("pointermove", (e) => { if (!surukle) return; const dx = e.clientX - surukle.x, dy = e.clientY - surukle.y; ay += dx * .01; ax += dy * .01; vy = dx * .002; vx = dy * .002; surukle = { x: e.clientX, y: e.clientY }; });
   const birak = () => { surukle = null; }; sahne.addEventListener("pointerup", birak); sahne.addEventListener("pointercancel", birak);
-  new ResizeObserver(() => { boyut(); kare(); }).observe(sahne);
-  boyut(); requestAnimationFrame(dongu);
+  new ResizeObserver(() => { boyut(); zeminBoyut(); kare(); }).observe(sahne);
+  new ResizeObserver(() => { zeminBoyut(); kare(); }).observe(acilis);
+  addEventListener("resize", () => { zeminBoyut(); kare(); });
+  boyut(); zeminBoyut(); requestAnimationFrame(dongu);
 })();
+</script>
+<script>
+/* MEDAR tahtası — oyunun kendi sitesindeki tahtayla aynı ölçü ve renkler: lacivert disk, pirinç halkalar,
+   aralarında boşluk olan altı üçgen (krem / lacivert sırayla), her üçgende 3 köşe deliği + ortada pim deliği,
+   parlak taşlar (kırmızı, inci, altın tarafsız). Sırayla bir üçgen kendi merkezi etrafında 120° döner. */
+(function () {
+  const svg = document.getElementById("medarTahta"); if (!svg) return;
+  const NS = "http://www.w3.org/2000/svg", O = [410, 390], KENAR = 201, KAY = 39, ORAN = .69;
+  const el = (ad, at, ana) => { const e = document.createElementNS(NS, ad); for (const k in at) e.setAttribute(k, at[k]); (ana || svg).appendChild(e); return e; };
+  svg.innerHTML = `<defs>
+    <radialGradient id="mWo" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#1f2a5c"/><stop offset=".7" stop-color="#141b40"/><stop offset="1" stop-color="#0b1030"/></radialGradient>
+    <linearGradient id="mDk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a3577"/><stop offset="1" stop-color="#18204d"/></linearGradient>
+    <linearGradient id="mLt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9e2cf"/><stop offset=".55" stop-color="#d4ccb6"/><stop offset="1" stop-color="#b9b199"/></linearGradient>
+    <radialGradient id="mWe" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#03050d"/><stop offset=".75" stop-color="#0c1027"/><stop offset="1" stop-color="#2a2f4a"/></radialGradient>
+    <radialGradient id="mRb" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#f0695a"/><stop offset=".5" stop-color="#a3161c"/><stop offset="1" stop-color="#4f070b"/></radialGradient>
+    <radialGradient id="mNu" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3a6"/><stop offset=".55" stop-color="#f2c41b"/><stop offset="1" stop-color="#a87b00"/></radialGradient>
+    <radialGradient id="mPe" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#ece8df"/><stop offset="1" stop-color="#b9b2a4"/></radialGradient>
+    <linearGradient id="mNa" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f7c6d9" stop-opacity="0"/><stop offset=".35" stop-color="#f2c9dc" stop-opacity=".55"/><stop offset=".6" stop-color="#bfe7ea" stop-opacity=".6"/><stop offset="1" stop-color="#d9d2ff" stop-opacity="0"/></linearGradient>
+  </defs>`;
+  const PIRINC = "#c9a24b", P1 = "#ff7a66", P2 = "#4cc3b5";
+  el("circle", { cx: O[0], cy: O[1], r: 292, fill: "url(#mWo)", stroke: PIRINC, "stroke-width": 2.5 });
+  el("circle", { cx: O[0], cy: O[1], r: 284, fill: "none", stroke: PIRINC, "stroke-opacity": .35 });
+  el("circle", { cx: O[0], cy: O[1], r: 254, fill: "none", stroke: PIRINC, "stroke-opacity": .25 });
+  // dış halkadaki elmas işaretler (hamle sayacı gibi): ilk yarısı oyuncu renkleriyle dolu
+  for (let i = 0; i < 22; i++) {
+    const dolu = i < 11, a = -81.8 + i * 16.3636;
+    el("path", { d: "M671,390 L678,385.8 L685,390 L678,394.2 Z", transform: `rotate(${a} 410 390)`, fill: dolu ? (i % 2 ? P2 : P1) : "none", stroke: PIRINC, "stroke-opacity": dolu ? 0 : .45 });
+  }
+  const tas = { k: ["url(#mRb)", P1, .35], i: ["url(#mPe)", P2, .7], a: ["url(#mNu)", PIRINC, .6] };
+  // örnek dizilim (sadece görsel): her üçgende [pim, köşe1, köşe2, köşe3]
+  const dizilim = [[null, "i", "k", null], [null, null, "i", null], ["k", null, null, "i"], [null, "a", null, "k"], ["i", null, "a", null], [null, "k", null, "i"]];
+  const harf = ["A", "B", "C", "D", "E", "F"];
+  const gruplar = [];
+  for (let k = 0; k < 6; k++) {
+    const yon = (30 + 60 * k) * Math.PI / 180, a1 = (60 * k) * Math.PI / 180, a2 = (60 * k + 60) * Math.PI / 180;
+    const d = [KAY * Math.cos(yon), KAY * Math.sin(yon)];
+    const V = [[O[0] + d[0], O[1] + d[1]], [O[0] + d[0] + KENAR * Math.cos(a1), O[1] + d[1] + KENAR * Math.sin(a1)], [O[0] + d[0] + KENAR * Math.cos(a2), O[1] + d[1] + KENAR * Math.sin(a2)]];
+    const G = [(V[0][0] + V[1][0] + V[2][0]) / 3, (V[0][1] + V[1][1] + V[2][1]) / 3], acik = k % 2 === 1;
+    const g = el("g", {}); const nokta = V.map((v) => v.join(",")).join(" ");
+    el("polygon", { points: nokta, fill: acik ? "url(#mLt)" : "url(#mDk)", stroke: acik ? "#f4eedd" : "#3a4693", "stroke-width": 22, "stroke-linejoin": "round" }, g);
+    el("polygon", { points: nokta, fill: "none", stroke: PIRINC, "stroke-opacity": acik ? .8 : .55, "stroke-width": 1.2, "stroke-linejoin": "round" }, g);
+    const delikler = [G, ...V.map((v) => [G[0] + (v[0] - G[0]) * ORAN, G[1] + (v[1] - G[1]) * ORAN])];
+    delikler.forEach((h, j) => {
+      el("circle", { cx: h[0], cy: h[1], r: 17, fill: "url(#mWe)", stroke: PIRINC, "stroke-width": 1.4 }, g);
+      const t = dizilim[k][j]; if (!t) return; const [dolgu, cizgi, parla] = tas[t];
+      el("circle", { cx: h[0], cy: h[1] + 2.2, r: 13.5, fill: "rgba(0,0,0,.55)" }, g);
+      el("circle", { cx: h[0], cy: h[1], r: 13.5, fill: dolgu, stroke: cizgi, "stroke-width": 1.6 }, g);
+      if (t === "i") el("circle", { cx: h[0], cy: h[1], r: 12.5, fill: "url(#mNa)", opacity: .55 }, g);
+      el("ellipse", { cx: h[0] - 4, cy: h[1] - 5, rx: 5, ry: 3, fill: "#fff", opacity: parla, transform: `rotate(-30 ${h[0] - 4} ${h[1] - 5})` }, g);
+    });
+    const L = 268, la = yon;
+    const yazi = el("text", { x: O[0] + L * Math.cos(la), y: O[1] + L * Math.sin(la) + 5, "text-anchor": "middle", fill: PIRINC, "font-family": "Fraunces, Georgia, serif", "font-size": 15, "font-weight": 600 });
+    yazi.textContent = harf[k];
+    gruplar.push({ g, G, aci: 0 });
+  }
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const yumusak = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  let sira = 0, bas = 0;
+  const SURE = 1100, ARA = 1500;
+  function kare(t) {
+    if (!bas) bas = t;
+    const gecen = t - bas, u = gruplar[sira];
+    if (gecen > ARA) {
+      const p = Math.min(1, (gecen - ARA) / SURE), a = u.aci + 120 * yumusak(p);
+      u.g.setAttribute("transform", `rotate(${a} ${u.G[0]} ${u.G[1]})`);
+      if (p >= 1) { u.aci = (u.aci + 120) % 360; sira = (sira + 1) % 6; bas = t; }
+    }
+    requestAnimationFrame(kare);
+  }
+  requestAnimationFrame(kare);
+})();
+</script>
+<script>
+/* E-posta adresi sayfada yazılı değil; tıklanınca parçalardan birleştirilir (otomatik adres toplayan botlara karşı). */
+document.querySelectorAll(".yaz").forEach((a) => a.addEventListener("click", (e) => {
+  e.preventDefault();
+  location.href = "mailto:" + a.dataset.k + "@" + a.dataset.a + "?subject=" + encodeURIComponent(a.dataset.konu || "");
+}));
 </script>
 </body>
 </html>
