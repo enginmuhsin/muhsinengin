@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muhsin ENGİN</title>
+<meta name="description" content="Muhsin ENGİN'in eğitim projeleri: Master Class Sayılar ve DNA'ları, Geometri Atölyesi, Ayın Geometri Sorusu, SekmeÖlçer.">
+<meta name="theme-color" content="#f5f7fa">
+<link rel="icon" href="simge.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(fonts/bricolage-grotesque-latin-ext-800-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(fonts/onest-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(fonts/onest-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(fonts/onest-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(fonts/onest-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* Kâğıt: kareli defter. Mürekkep: mavi tükenmez. Vurgu: kırmızı başlık kalemi. */
+:root {
+  --kagit: #f5f7fa; --kare: #dde5ef; --kare-kalin: #c9d5e4;
+  --murekkep: #1d3b8b; --metin: #1b2433; --kursun: #5c6778; --kirmizi: #c8323b;
+  --yazi: "Onest", "Segoe UI", system-ui, sans-serif; --baslik: "Bricolage", "Arial Black", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; color-scheme: dark; } }
+:root[data-theme="dark"] { --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--metin); font: 18px/1.6 var(--yazi);
+  background-color: var(--kagit);
+  background-image:
+    linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
+    linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--kirmizi); outline-offset: 4px; border-radius: 4px; }
+.sayfa { max-width: 1040px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)) 64px; }
+
+/* Kenar boşluğu çizgisi: defterin kırmızı marjı */
+.sayfa { position: relative; }
+.sayfa::before { content: ""; position: absolute; top: 0; bottom: 0; left: max(20px, env(safe-area-inset-left)); width: 2px; background: var(--kirmizi); opacity: .35; }
+.ic { padding-left: 40px; }
+
+/* ---------- Açılış ---------- */
+.acilis { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px 40px; align-items: center; min-height: min(70vh, 600px); padding-top: 40px; }
+h1 { font-family: var(--baslik); font-weight: 800; font-size: clamp(3rem, 9vw, 6.4rem); line-height: .92; letter-spacing: -.035em; margin: 0 0 22px; color: var(--metin); }
+h1 span { display: block; color: var(--murekkep); }
+.tanitim { font-size: clamp(1.05rem, 2.2vw, 1.3rem); max-width: 34ch; margin: 0 0 14px; }
+.tanitim-ek { color: var(--kursun); max-width: 46ch; margin: 0; font-size: 1rem; }
+.cizim { width: 100%; height: auto; overflow: visible; }
+.cizim .kalem { fill: none; stroke: var(--murekkep); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.cizim .pergel { fill: none; stroke: var(--kursun); stroke-width: 1.3; stroke-dasharray: 5 6; opacity: .75; }
+.cizim .cetvel { fill: none; stroke: var(--kursun); stroke-width: 1.3; opacity: .6; }
+.cizim .nokta { fill: var(--murekkep); }
+.cizim .harf { font-family: var(--baslik); font-weight: 700; font-size: 26px; fill: var(--murekkep); }
+.cizim .olcu { font-family: var(--yazi); font-weight: 700; font-size: 20px; fill: var(--kirmizi); }
+.cizim .soru { font-family: var(--baslik); font-weight: 800; font-size: 30px; fill: var(--kirmizi); }
+.cizim .centik { stroke: var(--kirmizi); stroke-width: 2.2; stroke-linecap: round; }
+.cizim .yay { fill: none; stroke: var(--kirmizi); stroke-width: 2; }
+figure { margin: 0; }
+figcaption { font-size: .9rem; color: var(--kursun); margin-top: 6px; }
+figcaption a { color: var(--murekkep); }
+
+/* Tek sahne: açılışta şekil cetvel ve pergelle kendini çizer */
+@media (prefers-reduced-motion: no-preference) {
+  .ciz { stroke-dasharray: var(--u); stroke-dashoffset: var(--u); animation: ciz var(--s, .9s) cubic-bezier(.5, .1, .3, 1) var(--g, 0s) forwards; }
+  .belir { opacity: 0; animation: belir .5s ease var(--g, 0s) forwards; }
+  .pergel.ciz { stroke-dasharray: var(--u); }
+  .pergel.bitti { stroke-dasharray: 5 6; stroke-dashoffset: 0; }
+}
+@keyframes ciz { to { stroke-dashoffset: 0; } }
+@keyframes belir { to { opacity: 1; } }
+
+/* ---------- İçindekiler ---------- */
+.icindekiler { margin-top: 32px; }
+h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6vw, 2.2rem); margin: 0 0 6px; color: var(--kirmizi); letter-spacing: -.01em; }
+.aciklama { color: var(--kursun); margin: 0 0 18px; max-width: 60ch; }
+.liste { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--metin); }
+.proje { border-bottom: 1px solid var(--kare-kalin); }
+.proje > a, .proje > div { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 4px 20px; align-items: center; padding: 18px 8px; text-decoration: none; }
+.proje > a:hover { background: color-mix(in srgb, var(--murekkep) 6%, transparent); }
+.proje svg { width: 56px; height: 56px; grid-row: span 2; }
+.proje svg * { fill: none; stroke: var(--murekkep); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.proje svg .dolu { fill: var(--murekkep); stroke: none; }
+.proje svg .kirmizi { stroke: var(--kirmizi); }
+.proje svg .dolu.kirmizi { fill: var(--kirmizi); }
+.proje h3 { font-family: var(--baslik); font-weight: 700; font-size: 1.3rem; margin: 0; line-height: 1.2; }
+.proje p { margin: 0; color: var(--kursun); font-size: 1rem; grid-column: 2; }
+.adres { grid-row: span 2; font-size: .95rem; color: var(--murekkep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; white-space: nowrap; }
+.durum { grid-row: span 2; font-size: .95rem; color: var(--kirmizi); white-space: nowrap; }
+.proje.yakinda h3 { color: var(--kursun); }
+
+footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
+
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .acilis { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-top: 36px; }
+  .cizim-kutu { max-width: 440px; }
+  .proje > a, .proje > div { grid-template-columns: 48px minmax(0, 1fr); padding: 16px 4px; }
+  .proje svg { width: 44px; height: 44px; }
+  .adres, .durum { grid-row: auto; grid-column: 2; white-space: normal; overflow-wrap: anywhere; }
+}
+</style>
+</head>
+<body>
+<div class="sayfa"><div class="ic">
+
+<header class="acilis">
+  <div>
+    <h1>Muhsin <span>ENGİN</span></h1>
+    <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
+    <p class="tanitim-ek">BİLSEM'de öğrencilerle bilim projeleri yürütüyor, TÜBİTAK 2204 projelerine danışmanlık yapıyorum. Buradaki her şey ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
+  </div>
+  <figure class="cizim-kutu">
+    <svg class="cizim" viewBox="0 100 530 215" role="img" aria-labelledby="cizimBaslik">
+      <title id="cizimBaslik">Ayın geometri sorusunun şekli: B, P, C doğrusal, |AP| = |PC|, |AC| = |BP|, m(ACB) = 20°, x = ?</title>
+      <!-- Ölçekli çizim (hesaplanmış): m(ACB) = 20°, x = m(ABC) = 30°, |AP| = |PC|, |AC| = |BP| -->
+      <path class="cetvel ciz" style="--u:520;--g:.1s;--s:.6s" d="M8 262 H512"/>
+      <path class="pergel ciz" style="--u:320;--g:.6s;--s:1.1s" d="M480.0 262.0 A 152.1 152.1 0 0 0 211.4 164.2" data-sonra="bitti"/>
+      <path class="pergel ciz" style="--u:120;--g:.9s;--s:.9s" d="M327.9 262.0 A 285.9 285.9 0 0 0 319.4 192.8" data-sonra="bitti"/>
+      <path class="kalem ciz" style="--u:201;--g:1.4s;--s:.7s" d="M42.0 262.0 L211.4 164.2"/>
+      <path class="kalem ciz" style="--u:291;--g:1.7s;--s:.7s" d="M211.4 164.2 L480.0 262.0"/>
+      <path class="kalem ciz" style="--u:443;--g:2.0s;--s:.8s" d="M42.0 262.0 L480.0 262.0"/>
+      <path class="kalem ciz" style="--u:157;--g:2.4s;--s:.6s" d="M211.4 164.2 L327.9 262.0"/>
+      <g class="belir" style="--g:2.9s">
+        <line class="centik" x1="274.8" y1="207.0" x2="264.5" y2="219.2"/><line class="centik" x1="403.9" y1="254.0" x2="403.9" y2="270.0"/>
+        <line class="centik" x1="345.1" y1="204.4" x2="339.7" y2="219.4"/><line class="centik" x1="351.7" y1="206.8" x2="346.2" y2="221.8"/><line class="centik" x1="181.4" y1="254.0" x2="181.4" y2="270.0"/><line class="centik" x1="188.4" y1="254.0" x2="188.4" y2="270.0"/>
+        <path class="yay" d="M88.0 262.0 A 46 46 0 0 0 81.8 239.0"/><path class="yay" d="M428.0 262.0 A 52 52 0 0 1 431.1 244.2"/>
+        <text class="soru" x="109.6" y="250.9" text-anchor="middle">x</text>
+        <text class="olcu" x="404" y="250" text-anchor="middle">20°</text>
+      </g>
+      <g class="belir" style="--g:2.5s">
+        <circle class="nokta" cx="42.0" cy="262.0" r="5"/><circle class="nokta" cx="480.0" cy="262.0" r="5"/><circle class="nokta" cx="211.4" cy="164.2" r="5"/><circle class="nokta" cx="327.9" cy="262.0" r="5"/>
+        <text class="harf" x="14" y="292">B</text><text class="harf" x="488" y="292">C</text><text class="harf" x="202.4" y="148.2">A</text><text class="harf" x="318.9" y="294">P</text>
+      </g>
+    </svg>
+    <figcaption>Eylül 2026'nın sorusu: x kaç derece? <a href="https://masterclass.muhsinengin.com/geometri/#ayin">Çözmeyi dene</a></figcaption>
+  </figure>
+</header>
+
+<main class="icindekiler">
+  <h2>Projeler</h2>
+  <p class="aciklama">Hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir.</p>
+  <ul class="liste">
+    <li class="proje"><a href="https://masterclass.muhsinengin.com/">
+      <svg viewBox="14 8 34 34" aria-hidden="true"><circle class="dolu" cx="28" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="22" r="2.6"/><circle class="dolu" cx="28" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="22" r="2.6"/><circle class="dolu" cx="22" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="34" r="2.6"/><circle class="dolu" cx="28" cy="34" r="2.6"/><circle class="dolu" cx="34" cy="34" r="2.6"/><circle class="dolu" cx="40" cy="34" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="28" r="2.6"/><circle class="dolu" cx="40" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="16" r="2.6"/><path d="M28 28 h6 v-6 h-12 v12 h18 v-18"/></svg>
+      <h3>Master Class: Sayılar ve DNA'ları</h3><span class="adres">masterclass.muhsinengin.com</span>
+      <p>Asal sayıları, bölenleri ve fonksiyonların büyümesini oyunlarla, 3B görsellerle ve sıralama tablosuyla keşfetmek için. TÜBİTAK 2204-A projesi.</p></a></li>
+    <li class="proje"><a href="https://masterclass.muhsinengin.com/geometri/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 8 L16 46 M28 8 L40 46 M21 30 h14"/><circle class="dolu" cx="28" cy="8" r="2.4"/><path class="kirmizi" d="M10 46 A 30 30 0 0 1 46 46"/></svg>
+      <h3>Geometri Atölyesi</h3><span class="adres">masterclass.muhsinengin.com/geometri</span>
+      <p>Cetvel ve pergelle çizim masası, Öklid görevleri, üçgenin gizli merkezleri, katlanıp açılan cisimler ve bir sorunun görselinden şekil kuran Soru Masası.</p></a></li>
+    <li class="proje"><a href="https://masterclass.muhsinengin.com/geometri/#ayin">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M8 44 L28 14 L48 44 Z"/><path class="kirmizi" d="M28 44 V27"/><path class="dolu kirmizi" d="M28 4 l2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.6-4.8 2.6 1-5.4-4-3.7 5.4-.7z"/></svg>
+      <h3>Ayın Geometri Sorusu</h3><span class="adres">masterclass.muhsinengin.com/geometri/#ayin</span>
+      <p>Her ay hazırladığım bir olimpiyat sorusu: ölçekli şekli, ipuçları ve öğrencinin yardımcı çizgilerle çözebileceği bir çalışma alanıyla.</p></a></li>
+    <li class="proje"><a href="https://sekmeolcer.muhsinengin.com/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
+      <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
+      <p>Telefonun mikrofonuyla topun yere çarpma seslerini dinleyip sekme katsayısını ölçen bir saha aracı. Fizik dersinde deney defteri gibi kullanılır.</p></a></li>
+    <li class="proje yakinda"><div>
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 8 h26 l8 8 v32 h-34 z"/><path d="M38 8 v8 h8"/><path d="M19 26 h18 M19 33 h18 M19 40 h11"/><circle class="dolu kirmizi" cx="42" cy="42" r="4"/></svg>
+      <h3>PİKRAM</h3><span class="durum">Hazırlanıyor</span>
+      <p>TÜBİTAK 2204 projelerini yazarken öğrenciye ve danışman öğretmene eşlik eden bir proje asistanı.</p></div></li>
+  </ul>
+</main>
+
+<footer>
+  <span>© 2026 Muhsin ENGİN</span>
+  <span>Projeler reklamsızdır; öğrenciden ad, e-posta ya da konum istenmez.</span>
+</footer>
+
+</div></div>
+<script>
+  // Pergel izleri çizildikten sonra kesik çizgiye döner (hareket azaltılmışsa zaten kesiktir)
+  document.querySelectorAll('.pergel[data-sonra]').forEach((p) => p.addEventListener('animationend', () => p.classList.add('bitti')));
+</script>
+</body>
+</html>
