@@ -87,6 +87,12 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 @keyframes suz { 50% { translate: 0 -7px; } }
 .yaz { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 1px 12px 2px; border: 1.5px solid var(--murekkep); border-radius: 999px; color: var(--murekkep); text-decoration: none; font-weight: 700; font-size: .92rem; white-space: nowrap; }
 .yaz:hover { background: var(--murekkep); color: var(--kagit); }
+.proje .yaz-dolu { background: var(--murekkep); color: var(--kagit); margin-left: 0; }
+.proje .yaz-dolu:hover { background: transparent; color: var(--murekkep); }
+.proje .yaz:not(.yaz-dolu):hover { background: var(--murekkep); color: var(--kagit); }
+.proje .yaz.yaz-dolu svg * { fill: currentColor; stroke: none; }
+.dugmeler { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 8px; }
+.soluk-not { margin-left: 4px; }
 .proje .yaz svg { width: 15px; height: 15px; grid-row: auto; flex: none; }
 .proje .yaz svg * { stroke: currentColor; stroke-width: 2; fill: none; }
 figure { margin: 0; }
@@ -186,7 +192,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <li class="proje"><div>
       <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
       <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
-      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. Yayıncılar ve iş birliği için <a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></p></div></li>
+      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="https://medar.hazirlabeni.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyunu gör</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
     <li class="proje yakinda"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 8 h26 l8 8 v32 h-34 z"/><path d="M38 8 v8 h8"/><path d="M19 26 h18 M19 33 h18 M19 40 h11"/><circle class="dolu kirmizi" cx="42" cy="42" r="4"/></svg>
       <h3>PİKRAM</h3><span class="durum">Hazırlanıyor</span>
