@@ -143,6 +143,33 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 .proje.yakinda h3 { color: var(--kursun); }
 .proje p a { color: var(--murekkep); text-underline-offset: 3px; }
 
+/* ---------- Takvim (geri sayım) ---------- */
+.takvim-bolum { margin-top: 32px; }
+.sayac { display: grid; grid-template-columns: repeat(auto-fit, minmax(172px, 1fr)); gap: 10px; }
+.sy { position: relative; background: var(--kagit); border: 1.5px solid var(--kare-kalin); border-left: 4px solid var(--murekkep); border-radius: 10px; padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 4px; }
+.sy.uyari { border-left-color: var(--turuncu); } .sy.kritik { border-left-color: var(--kirmizi); } .sy.tatil { border-left-color: var(--kursun); }
+.sy-ust { display: flex; flex-direction: column-reverse; gap: 2px; }
+.sy-ad { font-weight: 700; font-size: .95rem; line-height: 1.3; }
+.sy-etiket { font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--kursun); white-space: nowrap; }
+.sy-etiket.tahmini { color: var(--turuncu); }
+.sy-saat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; font-variant-numeric: tabular-nums; }
+.sy-gun { font-family: var(--baslik); font-weight: 800; font-size: 2rem; line-height: 1; color: var(--murekkep); }
+.sy-gun small { font-family: var(--yazi); font-weight: 400; font-size: .8rem; color: var(--kursun); margin-left: 3px; }
+.sy-hms { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .98rem; }
+.sy-alt { font-size: .82rem; color: var(--kursun); }
+.sy-cubuk { height: 4px; border-radius: 2px; background: var(--kare); overflow: hidden; margin-top: 2px; }
+.sy-cubuk i { display: block; height: 100%; background: var(--murekkep); }
+.sy.kritik .sy-gun { color: var(--kirmizi); }
+.tanitim-not { margin-top: 10px; font-size: .92rem; }
+/* ---------- Bağlantılar ---------- */
+.baglantilar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 28px; border-top: 2px solid var(--metin); padding-top: 14px; }
+.bag-grup h3 { font-family: var(--baslik); font-size: 1.05rem; margin: 0 0 6px; color: var(--kirmizi); letter-spacing: .02em; }
+.bag-grup ul { list-style: none; margin: 0; padding: 0; }
+.bag-grup li { border-bottom: 1px solid var(--kare-kalin); }
+.bag-grup a { display: flex; justify-content: space-between; gap: 10px; padding: 7px 2px; text-decoration: none; color: var(--murekkep); font-weight: 600; font-size: .98rem; }
+.bag-grup a::after { content: "↗"; color: var(--kursun); font-weight: 400; }
+.bag-grup a:hover { background: color-mix(in srgb, var(--murekkep) 6%, transparent); }
+
 footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
 
 @media (max-width: 760px) {
@@ -161,6 +188,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 
 <nav class="ayrac" aria-label="Bölümler">
   <a href="#projeler" aria-current="page">Projeler</a>
+  <a href="#takvim">Takvim</a>
+  <a href="#baglantilar">Bağlantılar</a>
   <a href="https://masterclass.muhsinengin.com/hafta/">Haftanın Soruları <span aria-hidden="true">↗</span></a>
   <a href="https://masterclass.muhsinengin.com/ogretmen/">Öğretmen Masası <span aria-hidden="true">↗</span></a>
 </nav>
@@ -170,7 +199,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <div>
     <h1>Muhsin <span>ENGİN</span></h1>
     <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
-    <p class="tanitim-ek">BİLSEM'de öğrencilerle bilim projeleri yürütüyor, proje yazım süreçlerinde danışmanlık yapıyorum. Buradaki eğitim araçları ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
+    <p class="tanitim-ek">Uzun yıllar pek çok özel ve devlet okulunda uzman matematik öğretmeni, proje koordinatörü ve öğrenci araştırma projelerinde mentör olarak çalıştım. Bugün BİLSEM'de öğrencilerle bilim projeleri yürütüyorum. Matematiksel yazılım ve geometri, emek vermeyi en çok sevdiğim iki alan.</p>
+    <p class="tanitim-ek tanitim-not">Buradaki araçlar ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
   <figure class="cizim-kutu">
     <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler; arkada üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
@@ -186,6 +216,12 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Cismin arkasında, kenarı birim çembere oturan tahta da oyunum MEDAR; üçgenleri sırayla 120° döner. Cismi sürükleyerek çevirebilirsin.</figcaption>
   </figure>
 </header>
+
+<section class="takvim-bolum" id="takvim" aria-labelledby="takvimBaslik">
+  <h2 id="takvimBaslik">Yaklaşan tarihler</h2>
+  <p class="aciklama">Öğrenci projeleri ve sınavlar için geri sayım. TÜBİTAK son tarihleri uzatabilir; “tahmini” yazanlar resmî takvim açıklanınca güncellenir.</p>
+  <div class="sayac" id="sayac"></div>
+</section>
 
 <main class="icindekiler" id="projeler">
   <h2>Projeler</h2>
@@ -222,6 +258,31 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   </ul>
 </main>
 
+<section class="icindekiler" id="baglantilar" aria-labelledby="bagBaslik">
+  <h2 id="bagBaslik">Bağlantılar</h2>
+  <p class="aciklama">Öğretmenlerin ve proje yürüten öğrencilerin sık açtığı resmî sayfalar.</p>
+  <div class="baglantilar">
+    <div class="bag-grup"><h3>TÜBİTAK</h3><ul>
+      <li><a href="https://tubitak.gov.tr/tr/yarismalar/icerik-lise-ogrencileri-arastirma-projeleri-yarismasi" target="_blank" rel="noopener">2204-A Lise Öğrencileri Araştırma Projeleri</a></li>
+      <li><a href="https://tubitak.gov.tr/tr/yarismalar/icerik-ortaokul-ogrencileri-arastirma-projeleri-yarismasi" target="_blank" rel="noopener">2204-B Ortaokul Öğrencileri Araştırma Projeleri</a></li>
+      <li><a href="https://tybs.tubitak.gov.tr/" target="_blank" rel="noopener">TYBS · başvuru sistemi</a></li>
+      <li><a href="https://arbis.tubitak.gov.tr/" target="_blank" rel="noopener">ARBİS · araştırmacı kaydı</a></li>
+      <li><a href="https://bilimolimpiyatlari.tubitak.gov.tr/" target="_blank" rel="noopener">Bilim Olimpiyatları</a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>MEB</h3><ul>
+      <li><a href="https://mebbis.meb.gov.tr/" target="_blank" rel="noopener">MEBBİS</a></li>
+      <li><a href="https://e-okul.meb.gov.tr/" target="_blank" rel="noopener">e-Okul</a></li>
+      <li><a href="https://www.oba.gov.tr/" target="_blank" rel="noopener">ÖBA · Öğretmen Bilişim Ağı</a></li>
+      <li><a href="https://www.eba.gov.tr/" target="_blank" rel="noopener">EBA</a></li>
+      <li><a href="https://arastirmaizinleri.meb.gov.tr/" target="_blank" rel="noopener">Araştırma Uygulama İzinleri</a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>Sınavlar</h3><ul>
+      <li><a href="https://odsgm.meb.gov.tr/" target="_blank" rel="noopener">MEB ÖDSGM · LGS</a></li>
+      <li><a href="https://www.osym.gov.tr/" target="_blank" rel="noopener">ÖSYM · YKS</a></li>
+    </ul></div>
+  </div>
+</section>
+
 <footer>
   <span>© 2026 Muhsin ENGİN</span>
   <span>Projeler reklamsızdır; öğrenciden ad, e-posta ya da konum istenmez.</span>
@@ -229,6 +290,44 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 
 </div></div>
 <script>
+/* Geri sayım (PİKRAM'daki sayacın sade sürümü). Tarihler Türkiye saatiyle; her ders yılı başında güncellenir.
+   Kaynaklar: TÜBİTAK 2204-A/B çağrı duyuruları (Ekim 2026), MEB 2026-2027 çalışma takvimi.
+   LGS ve YKS 2027 tarihlerini MEB ve ÖSYM henüz açıklamadı: geçmiş yıllara dayalı tahmin. */
+(function () {
+  const kutu = document.getElementById("sayac"); if (!kutu) return;
+  const T = [
+    { ad: "TÜBİTAK 2204-A Lise başvuruları", bas: "2026-09-23T00:00", bit: "2027-01-04T17:30" },
+    { ad: "TÜBİTAK 2204-B Ortaokul başvuruları", bas: "2026-10-21T00:00", bit: "2027-02-10T17:30" },
+    { sirali: [["1. ara tatil", "2026-11-16T00:00"], ["Yarıyıl tatili", "2027-01-25T00:00"], ["2. ara tatil", "2027-03-08T00:00"], ["Ders yılı sonu · karne", "2027-06-25T00:00"]] },
+    { ad: "LGS 2027", an: "2027-06-12T09:30", tahmini: true },
+    { ad: "YKS 2027 · TYT", an: "2027-06-19T10:15", tahmini: true },
+  ];
+  const t = (s) => new Date(s + ":00+03:00");
+  const yaz = (d) => d.toLocaleString("tr-TR", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
+  const iki = (n) => String(n).padStart(2, "0");
+  function ciz() {
+    const simdi = Date.now();
+    kutu.innerHTML = T.map((x) => {
+      let ad = x.ad, hedef, etiket, sinif = "", yuzde = 0, alt;
+      if (x.bit) {
+        const b = t(x.bas), e = t(x.bit);
+        if (simdi < b) { hedef = b; etiket = "Henüz açılmadı"; alt = "Açılış: "; }
+        else if (simdi < e) { hedef = e; etiket = "Başvuru açık"; alt = "Son gün: "; yuzde = Math.min(100, (simdi - b) / (e - b) * 100); }
+        else if (simdi - e < 14 * 864e5) return `<div class="sy"><div class="sy-ust"><span class="sy-ad">${ad}</span><span class="sy-etiket">Kapandı</span></div><span class="sy-alt">${yaz(e)}</span></div>`;
+        else return "";
+      } else if (x.sirali) {
+        const s = x.sirali.find(([, d]) => t(d) > simdi); if (!s) return ""; ad = s[0]; hedef = t(s[1]); etiket = "Okullar"; alt = "Başlangıç: "; sinif = "tatil";
+      } else { hedef = t(x.an); if (hedef <= simdi) return ""; etiket = x.tahmini ? "Tahmini" : "Sınav"; alt = x.tahmini ? "Tahmini tarih: " : "Sınav: "; }
+      const k = hedef - simdi, g = Math.floor(k / 864e5), sa = Math.floor(k / 36e5) % 24, dk = Math.floor(k / 6e4) % 60, sn = Math.floor(k / 1e3) % 60;
+      if (x.bit && simdi >= t(x.bas)) sinif = g < 7 ? "kritik" : g < 30 ? "uyari" : "";
+      return `<div class="sy ${sinif}"><div class="sy-ust"><span class="sy-ad">${ad}</span><span class="sy-etiket${x.tahmini ? " tahmini" : ""}">${etiket}</span></div>
+        <div class="sy-saat"><span class="sy-gun">${g}<small>gün</small></span><span class="sy-hms">${iki(sa)}:${iki(dk)}:${iki(sn)}</span></div>
+        <span class="sy-alt">${alt}${yaz(hedef)}</span>${yuzde ? `<div class="sy-cubuk" aria-hidden="true"><i style="width:${yuzde}%"></i></div>` : ""}</div>`;
+    }).join("");
+  }
+  ciz(); setInterval(ciz, 1000);
+})();
+
 /* Kalem çizimi gibi 3B tel kafes: düzgün onikiyüzlü (mavi) ve içindeki küp (kırmızı).
    Kütüphane yok; köşeler elle döndürülüp tuvale izdüşürülür. Uzaktaki çizgiler soluk ve ince. */
 (function () {
