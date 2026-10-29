@@ -1,0 +1,284 @@
+{
+ "topic": "TM07",
+ "title": "Mutlak Değer – Teşhis Testi",
+ "minutes": 16,
+ "questions": [
+  {
+   "id": "TM07-01",
+   "k": [
+    "TM07.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "Sayı doğrusu üzerinde \\(-7\\) sayısına olan uzaklığı 4 birim olan sayıların toplamı kaçtır?",
+   "opts": [
+    "\\(-14\\)",
+    "\\(-11\\)",
+    "\\(-3\\)",
+    "\\(8\\)",
+    "\\(14\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Yalnız −7'nin solundaki sayıyı (−11) almak",
+    "C": "Yalnız −7'nin sağındaki sayıyı (−3) almak",
+    "D": "Sayılar yerine uzaklıkları toplamak: 4 + 4",
+    "E": "−7'ye uzaklığı |x − 7| yazıp 3 ile 11'i toplamak"
+   },
+   "sol": "\\(|x+7|=4\\) ise \\(x+7=4\\) veya \\(x+7=-4\\); buradan \\(x=-3\\) ya da \\(x=-11\\). Toplam \\(-14\\) olur.",
+   "t": 50
+  },
+  {
+   "id": "TM07-02",
+   "k": [
+    "TM07.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(x\\) bir negatif gerçek sayı olmak üzere,<br>I. \\(|-x| = -x\\)<br>II. \\(|x| = x\\)<br>III. \\(|x| + x = 0\\)<br>eşitliklerinden hangileri doğrudur?",
+   "opts": [
+    "Yalnız I",
+    "Yalnız II",
+    "I ve III",
+    "II ve III",
+    "I, II ve III"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "III'te |x| = x alıp |x| + x = 2x ≠ 0 sanmak",
+    "B": "|x| = x sanıp −x içeren eşitliği negatif diye elemek",
+    "D": "−x'i negatif sanıp I'i elemek, |x| = x kabul etmek",
+    "E": "|x| = x sanıp öncülleri sayı deneyerek kontrol etmemek"
+   },
+   "sol": "\\(x \\lt 0\\) iken \\(-x \\gt 0\\) olduğundan \\(|-x| = -x\\) (I doğru). \\(|x| = -x \\ne x\\) olduğundan II yanlış; \\(|x| + x = -x + x = 0\\) (III doğru).",
+   "t": 50
+  },
+  {
+   "id": "TM07-03",
+   "k": [
+    "TM07.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(2 \\lt x \\lt 5\\) olmak üzere,<br>\\(|x-5| + |2-x|\\)<br>ifadesinin eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(-3\\)",
+    "\\(3\\)",
+    "\\(7\\)",
+    "\\(2x-7\\)",
+    "\\(7-2x\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "İçleri işaret değiştirmeden çıkarmak: (x − 5) + (2 − x)",
+    "C": "x'leri götürüp sabitleri pozitif alarak toplamak: 5 + 2",
+    "D": "|x − 5| = x − 5 ve |2 − x| = x − 2 almak",
+    "E": "|x − 5| = 5 − x alıp |2 − x| = 2 − x bırakmak"
+   },
+   "sol": "\\(x-5 \\lt 0\\) olduğundan \\(|x-5| = 5-x\\); \\(2-x \\lt 0\\) olduğundan \\(|2-x| = x-2\\). Toplam \\((5-x)+(x-2) = 3\\) olur.",
+   "t": 55
+  },
+  {
+   "id": "TM07-04",
+   "k": [
+    "TM07.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(|2x-3| = 7\\)<br>denklemini sağlayan \\(x\\) değerlerinin toplamı kaçtır?",
+   "opts": [
+    "\\(-10\\)",
+    "\\(\\frac{3}{2}\\)",
+    "\\(3\\)",
+    "\\(5\\)",
+    "\\(7\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Kökler toplamı yerine çarpımını almak: 5 · (−2)",
+    "B": "Köklerin orta noktası 3/2'yi toplam sanmak",
+    "D": "Yalnız 2x − 3 = 7 durumunu çözmek",
+    "E": "İkinci durumu 2x + 3 = 7 yazıp x = 2 bulmak"
+   },
+   "sol": "\\(2x-3 = 7 \\Rightarrow x = 5\\); \\(2x-3 = -7 \\Rightarrow x = -2\\). Toplam \\(5 + (-2) = 3\\) olur.",
+   "t": 75
+  },
+  {
+   "id": "TM07-05",
+   "k": [
+    "TM07.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(a \\lt b \\lt 0\\) olmak üzere,<br>\\(|a-b| + |b| - |a+b|\\)<br>ifadesinin eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(2a-b\\)",
+    "\\(-2a-b\\)",
+    "\\(-b\\)",
+    "\\(b\\)",
+    "\\(3b\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "İçi negatif olan |a − b|'yi a − b olarak dışarı almak",
+    "B": "|a + b|'yi a + b olarak dışarı almak",
+    "C": "Hiçbir mutlak değerde işaret değiştirmemek",
+    "E": "Negatif b için |b| = b yazmak"
+   },
+   "sol": "\\(a-b \\lt 0\\), \\(b \\lt 0\\), \\(a+b \\lt 0\\) olduğundan ifade \\((b-a) + (-b) - (-a-b) = b\\) olur.",
+   "t": 85
+  },
+  {
+   "id": "TM07-06",
+   "k": [
+    "TM07.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(|x-4| = 2x+1\\)<br>denkleminin gerçek sayılardaki çözüm kümesi aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(\\varnothing\\)",
+    "\\(\\{-5\\}\\)",
+    "\\(\\{-5,\\ 1\\}\\)",
+    "\\(\\{1\\}\\)",
+    "\\(\\{1,\\ 5\\}\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Sağ taraf değişken içerdiği için çözüm olmadığını sanmak",
+    "B": "Yalnız x − 4 = 2x + 1 durumunu çözüp kontrol etmemek",
+    "C": "2x + 1 ≥ 0 koşulunu kontrol etmeden iki kökü de almak",
+    "E": "x − 4 = 2x + 1 durumunda işaret hatasıyla x = 5 bulmak"
+   },
+   "sol": "Mutlak değer negatif olamayacağından \\(2x+1 \\ge 0\\) olmalıdır. \\(x-4 = 2x+1 \\Rightarrow x = -5\\), fakat \\(2(-5)+1 \\lt 0\\) olduğundan geçersizdir. \\(4-x = 2x+1 \\Rightarrow x = 1\\) uygundur. Çözüm kümesi \\(\\{1\\}\\) olur.",
+   "t": 90
+  },
+  {
+   "id": "TM07-07",
+   "k": [
+    "TM07.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(|3x-2| \\le 7\\)<br>eşitsizliğini sağlayan \\(x\\) tam sayılarının toplamı kaçtır?",
+   "opts": [
+    "\\(-5\\)",
+    "\\(-2\\)",
+    "\\(2\\)",
+    "\\(3\\)",
+    "\\(5\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Sabiti yanlış tarafa atmak: −3 ≤ x ≤ 5/3",
+    "B": "Sabiti yanlış tarafa atıp uç noktaları da dışlamak",
+    "C": "≤ yerine < alıp x = 3'ü çözüme katmamak",
+    "D": "−5/3'ü −2'ye yuvarlayıp −2'yi de çözüme katmak"
+   },
+   "sol": "\\(-7 \\le 3x-2 \\le 7 \\Rightarrow -5 \\le 3x \\le 9 \\Rightarrow -\\frac{5}{3} \\le x \\le 3\\). Tam sayılar \\(-1, 0, 1, 2, 3\\) olup toplamları 5'tir.",
+   "t": 90
+  },
+  {
+   "id": "TM07-08",
+   "k": [
+    "TM07.4",
+    "TM07.1"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir fabrikada üretilen vidaların uzunluğunun 50 mm olması gerekmektedir. Kalite kontrolde uzunluğu 50 mm'den en fazla 0,4 mm sapan vidalar kabul edilmekte, diğerleri ayrılmaktadır.<br>Buna göre, kabul edilen bir vidanın uzunluğu \\(x\\) mm ise \\(x\\)'in sağlaması gereken koşul aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(x-50 \\le 0{,}4\\)",
+    "\\(|x-50| \\le 0{,}4\\)",
+    "\\(|x-50| \\ge 0{,}4\\)",
+    "\\(|x+50| \\le 0{,}4\\)",
+    "\\(|x-0{,}4| \\le 50\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "|x − 50| ≤ 0,4'ü yalnız x − 50 ≤ 0,4 ile sınırlamak",
+    "C": "Kabul edilen ve ayrılan vidaların koşulunu karıştırmak",
+    "D": "x'in 50'ye uzaklığını |x + 50| ile göstermek",
+    "E": "Merkez (50) ile sapma payını (0,4) yer değiştirmek"
+   },
+   "sol": "\\(x\\)'in 50'ye uzaklığı \\(|x-50|\\) en fazla 0,4 olmalıdır: \\(|x-50| \\le 0{,}4\\), yani \\(49{,}6 \\le x \\le 50{,}4\\).",
+   "t": 75
+  },
+  {
+   "id": "TM07-09",
+   "k": [
+    "TM07.3",
+    "TM07.1"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Düz bir sahil yolu üzerindeki A ve B iskeleleri, yolun başlangıç noktasından sırasıyla 4 km ve 16 km uzaklıktadır. Bu yol üzerinde, başlangıç noktasından \\(x\\) km uzaklıkta bir büfe kurulacaktır. Büfenin A ve B iskelelerine olan uzaklıkları toplamı 18 km olacaktır.<br>Buna göre, \\(x\\)'in alabileceği değerlerin toplamı kaçtır?",
+   "opts": [
+    "\\(1\\)",
+    "\\(10\\)",
+    "\\(18\\)",
+    "\\(19\\)",
+    "\\(20\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Yalnız A'nın gerisindeki çözümü (x = 1) bulmak",
+    "B": "Büfeyi iki iskelenin tam ortasına (x = 10) yerleştirmek",
+    "C": "x < 4 durumunda işaret hatasıyla x = −1 bulup 19 ile toplamak",
+    "D": "Yalnız B'nin ötesindeki çözümü (x = 19) bulmak"
+   },
+   "sol": "İskeleler arası uzaklık 12 km ve \\(12 \\lt 18\\) olduğundan büfe iskelelerin arasında olamaz. \\(x \\gt 16\\) için \\((x-4)+(x-16) = 18 \\Rightarrow x = 19\\); \\(x \\lt 4\\) için \\((4-x)+(16-x) = 18 \\Rightarrow x = 1\\). Toplam 20'dir.",
+   "t": 130
+  },
+  {
+   "id": "TM07-10",
+   "k": [
+    "TM07.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(|x-2| \\le 5\\) ve \\(|x+1| \\ge 2\\)<br>eşitsizliklerinin ikisini birlikte sağlayan kaç farklı \\(x\\) tam sayısı vardır?",
+   "opts": [
+    "\\(5\\)",
+    "\\(6\\)",
+    "\\(7\\)",
+    "\\(8\\)",
+    "\\(11\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "|x + 1| ≥ 2'yi 'arasında' gibi çözmek: −3 ≤ x ≤ 1",
+    "B": "≥ yerine > alıp x = −3 ve x = 1'i dışlamak",
+    "C": "|x + 1| ≥ 2'yi yalnız x + 1 ≥ 2 ile sınırlamak",
+    "E": "İkinci eşitsizliği hesaba katmadan yalnız ilkini saymak"
+   },
+   "sol": "\\(|x-2| \\le 5 \\Rightarrow -3 \\le x \\le 7\\). \\(|x+1| \\ge 2 \\Rightarrow x \\ge 1\\) veya \\(x \\le -3\\). Ortak tam sayılar \\(-3, 1, 2, 3, 4, 5, 6, 7\\) olup 8 tanedir.",
+   "t": 130
+  },
+  {
+   "id": "TM07-11",
+   "k": [
+    "TM07.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(a \\lt 0 \\lt b\\) ve \\(|a| \\gt |b|\\) olmak üzere,<br>\\(|a+b| + |a-b| - |b|\\)<br>ifadesinin eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(-2a-b\\)",
+    "\\(-2a+b\\)",
+    "\\(2a-b\\)",
+    "\\(-3b\\)",
+    "\\(b\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Pozitif b için |b| = −b yazmak",
+    "C": "Hiçbir mutlak değerde işaret değiştirmemek",
+    "D": "İçi negatif olan |a − b|'yi a − b olarak dışarı almak",
+    "E": "|a| > |b| koşulunu kullanmayıp |a + b| = a + b almak"
+   },
+   "sol": "\\(a \\lt 0\\) ve \\(|a| \\gt |b|\\) olduğundan \\(a+b \\lt 0\\); ayrıca \\(a-b \\lt 0\\). İfade \\((-a-b) + (b-a) - b = -2a-b\\) olur.",
+   "t": 120
+  }
+ ]
+}

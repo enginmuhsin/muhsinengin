@@ -1,0 +1,282 @@
+{
+ "topic": "TM05",
+ "title": "Rasyonel ve Ondalık Sayılar – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM05-01",
+   "k": [
+    "TM05.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{2}{3}+\\dfrac{3}{4}-\\dfrac{5}{6}\\) işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(-\\dfrac{5}{42}\\)",
+    "\\(0\\)",
+    "\\(\\dfrac{1}{12}\\)",
+    "\\(\\dfrac{7}{12}\\)",
+    "\\(\\dfrac{9}{4}\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "İlk iki kesirde payları ve paydaları ayrı toplamak",
+    "B": "Payları ve paydaları ayrı ayrı toplayıp çıkarmak",
+    "C": "Genişletmede yalnızca paydayı çarpmak (2/3 → 2/12)",
+    "E": "Son terimi çıkarmak yerine eklemek"
+   },
+   "sol": "Paydalar 12'de eşitlenir: \\(\\frac{8}{12}+\\frac{9}{12}-\\frac{10}{12}=\\frac{7}{12}\\).",
+   "t": 50
+  },
+  {
+   "id": "TM05-02",
+   "k": [
+    "TM05.2"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(a=\\dfrac{5}{7},\\ b=\\dfrac{7}{9},\\ c=\\dfrac{4}{5}\\) olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
+   "opts": [
+    "\\(a<b<c\\)",
+    "\\(a<c<b\\)",
+    "\\(b<a<c\\)",
+    "\\(c<a<b\\)",
+    "\\(c<b<a\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "b ile c'nin çapraz çarpımını (35 < 36) ters yorumlamak",
+    "C": "Paydası büyük olan kesri küçük sanmak",
+    "D": "Yalnızca paylara göre sıralamak (4 < 5 < 7)",
+    "E": "Tamamlayanı büyük olan kesri büyük sanmak"
+   },
+   "sol": "Tamamlayanlara bakılır: \\(1-a=\\frac{2}{7}\\), \\(1-b=\\frac{2}{9}\\), \\(1-c=\\frac{1}{5}=\\frac{2}{10}\\). Tamamlayanı küçük olan büyüktür: \\(a<b<c\\).",
+   "t": 55
+  },
+  {
+   "id": "TM05-03",
+   "k": [
+    "TM05.4"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(0{,}1\\overline{6}\\) sayısının rasyonel sayı olarak yazılışı aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(\\dfrac{5}{33}\\)",
+    "\\(\\dfrac{4}{25}\\)",
+    "\\(\\dfrac{16}{99}\\)",
+    "\\(\\dfrac{1}{6}\\)",
+    "\\(\\dfrac{8}{45}\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Paydayı 90 yerine 99 alıp (16 − 1)/99 yazmak",
+    "B": "Devirli sayıyı sonlu ondalık (0,16) sanmak",
+    "C": "Devretmeyen 1'i de devrediyor sanmak",
+    "E": "Paydan devretmeyen kısmı çıkarmayı unutmak (16/90)"
+   },
+   "sol": "\\(0{,}1\\overline{6}=\\dfrac{16-1}{90}=\\dfrac{15}{90}=\\dfrac{1}{6}\\).",
+   "t": 60
+  },
+  {
+   "id": "TM05-04",
+   "k": [
+    "TM05.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(0{,}12\\cdot 0{,}5+1{,}2:0{,}4\\) işleminin sonucu kaçtır?",
+   "opts": [
+    "0,36",
+    "0,9",
+    "3,06",
+    "3,15",
+    "3,6"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Bölmede virgül hatası yapmak (1,2 : 0,4 = 0,3)",
+    "B": "Hem çarpmada hem bölmede virgül hatası yapmak",
+    "D": "İşlem önceliğine uymayıp toplamı 0,4'e bölmek",
+    "E": "Çarpımda virgülü yanlış koymak (0,12·0,5 = 0,6)"
+   },
+   "sol": "Önce çarpma ve bölme: \\(0{,}12\\cdot 0{,}5=0{,}06\\), \\(1{,}2:0{,}4=12:4=3\\). Toplam \\(3{,}06\\).",
+   "t": 75
+  },
+  {
+   "id": "TM05-05",
+   "k": [
+    "TM05.1"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Elif, harçlığının dörtte birini kitaba, kalan paranın beşte ikisini yemeğe harcadığında geriye 252 TL'si kalıyor.<br>Buna göre, Elif'in harçlığı kaç TL'dir?",
+   "opts": [
+    "336",
+    "378",
+    "420",
+    "560",
+    "720"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Yalnızca kitap harcamasını hesaba katmak",
+    "B": "Kesirlerin pay ve paydalarını ayrı toplamak (1/4 + 2/5 = 3/9)",
+    "C": "Yalnızca yemek harcamasını hesaba katmak",
+    "E": "Kalanın 2/5'ini harçlığın 2/5'i sanmak"
+   },
+   "sol": "Kitaptan sonra \\(\\frac{3}{4}\\), yemekten sonra bunun \\(\\frac{3}{5}\\)'i kalır: \\(\\frac{3}{4}\\cdot\\frac{3}{5}x=\\frac{9}{20}x=252\\Rightarrow x=560\\).",
+   "t": 90
+  },
+  {
+   "id": "TM05-06",
+   "k": [
+    "TM05.3"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir manavda kilogramı 36,40 TL olan elmadan 2,5 kg ve kilogramı 12,80 TL olan havuçtan 0,75 kg alan Ayşe, kasaya 200 TL veriyor.<br>Buna göre, Ayşe'nin alacağı para üstü kaç TL'dir?",
+   "opts": [
+    "13,00 TL",
+    "99,40 TL",
+    "100,60 TL",
+    "117,10 TL",
+    "181,30 TL"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "0,75 ile çarpımda virgülü koymayı unutmak (96 TL)",
+    "C": "Para üstü yerine ödenecek toplam tutarı vermek",
+    "D": "2,5 ile çarpmayı 2 ile çarpıp 0,5 eklemek sanmak",
+    "E": "2,5 ile çarpımda virgülü bir basamak fazla kaydırmak"
+   },
+   "sol": "\\(36{,}40\\cdot 2{,}5=91\\), \\(12{,}80\\cdot 0{,}75=9{,}6\\); toplam \\(100{,}6\\) TL. Para üstü \\(200-100{,}6=99{,}40\\) TL.",
+   "t": 90
+  },
+  {
+   "id": "TM05-07",
+   "k": [
+    "TM05.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(0{,}\\overline{3}+0{,}5+0{,}1\\overline{6}\\) toplamı kaçtır?",
+   "opts": [
+    "\\(\\dfrac{29}{30}\\)",
+    "\\(\\dfrac{197}{198}\\)",
+    "\\(1\\)",
+    "\\(\\dfrac{91}{90}\\)",
+    "\\(\\dfrac{19}{18}\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "0,3 devirliyi 3/10 sanmak",
+    "B": "0,16 devirliyi 16/99 almak (1'i de devirli sanmak)",
+    "D": "0,16 devirlide devretmeyen 1'i çıkarmamak (16/90)",
+    "E": "Devirli olmayan 0,5'i de 5/9 almak"
+   },
+   "sol": "\\(0{,}\\overline{3}=\\frac{1}{3}\\), \\(0{,}5=\\frac{1}{2}\\), \\(0{,}1\\overline{6}=\\frac{15}{90}=\\frac{1}{6}\\). Toplam \\(\\frac{2+3+1}{6}=1\\).",
+   "t": 85
+  },
+  {
+   "id": "TM05-08",
+   "k": [
+    "TM05.5"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{1}{1-\\dfrac{1}{1+\\dfrac{1}{2}}}\\) işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(-2\\)",
+    "\\(-\\dfrac{1}{2}\\)",
+    "\\(\\dfrac{1}{3}\\)",
+    "\\(\\dfrac{3}{5}\\)",
+    "\\(3\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "İçteki 1/(3/2) bölümünü 3/2 almak (ters çevirmemek)",
+    "B": "1/(1 + 1/2)'yi 1/1 + 1/(1/2) diye dağıtmak",
+    "C": "Son adımda 1'i 1/3'e bölmeyi unutmak",
+    "D": "1 − 2/3 yerine 1 + 2/3 hesaplamak"
+   },
+   "sol": "Aşağıdan yukarı: \\(1+\\frac{1}{2}=\\frac{3}{2}\\), \\(\\frac{1}{3/2}=\\frac{2}{3}\\), \\(1-\\frac{2}{3}=\\frac{1}{3}\\), \\(\\frac{1}{1/3}=3\\).",
+   "t": 80
+  },
+  {
+   "id": "TM05-09",
+   "k": [
+    "TM05.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(a=-\\dfrac{13}{14},\\ b=-\\dfrac{25}{27},\\ c=-\\dfrac{12}{13}\\) olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
+   "opts": [
+    "\\(a<b<c\\)",
+    "\\(a<c<b\\)",
+    "\\(b<a<c\\)",
+    "\\(c<a<b\\)",
+    "\\(c<b<a\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "2/27 ile 1/13'ü karşılaştırırken 2/27'yi büyük sanmak",
+    "C": "Yalnızca paylara bakmak (−25 < −13 < −12)",
+    "D": "Yalnızca paydalara göre sıralamak (13 < 14 < 27)",
+    "E": "Negatif sayılarda sıralamayı ters çevirmeyi unutmak"
+   },
+   "sol": "Mutlak değerlerin tamamlayanları \\(\\frac{1}{14}=\\frac{2}{28}<\\frac{2}{27}<\\frac{2}{26}=\\frac{1}{13}\\); bu yüzden \\(|a|>|b|>|c|\\). Negatiflerde mutlak değeri büyük olan küçüktür: \\(a<b<c\\).",
+   "t": 120
+  },
+  {
+   "id": "TM05-10",
+   "k": [
+    "TM05.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "a ve b sıfırdan ve birbirinden farklı rakamlar olmak üzere \\(0{,}\\overline{ab}+0{,}\\overline{ba}=1{,}\\overline{3}\\) eşitliği sağlanmaktadır.<br>Buna göre, \\(a\\cdot b\\) çarpımının alabileceği en büyük değer kaçtır?",
+   "opts": [
+    "12",
+    "27",
+    "35",
+    "36",
+    "42"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "a + b = 12 değerini çarpım sanmak",
+    "B": "Çarpımın en küçük değerini bulmak (3·9)",
+    "D": "a ile b'nin farklı olma koşulunu ihmal etmek (6·6)",
+    "E": "1,3 devirliyi 13/9 alıp a + b = 13 bulmak"
+   },
+   "sol": "\\(\\frac{10a+b}{99}+\\frac{10b+a}{99}=\\frac{11(a+b)}{99}=\\frac{a+b}{9}\\) ve \\(1{,}\\overline{3}=\\frac{13-1}{9}=\\frac{12}{9}\\); \\(a+b=12\\). Farklı rakamlarla en büyük çarpım \\(5\\cdot 7=35\\).",
+   "t": 130
+  },
+  {
+   "id": "TM05-11",
+   "k": [
+    "TM05.5"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(1+\\dfrac{1}{1+\\dfrac{1}{x}}=\\dfrac{8}{5}\\) olduğuna göre, x kaçtır?",
+   "opts": [
+    "\\(-\\dfrac{8}{3}\\)",
+    "\\(-\\dfrac{5}{2}\\)",
+    "\\(\\dfrac{3}{8}\\)",
+    "\\(\\dfrac{2}{3}\\)",
+    "\\(\\dfrac{3}{2}\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Baştaki 1'i karşı tarafa atmayı unutmak",
+    "B": "1/(1 + 1/x) = 3/5 iken ters çevirmeden 1 + 1/x = 3/5 yazmak",
+    "C": "1/x = 5/3 − 1 yerine 5/3 + 1 almak",
+    "D": "1/x = 2/3 bulup x'i bulurken ters çevirmemek"
+   },
+   "sol": "\\(\\frac{1}{1+\\frac{1}{x}}=\\frac{3}{5}\\Rightarrow 1+\\frac{1}{x}=\\frac{5}{3}\\Rightarrow\\frac{1}{x}=\\frac{2}{3}\\Rightarrow x=\\frac{3}{2}\\).",
+   "t": 130
+  }
+ ]
+}

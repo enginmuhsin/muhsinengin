@@ -1,0 +1,284 @@
+{
+ "topic": "TM08",
+ "title": "Üslü Sayılar – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM08-01",
+   "k": [
+    "TM08.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(-2^4 + (-2)^4 - 3^0\\)<br>işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(-33\\)",
+    "\\(-3\\)",
+    "\\(-1\\)",
+    "\\(0\\)",
+    "\\(31\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "(−2)⁴'ü −16 almak (çift kuvvette işareti korumak)",
+    "B": "3⁰'ı 3 sanmak",
+    "D": "3⁰'ı 0 sanmak",
+    "E": "−2⁴'ü (−2)⁴ gibi 16 sanmak"
+   },
+   "sol": "\\(-2^4 = -16\\), \\((-2)^4 = 16\\) ve \\(3^0 = 1\\) olduğundan sonuç \\(-16 + 16 - 1 = -1\\) olur.",
+   "t": 50
+  },
+  {
+   "id": "TM08-02",
+   "k": [
+    "TM08.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(\\left(\\dfrac{2}{3}\\right)^{-2} + 2^{-1}\\)<br>işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(-\\frac{17}{18}\\)",
+    "\\(\\frac{1}{4}\\)",
+    "\\(\\frac{17}{18}\\)",
+    "\\(\\frac{11}{4}\\)",
+    "\\(\\frac{7}{2}\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Negatif üssün sonucu negatif yaptığını sanmak",
+    "B": "2⁻¹'i −2 sanmak",
+    "C": "(2/3)⁻²'de kesri ters çevirmeyi unutmak: 4/9",
+    "E": "(2/3)⁻²'yi (3/2) · 2 = 3 hesaplamak"
+   },
+   "sol": "\\(\\left(\\frac{2}{3}\\right)^{-2} = \\left(\\frac{3}{2}\\right)^{2} = \\frac{9}{4}\\) ve \\(2^{-1} = \\frac{1}{2}\\) olduğundan toplam \\(\\frac{9}{4} + \\frac{2}{4} = \\frac{11}{4}\\) olur.",
+   "t": 55
+  },
+  {
+   "id": "TM08-03",
+   "k": [
+    "TM08.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{8^3 \\cdot 4^{-2}}{16^2} = 2^n\\)<br>olduğuna göre, \\(n\\) kaçtır?",
+   "opts": [
+    "\\(-11\\)",
+    "\\(-3\\)",
+    "\\(0\\)",
+    "\\(5\\)",
+    "\\(13\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "16²'yi 2^(4²) = 2¹⁶ sanmak (üs kulesiyle karıştırmak)",
+    "C": "Kuvvetin kuvvetinde üsleri çarpmak yerine toplamak",
+    "D": "4⁻²'yi 2⁴ alıp negatif işareti atmak",
+    "E": "Paydadaki üssü çıkarmak yerine toplamak"
+   },
+   "sol": "\\(8^3 = 2^9\\), \\(4^{-2} = 2^{-4}\\), \\(16^2 = 2^8\\) olduğundan ifade \\(2^{9-4-8} = 2^{-3}\\) olur; \\(n = -3\\).",
+   "t": 55
+  },
+  {
+   "id": "TM08-04",
+   "k": [
+    "TM08.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{3^{x+2} + 3^{x+1} - 3^{x}}{3^{x} + 3^{x-1}}\\)<br>ifadesinin değeri kaçtır?",
+   "opts": [
+    "\\(\\frac{11}{4}\\)",
+    "\\(6\\)",
+    "\\(\\frac{33}{4}\\)",
+    "\\(\\frac{39}{4}\\)",
+    "\\(\\frac{33}{2}\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "3^(x−1)'i 3ˣ · 3 olarak yazmak",
+    "B": "3^(x+2)'yi 3ˣ · 6 yazmak (üsteki 2'yi çarpan sanmak)",
+    "D": "Paydaki −3ˣ teriminin işaretini kaybetmek",
+    "E": "3⁻¹'i −1/3 alıp paydayı 2/3 · 3ˣ bulmak"
+   },
+   "sol": "Pay \\(3^x(9 + 3 - 1) = 11 \\cdot 3^x\\), payda \\(3^x\\left(1 + \\frac{1}{3}\\right) = \\frac{4}{3} \\cdot 3^x\\) olur. Oran \\(11 \\cdot \\frac{3}{4} = \\frac{33}{4}\\) bulunur.",
+   "t": 90
+  },
+  {
+   "id": "TM08-05",
+   "k": [
+    "TM08.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(2^{10} + 2^{10} + 2^{10} + 2^{10} = 4^{n}\\)<br>olduğuna göre, \\(n\\) kaçtır?",
+   "opts": [
+    "\\(6\\)",
+    "\\(7\\)",
+    "\\(11\\)",
+    "\\(12\\)",
+    "\\(20\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Dört terim olduğu için üsse 4 ekleyip 2¹⁴ bulmak",
+    "C": "2¹⁰'u 4¹⁰ sanıp 4 · 4¹⁰ = 4¹¹ yazmak",
+    "D": "2¹² = 4ⁿ'de tabanları eşitlemeden n = 12 almak",
+    "E": "aⁿ + aⁿ = a²ⁿ sanıp üsleri toplayarak 2⁴⁰ bulmak"
+   },
+   "sol": "\\(4 \\cdot 2^{10} = 2^2 \\cdot 2^{10} = 2^{12} = (2^2)^6 = 4^6\\) olduğundan \\(n = 6\\) olur.",
+   "t": 80
+  },
+  {
+   "id": "TM08-06",
+   "k": [
+    "TM08.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{4^{x+1}}{8^{x-1}} = \\dfrac{1}{16}\\)<br>olduğuna göre, \\(x\\) kaçtır?",
+   "opts": [
+    "\\(-\\frac{3}{5}\\)",
+    "\\(1\\)",
+    "\\(7\\)",
+    "\\(8\\)",
+    "\\(9\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Bölmede üsleri çıkarmak yerine toplamak",
+    "B": "1/16'yı 2⁴ alıp negatif üssü unutmak",
+    "C": "8^(x−1)'i 2^(3x−1) yazmak (3'ü yalnız x ile çarpmak)",
+    "D": "4^(x+1)'i 2^(2x+1) yazmak (2'yi yalnız x ile çarpmak)"
+   },
+   "sol": "\\(4^{x+1} = 2^{2x+2}\\), \\(8^{x-1} = 2^{3x-3}\\), \\(\\frac{1}{16} = 2^{-4}\\). \\((2x+2) - (3x-3) = -4 \\Rightarrow 5 - x = -4 \\Rightarrow x = 9\\) olur.",
+   "t": 90
+  },
+  {
+   "id": "TM08-07",
+   "k": [
+    "TM08.5"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "\\(a = 2^{60}, \\quad b = 3^{40}, \\quad c = 7^{20}\\)<br>olduğuna göre, \\(a\\), \\(b\\) ve \\(c\\) sayılarının doğru sıralanışı aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(c \\lt a \\lt b\\)",
+    "\\(a \\lt b \\lt c\\)",
+    "\\(a \\lt c \\lt b\\)",
+    "\\(b \\lt c \\lt a\\)",
+    "\\(c \\lt b \\lt a\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Yalnız tabanlara bakarak sıralamak",
+    "C": "2⁶⁰'ı 6²⁰ sanmak (tabanı 3 ile çarpmak)",
+    "D": "3⁴⁰'ı 6²⁰ sanmak (tabanı 2 ile çarpmak)",
+    "E": "Yalnız üslere bakarak sıralamak"
+   },
+   "sol": "Üsleri 20'de eşitleyelim: \\(a = (2^3)^{20} = 8^{20}\\), \\(b = (3^2)^{20} = 9^{20}\\), \\(c = 7^{20}\\). Üsler eşit ve tabanlar pozitif olduğundan \\(c \\lt a \\lt b\\) olur.",
+   "t": 90
+  },
+  {
+   "id": "TM08-08",
+   "k": [
+    "TM08.5",
+    "TM08.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Bir virüsün çapı yaklaşık \\(1{,}2 \\cdot 10^{-7}\\) metre, bir bakterinin boyu ise yaklaşık \\(3{,}6 \\cdot 10^{-6}\\) metredir.<br>Buna göre, bakterinin boyu virüsün çapının yaklaşık kaç katıdır?",
+   "opts": [
+    "\\(3 \\cdot 10^{-13}\\)",
+    "\\(3 \\cdot 10^{-1}\\)",
+    "\\(3\\)",
+    "\\(10\\)",
+    "\\(30\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Bölmede üsleri çıkarmak yerine toplamak: 10⁻¹³",
+    "B": "Üsleri ters sırada çıkarmak: −7 − (−6) = −1",
+    "C": "10'un kuvvetlerini ihmal edip yalnız katsayıları bölmek",
+    "D": "Katsayıları ihmal edip yalnız 10'un kuvvetlerini bölmek"
+   },
+   "sol": "\\(\\dfrac{3{,}6 \\cdot 10^{-6}}{1{,}2 \\cdot 10^{-7}} = 3 \\cdot 10^{-6-(-7)} = 3 \\cdot 10^{1} = 30\\) olur.",
+   "t": 80
+  },
+  {
+   "id": "TM08-09",
+   "k": [
+    "TM08.2"
+   ],
+   "d": 3,
+   "lvl": "U",
+   "stem": "\\(2^x = a\\) ve \\(3^x = b\\) olmak üzere,<br>\\(\\dfrac{12^{x+1}}{18^{x-1}}\\)<br>ifadesinin \\(a\\) ve \\(b\\) türünden eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(\\frac{a}{b}\\)",
+    "\\(\\frac{2a}{3b}\\)",
+    "\\(144\\)",
+    "\\(\\frac{216a}{b}\\)",
+    "\\(\\frac{216b}{a}\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Sabit çarpanları (12 ve 18) atmak",
+    "B": "18^(x−1)'i 18ˣ · 18 yazmak (negatif üssü ters kullanmak)",
+    "C": "4ˣ'i 2a, 9ˣ'i 3b yazmak (kuvveti çarpan sanmak)",
+    "E": "12ˣ ile 18ˣ'in açılımlarını karıştırmak"
+   },
+   "sol": "\\(12^{x+1} = 12 \\cdot 4^x \\cdot 3^x = 12a^2b\\) ve \\(18^{x-1} = \\frac{2^x \\cdot 9^x}{18} = \\frac{ab^2}{18}\\). Oran \\(\\frac{12a^2b \\cdot 18}{ab^2} = \\frac{216a}{b}\\) olur.",
+   "t": 130
+  },
+  {
+   "id": "TM08-10",
+   "k": [
+    "TM08.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(9^{x} - 4 \\cdot 3^{x} + 3 = 0\\)<br>denklemini sağlayan \\(x\\) değerlerinin toplamı kaçtır?",
+   "opts": [
+    "\\(0\\)",
+    "\\(1\\)",
+    "\\(2\\)",
+    "\\(3\\)",
+    "\\(4\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Yalnız 3ˣ = 1 durumunu çözmek",
+    "C": "3ˣ = 1'den x = 1 bulmak (sıfırıncı kuvveti unutmak)",
+    "D": "x değerleri yerine 3ˣ değerlerinin çarpımını vermek",
+    "E": "x değerleri yerine 3ˣ değerlerinin toplamını vermek"
+   },
+   "sol": "\\(3^x = t\\) dersek \\(t^2 - 4t + 3 = 0\\), yani \\(t = 1\\) veya \\(t = 3\\). \\(3^x = 1 \\Rightarrow x = 0\\) ve \\(3^x = 3 \\Rightarrow x = 1\\); toplam 1'dir.",
+   "t": 130
+  },
+  {
+   "id": "TM08-11",
+   "k": [
+    "TM08.4",
+    "TM08.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Bir laboratuvarda incelenen bir bakteri türünün sayısı her 20 dakikada bir 2 katına çıkmaktadır. Saat 09.00'da bu bakteriden \\(3 \\cdot 2^{10}\\) tane bulunan bir kültürde, bakteri sayısı \\(96 \\cdot 4^{8}\\) olduğu anda deney sona erdiriliyor.<br>Buna göre, deney saat kaçta sona erdirilmiştir?",
+   "opts": [
+    "10.40",
+    "11.20",
+    "12.20",
+    "12.40",
+    "16.00"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "4⁸'i 2¹⁰ yazmak (kuvvetin kuvvetinde üsleri toplamak)",
+    "B": "220 dakikayı 2 saat 20 dakika sanmak",
+    "C": "96'yı 3 · 2⁴ olarak yazmak",
+    "E": "Başlangıçtaki 2¹⁰'u hesaba katmadan 21 katlanma saymak"
+   },
+   "sol": "\\(96 \\cdot 4^8 = 3 \\cdot 2^5 \\cdot 2^{16} = 3 \\cdot 2^{21}\\). Sayı \\(2^{21-10} = 2^{11}\\) katına çıkmıştır, yani 11 kez ikiye katlanmıştır: \\(11 \\cdot 20 = 220\\) dakika = 3 saat 40 dakika. Deney 12.40'ta sona erer.",
+   "t": 140
+  }
+ ]
+}

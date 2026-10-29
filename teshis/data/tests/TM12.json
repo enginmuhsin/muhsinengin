@@ -1,0 +1,285 @@
+{
+ "topic": "TM12",
+ "title": "Birinci Dereceden Denklemler – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM12-01",
+   "k": [
+    "TM12.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(3(x-2)-5=2x+4\\)<br>denklemini sağlayan \\(x\\) değeri kaçtır?",
+   "opts": [
+    "−7",
+    "3",
+    "5",
+    "11",
+    "15"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "−11'i karşıya işaret değiştirmeden geçirmek",
+    "B": "2x'i karşıya işaret değiştirmeden geçirmek: 5x = 15",
+    "C": "−5'i +5 olarak almak",
+    "D": "Parantezi açarken yalnız x'i 3 ile çarpmak"
+   },
+   "sol": "\\(3x-6-5=2x+4\\Rightarrow 3x-11=2x+4\\Rightarrow x=15\\).",
+   "t": 50
+  },
+  {
+   "id": "TM12-02",
+   "k": [
+    "TM12.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{x}{3}-\\dfrac{x-1}{4}=2\\)<br>denkleminin çözümü kaçtır?",
+   "opts": [
+    "−1",
+    "21",
+    "23",
+    "25",
+    "27"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Paydayla çarparken sağdaki 2'yi 12 ile çarpmamak",
+    "C": "−3(x−1)'de yalnız x'i 3 ile çarpmak: −3x+1",
+    "D": "Kesrin önündeki −'yi yalnız x'e dağıtmak: 4x−3x−1",
+    "E": "−3(x−1) = −3x−3 yazmak; işaret hatası"
+   },
+   "sol": "Her terim 12 ile çarpılır: \\(4x-3(x-1)=24\\Rightarrow x+3=24\\Rightarrow x=21\\).",
+   "t": 55
+  },
+  {
+   "id": "TM12-03",
+   "k": [
+    "TM12.4"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\((a-3)x=b+2\\)<br>denkleminin çözüm kümesi gerçek sayılar kümesi olduğuna göre, \\(b-a\\) farkı kaçtır?",
+   "opts": [
+    "−5",
+    "−3",
+    "−1",
+    "1",
+    "5"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Yalnız x'in katsayısını sıfırlayıp b'yi 0 almak",
+    "C": "b+2 = 0'dan b = 2 bulmak; işaret hatası",
+    "D": "a−3 = 0'dan a = −3 bulmak; işaret hatası",
+    "E": "Hem a hem b için işareti ters almak (a = −3, b = 2)"
+   },
+   "sol": "\\(0\\cdot x=0\\) olmalıdır: \\(a-3=0\\) ve \\(b+2=0\\). \\(a=3,\\ b=-2\\), \\(b-a=-5\\).",
+   "t": 55
+  },
+  {
+   "id": "TM12-04",
+   "k": [
+    "TM12.5",
+    "TM12.1"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Bir sayının 3 katının 5 eksiği, aynı sayının 2 katının 7 fazlasına eşittir.<br>Buna göre, bu sayı kaçtır?",
+   "opts": [
+    "−12",
+    "12",
+    "19",
+    "22",
+    "29"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "'Eksiği/fazlası' yönlerini ters kurmak: 3x+5 = 2x−7",
+    "C": "'2 katının 7 fazlası'nı 2(x+7) yazmak",
+    "D": "'3 katının 5 eksiği'ni 3(x−5) yazmak",
+    "E": "Her iki ifadeyi de parantezli kurmak: 3(x−5) = 2(x+7)"
+   },
+   "sol": "\\(3x-5=2x+7\\Rightarrow x=12\\).",
+   "t": 75
+  },
+  {
+   "id": "TM12-05",
+   "k": [
+    "TM12.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(3x+2y=16\\)<br>\\(x+2y=8\\)<br>denklem sistemine göre, \\(x-y\\) farkı kaçtır?",
+   "opts": [
+    "−10",
+    "−2",
+    "2",
+    "5",
+    "6"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "x = 4'ü 1. denkleme koyarken 12'yi işaretsiz geçirmek",
+    "B": "x = 4'ü 2. denkleme koyarken 4'ü işaretsiz geçirmek",
+    "D": "Denklemleri toplayıp y'yi yok ettiğini sanmak: 4x = 24",
+    "E": "x−y yerine x+y toplamını hesaplamak"
+   },
+   "sol": "Denklemler taraf tarafa çıkarılırsa \\(2x=8,\\ x=4\\); \\(4+2y=8\\Rightarrow y=2\\). \\(x-y=2\\).",
+   "t": 80
+  },
+  {
+   "id": "TM12-06",
+   "k": [
+    "TM12.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(x-\\dfrac{x-3}{2}=\\dfrac{x+1}{3}+2\\)<br>denkleminin çözümü kaçtır?",
+   "opts": [
+    "−5",
+    "4",
+    "5",
+    "11",
+    "23"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Paydayla çarparken sabit 2'yi 6 ile çarpmamak",
+    "B": "2(x+1)'i 2x+1 yazmak; parantezin her terimini çarpmamak",
+    "D": "−3(x−3)'te yalnız x'i 3 ile çarpmak: −3x+3",
+    "E": "−3(x−3) = −3x−9 yazmak; işaret hatası"
+   },
+   "sol": "6 ile çarpılır: \\(6x-3(x-3)=2(x+1)+12\\Rightarrow 3x+9=2x+14\\Rightarrow x=5\\).",
+   "t": 85
+  },
+  {
+   "id": "TM12-07",
+   "k": [
+    "TM12.3"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir okul kantininde 2 tost ile 3 ayranın toplam fiyatı 130 TL, 3 tost ile 2 ayranın toplam fiyatı 145 TL'dir.<br>Buna göre, 1 tost ile 1 ayranın toplam fiyatı kaç TL'dir?",
+   "opts": [
+    "15",
+    "20",
+    "35",
+    "55",
+    "275"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Denklemleri çıkarıp bulunan t−a farkını cevap sanmak",
+    "B": "Yalnız ayranın fiyatını bulmak",
+    "C": "Yalnız tostun fiyatını bulmak",
+    "E": "Denklemleri toplayıp 5'e bölmeyi unutmak"
+   },
+   "sol": "Denklemler toplanırsa \\(5t+5a=275\\), buradan \\(t+a=55\\) TL.",
+   "t": 80
+  },
+  {
+   "id": "TM12-08",
+   "k": [
+    "TM12.5"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir sınıftaki öğrenciler sıralara 3'er 3'er oturursa 4 öğrenci ayakta kalıyor. Aynı öğrenciler sıralara 4'er 4'er oturursa 2 sıra tamamen boş kalıyor, diğer sıraların hepsi doluyor.<br>Buna göre, bu sınıfta kaç öğrenci vardır?",
+   "opts": [
+    "8",
+    "12",
+    "22",
+    "36",
+    "40"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "'4 öğrenci ayakta kalıyor'u 4 eksik gibi kurmak: 3s−4",
+    "B": "Sıra sayısını öğrenci sayısı sanmak",
+    "C": "'2 sıra boş'u 2 öğrenci eksik sanmak: 4s−2",
+    "D": "Ayakta kalan 4 öğrenciyi eklemeyi unutmak"
+   },
+   "sol": "Sıra sayısı \\(s\\) olsun: \\(3s+4=4(s-2)\\Rightarrow s=12\\). Öğrenci sayısı \\(3\\cdot 12+4=40\\).",
+   "t": 95
+  },
+  {
+   "id": "TM12-09",
+   "k": [
+    "TM12.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(m\\) bir gerçek sayı olmak üzere, \\(x\\)'e bağlı<br>\\((m^2-4)x=m^2-3m+2\\)<br>denklemi veriliyor. Buna göre,<br>I. \\(m=2\\) ise denklemin çözüm kümesi boş kümedir.<br>II. \\(m=-2\\) ise denklemin çözüm kümesi boş kümedir.<br>III. \\(m=1\\) ise denklemin çözüm kümesi \\(\\{0\\}\\)'dır.<br>ifadelerinden hangileri doğrudur?",
+   "opts": [
+    "Yalnız I",
+    "Yalnız II",
+    "I ve II",
+    "II ve III",
+    "I, II ve III"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "0x = 0'ı boş, 0x = 12'yi çözümlü; x = 0'ı çözümsüz sanmak",
+    "B": "Sağ taraf 0 olunca x = 0'ı 'çözüm yok' sanmak",
+    "C": "0x = 0 denkleminin çözüm kümesini boş küme sanmak",
+    "E": "a = 0 iken b'ye bakmadan hep boş küme demek"
+   },
+   "sol": "\\(m=2\\): \\(0x=0\\), çözüm kümesi \\(\\mathbb{R}\\) (I yanlış). \\(m=-2\\): \\(0x=12\\), boş küme (II doğru). \\(m=1\\): \\(-3x=0\\), \\(x=0\\) (III doğru).",
+   "t": 130
+  },
+  {
+   "id": "TM12-10",
+   "k": [
+    "TM12.5",
+    "TM12.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Elif bir kitabın ilk gün \\(\\dfrac{1}{4}\\)'ünü, ikinci gün kalan sayfaların \\(\\dfrac{1}{3}\\)'ünü okuyor. Üçüncü gün 32 sayfa daha okuduğunda kitabın okunmamış kısmı, tüm kitabın \\(\\dfrac{1}{6}\\)'sı oluyor.<br>Buna göre, kitap kaç sayfadır?",
+   "opts": [
+    "48",
+    "64",
+    "96",
+    "128",
+    "192"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Okunmamış 1/6'yı okunan kısma eklemek: x/2 + x/6 = 32",
+    "B": "Kalan 1/6'yı hesaba katmadan x/2 = 32 almak",
+    "D": "'Kalanın 1/3'ü'nü 'kitabın 1/3'ü' olarak kurmak",
+    "E": "32 sayfayı kitabın 1/6'sı sanmak"
+   },
+   "sol": "İki günün sonunda \\(x-\\frac{x}{4}-\\frac{x}{4}=\\frac{x}{2}\\) kalır. \\(\\frac{x}{2}-32=\\frac{x}{6}\\Rightarrow \\frac{x}{3}=32\\Rightarrow x=96\\).",
+   "t": 140
+  },
+  {
+   "id": "TM12-11",
+   "k": [
+    "TM12.3",
+    "TM12.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(ax+2y=4\\)<br>\\(6x+by=8\\)<br>denklem sisteminin sonsuz çoklukta çözümü olduğuna göre, \\(a+b\\) toplamı kaçtır?",
+   "opts": [
+    "4",
+    "7",
+    "8",
+    "13",
+    "16"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "b için oranı ters kurmak: b/2 = 1/2",
+    "C": "Katsayıları eşit sanmak: a = 6, b = 2",
+    "D": "Tüm oranları ters kurmak: a/6 = 2/b = 8/4",
+    "E": "a için oranı ters kurmak: a/6 = 2"
+   },
+   "sol": "Sonsuz çözüm için \\(\\dfrac{a}{6}=\\dfrac{2}{b}=\\dfrac{4}{8}=\\dfrac{1}{2}\\). \\(a=3,\\ b=4\\), \\(a+b=7\\).",
+   "t": 125
+  }
+ ]
+}

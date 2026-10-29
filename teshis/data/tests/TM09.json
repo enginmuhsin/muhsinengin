@@ -1,0 +1,283 @@
+{
+ "topic": "TM09",
+ "title": "Köklü Sayılar – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM09-01",
+   "k": [
+    "TM09.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(3\\sqrt{2} = \\sqrt{a}\\) ve \\(2\\sqrt[3]{5} = \\sqrt[3]{b}\\)<br>olduğuna göre, \\(a + b\\) toplamı kaçtır?",
+   "opts": [
+    "\\(16\\)",
+    "\\(24\\)",
+    "\\(28\\)",
+    "\\(38\\)",
+    "\\(58\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Katsayıyı kuvvet almadan kök içiyle çarpmak: 6 + 10",
+    "B": "Katsayının kuvvetini kök içiyle toplamak: 11 + 13",
+    "C": "Küpkökte katsayıyı kuvvet almadan çarpmak: 18 + 10",
+    "D": "Küpkökte katsayının küpü yerine karesini almak: 18 + 20"
+   },
+   "sol": "\\(3\\sqrt{2} = \\sqrt{3^2 \\cdot 2} = \\sqrt{18}\\) ve \\(2\\sqrt[3]{5} = \\sqrt[3]{2^3 \\cdot 5} = \\sqrt[3]{40}\\) olduğundan \\(a + b = 18 + 40 = 58\\) olur.",
+   "t": 55
+  },
+  {
+   "id": "TM09-02",
+   "k": [
+    "TM09.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(\\sqrt{48} - \\sqrt{27} + \\sqrt{12}\\)<br>işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(-3\\sqrt{3}\\)",
+    "\\(-\\sqrt{3}\\)",
+    "\\(3\\sqrt{3}\\)",
+    "\\(\\sqrt{33}\\)",
+    "\\(9\\sqrt{3}\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "√27'yi 9√3 yazmak (9'u kök dışına 9 olarak çıkarmak)",
+    "B": "−√27 + √12'yi −(3√3 + 2√3) gibi işleme sokmak",
+    "D": "√a − √b + √c = √(a − b + c) sanmak",
+    "E": "Çıkarmayı toplama gibi yapmak: 4√3 + 3√3 + 2√3"
+   },
+   "sol": "\\(\\sqrt{48} = 4\\sqrt{3}\\), \\(\\sqrt{27} = 3\\sqrt{3}\\), \\(\\sqrt{12} = 2\\sqrt{3}\\) olduğundan sonuç \\((4 - 3 + 2)\\sqrt{3} = 3\\sqrt{3}\\) olur.",
+   "t": 55
+  },
+  {
+   "id": "TM09-03",
+   "k": [
+    "TM09.5"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(a \\lt 0 \\lt b\\) olmak üzere,<br>\\(\\sqrt{a^2} + \\sqrt[3]{a^3} + \\sqrt{(a-b)^2}\\)<br>ifadesinin eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(b-a\\)",
+    "\\(3a-b\\)",
+    "\\(a-b\\)",
+    "\\(a+b\\)",
+    "\\(b-3a\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "√(x²) = x yazıp hiç mutlak değer almamak",
+    "C": "√((a − b)²)'yi a − b yazmak",
+    "D": "Negatif a için √(a²)'yi a yazmak",
+    "E": "Tek dereceli ∛(a³)'te de mutlak değer almak"
+   },
+   "sol": "\\(\\sqrt{a^2} = |a| = -a\\), \\(\\sqrt[3]{a^3} = a\\) ve \\(\\sqrt{(a-b)^2} = |a-b| = b - a\\) olduğundan toplam \\(-a + a + b - a = b - a\\) olur.",
+   "t": 55
+  },
+  {
+   "id": "TM09-04",
+   "k": [
+    "TM09.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{6}{3-\\sqrt{3}}\\)<br>ifadesinin eşiti aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(2-2\\sqrt{3}\\)",
+    "\\(3-\\sqrt{3}\\)",
+    "\\(\\frac{3+\\sqrt{3}}{2}\\)",
+    "\\(3+\\frac{\\sqrt{3}}{6}\\)",
+    "\\(3+\\sqrt{3}\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Kesri paydadaki terimlere dağıtmak: 6/3 − 6/√3",
+    "B": "Eşlenik yerine paydanın kendisiyle genişletip paydayı 6 almak",
+    "C": "Eşlenikle çarparken paydayı 9 + 3 = 12 hesaplamak",
+    "D": "Payı eşlenikle çarparken 6 · 3 + √3 yazmak"
+   },
+   "sol": "Pay ve payda eşlenik \\(3+\\sqrt{3}\\) ile çarpılırsa \\(\\dfrac{6(3+\\sqrt{3})}{9-3} = \\dfrac{6(3+\\sqrt{3})}{6} = 3+\\sqrt{3}\\) olur.",
+   "t": 85
+  },
+  {
+   "id": "TM09-05",
+   "k": [
+    "TM09.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Ayşe, odasının bir duvarı boyunca alanları 12 m² ve 27 m² olan kare biçimindeki iki halıyı, aralarında boşluk kalmayacak ve birer kenarları duvara tam bitişik olacak şekilde yan yana seriyor.<br>Buna göre, halıların duvar boyunca kapladığı toplam uzunluk kaç metredir?",
+   "opts": [
+    "\\(\\sqrt{39}\\)",
+    "\\(5\\sqrt{3}\\)",
+    "\\(7\\sqrt{3}\\)",
+    "\\(18\\)",
+    "\\(11\\sqrt{3}\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "√a + √b = √(a + b) sanmak",
+    "C": "√12'yi 4√3 yazmak (4'ü kök dışına 4 olarak çıkarmak)",
+    "D": "Kenarları toplamak yerine çarpmak: √12 · √27 = 18",
+    "E": "√27'yi 9√3 yazmak (9'u kök dışına 9 olarak çıkarmak)"
+   },
+   "sol": "Halıların kenarları \\(\\sqrt{12} = 2\\sqrt{3}\\) m ve \\(\\sqrt{27} = 3\\sqrt{3}\\) m'dir. Toplam uzunluk \\(2\\sqrt{3} + 3\\sqrt{3} = 5\\sqrt{3}\\) m olur.",
+   "t": 80
+  },
+  {
+   "id": "TM09-06",
+   "k": [
+    "TM09.2",
+    "TM09.1"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{\\sqrt{2} \\cdot \\sqrt[3]{4}}{\\sqrt[6]{2}}\\)<br>işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(\\sqrt[3]{2}\\)",
+    "\\(2\\)",
+    "\\(2\\sqrt[3]{2}\\)",
+    "\\(2\\sqrt[6]{32}\\)",
+    "\\(4\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Farklı dereceli kökleri doğrudan çarpmak: √2 · ∛4 = ⁶√8",
+    "C": "Dereceleri yok sayıp √2 · ∛4 = √8 yazmak",
+    "D": "∛4'ü 2^(3/2) yazmak (kök–üs dönüşümünü ters kurmak)",
+    "E": "Kök derecelerini yok sayıp 2 · 4 / 2 hesaplamak"
+   },
+   "sol": "\\(\\sqrt{2} = 2^{\\frac{1}{2}}\\), \\(\\sqrt[3]{4} = 2^{\\frac{2}{3}}\\), \\(\\sqrt[6]{2} = 2^{\\frac{1}{6}}\\) olduğundan sonuç \\(2^{\\frac{1}{2} + \\frac{2}{3} - \\frac{1}{6}} = 2^{1} = 2\\) olur.",
+   "t": 90
+  },
+  {
+   "id": "TM09-07",
+   "k": [
+    "TM09.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(a = 2\\sqrt{7}, \\quad b = 3\\sqrt{3}, \\quad c = 5\\sqrt{2}\\)<br>olduğuna göre, \\(a\\), \\(b\\) ve \\(c\\) sayılarının doğru sıralanışı aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(a \\lt b \\lt c\\)",
+    "\\(b \\lt c \\lt a\\)",
+    "\\(c \\lt a \\lt b\\)",
+    "\\(b \\lt a \\lt c\\)",
+    "\\(c \\lt b \\lt a\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Yalnız kök dışındaki katsayılara bakarak sıralamak",
+    "B": "Katsayıyı karesini almadan kök içine çarpmak: √14, √9, √10",
+    "C": "Büyükten küçüğe bulduğu sıralamayı '<' ile yazmak",
+    "E": "Yalnız kök içindeki sayılara bakarak sıralamak"
+   },
+   "sol": "Katsayılar kök içine alınırsa \\(a = \\sqrt{28}\\), \\(b = \\sqrt{27}\\), \\(c = \\sqrt{50}\\) olur. Buna göre \\(b \\lt a \\lt c\\) bulunur.",
+   "t": 85
+  },
+  {
+   "id": "TM09-08",
+   "k": [
+    "TM09.4"
+   ],
+   "d": 2,
+   "lvl": "K",
+   "stem": "I. \\(\\sqrt{10} \\lt 3{,}1\\)<br>II. \\(2 \\lt \\sqrt[3]{9} \\lt 3\\)<br>III. \\(\\sqrt{2} + \\sqrt{3} \\gt \\sqrt{5}\\)<br>eşitsizliklerinden hangileri doğrudur?",
+   "opts": [
+    "Yalnız I",
+    "Yalnız II",
+    "I ve III",
+    "II ve III",
+    "I, II ve III"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "√10 < 3,1 sanıp ∛9 = 3 ve √2 + √3 = √5 kabul etmek",
+    "B": "√2 + √3 = √5 sanıp III'ü elemek",
+    "C": "√10 ≈ 3,1 diye I'i doğru sayıp ∛9'u √9 = 3 ile karıştırmak",
+    "E": "√10 ≈ 3,1 yuvarlamasıyla I'i de doğru saymak"
+   },
+   "sol": "\\(3{,}1^2 = 9{,}61 \\lt 10\\) olduğundan \\(\\sqrt{10} \\gt 3{,}1\\); I yanlış. \\(2^3 = 8 \\lt 9 \\lt 27 = 3^3\\) olduğundan II doğru. \\((\\sqrt{2}+\\sqrt{3})^2 = 5 + 2\\sqrt{6} \\gt 5\\) olduğundan III doğru.",
+   "t": 90
+  },
+  {
+   "id": "TM09-09",
+   "k": [
+    "TM09.1"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Yüksekten serbest bırakılan bir cismin yere düşme süresi, hava direnci ihmal edildiğinde \\(t = \\sqrt{\\dfrac{h}{5}}\\) formülüyle hesaplanmaktadır. Burada \\(h\\) metre cinsinden bırakılma yüksekliği, \\(t\\) saniye cinsinden düşme süresidir.<br>Bir binanın yerden 20 m yükseklikteki balkonundan ve bu balkonun \\(x\\) m yukarısındaki çatısından birer top serbest bırakılıyor. Çatıdan bırakılan topun düşme süresi, balkondan bırakılanınkinden 1 saniye fazladır.<br>Buna göre, \\(x\\) kaçtır?",
+   "opts": [
+    "\\(5\\)",
+    "\\(10\\)",
+    "\\(25\\)",
+    "\\(45\\)",
+    "\\(105\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Süre farkını yalnız x'e uygulamak: √(x/5) = 1",
+    "B": "Düşme süresini yükseklikle doğru orantılı sanmak",
+    "D": "Çatının yerden yüksekliğini x sanmak",
+    "E": "√(20/5) = 2 yerine 4 alıp t = 5'ten h = 125 bulmak"
+   },
+   "sol": "Balkondan düşme süresi \\(\\sqrt{20/5} = 2\\) s, çatıdan ise 3 s'dir. \\(\\sqrt{\\frac{h}{5}} = 3 \\Rightarrow h = 45\\) m olduğundan \\(x = 45 - 20 = 25\\) bulunur.",
+   "t": 130
+  },
+  {
+   "id": "TM09-10",
+   "k": [
+    "TM09.3"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(\\dfrac{1}{\\sqrt{2}+1} + \\dfrac{1}{\\sqrt{3}+\\sqrt{2}} + \\dfrac{1}{\\sqrt{4}+\\sqrt{3}} + \\cdots + \\dfrac{1}{\\sqrt{9}+\\sqrt{8}}\\)<br>toplamının değeri kaçtır?",
+   "opts": [
+    "\\(2\\sqrt{2}-1\\)",
+    "\\(2\\)",
+    "\\(3\\)",
+    "\\(4\\)",
+    "\\(8\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Sadeleşmede kalan son terimi √9 yerine √8 almak",
+    "C": "Sadeleşmede kalan −1 terimini unutmak",
+    "D": "Eşlenikle çarpınca terimleri √(k+1) + √k yazmak: √9 + 1",
+    "E": "Kök almayı unutup 9 − 1 hesaplamak"
+   },
+   "sol": "Her terim eşleniğiyle genişletilirse \\(\\dfrac{1}{\\sqrt{k+1}+\\sqrt{k}} = \\sqrt{k+1} - \\sqrt{k}\\) olur. Toplam \\((\\sqrt{2}-1) + (\\sqrt{3}-\\sqrt{2}) + \\cdots + (\\sqrt{9}-\\sqrt{8}) = \\sqrt{9} - 1 = 2\\) bulunur.",
+   "t": 130
+  },
+  {
+   "id": "TM09-11",
+   "k": [
+    "TM09.5"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(\\sqrt{7-4\\sqrt{3}} + \\sqrt{7+4\\sqrt{3}}\\)<br>işleminin sonucu kaçtır?",
+   "opts": [
+    "\\(2\\sqrt{3}\\)",
+    "\\(\\sqrt{14}\\)",
+    "\\(4\\)",
+    "\\(2\\sqrt{7}\\)",
+    "\\(4+2\\sqrt{3}\\)"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "√((2 − √3)²)'yi √3 − 2 yazmak (√(x²) = x yanılgısı)",
+    "B": "√a + √b = √(a + b) sanmak: √14",
+    "D": "4√3'lerin birbirini götürdüğünü sanıp √7 + √7 yazmak",
+    "E": "√(7 − 4√3)'ü 2 + √3 almak (iç içe kökte işaret hatası)"
+   },
+   "sol": "\\(7 - 4\\sqrt{3} = (2-\\sqrt{3})^2\\) ve \\(7 + 4\\sqrt{3} = (2+\\sqrt{3})^2\\) olur. \\(\\sqrt{(2-\\sqrt{3})^2} = |2-\\sqrt{3}| = 2-\\sqrt{3}\\) olduğundan toplam \\((2-\\sqrt{3}) + (2+\\sqrt{3}) = 4\\) bulunur.",
+   "t": 140
+  }
+ ]
+}

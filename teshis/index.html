@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>YKS Teşhis Defteri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: sabit üst bar (öğrenci + sekmeler) → tek sütun çalışma alanı; çözme/cevap girişi tam ekran katman. Optik form kabarcıkları imza öğe. */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#E4E8EF; --ink:#141C27; --muted:#566273; --line:#D5DBE4;
+  --accent:#2B47D1; --accent-ink:#FFFFFF; --accent-soft:#E2E7FB;
+  --ok:#17845A; --warn:#B57F06; --low:#CC5A15; --bad:#BE2338; --none:#A7B0BD;
+  --ok-soft:#DDF2E8; --warn-soft:#F8EED3; --low-soft:#FBE5D6; --bad-soft:#F9DEE2;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E131A; --surface:#161D27; --sunk:#1C2531; --ink:#E7EBF1; --muted:#97A3B4; --line:#2A3445;
+  --accent:#8196FF; --accent-ink:#0E131A; --accent-soft:#222C55;
+  --ok:#41C58B; --warn:#E2B040; --low:#F08C4E; --bad:#F2687A; --none:#4D5768;
+  --ok-soft:#173528; --warn-soft:#3A2F12; --low-soft:#3D2414; --bad-soft:#41191F; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E131A; --surface:#161D27; --sunk:#1C2531; --ink:#E7EBF1; --muted:#97A3B4; --line:#2A3445;
+  --accent:#8196FF; --accent-ink:#0E131A; --accent-soft:#222C55;
+  --ok:#41C58B; --warn:#E2B040; --low:#F08C4E; --bad:#F2687A; --none:#4D5768;
+  --ok-soft:#173528; --warn-soft:#3A2F12; --low-soft:#3D2414; --bad-soft:#41191F; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{padding-top:env(safe-area-inset-top,0px)}
+body{margin:0}
+.login{max-width:420px;margin:40px auto}
+.login form{display:flex;flex-direction:column;gap:12px}
+.login label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h2{font-size:1.45rem} h3{font-size:1.08rem}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .row1{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:12px 8px}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand h1{font-size:1.3rem}
+.brand .tag{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.stu{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stu label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+select,input[type=text],input[type=date],input[type=number],textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{width:100%;min-height:80px;font-family:var(--mono);font-size:.85rem}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{padding:9px 14px 11px;color:var(--muted);text-decoration:none;border-bottom:2.5px solid transparent;white-space:nowrap;font-weight:500}
+nav.tabs a[aria-current=page]{color:var(--ink);border-color:var(--accent)}
+main{padding-block:24px 64px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 13px;font-weight:500;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:1px 9px;font-size:.78rem;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-soft)} .s-warn{color:var(--warn);background:var(--warn-soft)}
+.s-low{color:var(--low);background:var(--low-soft)} .s-bad{color:var(--bad);background:var(--bad-soft)}
+.s-none{color:var(--muted);background:var(--sunk)}
+.chip.plain::before{display:none}
+.chip.acc{color:var(--accent);background:var(--accent-soft)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.sechead{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.notice{border:1px dashed var(--line);border-radius:var(--r);padding:12px 14px;background:var(--sunk);font-size:.9rem}
+
+/* topics list */
+.secblock{margin-bottom:28px}
+.secblock > h3{display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+.tlist{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.trow{display:grid;grid-template-columns:62px minmax(0,1fr) 70px 150px 120px;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line);width:100%;text-align:left;background:none;border-left:0;border-right:0;border-bottom:0}
+.trow:first-child{border-top:0}
+.trow:hover{background:var(--sunk)}
+.trow .nm{font-weight:500;min-width:0}
+.dots{display:inline-flex;gap:3px} .dots i{width:7px;height:7px;border-radius:50%;background:var(--line)} .dots i.on{background:var(--ink)}
+@media (max-width:720px){.trow{grid-template-columns:52px minmax(0,1fr) auto}.trow .c-w,.trow .c-st{display:none}}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,14,20,.45);z-index:20;display:flex;justify-content:flex-end}
+.drawer{width:min(620px,100%);height:100%;background:var(--surface);overflow-y:auto;padding:22px max(20px,env(safe-area-inset-right,0px)) calc(40px + env(safe-area-inset-bottom,0px)) 22px;padding-top:calc(22px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:18px}
+.drawer .x{align-self:flex-end}
+.klist{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.klist li{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:10px;align-items:start;font-size:.92rem}
+.analogy{border-left:3px solid var(--accent);padding:8px 12px;background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:.93rem}
+
+/* overlay (solve / entry) */
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:30;overflow-y:auto}
+.ovbar{position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.ovbar .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:10px}
+.ovbar .ttl{margin-right:auto;min-width:0}
+.timer{font-family:var(--mono);font-size:1.05rem;padding:3px 10px;border-radius:6px;background:var(--sunk)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-top:20px}
+.qnum{font-family:var(--display);font-size:1.6rem;color:var(--accent);line-height:1}
+.stem{font-size:1.04rem;margin:12px 0 18px;overflow-x:auto}
+.stem table{border-collapse:collapse;margin:8px 0}.stem td,.stem th{border:1px solid var(--line);padding:4px 10px}
+.fig{max-width:360px;margin:8px 0;color:var(--ink)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--surface);text-align:left;width:100%}
+.opt:hover{border-color:var(--accent)}
+.bub{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-family:var(--mono);font-weight:500;font-size:.88rem}
+.opt[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}
+.opt[aria-pressed=true] .bub{background:var(--ink);color:var(--surface)}
+.qnav{display:flex;justify-content:space-between;gap:8px;margin-top:18px;flex-wrap:wrap}
+.qmap{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.qmap button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-family:var(--mono);font-size:.85rem}
+.qmap button.done{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.qmap button.cur{outline:2px solid var(--accent);outline-offset:1px}
+
+/* optik form */
+.optik{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:18px}
+.orow{display:grid;grid-template-columns:44px auto minmax(0,1fr);gap:12px;align-items:center;padding:8px 14px;border-top:1px solid var(--line)}
+.orow:first-child{border-top:0}
+.orow .no{font-family:var(--mono);color:var(--muted)}
+.bubs{display:flex;gap:6px}
+.bubs button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--muted);background:var(--surface);font-family:var(--mono);font-size:.82rem}
+.bubs button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.orow.right .bubs button[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#fff}
+.orow.wrong .bubs button[aria-pressed=true]{background:var(--bad);border-color:var(--bad);color:#fff}
+.bubs button.key{box-shadow:0 0 0 2px var(--ok)}
+.orow .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.84rem;min-width:0}
+.orow select{padding:4px 8px;font-size:.84rem}
+@media (max-width:560px){.orow{grid-template-columns:30px minmax(0,1fr)}.orow .meta{grid-column:1/-1}.bubs button{width:30px;height:30px}}
+
+/* analysis */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.kpi b{display:block;font-family:var(--display);font-size:1.7rem;line-height:1.15}
+.kpi span{font-size:.82rem;color:var(--muted)}
+.heat{display:flex;flex-direction:column;gap:6px}
+.hrow{display:grid;grid-template-columns:minmax(120px,220px) minmax(0,1fr) 54px;gap:10px;align-items:center}
+.hrow .tn{font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cells{display:flex;gap:4px;flex-wrap:wrap}
+.cell{min-width:46px;height:30px;border-radius:6px;display:grid;place-items:center;font-family:var(--mono);font-size:.72rem;font-weight:500;border:0;padding:0 4px}
+.cell.s-none{background:var(--sunk)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;margin-top:10px}
+table.tbl{border-collapse:collapse;width:100%;font-size:.88rem}
+.tbl th{text-align:left;font-weight:600;color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+.scroll{overflow-x:auto}
+.prio{display:flex;flex-direction:column}
+.prow{display:grid;grid-template-columns:34px minmax(0,1fr) 64px;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.prow:first-child{border-top:0}
+.prow .rk{font-family:var(--display);font-size:1.25rem;color:var(--muted)}
+.reasons{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.bar{height:8px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.blist{display:flex;flex-direction:column;gap:9px}
+.bl{display:grid;grid-template-columns:130px minmax(0,1fr) 30px;gap:10px;align-items:center;font-size:.88rem}
+
+/* plan */
+.week{margin-top:22px}
+.week h3{display:flex;gap:10px;align-items:baseline;margin-bottom:10px}
+.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.lesson.done{opacity:.6}
+.lesson header{display:flex;align-items:center;gap:10px}
+.lesson header .d{margin-right:auto}
+.blk{border-top:1px solid var(--line);padding-top:10px}
+.phases{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;font-size:.88rem}
+.phases li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px}
+.phases li span:first-child{font-family:var(--mono);color:var(--muted)}
+.hw{font-size:.87rem;background:var(--sunk);border-radius:8px;padding:8px 10px}
+.form{display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted)}
+.form input,.form select{min-width:120px}
+.form input[type=checkbox]{min-width:0}
+@media (max-width:600px){.hrow{grid-template-columns:minmax(0,1fr) 48px}.hrow .cells{grid-column:1/-1;grid-row:2}}
+
+/* method */
+.prose{max-width:72ch}
+.prose p,.prose li{margin:.4em 0}
+.formula{background:var(--sunk);border-radius:8px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+
+.empty{text-align:center;padding:40px 20px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;z-index:50;font-size:.9rem;max-width:calc(100% - 32px)}
+.confirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--warn-soft);border-radius:8px;padding:10px 12px;margin-top:12px}
+.mjx-svg-fallback{font-family:var(--mono)}
+mjx-container{max-width:100%}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap row1">
+    <div class="brand"><h1>YKS Teşhis Defteri</h1><span class="tag" id="modeTag">yükleniyor…</span></div>
+    <div class="stu" id="stuBox"></div>
+  </div>
+  <div class="wrap"><nav class="tabs" id="tabs">
+    <a href="#konular" data-v="konular">Konular ve Testler</a>
+    <a href="#analiz" data-v="analiz">Teşhis Raporu</a>
+    <a href="#plan" data-v="plan">Gelişim Planı</a>
+    <a href="#gecmis" data-v="gecmis">Uygulamalar</a>
+    <a href="#yontem" data-v="yontem">Yöntem</a>
+  </nav></div>
+</header>
+<main class="wrap" id="main"><div class="empty muted">Kazanım haritası yükleniyor…</div></main>
+<div id="layer"></div>
+
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'local'},startup:{typeset:false},options:{enableMenu:false}};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+"use strict";
+/* ================= yardımcılar ================= */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const L='ABCDE';
+const uid=()=>(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)});
+const rndToken=(n=14)=>{const a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';const v=new Uint32Array(n);crypto.getRandomValues(v);return [...v].map(x=>a[x%a.length]).join('')};
+const pct=x=>Math.round(x*100);
+const fmtDate=iso=>{try{return new Date(iso).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})}catch(e){return iso}};
+const localISO=(d=new Date())=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+const fmtDay=d=>d.toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'short'});
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function tex(el){ if(!el) return; const MJ=window.MathJax; if(MJ&&MJ.typesetPromise){ (MJ.startup&&MJ.startup.promise?MJ.startup.promise:Promise.resolve()).then(()=>MJ.typesetPromise([el])).catch(()=>{}) } }
+
+/* durum eşikleri */
+const ST=[{min:.75,c:'s-ok',t:'Hakim'},{min:.55,c:'s-warn',t:'Gelişiyor'},{min:.35,c:'s-low',t:'Eksik'},{min:-1,c:'s-bad',t:'Kritik'}];
+const stOf=m=>m==null?{c:'s-none',t:'Test edilmedi'}:ST.find(s=>m>=s.min);
+const chip=m=>{const s=stOf(m);return `<span class="chip ${s.c}">${s.t}${m!=null?' · '+pct(m)+'%':''}</span>`};
+const ERR={kavram:'Kavramsal',islem:'İşlem',dikkat:'Dikkat / okuma',sure:'Süre yetmedi',tahmin:'Tahmin'};
+
+/* ================= durum ================= */
+const S={cur:null,topics:{},ready:[],tests:{},students:[],attempts:[],plans:{},sid:null,view:'konular',mode:'local',dl:null};
+
+/* ================= depolama ================= */
+const CFG=window.TESHIS_CONFIG||{};
+/* tarayıcıda dosya indirme (site sürümü) */
+S.dl={save:async({filename,data})=>{const blob=typeof data==='string'?new Blob([data],{type:'text/html;charset=utf-8'}):data;const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500);return {status:'saved'}}};
+const TBL={students:'teshis_students',attempts:'teshis_attempts',plans:'teshis_plans'};
+const Store={
+  sb:null,
+  async init(){
+    const m=location.hash.slice(1).match(/^coz-([A-Za-z]{2}\d{2})(?:-([A-Za-z0-9]{10,40}))?$/);
+    if(m){ S.coz=m[1].toUpperCase(); S.token=m[2]||null; }
+    if(CFG.supabaseUrl&&CFG.supabaseAnonKey&&window.supabase){
+      this.sb=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey);
+      if(S.coz){ S.mode='student'; return; }
+      const {data}=await this.sb.auth.getSession();
+      if(!data||!data.session){ S.mode='login'; return; }
+      S.user=data.session.user; S.mode='cloud'; await this.loadAll(); this.live();
+    } else {
+      if(S.coz){ S.mode='student'; return; }
+      S.mode='local'; this.loadLocal();
+    }
+  },
+  async loadAll(){
+    const sb=this.sb;
+    const [st,at,pl]=await Promise.all([sb.from(TBL.students).select('*').order('created_at'),sb.from(TBL.attempts).select('*'),sb.from(TBL.plans).select('*')]);
+    const err=st.error||at.error||pl.error; if(err){ toast('Veriler alınamadı: '+err.message); return; }
+    S.students=st.data.map(r=>({id:r.id,name:r.name,created:r.created_at}));
+    S.attempts=at.data.map(r=>({id:r.id,sid:r.student_id,topic:r.topic,mode:r.mode,date:r.date,answers:r.answers||[],times:r.times||[],errs:r.errs||{},dur:r.dur||0,from:r.from_name}));
+    S.plans=Object.fromEntries(pl.data.map(r=>[r.student_id,{id:r.student_id,...r.data}]));
+    if(!S.students.find(x=>x.id===S.sid)) S.sid=pickSid();
+    render();
+  },
+  live(){
+    try{ this.sb.channel('teshis-attempts').on('postgres_changes',{event:'INSERT',schema:'public',table:TBL.attempts},p=>{ if(!S.attempts.find(a=>a.id===p.new.id)){ this.loadAll(); toast('Yeni sonuç geldi: '+p.new.topic) } }).subscribe(); }catch(e){}
+    let last=Date.now(); window.addEventListener('focus',()=>{ if(Date.now()-last>20000 && !$('#layer').innerHTML){ last=Date.now(); this.loadAll() } });
+  },
+  row(coll,id,d){
+    if(coll==='students') return {id,name:d.name};
+    if(coll==='attempts') return {id,student_id:d.sid,topic:d.topic,mode:d.mode,date:d.date,answers:d.answers||[],times:d.times||[],errs:d.errs||{},dur:Math.round(d.dur||0),from_name:d.from||null};
+    return {student_id:id,data:d,updated_at:new Date().toISOString()};
+  },
+  apply(coll,id,data){
+    if(coll==='plans'){S.plans[id]={id,...data};return}
+    const arr=S[coll]; const i=arr.findIndex(x=>x.id===id); if(i>=0)arr[i]={id,...data}; else arr.push({id,...data});
+  },
+  async put(coll,id,data){
+    const rec={...data};
+    if(S.mode==='cloud'){ const {error}=await this.sb.from(TBL[coll]).upsert(this.row(coll,id,rec)); if(error){ toast('Kaydedilemedi: '+error.message); return false } }
+    this.apply(coll,id,rec); if(S.mode==='local') this.saveLocal(); render(); return true;
+  },
+  async del(coll,id){
+    if(S.mode==='cloud'){ const {error}=await this.sb.from(TBL[coll]).delete().eq(coll==='plans'?'student_id':'id',id); if(error){ toast('Silinemedi: '+error.message); return false } }
+    if(coll==='plans') delete S.plans[id]; else S[coll]=S[coll].filter(x=>x.id!==id);
+    if(S.mode==='local') this.saveLocal(); render(); return true;
+  },
+  loadLocal(){ try{const j=JSON.parse(localStorage.getItem('yks-teshis-v1')||'{}');S.students=j.students||[];S.attempts=j.attempts||[];S.plans=j.plans||{};}catch(e){} S.sid=pickSid(); },
+  saveLocal(){ try{localStorage.setItem('yks-teshis-v1',JSON.stringify({students:S.students,attempts:S.attempts,plans:S.plans}))}catch(e){} },
+  async login(email,pw){ const {error}=await this.sb.auth.signInWithPassword({email,password:pw}); if(error) throw error; await this.init(); route(); },
+  async logout(){ await this.sb.auth.signOut(); S.students=[];S.attempts=[];S.plans={};S.sid=null; S.mode='login'; render(); }
+};
+function pickSid(){ let s=null; try{s=localStorage.getItem('yks-sid')}catch(e){} return S.students.find(x=>x.id===s)?s:(S.students[0]&&S.students[0].id)||null }
+function setSid(id){ S.sid=id; try{localStorage.setItem('yks-sid',id)}catch(e){} render() }
+
+/* ================= veri yükleme ================= */
+async function loadTest(tid){
+  if(S.tests[tid]) return S.tests[tid];
+  const r=await fetch('data/tests/'+tid+'.json'); if(!r.ok) throw new Error('Test bulunamadı');
+  return S.tests[tid]=await r.json();
+}
+async function boot(){
+  const [cur,idx]=await Promise.all([fetch('data/curriculum.json').then(r=>r.json()),fetch('data/tests/index.json').then(r=>r.json()).catch(()=>({ready:[]}))]);
+  S.cur=cur; cur.topics.forEach(t=>S.topics[t.id]=t); S.ready=idx.ready||[];
+  computeGraph();
+  await Store.init();
+  // gerekli test dosyalarını önden yükle (analiz için)
+  await Promise.all(S.ready.map(id=>loadTest(id).catch(()=>null)));
+  const h=location.hash.slice(1);
+  if(S.coz){ if(S.ready.includes(S.coz)){ S.view='konular'; render(); return startSolve(S.coz,{student:true}); } }
+  route();
+}
+window.addEventListener('hashchange',route);
+function route(){ const h=location.hash.slice(1); S.view=['konular','analiz','plan','gecmis','yontem'].includes(h)?h:'konular'; render(); }
+
+/* önkoşul grafiği: her konudan sonra gelen (ona bağımlı) konu sayısı */
+function computeGraph(){
+  const kids={}; S.cur.topics.forEach(t=>kids[t.id]=[]);
+  S.cur.topics.forEach(t=>t.pre.forEach(p=>kids[p].push(t.id)));
+  const desc=id=>{const seen=new Set(),st=[...kids[id]];while(st.length){const x=st.pop();if(!seen.has(x)){seen.add(x);st.push(...kids[x])}}return seen.size};
+  let mx=1; S.cur.topics.forEach(t=>{t.desc=desc(t.id);mx=Math.max(mx,t.desc)});
+  S.cur.topics.forEach(t=>t.C=1+t.desc/mx);
+}
+
+/* ================= puanlama / analiz ================= */
+function scoreAttempt(a){
+  const T=S.tests[a.topic]; if(!T) return null;
+  let D=0,Y=0,B=0; const per=T.questions.map((q,i)=>{const x=(a.answers||[])[i]||''; const ok=x===q.ans; if(!x)B++; else if(ok)D++; else Y++; return {q,x,ok,blank:!x,i}});
+  const net=D-Y/4; return {D,Y,B,N:T.questions.length,net,pct:Math.max(0,net)/T.questions.length,per};
+}
+const ALPHA=1, PRIOR=.5;
+function latestAttempts(sid){
+  const m={}; S.attempts.filter(a=>a.sid===sid&&S.tests[a.topic]).forEach(a=>{ if(!m[a.topic]||a.date>m[a.topic].date) m[a.topic]=a });
+  return m;
+}
+function analyze(sid){
+  const latest=latestAttempts(sid); const K={}; const topicM={}; const miscon=[]; const errs={kavram:0,islem:0,dikkat:0,sure:0,tahmin:0,yok:0}; const timing=[];
+  for(const tid in latest){
+    const a=latest[tid], sc=scoreAttempt(a), T=S.topics[tid];
+    T.k.forEach(k=>K[k.id]={id:k.id,t:k.t,topic:tid,num:0,den:0,n:0,wrongs:[],tags:{}});
+    sc.per.forEach(({q,x,ok,blank,i})=>{
+      q.k.forEach((kid,j)=>{ const kk=K[kid]; if(!kk)return; const w=q.d*(j===0?1:.5); kk.den+=w; kk.n++; if(ok) kk.num+=w; else { kk.wrongs.push({q,x,blank,i}); const tg=(a.errs||{})[i]; if(tg) kk.tags[tg]=(kk.tags[tg]||0)+1; } });
+      if(!ok){ const tg=(a.errs||{})[i]; if(blank&&!tg) errs.yok++; else errs[tg||'yok']++; if(!blank&&q.dist&&q.dist[x]) miscon.push({tid,qid:q.id,i,text:q.dist[x],x}); }
+      const tm=(a.times||[])[i]; if(tm&&q.t){ if(ok&&tm>1.6*q.t) timing.push({type:'yavaş doğru',q,tm,tid}); else if(!ok&&!blank&&tm<.45*q.t) timing.push({type:'aceleci yanlış',q,tm,tid}); }
+    });
+    T.k.forEach(k=>{const kk=K[k.id]; kk.m=kk.den? (kk.num+ALPHA*PRIOR)/(kk.den+ALPHA) : null; kk.raw=kk.den?kk.num/kk.den:null;});
+    const ks=T.k.map(k=>K[k.id]).filter(k=>k.m!=null);
+    topicM[tid]={m:ks.reduce((s,k)=>s+k.m*k.den,0)/ks.reduce((s,k)=>s+k.den,0),sc,a};
+  }
+  // öncelik
+  const pri=[];
+  Object.values(K).forEach(k=>{
+    if(k.m==null||k.m>=.75) return;
+    const T=S.topics[k.topic]; const W=T.w/2; const tagN=Object.values(k.tags).reduce((a,b)=>a+b,0)||0;
+    const fc=tagN?(k.tags.kavram||0)/tagN:0, fd=tagN?((k.tags.dikkat||0)+(k.tags.islem||0))/tagN:0;
+    const E=1+.25*fc-.15*fd;
+    const P=(1-k.m)*W*T.C*E;
+    const reasons=[];
+    T.pre.forEach(p=>{ if(topicM[p]&&topicM[p].m<.55) reasons.push({c:'s-bad',t:'Kök neden: '+S.topics[p].name+' zayıf',root:p}); });
+    if(T.w>=2) reasons.push({c:'acc',t:'Sınavda sık soruluyor'});
+    if(T.C>=1.7) reasons.push({c:'acc',t:T.desc+' konunun temeli'});
+    if(fc>=.5) reasons.push({c:'s-low',t:'Kavramsal hata ağırlıklı'});
+    if(fd>=.5) reasons.push({c:'s-warn',t:'İşlem/dikkat hatası ağırlıklı'});
+    const ms=[...new Set(k.wrongs.filter(w=>!w.blank&&w.q.dist&&w.q.dist[w.x]).map(w=>w.q.dist[w.x]))];
+    pri.push({...k,P,W,C:T.C,E,reasons,ms});
+  });
+  pri.sort((a,b)=>b.P-a.P);
+  return {latest,K,topicM,pri,miscon,errs,timing};
+}
+
+/* ================= render ================= */
+function render(){
+  const tag=$('#modeTag'); tag.textContent={cloud:'kayıtlar Supabase\'te',local:'kayıtlar bu tarayıcıda',student:'öğrenci görünümü',login:'giriş gerekli'}[S.mode]||'';
+  document.querySelectorAll('#tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.v===S.view?'page':'false'));
+  $('#tabs').hidden=S.mode==='student'||S.mode==='login';
+  renderStu();
+  const m=$('#main');
+  if(!S.cur){return}
+  if(S.mode==='student'){ m.innerHTML=viewStudent(); return; }
+  if(S.mode==='login'){ m.innerHTML=viewLogin(); bindLogin(); return; }
+  m.innerHTML=({konular:viewTopics,analiz:viewAnalysis,plan:viewPlan,gecmis:viewHistory,yontem:viewMethod}[S.view])();
+  bindMain(); tex(m);
+}
+function renderStu(){
+  const b=$('#stuBox'); if(S.mode==='student'||S.mode==='login'){b.innerHTML='';return}
+  if(b.dataset.adding==='1'){ b.innerHTML=`<input type="text" id="newStu" placeholder="Öğrenci adı" aria-label="Öğrenci adı"><button class="btn primary" id="addStuOk">Ekle</button><button class="btn ghost" id="addStuNo">Vazgeç</button>`;
+    $('#addStuOk').onclick=async()=>{const n=$('#newStu').value.trim(); if(!n)return; const id=uid(); b.dataset.adding=''; await Store.put('students',id,{name:n,created:new Date().toISOString()}); setSid(id); toast(n+' eklendi')};
+    $('#addStuNo').onclick=()=>{b.dataset.adding='';render()}; $('#newStu').focus(); return; }
+  b.innerHTML=`<label for="stuSel">Öğrenci</label><select id="stuSel">${S.students.length?S.students.map(s=>`<option value="${s.id}" ${s.id===S.sid?'selected':''}>${esc(s.name)}</option>`).join(''):'<option value="">Henüz öğrenci yok</option>'}</select><button class="btn" id="addStu">+ Öğrenci</button>${S.mode==='cloud'?'<button class="btn ghost" id="logout">Çıkış</button>':''}`;
+  const lo=$('#logout'); if(lo) lo.onclick=()=>Store.logout();
+  $('#stuSel').onchange=e=>setSid(e.target.value);
+  $('#addStu').onclick=()=>{b.dataset.adding='1';renderStu()};
+}
+const cur=()=>S.students.find(s=>s.id===S.sid);
+const needStudent=()=>`<div class="panel empty"><h3>Önce bir öğrenci ekleyin</h3><p class="muted">Sağ üstteki <b>+ Öğrenci</b> ile öğrencinizi ekleyin; testler ve raporlar öğrenciye göre tutulur.</p></div>`;
+
+/* ---------- Konular ---------- */
+function viewTopics(){
+  const an=S.sid?analyze(S.sid):null;
+  const secs=S.cur.sections.map(sec=>{
+    const ts=S.cur.topics.filter(t=>t.sec===sec.id);
+    const nReady=ts.filter(t=>S.ready.includes(t.id)).length;
+    return `<section class="secblock"><h3>${sec.name} <span class="muted small mono">${ts.length} konu · ${nReady} test hazır</span></h3>
+    <div class="tlist">${ts.map(t=>{
+      const ready=S.ready.includes(t.id), T=S.tests[t.id]; const tm=an&&an.topicM[t.id];
+      const dots=t.w>=2.5?3:t.w>=1.5?2:1;
+      return `<button class="trow" data-topic="${t.id}"><span class="mono muted">${t.id}</span><span class="nm">${esc(t.name)}<br><span class="small muted">${t.k.length} kazanım</span></span>
+      <span class="c-w" title="Sınav ağırlığı"><span class="dots">${[1,2,3].map(i=>`<i class="${i<=dots?'on':''}"></i>`).join('')}</span></span>
+      <span class="c-st small">${ready&&T?`<span class="chip acc plain">${T.questions.length} soru · ${T.minutes} dk</span>`:'<span class="chip s-none plain">Sonraki pakette</span>'}</span>
+      <span>${tm?chip(tm.m):ready?'<span class="small muted">uygulanmadı</span>':''}</span></button>`}).join('')}</div></section>`}).join('');
+  return `<div class="sechead"><div><div class="eyebrow">${S.cur.topics.length} konu · ${S.cur.topics.reduce((s,t)=>s+t.k.length,0)} kazanım</div><h2>Konular ve teşhis testleri</h2></div>
+  <div class="small muted">Noktalar: konunun ÖSYM sınavlarındaki yaklaşık ağırlığı</div></div>
+  ${S.mode==='local'?`<div class="notice" style="margin-bottom:18px">Kayıtlar şu an yalnızca bu tarayıcıda tutuluyor. config.js dosyasına Supabase bilgilerinizi girdiğinizde kayıtlar veritabanınızda saklanır.</div>`:''}
+  ${secs}`;
+}
+function bindMain(){
+  document.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>openTopic(b.dataset.topic));
+  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>ACT[b.dataset.act](b.dataset));
+}
+function openTopic(tid){
+  const t=S.topics[tid], ready=S.ready.includes(tid), T=S.tests[tid];
+  const an=S.sid?analyze(S.sid):null;
+  const pdf=ready&&S.dl?`<button class="btn" data-dl="${tid}-ogrenci">Öğrenci kitapçığı (PDF)</button><button class="btn" data-dl="${tid}-ogretmen">Öğretmen anahtarı (PDF)</button>`:'';
+  const lay=$('#layer');
+  lay.innerHTML=`<div class="scrim" id="scrim"><aside class="drawer" role="dialog" aria-label="${esc(t.name)}">
+   <button class="btn ghost x" id="dClose">Kapat ✕</button>
+   <div><div class="eyebrow">${t.id} · ${S.cur.sections.find(s=>s.id===t.sec).name}</div><h2>${esc(t.name)}</h2>
+   ${t.pre.length?`<p class="small muted">Önkoşul: ${t.pre.map(p=>S.topics[p].id+' '+esc(S.topics[p].name)).join(', ')}</p>`:''}</div>
+   ${ready&&T?`<div class="btns">${S.sid?`<button class="btn primary" id="dSolve">Ekranda çöz</button><button class="btn" id="dEntry">Kâğıt cevaplarını gir</button>`:''}<button class="btn" id="dLink">${S.mode==='cloud'&&S.sid?'Öğrenciye link oluştur':'Öğrenci linkini kopyala'}</button>${pdf}</div>
+   <p class="small muted">${T.questions.length} soru · ${T.minutes} dakika · zorluk: ${T.questions.filter(q=>q.d===1).length} kolay / ${T.questions.filter(q=>q.d===2).length} orta / ${T.questions.filter(q=>q.d===3).length} zor</p>`:`<div class="notice">Bu konunun teşhis testi sonraki pakette eklenecek. Kazanım haritası ve öğretim önerileri şimdiden kullanılabilir.</div>`}
+   <div><h3>Kazanımlar</h3><ul class="klist" style="margin-top:8px">${t.k.map(k=>{const kk=an&&an.K[k.id];return `<li><span class="mono small muted">${k.id}</span><span>${esc(k.t)}</span><span>${kk?chip(kk.m):''}</span></li>`}).join('')}</ul></div>
+   <div><h3>Benzetme</h3><p class="analogy">${esc(t.an)}</p></div>
+   <div><h3>Öğretim stratejisi</h3><p>${esc(t.st)}</p></div>
+   <div><h3>Yaygın kavram yanılgıları</h3><ul>${t.my.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+  </aside></div>`;
+  const close=()=>lay.innerHTML='';
+  $('#dClose').onclick=close; $('#scrim').onclick=e=>{if(e.target.id==='scrim')close()};
+  const s=$('#dSolve'); if(s) s.onclick=()=>{close();startSolve(tid,{})};
+  const en=$('#dEntry'); if(en) en.onclick=()=>{close();openEntry(tid,null)};
+  const lk=$('#dLink'); if(lk) lk.onclick=()=>makeLink(tid);
+  lay.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>downloadPdf(b.dataset.dl));
+}
+async function makeLink(tid){
+  const base=location.href.split('#')[0];
+  if(S.mode!=='cloud'||!S.sid) return copyText(base+'#coz-'+tid,'Öğrenci linki kopyalandı (sonuç kodla gelir)');
+  const token=rndToken(14);
+  const {error}=await Store.sb.from('teshis_links').insert({token,student_id:S.sid,topic:tid});
+  if(error) return toast('Link oluşturulamadı: '+error.message);
+  copyText(base+'#coz-'+tid+'-'+token, esc(cur().name)+' için tek kullanımlık link kopyalandı');
+}
+async function copyText(txt,msg){ try{await navigator.clipboard.writeText(txt);toast(msg)}catch(e){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();toast('Seçili metni kopyalayın: Ctrl+C');setTimeout(()=>ta.remove(),8000) } }
+async function downloadPdf(name){
+  if(!S.dl){toast('Bu görünümde indirme yapılamıyor');return}
+  try{ const r=await fetch('data/pdf/'+name+'.pdf'); if(!r.ok) throw 0; const blob=await r.blob(); await S.dl.save({filename:name+'.pdf',data:blob}); toast('İndirildi: '+name+'.pdf') }
+  catch(e){ toast(e&&e.code==='declined'?'İndirme iptal edildi':'İndirilemedi') }
+}
+
+/* ---------- Ekranda çözme ---------- */
+let SOLVE=null;
+async function startSolve(tid,{student}){
+  const T=await loadTest(tid); const t=S.topics[tid];
+  SOLVE={tid,T,i:0,ans:Array(T.questions.length).fill(''),times:Array(T.questions.length).fill(0),t0:Date.now(),qStart:Date.now(),student:!!student||S.mode==='student',name:'',started:!(student||S.mode==='student'),confirm:false,tick:null};
+  drawSolve();
+  SOLVE.tick=setInterval(()=>{const el=$('#timer');if(el&&SOLVE.started){const s=Math.floor((Date.now()-SOLVE.t0)/1000);el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); if(s>=T.minutes*60) el.style.color='var(--bad)'}},1000);
+}
+function bankTime(){ if(!SOLVE||!SOLVE.started)return; const now=Date.now(); SOLVE.times[SOLVE.i]+=(now-SOLVE.qStart)/1000; SOLVE.qStart=now; }
+function drawSolve(){
+  const X=SOLVE, T=X.T, t=S.topics[X.tid], lay=$('#layer');
+  if(!X.started){
+    lay.innerHTML=`<div class="overlay"><div class="wrap" style="max-width:640px;padding-block:48px"><div class="eyebrow">${t.id} · Teşhis testi</div><h2>${esc(t.name)}</h2>
+    <p>${T.questions.length} soru, önerilen süre <b>${T.minutes} dakika</b>. Bilmediğiniz soruyu boş bırakın; tahmin etmeyin. Bu test not için değil, eksikleri bulmak için.</p>
+    <div class="form"><label>Adınız<input type="text" id="sName" placeholder="Ad Soyad"></label><button class="btn primary" id="sGo">Teste başla</button></div></div></div>`;
+    $('#sGo').onclick=()=>{X.name=$('#sName').value.trim()||'Öğrenci';X.started=true;X.t0=Date.now();X.qStart=Date.now();drawSolve()}; return;
+  }
+  const q=T.questions[X.i], n=T.questions.length, blanks=X.ans.filter(a=>!a).length;
+  lay.innerHTML=`<div class="overlay"><div class="ovbar"><div class="wrap"><div class="ttl"><div class="eyebrow">${t.id} · ${esc(t.name)}</div></div><span class="timer" id="timer">00:00</span><button class="btn" id="sEnd">Testi bitir</button><button class="btn ghost" id="sQuit">Çık</button></div></div>
+  <div class="wrap" style="max-width:820px;padding-bottom:40px">
+   ${X.confirm?`<div class="confirm"><span>${blanks?blanks+' soru boş. ':''}Testi bitirip sonuçları kaydedelim mi?</span><button class="btn primary" id="cYes">Bitir ve kaydet</button><button class="btn" id="cNo">Devam et</button></div>`:''}
+   ${X.quit?`<div class="confirm"><span>Çıkarsanız cevaplar kaydedilmez.</span><button class="btn danger" id="qYes">Kaydetmeden çık</button><button class="btn" id="qNo">Devam et</button></div>`:''}
+   <article class="qcard"><div class="qnum">${X.i+1}<span class="muted small mono"> / ${n}</span></div>
+    <div class="stem">${q.stem}</div>${q.fig?`<div class="fig">${q.fig}</div>`:''}
+    <div class="opts">${q.opts.map((o,j)=>`<button class="opt" data-o="${L[j]}" aria-pressed="${X.ans[X.i]===L[j]}"><span class="bub">${L[j]}</span><span>${o.replace(/\\\(/g,'\\(\\displaystyle ')}</span></button>`).join('')}</div>
+    <div class="qnav"><button class="btn" id="qPrev" ${X.i?'':'disabled'}>← Önceki</button><button class="btn ghost" id="qClear">Cevabı sil</button><button class="btn primary" id="qNext">${X.i<n-1?'Sonraki →':'Bitir'}</button></div>
+   </article>
+   <div class="qmap">${T.questions.map((_,j)=>`<button data-j="${j}" class="${X.ans[j]?'done':''} ${j===X.i?'cur':''}" aria-label="Soru ${j+1}">${j+1}</button>`).join('')}</div>
+  </div></div>`;
+  tex(lay);
+  const go=j=>{bankTime();X.i=j;drawSolve()};
+  lay.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{X.ans[X.i]=X.ans[X.i]===b.dataset.o?'':b.dataset.o;lay.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed',X.ans[X.i]===o.dataset.o));lay.querySelectorAll('.qmap button')[X.i].classList.toggle('done',!!X.ans[X.i])});
+  lay.querySelectorAll('.qmap button').forEach(b=>b.onclick=()=>go(+b.dataset.j));
+  $('#qPrev').onclick=()=>go(X.i-1);
+  $('#qNext').onclick=()=>{ if(X.i<n-1) go(X.i+1); else {X.confirm=true;drawSolve()} };
+  $('#qClear').onclick=()=>{X.ans[X.i]='';drawSolve()};
+  $('#sEnd').onclick=()=>{X.confirm=true;drawSolve()};
+  $('#sQuit').onclick=()=>{X.quit=true;drawSolve()};
+  const cy=$('#cYes'); if(cy){cy.onclick=finishSolve; $('#cNo').onclick=()=>{X.confirm=false;drawSolve()}}
+  const qy=$('#qYes'); if(qy){qy.onclick=closeSolve; $('#qNo').onclick=()=>{X.quit=false;drawSolve()}}
+}
+function closeSolve(){ if(SOLVE&&SOLVE.tick)clearInterval(SOLVE.tick); SOLVE=null; $('#layer').innerHTML=''; if(/^#coz-/.test(location.hash)) history.replaceState(null,'',location.pathname+location.search+'#konular'); render(); }
+function encodeResult(tid,ans,times,name){ const s=[tid,ans.map(a=>a||'-').join(''),times.map(x=>Math.round(x)).join('.'),name].join('|'); return 'YKS1:'+btoa(unescape(encodeURIComponent(s))) }
+function decodeResult(code){ const c=code.trim().replace(/^YKS1:/,''); const s=decodeURIComponent(escape(atob(c))); const [tid,a,t,name]=s.split('|'); return {tid,answers:a.split('').map(x=>x==='-'?'':x),times:(t||'').split('.').map(Number),name} }
+async function finishSolve(){
+  bankTime(); const X=SOLVE; clearInterval(X.tick);
+  const att={sid:S.sid,topic:X.tid,mode:'ekran',date:new Date().toISOString(),answers:X.ans,times:X.times.map(x=>Math.round(x)),errs:{},dur:Math.round((Date.now()-X.t0)/1000)};
+  if(X.student&&S.token&&Store.sb){
+    const {error}=await Store.sb.rpc('teshis_submit',{p_token:S.token,p_topic:X.tid,p_name:X.name,p_answers:X.ans,p_times:att.times,p_dur:att.dur});
+    if(!error){ $('#layer').innerHTML=`<div class="overlay"><div class="wrap" style="max-width:640px;padding-block:48px"><div class="eyebrow">Test tamamlandı</div><h2>Teşekkürler, ${esc(X.name)}</h2><p>Cevapların öğretmenine iletildi. Sonuçlarını bir sonraki derste birlikte inceleyeceksiniz.</p></div></div>`; return; }
+    toast('Sonuç gönderilemedi ('+error.message+'). Kodu öğretmenine ilet.');
+  }
+  if(X.student||!S.sid){
+    const code=encodeResult(X.tid,X.ans,att.times,X.name);
+    const sc=scoreAttempt({...att});
+    $('#layer').innerHTML=`<div class="overlay"><div class="wrap" style="max-width:640px;padding-block:48px"><div class="eyebrow">Test tamamlandı</div><h2>Teşekkürler, ${esc(X.name)}</h2>
+     <p>${sc.N} sorunun ${sc.D}'ini doğru, ${sc.Y}'ini yanlış yanıtladın, ${sc.B} soru boş.</p>
+     <p>Aşağıdaki <b>sonuç kodunu</b> öğretmenine gönder. Öğretmenin bu kodla ayrıntılı teşhis raporunu hazırlayacak.</p>
+     <textarea id="rc" readonly>${code}</textarea><div class="btns" style="margin-top:10px"><button class="btn primary" id="rcCopy">Kodu kopyala</button><button class="btn" id="rcClose">Kapat</button></div></div></div>`;
+    $('#rcCopy').onclick=()=>copyText(code,'Sonuç kodu kopyalandı'); $('#rcClose').onclick=closeSolve; return;
+  }
+  const id=uid(); await Store.put('attempts',id,att); SOLVE=null; $('#layer').innerHTML='';
+  openEntry(X.tid,id,true);
+}
+
+/* ---------- Kâğıt cevap girişi / uygulama düzenleme ---------- */
+let ENTRY=null;
+async function openEntry(tid,attId,justSolved){
+  const T=await loadTest(tid); const ex=attId?S.attempts.find(a=>a.id===attId):null;
+  ENTRY={tid,T,attId,ans:ex?[...ex.answers]:Array(T.questions.length).fill(''),errs:ex?{...(ex.errs||{})}:{},date:ex?ex.date.slice(0,10):localISO(),times:ex?ex.times||[]:[],mode:ex?ex.mode:'kâğıt',justSolved,showKey:!!ex};
+  drawEntry();
+}
+function drawEntry(){
+  const E=ENTRY,T=E.T,t=S.topics[E.tid],lay=$('#layer');
+  const sc=scoreAttempt({topic:E.tid,answers:E.ans});
+  lay.innerHTML=`<div class="overlay"><div class="ovbar"><div class="wrap"><div class="ttl"><div class="eyebrow">${E.attId?'Uygulamayı düzenle':'Kâğıt cevaplarını gir'} · ${esc(cur()?cur().name:'')}</div><b>${t.id} ${esc(t.name)}</b></div>
+   <span class="mono small">D ${sc.D} · Y ${sc.Y} · B ${sc.B} · Net ${sc.net.toFixed(2)}</span><button class="btn primary" id="eSave">Kaydet</button><button class="btn ghost" id="eClose">Kapat</button></div></div>
+   <div class="wrap" style="max-width:900px;padding-bottom:40px">
+   ${E.justSolved?`<div class="notice" style="margin-top:18px">Ekran uygulaması kaydedildi. Yanlış soruların <b>hata türünü</b> öğrenciyle konuşarak işaretlerseniz plan daha isabetli olur.</div>`:''}
+   <div class="form" style="margin-top:18px"><label>Uygulama tarihi<input type="date" id="eDate" value="${E.date}"></label>
+   <label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="eKey" ${E.showKey?'checked':''}> Doğru cevapları göster</label></div>
+   <div class="optik">${T.questions.map((q,i)=>{const x=E.ans[i];const cls=!x?'':x===q.ans?'right':'wrong';const tm=E.times[i];
+    return `<div class="orow ${E.showKey?cls:''}"><span class="no">${String(i+1).padStart(2,'0')}</span>
+     <span class="bubs">${L.split('').map(c=>`<button data-q="${i}" data-c="${c}" aria-pressed="${x===c}" class="${E.showKey&&c===q.ans?'key':''}" aria-label="Soru ${i+1} ${c}">${c}</button>`).join('')}</span>
+     <span class="meta"><span class="mono muted">${q.k[0]}</span><span class="chip plain s-none">${['','kolay','orta','zor'][q.d]}</span>${tm?`<span class="mono muted">${tm} sn / ${q.t}</span>`:''}
+     ${E.showKey&&x&&x!==q.ans&&q.dist&&q.dist[x]?`<span class="muted">↳ ${esc(q.dist[x])}</span>`:''}
+     ${E.showKey&&x!==q.ans?`<select data-err="${i}" aria-label="Hata türü"><option value="">Hata türü…</option>${Object.entries(ERR).map(([k,v])=>`<option value="${k}" ${E.errs[i]===k?'selected':''}>${v}</option>`).join('')}</select>`:''}</span></div>`}).join('')}</div>
+   ${E.attId?`<div class="btns" style="margin-top:16px"><button class="btn danger" id="eDel">Bu uygulamayı sil</button></div>${E.delAsk?`<div class="confirm"><span>Uygulama kalıcı olarak silinsin mi?</span><button class="btn danger" id="eDelY">Sil</button><button class="btn" id="eDelN">Vazgeç</button></div>`:''}`:''}
+   </div></div>`;
+  lay.querySelectorAll('.bubs button').forEach(b=>b.onclick=()=>{const i=+b.dataset.q;E.ans[i]=E.ans[i]===b.dataset.c?'':b.dataset.c;drawEntry()});
+  lay.querySelectorAll('[data-err]').forEach(s=>s.onchange=()=>{const i=s.dataset.err; if(s.value)E.errs[i]=s.value; else delete E.errs[i]});
+  $('#eKey').onchange=e=>{E.showKey=e.target.checked;drawEntry()};
+  $('#eDate').onchange=e=>E.date=e.target.value;
+  $('#eClose').onclick=()=>{ENTRY=null;lay.innerHTML='';render()};
+  $('#eSave').onclick=async()=>{
+    const id=E.attId||uid(); const prev=E.attId?S.attempts.find(a=>a.id===E.attId):null;
+    const d=E.date+(prev&&prev.date.slice(0,10)===E.date?prev.date.slice(10):'T12:00:00.000Z');
+    const ok=await Store.put('attempts',id,{sid:prev?prev.sid:S.sid,topic:E.tid,mode:E.mode,date:d,answers:E.ans,times:E.times,errs:E.errs,dur:prev?prev.dur||0:0});
+    if(ok){toast('Kaydedildi');ENTRY=null;lay.innerHTML='';location.hash='analiz';render()}
+  };
+  const dl=$('#eDel'); if(dl) dl.onclick=()=>{E.delAsk=true;drawEntry()};
+  const dy=$('#eDelY'); if(dy){dy.onclick=async()=>{await Store.del('attempts',E.attId);ENTRY=null;lay.innerHTML='';render();toast('Silindi')}; $('#eDelN').onclick=()=>{E.delAsk=false;drawEntry()}}
+}
+
+/* ---------- Teşhis raporu ---------- */
+function viewAnalysis(){
+  if(!S.sid) return needStudent();
+  const A=analyze(S.sid), st=cur(), tested=Object.keys(A.topicM);
+  if(!tested.length) return `<div class="sechead"><div><div class="eyebrow">Teşhis raporu</div><h2>${esc(st.name)}</h2></div></div>
+   <div class="panel empty"><h3>Henüz uygulanmış test yok</h3><p class="muted">Konular sekmesinden bir teşhis testi seçip ekranda çözdürün ya da kâğıt cevaplarını girin. Öğrenci evde çözdüyse gönderdiği sonuç kodunu aşağıya yapıştırın.</p></div>${importBox()}`;
+  const allK=Object.values(A.K).filter(k=>k.m!=null);
+  const cnt=s=>allK.filter(k=>stOf(k.m).t===s).length;
+  const avg=tested.reduce((s,t)=>s+A.topicM[t].sc.pct,0)/tested.length;
+  const roots=[...new Set(A.pri.flatMap(p=>p.reasons.filter(r=>r.root).map(r=>r.root)))];
+  const errTot=Object.values(A.errs).reduce((a,b)=>a+b,0)||1;
+  const misBy={}; A.miscon.forEach(m=>{(misBy[m.tid]=misBy[m.tid]||[]).push(m)});
+  return `<div class="sechead"><div><div class="eyebrow">Teşhis raporu · ${tested.length} konu</div><h2>${esc(st.name)}</h2></div>
+   <div class="btns"><a class="btn primary" href="#plan">Gelişim planına geç →</a></div></div>
+  <div class="kpis">
+   <div class="kpi"><b>${pct(avg)}%</b><span>Ortalama başarı (net / soru)</span></div>
+   <div class="kpi"><b>${cnt('Kritik')+cnt('Eksik')}</b><span>Kritik + eksik kazanım (${cnt('Kritik')} kritik)</span></div>
+   <div class="kpi"><b>${cnt('Hakim')}<span class="muted" style="font-size:1rem"> / ${allK.length}</span></b><span>Hakim olunan kazanım</span></div>
+   <div class="kpi"><b>${roots.length?roots.join(', '):'—'}</b><span>Kök neden konular (önkoşul zayıf)</span></div>
+  </div>
+  <div class="panel" style="margin-bottom:16px"><div class="sechead"><h3>Kazanım karnesi</h3><span class="small muted">Her hücre bir kazanım; ağırlıklı ve düzeltilmiş hakimiyet yüzdesi</span></div>
+   <div class="scroll"><div class="heat">${S.cur.topics.filter(t=>A.topicM[t.id]).map(t=>`<div class="hrow"><span class="tn" title="${esc(t.name)}"><span class="mono muted">${t.id}</span> ${esc(t.name)}</span>
+    <span class="cells">${t.k.map(k=>{const kk=A.K[k.id];const s=stOf(kk.m);return `<span class="cell ${s.c}" title="${esc(k.id+' — '+k.t+' · '+s.t+' '+pct(kk.m)+'%')}">${k.id.split('.')[1]}·${pct(kk.m)}</span>`}).join('')}</span>
+    <span class="mono small" style="text-align:right">${pct(A.topicM[t.id].sc.pct)}%</span></div>`).join('')}</div></div>
+   <div class="legend">${ST.slice().reverse().map(s=>`<span class="chip ${s.c}">${s.t} ${s.t==='Hakim'?'≥ 75':s.t==='Gelişiyor'?'55–74':s.t==='Eksik'?'35–54':'< 35'}</span>`).join('')}</div>
+   ${S.ready.filter(id=>!A.topicM[id]).length?`<p class="small muted" style="margin-top:10px">Henüz uygulanmamış hazır testler: ${S.ready.filter(id=>!A.topicM[id]).map(id=>`<button class="btn ghost small" data-topic="${id}" style="padding:2px 6px">${id}</button>`).join(' ')}</p>`:''}
+  </div>
+  <div class="grid2">
+   <div class="panel"><div class="sechead"><h3>Öncelikli kazanımlar</h3><span class="small muted">Öncelik puanı P</span></div>
+    ${(()=>{const u=[...new Set(Object.keys(A.topicM).flatMap(t=>S.topics[t].pre).filter(p=>!A.topicM[p]&&S.ready.includes(p)))];return u.length?`<p class="small muted" style="margin:0 0 8px">Önkoşul olup henüz test edilmemiş: <b>${u.join(', ')}</b>. Kök neden analizinin güvenilirliği için bunları da uygulayın.</p>`:''})()}<div class="prio">${A.pri.slice(0,12).map((p,i)=>`<div class="prow"><span class="rk">${i+1}</span><div><div><span class="mono small muted">${p.id}</span> ${esc(p.t)}</div>
+     <div class="reasons">${chip(p.m)}${p.reasons.map(r=>`<span class="chip ${r.c} plain">${esc(r.t)}</span>`).join('')}</div>
+     ${p.ms.length?`<div class="small muted" style="margin-top:4px">Seçtiği çeldirici: ${p.ms.map(esc).join(' · ')}</div>`:''}</div>
+     <div class="mono" style="text-align:right">${p.P.toFixed(2)}<div class="bar"><i style="width:${Math.min(100,p.P/ (A.pri[0].P||1)*100)}%"></i></div></div></div>`).join('')||'<p class="muted">Test edilen konularda tüm kazanımlar hakim düzeyde.</p>'}</div></div>
+   <div class="stack">
+    <div class="panel"><h3>Kavram yanılgıları</h3><p class="small muted">Öğrencinin işaretlediği yanlış şıkların işaret ettiği hatalar</p>
+     ${Object.keys(misBy).length?Object.entries(misBy).map(([tid,ms])=>`<div style="margin-top:10px"><b class="small">${tid} ${esc(S.topics[tid].name)}</b><ul class="small" style="margin:4px 0;padding-left:18px">${ms.map(m=>`<li>${esc(m.text)} <span class="mono muted">(${m.i+1}. soru, ${m.x})</span></li>`).join('')}</ul></div>`).join(''):'<p class="muted small">Yanlış şık işaretlenmemiş.</p>'}</div>
+    <div class="panel"><h3>Hata türleri</h3><div class="blist" style="margin-top:10px">${Object.entries({...ERR,yok:'Etiketlenmedi / boş'}).map(([k,v])=>`<div class="bl"><span>${v}</span><span class="bar"><i style="width:${A.errs[k]/errTot*100}%"></i></span><span class="mono small">${A.errs[k]}</span></div>`).join('')}</div>
+     ${A.errs.yok>A.errs.kavram+A.errs.islem+A.errs.dikkat?`<p class="small muted" style="margin-top:8px">İpucu: Uygulamalar sekmesinden yanlışların hata türünü işaretleyin; öncelik puanı buna göre ayarlanır.</p>`:''}</div>
+    ${A.timing.length?`<div class="panel"><h3>Süre gözlemleri</h3><ul class="small" style="padding-left:18px">${A.timing.map(x=>`<li><b>${x.type}</b>: ${x.q.id} (${x.tm} sn, beklenen ${x.q.t} sn)</li>`).join('')}</ul><p class="small muted">Yavaş doğru → akıcılık çalışması; aceleci yanlış → okuma/işaretleme rutini.</p></div>`:''}
+   </div>
+  </div>
+  ${importBox()}`;
+}
+function importBox(){ return `<div class="panel" style="margin-top:16px"><h3>Sonuç kodu içe aktar</h3><p class="small muted">Öğrenci testi kendi cihazında çözdüyse ekranda verilen kodu buraya yapıştırın; seçili öğrenciye kaydedilir.</p><textarea id="impCode" placeholder="YKS1:…" aria-label="Sonuç kodu"></textarea><div class="btns" style="margin-top:8px"><button class="btn primary" data-act="import">İçe aktar</button></div></div>` }
+const ACT={
+  async import(){ const v=$('#impCode').value; try{ const r=decodeResult(v); if(!S.ready.includes(r.tid)) throw 0; await loadTest(r.tid); const id=uid(); await Store.put('attempts',id,{sid:S.sid,topic:r.tid,mode:'ekran (kod)',date:new Date().toISOString(),answers:r.answers,times:r.times,errs:{},dur:r.times.reduce((a,b)=>a+(b||0),0),from:r.name}); toast(r.tid+' sonucu eklendi'); openEntry(r.tid,id,true) }catch(e){ toast('Kod okunamadı; eksiksiz kopyalandığından emin olun') } },
+  edit(d){ openEntry(d.tid,d.id) },
+  gen(){ genPlan() },
+  done(d){ togglePlanDone(d.key) },
+  plantext(){ copyText(planText(),'Plan metni kopyalandı') },
+  async plandl(){ if(!S.dl) return toast('Bu görünümde indirme yapılamıyor'); try{ await S.dl.save({filename:'gelisim-plani-'+(cur().name||'ogrenci').replace(/\s+/g,'-')+'.html',data:planHTML()}); toast('Plan indirildi') }catch(e){ toast(e&&e.code==='rejected_extension'?'HTML indirilemedi; "Metni kopyala"yı kullanın':'İndirilemedi') } },
+  async delstu(){ const st=cur(); if(!st)return; for(const a of S.attempts.filter(a=>a.sid===st.id)) await Store.del('attempts',a.id); if(S.plans[st.id]) await Store.del('plans',st.id); await Store.del('students',st.id); S.sid=S.students[0]?S.students[0].id:null; toast('Öğrenci silindi'); render() },
+  askdel(){ S.askDel=true; render() }, nodel(){ S.askDel=false; render() }
+};
+
+/* ---------- Uygulamalar (geçmiş) ---------- */
+function viewHistory(){
+  if(!S.sid) return needStudent();
+  const at=S.attempts.filter(a=>a.sid===S.sid).sort((a,b)=>b.date.localeCompare(a.date));
+  const byT={}; at.slice().reverse().forEach(a=>{(byT[a.topic]=byT[a.topic]||[]).push(a)});
+  const prog=Object.entries(byT).filter(([t,l])=>l.length>1);
+  return `<div class="sechead"><div><div class="eyebrow">Uygulamalar</div><h2>${esc(cur().name)}</h2></div></div>
+  ${prog.length?`<div class="panel" style="margin-bottom:16px"><h3>İlerleme (aynı testin tekrarları)</h3><div class="scroll"><table class="tbl" style="margin-top:8px"><tr><th>Konu</th><th>İlk</th><th>Son</th><th>Değişim</th></tr>${prog.map(([t,l])=>{const f=scoreAttempt(l[0]).pct,s=scoreAttempt(l[l.length-1]).pct;return `<tr><td>${t} ${esc(S.topics[t].name)}</td><td class="num">${pct(f)}%</td><td class="num">${pct(s)}%</td><td class="num" style="color:var(${s>=f?'--ok':'--bad'})">${s>=f?'+':''}${pct(s-f)}</td></tr>`}).join('')}</table></div></div>`:''}
+  <div class="panel">${at.length?`<div class="scroll"><table class="tbl"><tr><th>Tarih</th><th>Konu</th><th>Biçim</th><th>D</th><th>Y</th><th>B</th><th>Net</th><th>Başarı</th><th></th></tr>
+   ${at.map(a=>{const s=scoreAttempt(a);if(!s)return'';return `<tr><td>${fmtDate(a.date)}</td><td>${a.topic} ${esc(S.topics[a.topic].name)}</td><td class="small muted">${esc(a.mode||'')}</td><td class="num">${s.D}</td><td class="num">${s.Y}</td><td class="num">${s.B}</td><td class="num">${s.net.toFixed(2)}</td><td class="num">${pct(s.pct)}%</td><td><button class="btn" data-act="edit" data-tid="${a.topic}" data-id="${a.id}">Aç / hata türü</button></td></tr>`}).join('')}</table></div>`:'<p class="muted">Henüz uygulama yok.</p>'}</div>
+  <div class="panel" style="margin-top:16px"><h3>Öğrenci kaydı</h3><p class="small muted">Öğrenciyi silmek tüm uygulamalarını ve planını da siler.</p>
+  ${S.askDel?`<div class="confirm"><span>${esc(cur().name)} ve tüm kayıtları silinsin mi?</span><button class="btn danger" data-act="delstu">Evet, sil</button><button class="btn" data-act="nodel">Vazgeç</button></div>`:`<button class="btn danger" data-act="askdel">Öğrenciyi sil</button>`}</div>`;
+}
+
+/* ---------- Gelişim planı ---------- */
+const COST={'Kritik':40,'Eksik':30,'Gelişiyor':20};
+const DAYS={1:[6],2:[2,6],3:[1,3,6],4:[1,2,4,6],5:[1,2,3,4,5]};
+function phasesFor(status,topic,isFirst){
+  if(status==='Kritik') return [[12,'Kavram inşası: '+(isFirst?'benzetme + somut model':'somut model, kuralı öğrenciye keşfettir')],[8,'Modelleme: 2 çözümlü örnek (sesli düşünerek)'],[10,'Rehberli pratik: 3 kolay soru'],[10,'Bağımsız pratik: 2 orta soru']];
+  if(status==='Eksik') return [[8,'Yanılgı yüzleştirme: öğrencinin seçtiği şıkkı ona savundur, karşı örnekle çürüt'],[5,'Modelleme: 1 çözümlü örnek'],[7,'Rehberli pratik: 2 orta soru'],[10,'Bağımsız pratik: 3 orta + 1 zor soru']];
+  return [[5,'Hata analizi: testteki yanlışları yeniden çözdür'],[15,'Süreli akıcılık: 5 ÖSYM tarzı soru (soru başına ~90 sn)']];
+}
+const HW={'Kritik':'8 soru (4 kolay, 4 orta)','Eksik':'10 soru (7 orta, 3 zor)','Gelişiyor':'10 soru, süreli (5 orta, 5 zor)'};
+function genPlan(){
+  const f=id=>$('#'+id).value;
+  const set={start:f('pStart'),per:+f('pPer'),len:+f('pLen'),weeks:+f('pWeeks')};
+  const A=analyze(S.sid);
+  // konu sırası: öncelik + önkoşul (topolojik)
+  const items=A.pri.map(p=>({...p,status:stOf(p.m).t}));
+  const tP={}; items.forEach(p=>tP[p.topic]=Math.max(tP[p.topic]||0,p.P));
+  const weakT=new Set(Object.keys(tP)); const order=[],seen=new Set();
+  const visit=t=>{ if(seen.has(t))return; seen.add(t); S.topics[t].pre.forEach(p=>{ if(weakT.has(p)) visit(p) }); order.push(t) };
+  Object.keys(tP).sort((a,b)=>tP[b]-tP[a]).forEach(visit);
+  const queue=[]; order.forEach(t=>S.topics[t].k.forEach(k=>{const it=items.find(x=>x.id===k.id); if(it) queue.push(it)}));
+  // ders tarihleri
+  const st=new Date(set.start+'T12:00:00'); const dates=[]; let d=new Date(st);
+  const want=set.per*set.weeks;
+  while(dates.length<want){ const wd=d.getDay()===0?7:d.getDay(); if(DAYS[set.per].includes(wd)) dates.push(new Date(d)); d.setDate(d.getDate()+1) }
+  const cap=Math.max(20,set.len-15);
+  const lessons=dates.map((dt,i)=>({i,date:dt.toISOString().slice(0,10),blocks:[],used:0,review:[],hw:[],retest:[]}));
+  let li=0; const firstSeen=new Set(); const taughtAt={}; const lastOfTopic={};
+  for(const it of queue){
+    let cost=Math.min(COST[it.status],cap);
+    while(li<lessons.length){ const L0=lessons[li]; const topicsIn=new Set(L0.blocks.map(b=>b.topic)); const rem=cap-L0.used;
+      if(rem>=cost && (topicsIn.size<2||topicsIn.has(it.topic))) break; li++; }
+    if(li>=lessons.length){ it.overflow=true; continue; }
+    const isFirst=!firstSeen.has(it.topic); firstSeen.add(it.topic);
+    lessons[li].blocks.push({id:it.id,t:it.t,topic:it.topic,status:it.status,m:it.m,cost,first:isFirst,phases:phasesFor(it.status,it.topic,isFirst),ms:it.ms.slice(0,3)});
+    lessons[li].used+=cost; lessons[li].hw.push(it.id+': '+HW[it.status]); taughtAt[it.id]=li; lastOfTopic[it.topic]=li;
+  }
+  // aralıklı tekrar: +1 ders, +7 gün, +21 gün
+  const dayIdx=x=>Math.round((new Date(x)-st)/864e5);
+  Object.entries(taughtAt).forEach(([kid,i])=>{
+    const add=j=>{ if(j<lessons.length && j>i && !lessons[j].review.includes(kid)) lessons[j].review.push(kid) };
+    add(i+1);
+    [7,21].forEach(off=>{ const target=dayIdx(lessons[i].date)+off; const j=lessons.findIndex(l=>dayIdx(l.date)>=target); if(j>=0) add(j) });
+  });
+  Object.entries(lastOfTopic).forEach(([t,i])=>{ const j=Math.min(i+2,lessons.length-1); if(j>i) lessons[j].retest.push(t); });
+  lessons.forEach(l=>{ if(!l.blocks.length) l.free=true });
+  const overflow=queue.filter(x=>x.overflow).map(x=>x.id);
+  const tip=[]; const e=A.errs; if(e.dikkat>=2) tip.push('Her derste soru kökündeki koşulların altını çizme ve şıkları geri sağlama rutini (2 dk).'); if(e.sure>=2||A.timing.some(x=>x.type==='yavaş doğru')) tip.push('Her dersin sonuna 5 dakikalık süreli mini blok ekleyin.'); if(e.kavram>=3) tip.push('Kavramsal hatalar baskın: yeni kural vermeden önce öğrenciye kendi cümleleriyle açıklat.');
+  const plan={settings:set,created:new Date().toISOString(),lessons,overflow,tips:tip,untested:S.ready.filter(id=>!A.topicM[id]),done:(S.plans[S.sid]||{}).done||{}};
+  Store.put('plans',S.sid,plan).then(ok=>ok&&toast('Plan oluşturuldu'));
+}
+function togglePlanDone(key){ const p=S.plans[S.sid]; if(!p)return; const done={...(p.done||{})}; done[key]=!done[key]; const {id,...rest}=p; Store.put('plans',S.sid,{...rest,done}) }
+function viewPlan(){
+  if(!S.sid) return needStudent();
+  const A=analyze(S.sid), p=S.plans[S.sid];
+  const today=localISO();
+  const s=p?p.settings:{start:today,per:2,len:90,weeks:6};
+  const form=`<div class="panel"><div class="form">
+   <label>Başlangıç<input type="date" id="pStart" value="${s.start}"></label>
+   <label>Haftada ders<select id="pPer">${[1,2,3,4,5].map(n=>`<option ${n===s.per?'selected':''}>${n}</option>`).join('')}</select></label>
+   <label>Ders süresi (dk)<select id="pLen">${[45,60,75,90,120].map(n=>`<option ${n===s.len?'selected':''}>${n}</option>`).join('')}</select></label>
+   <label>Plan süresi (hafta)<select id="pWeeks">${[2,3,4,5,6,8,10,12].map(n=>`<option ${n===s.weeks?'selected':''}>${n}</option>`).join('')}</select></label>
+   <button class="btn primary" data-act="gen">${p?'Güncel verilerle yeniden oluştur':'Planı oluştur'}</button></div>
+   <p class="small muted" style="margin:10px 0 0">Plan; öncelik puanına, önkoşul sırasına ve kazanım durumuna göre dersleri doldurur. Her derste 10 dk ısınma/aralıklı tekrar ve 5 dk çıkış bileti ayrılır.</p></div>`;
+  if(!Object.keys(A.topicM).length) return `<div class="sechead"><div><div class="eyebrow">Gelişim planı</div><h2>${esc(cur().name)}</h2></div></div><div class="panel empty"><h3>Plan için önce teşhis verisi gerekiyor</h3><p class="muted">En az bir teşhis testi uygulayın; plan, testin ortaya çıkardığı eksiklerden üretilir.</p></div>`;
+  if(!p) return `<div class="sechead"><div><div class="eyebrow">Gelişim planı</div><h2>${esc(cur().name)}</h2></div></div>${form}`;
+  const weeks={}; p.lessons.forEach(l=>{const w=Math.floor(p.lessons.indexOf(l)/p.settings.per);(weeks[w]=weeks[w]||[]).push(l)});
+  const nDone=Object.values(p.done||{}).filter(Boolean).length, nL=p.lessons.filter(l=>!l.free).length;
+  const kTot=p.lessons.reduce((s,l)=>s+l.blocks.length,0);
+  return `<div class="sechead"><div><div class="eyebrow">Gelişim planı · ${p.settings.weeks} hafta · ${fmtDate(p.created)} tarihli</div><h2>${esc(cur().name)}</h2></div>
+   <div class="btns"><button class="btn" data-act="plantext">Metni kopyala</button>${S.dl?'<button class="btn" data-act="plandl">Planı indir (HTML)</button>':''}</div></div>
+  ${form}
+  <div class="kpis" style="margin-top:16px"><div class="kpi"><b>${kTot}</b><span>Hedef kazanım</span></div><div class="kpi"><b>${nDone} / ${nL}</b><span>Tamamlanan ders</span></div><div class="kpi"><b>${p.lessons.reduce((s,l)=>s+l.retest.length,0)}</b><span>Planlı yeniden test</span></div><div class="kpi"><b>${p.overflow.length}</b><span>Plana sığmayan kazanım</span></div></div>
+  ${p.tips.length?`<div class="notice">${p.tips.map(esc).join('<br>')}</div>`:''}
+  ${p.untested.length?`<div class="notice" style="margin-top:10px">Henüz uygulanmamış hazır testler (${p.untested.join(', ')}): ilk derslerin ödevi olarak öğrenci linkiyle evde çözdürün; sonuçlar gelince planı yeniden oluşturun.</div>`:''}
+  ${p.overflow.length?`<div class="notice" style="margin-top:10px">Plana sığmayanlar (sonraki döngü): ${p.overflow.join(', ')}. Ders sayısını ya da süreyi artırabilirsiniz.</div>`:''}
+  ${Object.entries(weeks).map(([w,ls])=>`<section class="week"><h3>${+w+1}. hafta <span class="small muted mono">${fmtDay(new Date(ls[0].date))} – ${fmtDay(new Date(ls[ls.length-1].date))}</span></h3><div class="lessons">${ls.map(l=>lessonCard(l,p)).join('')}</div></section>`).join('')}`;
+}
+function lessonCard(l,p){
+  const key=l.date+'#'+l.i, done=(p.done||{})[key];
+  const top=[...new Set(l.blocks.map(b=>b.topic))];
+  return `<article class="lesson ${done?'done':''}"><header><div class="d"><div class="eyebrow">${l.i+1}. ders · ${fmtDay(new Date(l.date))}</div><b>${l.free?'Karma tekrar ve deneme':top.map(t=>t+' '+esc(S.topics[t].name)).join(' + ')}</b></div>
+   <label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-act="done" data-key="${key}" ${done?'checked':''}> Yapıldı</label></header>
+   <div class="small"><span class="mono muted">10 dk</span> Isınma / aralıklı tekrar${l.review.length?': '+l.review.map(r=>`<span class="mono">${r}</span>`).join(', ')+' (kazanım başına 2 soru)':': önceki dersin ödev kontrolü'}</div>
+   ${l.blocks.map(b=>{const T=S.topics[b.topic];return `<div class="blk"><div><span class="mono small muted">${b.id}</span> ${esc(b.t)}</div><div class="reasons">${chip(b.m)}<span class="chip plain s-none">${b.cost} dk</span></div>
+     ${b.first?`<p class="analogy small" style="margin:8px 0 0">${esc(T.an)}</p>`:''}
+     <ul class="phases">${b.phases.map(([m,t])=>`<li><span>${m} dk</span><span>${esc(t)}</span></li>`).join('')}</ul>
+     ${(b.ms.length?b.ms:T.my.slice(0,2)).length?`<div class="small muted" style="margin-top:6px">Hedef yanılgı: ${(b.ms.length?b.ms:T.my.slice(0,2)).map(esc).join(' · ')}</div>`:''}</div>`}).join('')}
+   ${l.free?`<div class="blk small">Önceki kazanımlardan karışık 15–20 ÖSYM tarzı soru, süreli. Yanlışları hata türüne göre ayır.</div>`:''}
+   <div class="small"><span class="mono muted">5 dk</span> Çıkış bileti: her hedef kazanımdan 1 soru, defterine yazdır.</div>
+   ${l.hw.length||l.retest.length?`<div class="hw"><b>Ödev:</b> ${l.hw.map(esc).join('; ')}${l.retest.length?`${l.hw.length?'<br>':''}<b>Yeniden teşhis:</b> ${l.retest.map(t=>t+' testini öğrenci linkiyle evde çözdür').join('; ')}`:''}</div>`:''}
+  </article>`;
+}
+function planText(){
+  const p=S.plans[S.sid]; if(!p) return '';
+  return `GELİŞİM PLANI – ${cur().name}\n`+p.lessons.map(l=>`\n${l.i+1}. ders – ${fmtDay(new Date(l.date))}\n  Isınma: ${l.review.join(', ')||'ödev kontrolü'}\n`+(l.free?'  Karma tekrar ve süreli deneme\n':l.blocks.map(b=>`  [${b.id}] ${b.t} (${stOf(b.m).t}, ${b.cost} dk)\n`+b.phases.map(([m,t])=>`     ${m} dk – ${t}\n`).join('')).join(''))+(l.hw.length?`  Ödev: ${l.hw.join('; ')}\n`:'')+(l.retest.length?`  Yeniden teşhis: ${l.retest.join(', ')}\n`:'')).join('');
+}
+function planHTML(){
+  const p=S.plans[S.sid];
+  const css=`body{font:14px/1.5 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#141C27}h1{font-size:22px}h2{font-size:16px;margin-top:22px;border-bottom:1px solid #ccc}.l{border:1px solid #ccc;border-radius:8px;padding:10px 12px;margin:8px 0;break-inside:avoid}.m{color:#566273;font-size:12px}ul{margin:4px 0}`;
+  const weeks={}; p.lessons.forEach((l,i)=>{const w=Math.floor(i/p.settings.per);(weeks[w]=weeks[w]||[]).push(l)});
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Gelişim Planı – ${esc(cur().name)}</title><style>${css}</style></head><body><h1>Gelişim Planı – ${esc(cur().name)}</h1><p class="m">${p.settings.weeks} hafta · haftada ${p.settings.per} ders · ${p.settings.len} dk · oluşturma ${fmtDate(p.created)}</p>${p.tips.map(t=>`<p>${esc(t)}</p>`).join('')}`+
+   Object.entries(weeks).map(([w,ls])=>`<h2>${+w+1}. hafta</h2>`+ls.map(l=>`<div class="l"><b>${l.i+1}. ders – ${fmtDay(new Date(l.date))}</b><div class="m">Isınma: ${l.review.join(', ')||'ödev kontrolü'}</div>${l.free?'<p>Karma tekrar ve süreli deneme</p>':l.blocks.map(b=>`<p><b>${b.id}</b> ${esc(b.t)} <span class="m">(${stOf(b.m).t}, ${b.cost} dk)</span></p>${b.first?`<p class="m">Benzetme: ${esc(S.topics[b.topic].an)}</p>`:''}<ul>${b.phases.map(([m,t])=>`<li>${m} dk – ${esc(t)}</li>`).join('')}</ul>`).join('')}${l.hw.length?`<p><b>Ödev:</b> ${esc(l.hw.join('; '))}</p>`:''}${l.retest.length?`<p><b>Yeniden teşhis:</b> ${l.retest.join(', ')}</p>`:''}</div>`).join('')).join('')+`</body></html>`;
+}
+
+/* ---------- Yöntem ---------- */
+function viewMethod(){
+  return `<div class="sechead"><div><div class="eyebrow">Yöntem</div><h2>Teşhis nasıl hesaplanıyor?</h2></div></div>
+  <div class="grid2"><div class="panel prose">
+   <h3>1. Kazanım hakimiyeti \\(m_k\\)</h3>
+   <p>Her soru zorluğu kadar ağırlık taşır (\\(w = 1, 2, 3\\)). Bir soru iki kazanım ölçüyorsa ikinci kazanıma yarım ağırlık gider. Kazanımın ham başarısı ağırlıklı doğru oranıdır; ancak bir kazanım çoğu zaman 2–3 soruyla ölçüldüğü için tek bir şanslı/şanssız soru sonucu uçlara savurur. Bunu önlemek için Bayesçi düzeltme (Laplace yumuşatması) kullanılır:</p>
+   <div class="formula">\\[ m_k = \\frac{\\sum w_i\\,s_i + \\alpha\\,\\mu}{\\sum w_i + \\alpha}, \\qquad \\alpha = 1,\\; \\mu = 0{,}5 \\]</div>
+   <p class="analogy">Benzetme: Yeni açılmış bir restoranın tek yorumu 5 yıldızsa ona hemen "mükemmel" demeyiz. Hesaba "ortalama" bir sanal yorum ekleriz; yorum sayısı arttıkça bu sanal yorumun etkisi kaybolur.</p>
+   <p>Örnek: 2 kolay (w=1) sorudan 1'i, 1 zor (w=3) soruyu doğru yapan öğrenci: ham \\(\\frac{1+3}{5}=0{,}80\\); düzeltilmiş \\(\\frac{4+0{,}5}{6}=0{,}75\\).</p>
+   <h3>2. Durum sınıfları</h3>
+   <p>Hakim \\(m\\ge0{,}75\\) · Gelişiyor \\(0{,}55\\)–\\(0{,}75\\) · Eksik \\(0{,}35\\)–\\(0{,}55\\) · Kritik \\(m\\lt0{,}35\\).</p>
+   <h3>3. Konu başarısı</h3><p>ÖSYM mantığıyla net: \\(\\text{Net}=D-\\frac{Y}{4}\\), başarı yüzdesi \\(\\max(0,\\text{Net})/N\\). Boş ile yanlış ayrı tutulur: boş "bilmiyorum", yanlış çoğunlukla "yanlış biliyorum" demektir.</p>
+  </div><div class="panel prose">
+   <h3>4. Öncelik puanı \\(P_k\\)</h3>
+   <div class="formula">\\[ P_k = (1-m_k)\\cdot W_T \\cdot C_T \\cdot E_k \\]</div>
+   <ul><li>\\(1-m_k\\): eksiklik miktarı.</li>
+   <li>\\(W_T = w_T/2\\): konunun ÖSYM'deki yaklaşık soru ağırlığı (0,5–1,5).</li>
+   <li>\\(C_T = 1 + \\frac{d_T}{d_{\\max}}\\): merkezilik. \\(d_T\\), bu konuyu önkoşul olarak (doğrudan ya da dolaylı) kullanan konu sayısıdır. Temel konular 2'ye kadar çarpan alır.</li>
+   <li>\\(E_k = 1 + 0{,}25\\,f_{kavram} - 0{,}15\\,f_{işlem+dikkat}\\): kavramsal hatalar öğretim gerektirdiği için öne alınır; işlem/dikkat hataları daha çok pratikle kapanır.</li></ul>
+   <p class="analogy">Benzetme: Bir binanın onarım sırası gibi. Çatlak ne kadar büyükse (\\(1-m\\)), duvar ne kadar çok yük taşıyorsa (\\(C\\)) ve o oda ne kadar sık kullanılıyorsa (\\(W\\)) onarım o kadar önceliklidir. Temeldeki çatlak, üst kattaki çatlaklardan önce kapatılır.</p>
+   <h3>5. Kök neden ve plan sırası</h3>
+   <p>Bir konunun önkoşulu da zayıfsa (\\(m\\lt0{,}55\\)) "kök neden" olarak işaretlenir ve planda önce o konu çalışılır (önkoşul grafiğinde topolojik sıralama). Konu içinde kazanımlar müfredattaki doğal öğrenme sırasıyla işlenir.</p>
+   <h3>6. Aralıklı tekrar</h3><p>Her kazanım öğretildiği dersten sonraki ilk derste, yaklaşık 7 gün ve 21 gün sonra ısınma bölümünde 2'şer soruyla yeniden yoklanır (unutma eğrisine karşı). Konu bittikten 2 ders sonra teşhis testi yeniden uygulanır; ilerleme Uygulamalar sekmesinde görünür.</p>
+   <h3>7. Çeldirici analizi</h3><p>Her yanlış şık belirli bir kavram yanılgısından türetilmiştir. Öğrencinin işaretlediği şık, "ne bilmiyor"un yanında "neyi yanlış biliyor"u da gösterir; plan bu yanılgıları doğrudan hedefler.</p>
+  </div></div>`;
+}
+
+/* ---------- Giriş ---------- */
+function viewLogin(){
+  return `<div class="login panel"><div class="eyebrow">Öğretmen girişi</div><h2>YKS Teşhis Defteri</h2>
+  <p class="small muted">Sitenizin Supabase hesabıyla giriş yapın. Öğrenciler giriş yapmaz; size özel linkle testi çözer.</p>
+  <form id="lf"><label>E-posta<input type="email" id="lEmail" autocomplete="username" required></label>
+  <label>Şifre<input type="password" id="lPw" autocomplete="current-password" required></label>
+  <button class="btn primary" type="submit" id="lGo">Giriş yap</button><p class="small" id="lErr" style="color:var(--bad);margin:0"></p></form></div>`;
+}
+function bindLogin(){
+  $('#lf').onsubmit=async e=>{ e.preventDefault(); $('#lGo').disabled=true; $('#lErr').textContent='';
+    try{ await Store.login($('#lEmail').value.trim(),$('#lPw').value) }catch(err){ $('#lErr').textContent=err.message==='Invalid login credentials'?'E-posta ya da şifre hatalı.':err.message; $('#lGo').disabled=false } };
+}
+
+/* ---------- Öğrenci görünümü ---------- */
+function viewStudent(){
+  return `<div class="sechead"><div><div class="eyebrow">Öğrenci görünümü</div><h2>Teşhis testleri</h2></div></div><p class="muted">Öğretmeninin söylediği testi seç. Bitirdiğinde ekranda çıkan sonuç kodunu öğretmenine gönder.</p>
+  <div class="tlist">${(S.coz&&S.ready.includes(S.coz)?[S.coz]:S.ready).map(id=>{const t=S.topics[id],T=S.tests[id];return `<button class="trow" onclick="startSolve('${id}',{student:true})"><span class="mono muted">${id}</span><span class="nm">${esc(t.name)}</span><span class="c-w"></span><span class="c-st small">${T?T.questions.length+' soru · '+T.minutes+' dk':''}</span><span class="small">Başla →</span></button>`}).join('')}</div>`;
+}
+
+boot().catch(e=>{ $('#main').innerHTML=`<div class="panel empty"><h3>Veriler yüklenemedi</h3><p class="muted">${esc(e.message)}</p></div>` });
+</script>
+</body>
+</html>

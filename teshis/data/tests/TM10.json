@@ -1,0 +1,285 @@
+{
+ "topic": "TM10",
+ "title": "Çarpanlara Ayırma ve Özdeşlikler – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM10-01",
+   "k": [
+    "TM10.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(ab+3a-2b-6\\) ifadesi aşağıdakilerden hangisine eşittir?",
+   "opts": [
+    "\\((a+2)(b-3)\\)",
+    "\\((a-2)(b+3)\\)",
+    "\\((a-2)(b-3)\\)",
+    "\\((a+2)(b+3)\\)",
+    "\\((a+3)(b-2)\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Gruplamada ortak çarpanların işaretlerini ters almak",
+    "C": "−2(b+3) yerine −2(b−3) yazmak; işaret hatası",
+    "D": "−2b terimini +2b gibi gruplamak",
+    "E": "Katsayıları yanlış değişkenle eşleştirmek"
+   },
+   "sol": "İlk iki terimden \\(a\\), son iki terimden \\(-2\\) parantezine alınır: \\(a(b+3)-2(b+3)=(a-2)(b+3)\\).",
+   "t": 50
+  },
+  {
+   "id": "TM10-02",
+   "k": [
+    "TM10.2"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(101^2-99^2\\) işleminin sonucu kaçtır?",
+   "opts": [
+    "4",
+    "200",
+    "400",
+    "20002",
+    "40000"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "a²−b² ifadesini (a−b)² sanmak",
+    "B": "(a−b)(a+b) çarpımında (a−b) çarpanını unutmak",
+    "D": "Aradaki işlemi + alıp a²+b² hesaplamak",
+    "E": "a²−b² ifadesini (a+b)² sanmak"
+   },
+   "sol": "\\(101^2-99^2=(101-99)(101+99)=2\\cdot 200=400\\).",
+   "t": 45
+  },
+  {
+   "id": "TM10-03",
+   "k": [
+    "TM10.5"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(a+b=7\\) ve \\(a\\cdot b=10\\) olduğuna göre, \\(a^2+b^2\\) toplamı kaçtır?",
+   "opts": [
+    "29",
+    "39",
+    "49",
+    "59",
+    "69"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "(a+b)²'den 2ab yerine yalnız ab'yi çıkarmak",
+    "C": "(a+b)² = a²+b² sanmak",
+    "D": "(a+b)²'ye ab'yi eklemek",
+    "E": "(a+b)² = a²+b²−2ab sanıp 2ab'yi eklemek"
+   },
+   "sol": "\\(a^2+b^2=(a+b)^2-2ab=49-20=29\\).",
+   "t": 50
+  },
+  {
+   "id": "TM10-04",
+   "k": [
+    "TM10.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(x^2-5x-14\\) ifadesi \\((x+a)(x+b)\\) biçiminde çarpanlarına ayrılıyor.<br>\\(a>b\\) olduğuna göre, \\(2a-b\\) kaçtır?",
+   "opts": [
+    "−16",
+    "3",
+    "11",
+    "12",
+    "16"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "a > b koşulunu ters uygulamak (a = −7, b = 2)",
+    "B": "Çarpımı −14 değil 14 alıp (x−2)(x−7) yazmak",
+    "D": "Sabit terim ve orta terimin işaretini atlamak: (x+7)(x+2)",
+    "E": "İşaret hatası: (x+7)(x−2) yazmak"
+   },
+   "sol": "Çarpımı \\(-14\\), toplamı \\(-5\\) olan sayılar \\(2\\) ve \\(-7\\)'dir: \\((x+2)(x-7)\\). \\(a=2,\\ b=-7\\) ise \\(2a-b=4+7=11\\).",
+   "t": 80
+  },
+  {
+   "id": "TM10-05",
+   "k": [
+    "TM10.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Alanı \\((6x^2-x-2)\\) santimetrekare olan dikdörtgen biçimindeki bir fotoğrafın kenar uzunlukları, santimetre cinsinden, katsayıları tam sayı olan birinci dereceden iki ifadeyle gösterilmektedir.<br>Buna göre, bu fotoğrafın kenar uzunluklarından biri aşağıdakilerden hangisi olabilir?",
+   "opts": [
+    "\\(x-2\\)",
+    "\\(2x-1\\)",
+    "\\(3x+1\\)",
+    "\\(2x+1\\)",
+    "\\(3x+2\\)"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "6 katsayısını yok sayıp x²−x−2 = (x−2)(x+1) yazmak",
+    "B": "İşaret hatası: (2x−1)(3x+2) = 6x²+x−2",
+    "C": "Yalnız uç terimleri tutturmak: (3x+1)(2x−2)",
+    "E": "Orta terimin işaretini ters almak: (3x+2)(2x−1)"
+   },
+   "sol": "Çapraz çarpımda \\(6x^2-x-2=(2x+1)(3x-2)\\) olur; kenarlardan biri \\(2x+1\\)'dir.",
+   "t": 85
+  },
+  {
+   "id": "TM10-06",
+   "k": [
+    "TM10.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Paydaları sıfır yapmayan \\(x\\) gerçek sayıları için<br>\\(\\dfrac{x^2-9}{x^2-5x+6}:\\dfrac{x^2+6x+9}{x^2-4}\\)<br>ifadesinin en sade biçimi aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(\\dfrac{x-2}{x+3}\\)",
+    "\\(\\dfrac{x+3}{x+2}\\)",
+    "\\(\\dfrac{x+2}{x-3}\\)",
+    "\\(\\dfrac{(x+3)^3}{(x-2)^2(x+2)}\\)",
+    "\\(\\dfrac{x+2}{x+3}\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "x²−4'ü (x−2)² olarak çarpanlarına ayırmak",
+    "B": "Bölmede yanlış kesri ters çevirmek",
+    "C": "x²+6x+9'u (x+3)(x−3) sanmak",
+    "D": "Bölmeyi çarpma gibi yapıp ikinci kesri ters çevirmemek"
+   },
+   "sol": "\\(\\dfrac{(x-3)(x+3)}{(x-2)(x-3)}\\cdot\\dfrac{(x-2)(x+2)}{(x+3)^2}=\\dfrac{x+2}{x+3}\\).",
+   "t": 90
+  },
+  {
+   "id": "TM10-07",
+   "k": [
+    "TM10.2"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Kenar uzunluğu \\(a\\) cm olan kare biçimindeki bir kartonun bir köşesinden, kenar uzunluğu \\(b\\) cm olan kare biçiminde bir parça kesilip çıkarılıyor.<br>Kalan parçanın alanı 96 cm² ve \\(a+b=24\\) olduğuna göre, kesilen karenin bir kenarı kaç cm'dir?",
+   "opts": [
+    "4",
+    "10",
+    "12",
+    "14",
+    "20"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "a−b = 4 farkını b sanmak",
+    "C": "a ile b'yi eşit sanıp 24'ü ikiye bölmek",
+    "D": "Büyük karenin kenarı a'yı bulmak",
+    "E": "a−b = 4'ü 24'ten çıkarıp 2'ye bölmeyi unutmak"
+   },
+   "sol": "\\(a^2-b^2=(a-b)(a+b)=96\\Rightarrow a-b=4\\). \\(a+b=24\\) ile \\(2b=20\\), \\(b=10\\).",
+   "t": 85
+  },
+  {
+   "id": "TM10-08",
+   "k": [
+    "TM10.4",
+    "TM10.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "\\(x\\neq \\pm 2\\) olmak üzere,<br>\\(\\dfrac{x^3-8}{x^2-4}-\\dfrac{4}{x+2}\\)<br>ifadesinin en sade biçimi aşağıdakilerden hangisidir?",
+   "opts": [
+    "\\(\\dfrac{x^2}{x+2}\\)",
+    "\\(x\\)",
+    "\\(\\dfrac{x(x-2)}{x+2}\\)",
+    "\\(\\dfrac{x(x-4)}{x+2}\\)",
+    "\\(\\dfrac{x^2+2x+4}{x+2}\\)"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "x³−8'i (x−2)(x²+4) yazıp orta terimi unutmak",
+    "C": "Küp farkında orta terimi −2x almak",
+    "D": "x³−8 = (x−2)³ sanmak",
+    "E": "İkinci kesri çıkarmayı unutmak"
+   },
+   "sol": "\\(\\dfrac{(x-2)(x^2+2x+4)}{(x-2)(x+2)}-\\dfrac{4}{x+2}=\\dfrac{x^2+2x}{x+2}=x\\).",
+   "t": 95
+  },
+  {
+   "id": "TM10-09",
+   "k": [
+    "TM10.2",
+    "TM10.5"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(a-b=3\\) ve \\(a\\cdot b=4\\) olduğuna göre, \\(a^3-b^3\\) farkı kaçtır?",
+   "opts": [
+    "15",
+    "27",
+    "39",
+    "51",
+    "63"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "a²+b²'yi (a−b)²−2ab ile 9−8 = 1 bulmak",
+    "B": "a³−b³ = (a−b)³ sanmak",
+    "C": "Küp farkında orta terimin işaretini − almak",
+    "D": "(a−b)(a²+ab+b²) içinde ab terimini unutmak"
+   },
+   "sol": "\\(a^2+b^2=(a-b)^2+2ab=17\\); \\(a^3-b^3=(a-b)(a^2+ab+b^2)=3\\cdot 21=63\\).",
+   "t": 120
+  },
+  {
+   "id": "TM10-10",
+   "k": [
+    "TM10.5",
+    "TM10.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(x^2-4x+1=0\\) olduğuna göre, \\(x^3+\\dfrac{1}{x^3}\\) toplamı kaçtır?",
+   "opts": [
+    "52",
+    "56",
+    "60",
+    "64",
+    "76"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Küp toplamında orta terimi (−1) unutmak: 4·14",
+    "C": "Küp toplamında orta terimin işaretini + almak: 4·15",
+    "D": "a³+b³ = (a+b)³ sanmak",
+    "E": "(a+b)³ − 3ab(a+b) yerine + 3ab(a+b) kullanmak"
+   },
+   "sol": "Eşitlik \\(x\\)'e bölünürse \\(x+\\frac{1}{x}=4\\). \\(x^3+\\frac{1}{x^3}=4^3-3\\cdot 4=52\\).",
+   "t": 130
+  },
+  {
+   "id": "TM10-11",
+   "k": [
+    "TM10.1"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(a\\) ve \\(b\\) pozitif tam sayılar olmak üzere,<br>\\(ab+3a+2b=30\\)<br>olduğuna göre, \\(a+b\\) toplamının alabileceği en büyük değer kaçtır?",
+   "opts": [
+    "7",
+    "8",
+    "10",
+    "15",
+    "32"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "En büyük yerine en küçük toplamı bulmak",
+    "B": "İki tarafa 6 eklemeden (a+2)(b+3) = 30 yazmak",
+    "D": "Çarpanların toplamını (a+2)+(b+3) cevap sanmak",
+    "E": "Pozitiflik koşulunu atlayıp a = −1, b = 33 almak"
+   },
+   "sol": "İki tarafa 6 eklenirse \\((a+2)(b+3)=36\\). \\(a+2\\geq 3,\\ b+3\\geq 4\\) ile en büyük toplam \\(3\\cdot 12\\) için: \\(a=1,\\ b=9\\), \\(a+b=10\\).",
+   "t": 135
+  }
+ ]
+}

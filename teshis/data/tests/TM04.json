@@ -1,0 +1,282 @@
+{
+ "topic": "TM04",
+ "title": "EBOB – EKOK – Teşhis Testi",
+ "minutes": 16,
+ "questions": [
+  {
+   "id": "TM04-01",
+   "k": [
+    "TM04.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "\\(A=2^3\\cdot 3^2\\cdot 5\\) ve \\(B=2^2\\cdot 3^3\\cdot 7\\) olduğuna göre, \\(\\mathrm{EBOB}(A,B)\\) kaçtır?",
+   "opts": [
+    "6",
+    "12",
+    "36",
+    "216",
+    "1260"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Ortak asalları üslerini almadan çarpmak (2·3)",
+    "B": "3'ün üssünü yanlış almak (2²·3)",
+    "D": "Ortak asalların en büyük üslerini almak (2³·3³)",
+    "E": "Tüm asalları en küçük üsle almak (2²·3²·5·7)"
+   },
+   "sol": "EBOB için yalnızca <b>ortak</b> asal çarpanlar <b>en küçük</b> üsleriyle alınır: \\(2^2\\cdot 3^2=36\\).",
+   "t": 50
+  },
+  {
+   "id": "TM04-02",
+   "k": [
+    "TM04.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "a ve b pozitif tam sayılardır. \\(\\mathrm{EBOB}(a,b)=4\\), \\(\\mathrm{EKOK}(a,b)=240\\) ve \\(a=48\\) olduğuna göre, b kaçtır?",
+   "opts": [
+    "5",
+    "20",
+    "60",
+    "192",
+    "2880"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "EBOB'u kullanmadan EKOK'u a'ya bölmek",
+    "C": "a'yı kullanmadan EKOK'u EBOB'a bölmek",
+    "D": "a + b = EKOK sanmak",
+    "E": "Bağıntıyı b = a·EKOK/EBOB diye kurmak"
+   },
+   "sol": "\\(\\mathrm{EBOB}\\cdot\\mathrm{EKOK}=a\\cdot b\\) olduğundan \\(4\\cdot 240=48\\cdot b\\), \\(b=20\\).",
+   "t": 55
+  },
+  {
+   "id": "TM04-03",
+   "k": [
+    "TM04.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "Uzunlukları 84 cm ve 120 cm olan iki tahta çıta, hiç artmayacak biçimde birbirine eşit uzunlukta ve mümkün olan en uzun parçalara kesilecektir.<br>Buna göre, toplam kaç parça elde edilir?",
+   "opts": [
+    "7",
+    "12",
+    "15",
+    "17",
+    "840"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Yalnızca 84 cm'lik çıtanın parça sayısını almak",
+    "B": "Parça uzunluğunu (EBOB) parça sayısı sanmak",
+    "C": "Parça sayısı yerine kesim sayısını saymak",
+    "E": "Parçalama problemini EKOK ile çözmek"
+   },
+   "sol": "En uzun parça \\(\\mathrm{EBOB}(84,120)=12\\) cm'dir. Parça sayısı \\(\\frac{84}{12}+\\frac{120}{12}=7+10=17\\).",
+   "t": 60
+  },
+  {
+   "id": "TM04-04",
+   "k": [
+    "TM04.2"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Kenar uzunlukları 72 m ve 120 m olan dikdörtgen biçimindeki bir bahçenin kenarları boyunca fidan dikilecektir. Her köşeye birer fidan dikilecek ve kenarlar üzerindeki ardışık iki fidan arasındaki uzaklıklar birbirine eşit olacaktır.<br>Buna göre, bu iş için en az kaç fidan gerekir?",
+   "opts": [
+    "16",
+    "17",
+    "20",
+    "24",
+    "32"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Kapalı çevrede aralık sayısına 1 eklemek",
+    "C": "Her kenarı ayrı sayıp köşe fidanlarını iki kez saymak",
+    "D": "Fidan sayısı yerine aralık uzunluğunu (EBOB) vermek",
+    "E": "En büyük değil, daha küçük bir ortak bölen (12) almak"
+   },
+   "sol": "Fidan sayısının en az olması için aralık en büyük olmalı: \\(\\mathrm{EBOB}(72,120)=24\\) m. Kapalı çevrede fidan sayısı = aralık sayısı \\(=\\frac{384}{24}=16\\).",
+   "t": 85
+  },
+  {
+   "id": "TM04-05",
+   "k": [
+    "TM04.3"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir otogardan A, B ve C firmalarının otobüsleri sırasıyla 12, 18 ve 30 dakikada bir kalkmaktadır. Üç firmanın otobüsleri saat 07.00'de birlikte kalkmıştır.<br>Buna göre, bu üç firmanın otobüsleri ilk kez saat kaçta yeniden birlikte kalkar?",
+   "opts": [
+    "07.06",
+    "07.30",
+    "07.36",
+    "08.00",
+    "10.00"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "EKOK yerine EBOB almak",
+    "B": "Asal çarpanları birinci kuvvetle almak (2·3·5)",
+    "C": "Yalnızca iki firmanın EKOK'unu almak",
+    "D": "Süreleri toplamak (12 + 18 + 30)"
+   },
+   "sol": "Birlikte kalkış aralığı \\(\\mathrm{EKOK}(12,18,30)=2^2\\cdot 3^2\\cdot 5=180\\) dakika = 3 saattir; 07.00 + 3 saat = 10.00.",
+   "t": 80
+  },
+  {
+   "id": "TM04-06",
+   "k": [
+    "TM04.3"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "8 saniyede bir yanan bir lamba ile 12 saniyede bir yanan başka bir lamba aynı anda yanmıştır.<br>Buna göre, bu andan sonraki 3 dakika içinde iki lamba kaç kez birlikte yanar?",
+   "opts": [
+    "7",
+    "8",
+    "9",
+    "15",
+    "45"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Başlangıç anını da saymak",
+    "C": "Süreyi periyotların toplamına (20) bölmek",
+    "D": "Yalnızca 12 saniyelik lambayı dikkate almak",
+    "E": "EKOK yerine EBOB (4) kullanmak"
+   },
+   "sol": "Lambalar \\(\\mathrm{EKOK}(8,12)=24\\) saniyede bir birlikte yanar. 180 saniyede \\(24k\\le 180\\Rightarrow k\\le 7\\); 7 kez.",
+   "t": 75
+  },
+  {
+   "id": "TM04-07",
+   "k": [
+    "TM04.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "6, 8 ve 10 ile bölündüğünde her seferinde 4 kalanını veren üç basamaklı en küçük doğal sayı kaçtır?",
+   "opts": [
+    "116",
+    "120",
+    "124",
+    "244",
+    "484"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Kalanı eklemek yerine çıkarmak",
+    "B": "Kalanı eklemeyi unutmak",
+    "D": "Üç sayıda EKOK'u çarpım/EBOB (480/2) sanmak",
+    "E": "EKOK yerine sayıların çarpımını almak"
+   },
+   "sol": "Sayı \\(n=\\mathrm{EKOK}(6,8,10)\\cdot k+4=120k+4\\) biçimindedir. Üç basamaklı en küçüğü \\(k=1\\) için 124'tür.",
+   "t": 80
+  },
+  {
+   "id": "TM04-08",
+   "k": [
+    "TM04.4"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Bir kırtasiyedeki kalemler 6'şarlı paketlere konulursa 5, 8'erli paketlere konulursa 7, 9'arlı paketlere konulursa 8 kalem artmaktadır.<br>Kalem sayısı 100 ile 200 arasında olduğuna göre, kırtasiyede kaç kalem vardır?",
+   "opts": [
+    "71",
+    "143",
+    "144",
+    "145",
+    "431"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "100–200 aralığı koşulunu kontrol etmemek",
+    "C": "Sayının 1 fazlasını (EKOK'un katını) cevap sanmak",
+    "D": "Eksik yerine 1 fazlalık varmış gibi 72k + 1 almak",
+    "E": "EKOK yerine 6·8·9 çarpımını kullanmak"
+   },
+   "sol": "Her durumda 1 kalem eksik: \\(n+1\\), \\(\\mathrm{EKOK}(6,8,9)=72\\)'nin katıdır. \\(n=72k-1\\in\\{71,143,215,\\dots\\}\\); aralıktaki değer 143.",
+   "t": 95
+  },
+  {
+   "id": "TM04-09",
+   "k": [
+    "TM04.1"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "a ve b pozitif tam sayılar ve \\(a<b\\) olmak üzere \\(\\mathrm{EBOB}(a,b)=12\\) ve \\(\\mathrm{EKOK}(a,b)=720\\) olduğuna göre, kaç farklı \\((a,b)\\) ikilisi vardır?",
+   "opts": [
+    "3",
+    "4",
+    "6",
+    "8",
+    "12"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "60'ın farklı asal çarpan sayısını cevap sanmak",
+    "C": "x·y = 60'ta x ile y'nin aralarında asal olmasını aramamak",
+    "D": "a < b koşulunu ihmal edip sıralı ikili saymak",
+    "E": "Aralarında asallığı ve a < b'yi ihmal etmek (bölen sayısı)"
+   },
+   "sol": "\\(a=12x,\\ b=12y\\), \\(\\mathrm{EBOB}(x,y)=1\\), \\(xy=\\frac{720}{12}=60\\). Aralarında asal ve \\(x<y\\): (1,60), (3,20), (4,15), (5,12) → 4 ikili.",
+   "t": 130
+  },
+  {
+   "id": "TM04-10",
+   "k": [
+    "TM04.2"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "150 ve 196 sayıları bir A doğal sayısına bölündüğünde kalanlar sırasıyla 6 ve 4 olmaktadır.<br>Buna göre, A'nın alabileceği en büyük değer kaçtır?",
+   "opts": [
+    "2",
+    "4",
+    "6",
+    "48",
+    "576"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Kalanları çıkarmadan EBOB(150, 196) almak",
+    "B": "Kalanları çıkarmak yerine eklemek: EBOB(156, 200)",
+    "C": "Yalnızca birinin kalanını çıkarmak: EBOB(150, 192)",
+    "E": "EBOB yerine EKOK(144, 192) almak"
+   },
+   "sol": "A, \\(150-6=144\\) ve \\(196-4=192\\) sayılarını tam böler ve \\(A>6\\) olmalıdır. En büyük A \\(=\\mathrm{EBOB}(144,192)=48\\).",
+   "t": 120
+  },
+  {
+   "id": "TM04-11",
+   "k": [
+    "TM04.3"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Bir binanın cephesindeki üç ışık sırasıyla 15, 20 ve 45 dakikada bir yanmaktadır. Bu üç ışık saat 09.00'da birlikte yanmıştır.<br>Buna göre, aynı gün 09.00 ile 21.00 arasında (bu saatler dâhil) üç ışık kaç kez birlikte yanar?",
+   "opts": [
+    "3",
+    "4",
+    "5",
+    "9",
+    "13"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Başlangıç ve bitiş anlarını saymamak",
+    "B": "Başlangıç anını (09.00) saymamak",
+    "D": "Süreyi periyotların toplamına (80) bölmek",
+    "E": "EKOK'ta 3'ün en büyük kuvvetini almamak (60)"
+   },
+   "sol": "\\(\\mathrm{EKOK}(15,20,45)=180\\) dk = 3 saat. 09.00, 12.00, 15.00, 18.00, 21.00 → 5 kez.",
+   "t": 125
+  }
+ ]
+}

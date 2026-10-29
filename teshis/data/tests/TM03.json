@@ -1,0 +1,309 @@
+{
+ "topic": "TM03",
+ "title": "Bölme ve Bölünebilme – Teşhis Testi",
+ "minutes": 18,
+ "questions": [
+  {
+   "id": "TM03-01",
+   "k": [
+    "TM03.1"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "A ve B doğal sayılardır. A sayısı 9'a bölündüğünde bölüm B, kalan 7'dir. B sayısı 4'e bölündüğünde bölüm 3, kalan 2'dir.<br>Buna göre A kaçtır?",
+   "opts": [
+    "115",
+    "117",
+    "126",
+    "133",
+    "135"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "B'yi 4·3 = 12 alıp kalan 2'yi eklemedi",
+    "B": "A = 9·4·3 alıp iki kalanı sona ekledi",
+    "C": "A'yı bulurken kalan 7'yi eklemeyi unuttu",
+    "E": "İkinci bölmenin kalanı 2'yi A'ya da ekledi"
+   },
+   "sol": "Bölünen = bölen · bölüm + kalan. \\(B=4\\cdot 3+2=14\\), \\(A=9\\cdot 14+7=133\\)'tür.",
+   "t": 50
+  },
+  {
+   "id": "TM03-02",
+   "k": [
+    "TM03.2"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "Aşağıdaki sayılardan hangisi 4 ile tam bölünür?",
+   "opts": [
+    "1322",
+    "2134",
+    "3218",
+    "5150",
+    "7316"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Rakamlar toplamının (8) 4'e bölünmesine baktı",
+    "B": "Yalnızca son rakamın (4) 4'e bölünmesine baktı",
+    "C": "Son iki yerine ilk iki basamağa (32) baktı",
+    "D": "Son rakamı 0 olan sayının 4'e bölüneceğini sandı"
+   },
+   "sol": "Bir sayının 4 ile bölünebilmesi için son iki basamağının oluşturduğu sayı 4'ün katı olmalıdır. 22, 34, 18, 50 4'ün katı değildir; \\(16=4\\cdot 4\\) olduğundan 7316 4 ile tam bölünür.",
+   "t": 45
+  },
+  {
+   "id": "TM03-03",
+   "k": [
+    "TM03.5"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "Bir bahçıvan 72 fidanı, her sırada eşit sayıda fidan olacak biçimde sıralar hâlinde dikecektir. Her sırada en az 3, en çok 18 fidan bulunacaktır.<br>Buna göre bir sıradaki fidan sayısı kaç farklı değer alabilir?",
+   "opts": [
+    "5",
+    "6",
+    "7",
+    "10",
+    "12"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Sınır değerleri 3 ve 18'i dâhil etmedi",
+    "B": "Bölen sayısında üslere 1 eklemeyi unuttu (3·2)",
+    "D": "1 ve 72 dışındaki tüm bölenleri saydı",
+    "E": "72'nin tüm pozitif bölenlerini saydı"
+   },
+   "sol": "Sıradaki fidan sayısı 72'nin bir böleni olmalıdır. \\(72=2^3\\cdot 3^2\\)'nin bölenlerinden 3 ile 18 arasında (sınırlar dâhil) olanlar 3, 4, 6, 8, 9, 12, 18'dir: 7 değer.",
+   "t": 60
+  },
+  {
+   "id": "TM03-04",
+   "k": [
+    "TM03.1"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "a ve b pozitif tam sayılardır. a sayısı b'ye bölündüğünde bölüm 6, kalan 11'dir.<br>Buna göre \\(a+b\\) toplamının alabileceği en küçük değer kaçtır?",
+   "opts": [
+    "18",
+    "83",
+    "84",
+    "88",
+    "95"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Kalan < bölen koşulunu unutup b = 1 aldı",
+    "B": "Yalnızca a'yı bulup b'yi eklemedi",
+    "C": "a'yı bulurken kalanı eklemedi (72 + 12)",
+    "D": "Kalanın bölene eşit olabileceğini sandı (b = 11)"
+   },
+   "sol": "Kalan bölenden küçük olmalıdır: \\(b>11\\), yani \\(b\\ge 12\\). \\(a=6b+11\\) olduğundan \\(a+b=7b+11\\) en küçük \\(b=12\\) için \\(95\\)'tir.",
+   "t": 80
+  },
+  {
+   "id": "TM03-05",
+   "k": [
+    "TM03.1"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Bugün günlerden cumadır.<br>Buna göre bugünden 250 gün sonra günlerden hangisi olur?",
+   "opts": [
+    "Salı",
+    "Çarşamba",
+    "Perşembe",
+    "Cuma",
+    "Pazar"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Bugünü de sayarak kalanı bir eksik (4) kullandı",
+    "C": "Son günü de sayarak kalanı bir fazla (6) kullandı",
+    "D": "Kalan yerine bölümü (35) kullanıp 35'in 7'ye tam bölündüğünü aldı",
+    "E": "Kalan 5'i geriye doğru saydı"
+   },
+   "sol": "\\(250=7\\cdot 35+5\\)'tir. 35 tam hafta sonra yine cuma olur; cumadan 5 gün sonrası çarşambadır.",
+   "t": 75
+  },
+  {
+   "id": "TM03-06",
+   "k": [
+    "TM03.3"
+   ],
+   "d": 2,
+   "lvl": "K",
+   "stem": "4 ile ve 6 ile tam bölünebilen her pozitif tam sayı için aşağıdakilerden hangileri <b>kesinlikle</b> doğrudur?<br>I. 12 ile tam bölünür.<br>II. 24 ile tam bölünür.<br>III. 3 ile tam bölünür.",
+   "opts": [
+    "Yalnız I",
+    "Yalnız II",
+    "I ve II",
+    "I ve III",
+    "I, II ve III"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "6 ile bölünen sayının 3 ile de bölündüğünü görmedi",
+    "B": "Bölünebilmeyi 4·6 = 24 çarpımıyla kurdu, 12'yi görmedi",
+    "C": "4 ile 6'yı aralarında asal sanıp 24 dedi; III'ü atladı",
+    "E": "4 ile 6'yı aralarında asal sanıp 24 ile de bölünür dedi"
+   },
+   "sol": "4 ve 6 aralarında asal olmadığından sayı \\(4\\cdot 6=24\\) ile değil, EKOK\\((4,6)=12\\) ile bölünür. 12 sayısı II'ye karşı örnektir. 6 ile bölünen sayı 3 ile de bölünür. I ve III doğrudur.",
+   "t": 80
+  },
+  {
+   "id": "TM03-07",
+   "k": [
+    "TM03.3",
+    "TM03.2"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Dört basamaklı \\(\\overline{4a7b}\\) sayısı 12 ile tam bölünebildiğine göre \\(a+b\\) toplamının alabileceği en büyük değer kaçtır?",
+   "opts": [
+    "7",
+    "10",
+    "13",
+    "15",
+    "16"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "3 yerine 9 ile bölünebilme kuralını uyguladı",
+    "B": "4 kuralında yalnızca 72'yi buldu, 76'yı atladı",
+    "D": "3 ile bölünebilmeyi kontrol etmedi (a = 9, b = 6)",
+    "E": "12 ile bölünebilmeyi 2 ve 6 ile kontrol etti"
+   },
+   "sol": "\\(12=3\\cdot 4\\) (aralarında asal). 4 ile bölünme: \\(\\overline{7b}\\in\\{72,76\\}\\). 3 ile bölünme: \\(11+a+b\\) 3'ün katı. \\(b=6\\) için \\(a=7\\) en büyük olup \\(a+b=13\\)'tür (\\(b=2\\) için en çok 10).",
+   "t": 90
+  },
+  {
+   "id": "TM03-08",
+   "k": [
+    "TM03.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "x ve y pozitif tam sayılardır. x sayısının 9 ile bölümünden kalan 7, y sayısının 9 ile bölümünden kalan 3'tür.<br>Buna göre \\(x^2+2y\\) sayısının 9 ile bölümünden kalan kaçtır?",
+   "opts": [
+    "1",
+    "2",
+    "4",
+    "7",
+    "55"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "x² yerine 2x kullandı",
+    "C": "x²'yi x gibi aldı (7 + 6)",
+    "D": "2y'deki 2 katsayısını unuttu (49 + 3)",
+    "E": "55'i 9'a bölmedi; kalanın bölenden küçük olacağını unuttu"
+   },
+   "sol": "Sayı yerine kalanlar kullanılır: \\(7^2+2\\cdot 3=49+6=55\\). \\(55=9\\cdot 6+1\\) olduğundan kalan 1'dir.",
+   "t": 80
+  },
+  {
+   "id": "TM03-09",
+   "k": [
+    "TM03.5"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "n bir pozitif tam sayıdır. \\(2^n\\cdot 15\\) sayısının 24 tane pozitif böleni vardır.<br>Buna göre n kaçtır?",
+   "opts": [
+    "2",
+    "5",
+    "11",
+    "19",
+    "24"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Pozitif ve negatif bölenleri birlikte saydı",
+    "C": "15'i asal sanıp (n + 1)·2 = 24 kurdu",
+    "D": "Üslere 1 ekleyip çarpmak yerine topladı",
+    "E": "Bölen sayısında üslere 1 eklemeyi unuttu (n·1·1)"
+   },
+   "sol": "\\(2^n\\cdot 15=2^n\\cdot 3^1\\cdot 5^1\\) olduğundan pozitif bölen sayısı \\((n+1)\\cdot 2\\cdot 2=24\\)'tür. Buradan \\(n+1=6\\), \\(n=5\\) bulunur.",
+   "t": 80
+  },
+  {
+   "id": "TM03-10",
+   "k": [
+    "TM03.2",
+    "TM03.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Altı basamaklı \\(\\overline{72a531}\\) sayısının 11 ile bölümünden kalan 4 olduğuna göre a kaçtır?",
+   "opts": [
+    "2",
+    "5",
+    "6",
+    "8",
+    "9"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "11 kuralında işaretlemeye soldan (en büyük basamaktan) başladı",
+    "C": "−2 − a = 4 denkleminde a = −6 bulup işareti attı",
+    "D": "11 için rakamlar toplamını kullandı (18 + a)",
+    "E": "Kalanı yok sayıp 11'e tam bölünme koşulunu kurdu"
+   },
+   "sol": "Birler basamağından başlayarak rakamlar sırayla \\(+,-,+,\\ldots\\) işaretlenir: \\(1-3+5-a+2-7=-2-a\\). \\(-2-a\\equiv 4\\) (mod 11) ise \\(a\\equiv -6\\equiv 5\\); \\(a=5\\)'tir.",
+   "t": 125
+  },
+  {
+   "id": "TM03-11",
+   "k": [
+    "TM03.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "\\(17^{20}+23^{21}\\) sayısının 8 ile bölümünden kalan kaçtır?",
+   "opts": [
+    "0",
+    "2",
+    "3",
+    "7",
+    "8"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "23 ≡ −1 alıp (−1)²¹'i 1 sandı",
+    "C": "1²⁰'yi 20 sanıp 20 + 7 = 27 aldı",
+    "D": "Kalanı üsle çarptı (1·20 + 7·21 = 167)",
+    "E": "1 + 7 = 8'i 8'e göre indirgemedi (kalan < bölen)"
+   },
+   "sol": "\\(17\\equiv 1\\) ve \\(23\\equiv 7\\equiv -1\\) (mod 8). \\(1^{20}+(-1)^{21}=1-1=0\\) olduğundan kalan 0'dır.",
+   "t": 120
+  },
+  {
+   "id": "TM03-12",
+   "k": [
+    "TM03.5"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "a ve b pozitif tam sayılardır. \\(2^a\\cdot 3^b\\) sayısının pozitif bölenlerinin toplamı 91'dir.<br>Buna göre bu sayının pozitif bölen sayısı kaçtır?",
+   "opts": [
+    "4",
+    "5",
+    "9",
+    "18",
+    "36"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "Bölen sayısını üslerin çarpımı (a·b) aldı",
+    "B": "Üsleri toplayıp 1 ekledi (a + b + 1)",
+    "D": "Negatif bölenleri de saydı",
+    "E": "Bölen sayısı yerine sayının kendisini verdi"
+   },
+   "sol": "Bölenler toplamı \\((1+2+\\cdots+2^a)(1+3+\\cdots+3^b)=91=7\\cdot 13\\)'tür. \\(1+2+4=7\\), \\(1+3+9=13\\) olduğundan \\(a=b=2\\), sayı 36'dır. Pozitif bölen sayısı \\((2+1)(2+1)=9\\)'dur.",
+   "t": 140
+  }
+ ]
+}

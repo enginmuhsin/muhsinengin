@@ -1,0 +1,307 @@
+{
+ "topic": "TM01",
+ "title": "Temel Kavramlar – Teşhis Testi",
+ "minutes": 17,
+ "questions": [
+  {
+   "id": "TM01-01",
+   "k": [
+    "TM01.1"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "Aşağıdakilerden hangisi bir irrasyonel sayıdır?",
+   "opts": [
+    "\\(\\sqrt{0{,}4}\\)",
+    "\\(\\sqrt{0{,}09}\\)",
+    "\\(0{,}\\overline{6}\\)",
+    "\\(\\dfrac{\\sqrt{18}}{\\sqrt{2}}\\)",
+    "\\(\\sqrt{1{,}44}\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "Kök gördüğü için irrasyonel sandı; √0,09 = 0,3 olduğunu görmedi",
+    "C": "Devirli ondalık sayıları irrasyonel sandı",
+    "D": "Kök içeren her ifadeyi irrasyonel sandı; √18/√2 = 3",
+    "E": "√1,44 = 1,2 olduğunu fark etmedi"
+   },
+   "sol": "\\(\\sqrt{0{,}09}=0{,}3\\), \\(0{,}\\overline{6}=\\frac{2}{3}\\), \\(\\frac{\\sqrt{18}}{\\sqrt{2}}=\\sqrt{9}=3\\) ve \\(\\sqrt{1{,}44}=1{,}2\\) rasyoneldir. \\(\\sqrt{0{,}4}=\\sqrt{\\frac{2}{5}}\\) ise tam kare olmayan bir kesrin karekökü olduğundan irrasyoneldir.",
+   "t": 45
+  },
+  {
+   "id": "TM01-02",
+   "k": [
+    "TM01.2"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "a bir tek tam sayı ve b bir çift tam sayı olmak üzere, aşağıdaki ifadelerden hangisinin değeri <b>kesinlikle</b> tek sayıdır?",
+   "opts": [
+    "\\(a\\cdot b\\)",
+    "\\(a+b+1\\)",
+    "\\(3a+5\\)",
+    "\\(b^2+a\\cdot b\\)",
+    "\\(a^2+b\\)"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Tek · çift çarpımını tek sandı",
+    "B": "a + b tek iken 1 eklemenin sonucu çift yaptığını atladı",
+    "C": "3a + 5'te tek + tek toplamını tek sandı",
+    "D": "a·b'yi tek sanıp çift + tek = tek dedi"
+   },
+   "sol": "Tek · tek = tek olduğundan \\(a^2\\) tektir; tek + çift = tek olduğundan \\(a^2+b\\) kesinlikle tektir. Diğerleri: \\(ab\\) çift, \\(a+b+1\\) çift, \\(3a+5\\) (tek + tek) çift, \\(b^2+ab\\) çifttir.",
+   "t": 50
+  },
+  {
+   "id": "TM01-03",
+   "k": [
+    "TM01.3"
+   ],
+   "d": 1,
+   "lvl": "K",
+   "stem": "15'ten küçük asal sayıların toplamı kaçtır?",
+   "opts": [
+    "39",
+    "40",
+    "41",
+    "42",
+    "50"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "2'yi asal saymadı (çift sayıların asal olamayacağını sandı)",
+    "B": "1'i asal sayıp 2'yi saymadı",
+    "D": "1'i asal saydı",
+    "E": "9'u asal saydı (tek sayıları asal sandı)"
+   },
+   "sol": "15'ten küçük asal sayılar 2, 3, 5, 7, 11 ve 13'tür (1 asal değildir, 2 tek çift asaldır). Toplamları 41'dir.",
+   "t": 45
+  },
+  {
+   "id": "TM01-04",
+   "k": [
+    "TM01.5"
+   ],
+   "d": 1,
+   "lvl": "U",
+   "stem": "\\(\\dfrac{7!}{5!}+0!\\cdot 3!\\) işleminin sonucu kaçtır?",
+   "opts": [
+    "8",
+    "42",
+    "43",
+    "48",
+    "216"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "7!/5!'i (7 − 5)! = 2! sandı",
+    "B": "0! = 0 aldı",
+    "C": "0!·3!'ü (0·3)! = 0! = 1 sandı",
+    "E": "7!/5!'i 7·6·5 aldı (7!/4! ile karıştırdı)"
+   },
+   "sol": "\\(\\frac{7!}{5!}=7\\cdot 6=42\\) ve \\(0!=1\\) olduğundan \\(0!\\cdot 3!=6\\) olur. Sonuç \\(42+6=48\\)'dir.",
+   "t": 50
+  },
+  {
+   "id": "TM01-05",
+   "k": [
+    "TM01.1"
+   ],
+   "d": 2,
+   "lvl": "K",
+   "stem": "Aşağıdaki ifadelerden hangileri her zaman doğrudur?<br>I. Her doğal sayı bir rasyonel sayıdır.<br>II. İki irrasyonel sayının toplamı bir irrasyonel sayıdır.<br>III. Bir rasyonel sayı ile bir irrasyonel sayının toplamı bir irrasyonel sayıdır.",
+   "opts": [
+    "Yalnız I",
+    "Yalnız II",
+    "I ve II",
+    "I ve III",
+    "I, II ve III"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "Rasyonel + irrasyonel toplamın rasyonel olabileceğini sandı",
+    "B": "II'yi doğru sandı; doğal sayıların rasyonel olduğunu görmedi",
+    "C": "II'de √2 + (−√2) = 0 karşı örneğini görmedi; III'ü eledi",
+    "E": "II için √2 + (−√2) = 0 karşı örneğini düşünmedi"
+   },
+   "sol": "I doğrudur: \\(\\mathbb{N}\\subset\\mathbb{Z}\\subset\\mathbb{Q}\\). II yanlıştır: \\(\\sqrt{2}+(-\\sqrt{2})=0\\) rasyoneldir. III doğrudur: toplam rasyonel olsaydı, irrasyonel sayı iki rasyonelin farkı olarak rasyonel çıkardı.",
+   "t": 80
+  },
+  {
+   "id": "TM01-06",
+   "k": [
+    "TM01.2"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "a, b ve c sıfırdan farklı gerçek sayılar olmak üzere<br>\\(a^2\\cdot b<0,\\quad b\\cdot c^3>0,\\quad \\dfrac{a}{c}<0\\)<br>olduğu biliniyor.<br>Buna göre aşağıdakilerden hangisi <b>kesinlikle</b> pozitiftir?",
+   "opts": [
+    "\\(a-b\\)",
+    "\\(a\\cdot b\\)",
+    "\\(b+c\\)",
+    "\\(a\\cdot c\\)",
+    "\\(c-a\\)"
+   ],
+   "ans": "A",
+   "dist": {
+    "B": "a²·b < 0'dan a'yı da negatif sandı",
+    "C": "İki negatifin toplamını pozitif sandı (− · − = + ile karıştırdı)",
+    "D": "a/c < 0 iken a·c'nin işaretinin farklı olabileceğini sandı",
+    "E": "c³'ü c² gibi pozitif sayıp c > 0 aldı"
+   },
+   "sol": "\\(a^2>0\\) olduğundan \\(b<0\\); \\(b<0\\) ve \\(b\\cdot c^3>0\\) ise \\(c^3<0\\), yani \\(c<0\\); \\(\\frac{a}{c}<0\\) ise \\(a>0\\). Pozitiften negatif çıkarılırsa sonuç pozitif olur: \\(a-b>0\\).",
+   "t": 90
+  },
+  {
+   "id": "TM01-07",
+   "k": [
+    "TM01.3"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "Ahmet ile kız kardeşi Elif'in bugünkü yaşları birer asal sayıdır. Elif, Ahmet'ten küçüktür. 5 yıl sonra ikisinin yaşları toplamı 35 olacaktır.<br>Buna göre Elif'in 5 yıl sonraki yaşı kaçtır?",
+   "opts": [
+    "2",
+    "7",
+    "12",
+    "23",
+    "28"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Elif'in bugünkü yaşını verdi; 5 yıl eklemeyi unuttu",
+    "C": "Toplamdan Ahmet'in bugünkü yaşını çıkardı (35 − 23)",
+    "D": "Ahmet'in bugünkü yaşını verdi (kişileri karıştırdı)",
+    "E": "Ahmet'in 5 yıl sonraki yaşını verdi"
+   },
+   "sol": "Bugünkü yaşlar toplamı \\(35-2\\cdot 5=25\\)'tir. İki asal sayının toplamı tek ise bunlardan biri 2 olmalıdır: \\(2+23=25\\). Elif 2 yaşındadır, 5 yıl sonra 7 yaşında olur.",
+   "t": 85
+  },
+  {
+   "id": "TM01-08",
+   "k": [
+    "TM01.4"
+   ],
+   "d": 2,
+   "lvl": "U",
+   "stem": "Maratona hazırlanan Deniz, antrenman programının ilk günü 3 km koşmuş; sonraki her gün bir önceki günden 2 km fazla koşmuştur. Deniz programın son günü 25 km koşmuştur.<br>Buna göre Deniz bu programda toplam kaç km koşmuştur?",
+   "opts": [
+    "154",
+    "168",
+    "169",
+    "322",
+    "336"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "Terim sayısında +1'i unuttu: (25 − 3)/2 = 11 gün aldı",
+    "C": "Diziyi 1'den başlatıp 1 + 3 + … + 25 = 13² hesapladı",
+    "D": "Terim sayısını (son − ilk) + 1 = 23 aldı",
+    "E": "(İlk + son)·n çarpımını 2'ye bölmeyi unuttu"
+   },
+   "sol": "Gün sayısı \\(\\frac{25-3}{2}+1=12\\)'dir. Toplam \\(\\frac{3+25}{2}\\cdot 12=14\\cdot 12=168\\) km'dir.",
+   "t": 80
+  },
+  {
+   "id": "TM01-09",
+   "k": [
+    "TM01.6"
+   ],
+   "d": 2,
+   "lvl": "A",
+   "stem": "x ve y tam sayılar olmak üzere<br>\\(-4<x\\le 3\\quad\\) ve \\(\\quad -2\\le y<5\\)<br>olduğuna göre \\(x^2-3y\\) ifadesinin alabileceği en büyük değer kaçtır?",
+   "opts": [
+    "\\(-3\\)",
+    "9",
+    "12",
+    "15",
+    "22"
+   ],
+   "ans": "D",
+   "dist": {
+    "A": "−3y'yi büyütmek için y'nin en büyük değerini (4) seçti",
+    "B": "x² yerine x kullandı (3 + 6)",
+    "C": "−2 ≤ y'deki eşitliği görmeyip y = −1 aldı",
+    "E": "−4 < x kesin eşitsizliğine rağmen x = −4 aldı"
+   },
+   "sol": "\\(x^2\\) en büyük \\(x=-3\\) ya da \\(x=3\\) için 9 olur (\\(x=-4\\) alınamaz). \\(-3y\\) en büyük \\(y=-2\\) için 6 olur. En büyük değer \\(9+6=15\\)'tir.",
+   "t": 85
+  },
+  {
+   "id": "TM01-10",
+   "k": [
+    "TM01.4"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "Ardışık 7 tek sayının toplamı, bu sayıların en küçüğünün 9 katından 12 fazladır.<br>Buna göre bu sayıların en büyüğü kaçtır?",
+   "opts": [
+    "15",
+    "21",
+    "27",
+    "29",
+    "36"
+   ],
+   "ans": "C",
+   "dist": {
+    "A": "En küçük sayıyı bulup en büyüğe geçmedi",
+    "B": "Ortanca terimi (x + 6) en büyük sandı",
+    "D": "En büyüğü x + 2·7 aldı (adım sayısını 7 saydı)",
+    "E": "Terimleri x + 2, …, x + 14 alıp x'i dışarıda bıraktı"
+   },
+   "sol": "Sayılar \\(x, x+2, \\ldots, x+12\\) olsun. Toplam \\(7x+42\\)'dir. \\(7x+42=9x+12\\) ise \\(x=15\\) olur; en büyük sayı \\(15+12=27\\)'dir.",
+   "t": 125
+  },
+  {
+   "id": "TM01-11",
+   "k": [
+    "TM01.5"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "a ve b doğal sayılar olmak üzere<br>\\(a!=6\\cdot b!\\)<br>eşitliğini sağlayan tüm \\((a,\\,b)\\) ikilileri için \\(a+b\\) toplamının alabileceği değerlerin toplamı kaçtır?",
+   "opts": [
+    "7",
+    "11",
+    "14",
+    "15",
+    "18"
+   ],
+   "ans": "E",
+   "dist": {
+    "A": "Yalnız a = 3 durumunu buldu; (6, 5) ikilisini kaçırdı",
+    "B": "Yalnız ardışık (6, 5) çözümünü buldu",
+    "C": "(3, 1) ikilisini gözden kaçırdı",
+    "D": "0! = 0 sanıp (3, 0) ikilisini saymadı"
+   },
+   "sol": "\\(\\frac{a!}{b!}=6\\) olmalıdır. \\(a!=6\\) ve \\(b!=1\\) için \\(a=3\\), \\(b\\in\\{0,1\\}\\) (\\(0!=1!=1\\)); ardışık durumda \\(\\frac{6!}{5!}=6\\) için \\((6,5)\\). Toplamlar 3, 4, 11 olup toplamları 18'dir.",
+   "t": 130
+  },
+  {
+   "id": "TM01-12",
+   "k": [
+    "TM01.6"
+   ],
+   "d": 3,
+   "lvl": "A",
+   "stem": "a, b ve c pozitif tam sayılar olmak üzere<br>\\(a\\cdot b=24\\quad\\) ve \\(\\quad b\\cdot c=36\\)<br>olduğuna göre \\(a+b+c\\) toplamının alabileceği en küçük değer kaçtır?",
+   "opts": [
+    "10",
+    "16",
+    "17",
+    "23",
+    "61"
+   ],
+   "ans": "B",
+   "dist": {
+    "A": "a + c'yi buldu, b'yi toplama katmadı (4 + 6)",
+    "C": "b'yi en büyük ortak bölen 12 alıp diğerlerini denemedi",
+    "D": "Yalnız b = 1, 2, 3 değerlerini deneyip en küçüğü seçti",
+    "E": "En küçük yerine en büyük değeri buldu (b = 1)"
+   },
+   "sol": "b, 24 ile 36'nın ortak böleni olmalıdır: \\(b\\in\\{1,2,3,4,6,12\\}\\). Toplam \\(b+\\frac{60}{b}\\) olur; değerler 61, 32, 23, 19, 16, 17'dir. En küçüğü \\(b=6\\) için 16'dır.",
+   "t": 130
+  }
+ ]
+}

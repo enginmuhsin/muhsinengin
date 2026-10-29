@@ -1,0 +1,598 @@
+{
+"version": "2026.10",
+"note": "ÖSYM ağırlıkları (w) 2018 sonrası YKS sınavlarındaki yaklaşık ortalama soru sayısıdır; kesin değildir.",
+"sections": [
+ {"id":"TM","name":"TYT Matematik"},
+ {"id":"TG","name":"TYT Geometri"},
+ {"id":"AM","name":"AYT Matematik"},
+ {"id":"AG","name":"AYT Geometri"}
+],
+"topics": [
+{"id":"TM01","sec":"TM","name":"Temel Kavramlar","w":2.5,"pre":[],
+ "k":[
+  {"id":"TM01.1","t":"Sayı kümelerini (N, Z, Q, I, R) ayırt eder ve bir sayının hangi kümelere ait olduğunu belirler."},
+  {"id":"TM01.2","t":"Tek–çift ve pozitif–negatif sayıların dört işlemdeki kurallarını kullanır."},
+  {"id":"TM01.3","t":"Asal sayı, aralarında asal sayı ve asal çarpan kavramlarını kullanır."},
+  {"id":"TM01.4","t":"Ardışık sayıların toplamı ve terim sayısı ile ilgili hesaplamalar yapar."},
+  {"id":"TM01.5","t":"Faktöriyel kavramını kullanır, faktöriyelli ifadeleri sadeleştirir."},
+  {"id":"TM01.6","t":"İşlem önceliğini ve verilen koşullara göre en büyük/en küçük değer akıl yürütmesini uygular."}
+ ],
+ "st":"Her kuralı önce küçük sayılarla deneterek (tablo kurdurarak) keşfettir, sonra genelle. En büyük–en küçük sorularında 'değişkenlere uç değer verme' alışkanlığı kazandır.",
+ "an":"Sayı kümeleri iç içe geçmiş Rus bebekleri (matruşka) gibidir: her doğal sayı aynı zamanda bir tam sayı, her tam sayı bir rasyonel sayıdır; irrasyoneller ise rasyonel bebeğin yanında duran ayrı bir bebektir.",
+ "my":["0'ı pozitif sanmak","1'i asal saymak","Negatif çarpımında işaret kuralını unutmak","Ardışık çift sayılarda terim sayısını (son−ilk)+1 almak","0! = 0 sanmak"]},
+
+{"id":"TM02","sec":"TM","name":"Sayı Basamakları","w":1,"pre":["TM01"],
+ "k":[
+  {"id":"TM02.1","t":"Basamak ve basamak değeri kavramlarını ayırt eder; sayıları çözümlenmiş biçimde yazar."},
+  {"id":"TM02.2","t":"Rakamları yer değiştirilen sayılar arasındaki farkı/toplamı çözümleme ile hesaplar."},
+  {"id":"TM02.3","t":"Rakamları farklı en büyük/en küçük sayıları koşullara göre belirler."},
+  {"id":"TM02.4","t":"Basamak sayısı ve rakam sayısı ile ilgili sayma problemlerini çözer."}
+ ],
+ "st":"Her soruda 'ab = 10a + b' çözümlemesini yazdırmayı alışkanlık haline getir; zihinden kestirmeyi sonraya bırak.",
+ "an":"Basamaklar bir apartmanın katları gibidir: aynı rakam 3. katta oturursa (yüzler) değeri 100 katına çıkar; rakam aynı, adres farklı.",
+ "my":["Basamak değeri ile sayı değerini karıştırmak","ab'yi a·b çarpımı sanmak","Baştaki rakamın 0 olamayacağını unutmak","Rakamları farklı koşulunu atlamak"]},
+
+{"id":"TM03","sec":"TM","name":"Bölme ve Bölünebilme","w":1.5,"pre":["TM01","TM02"],
+ "k":[
+  {"id":"TM03.1","t":"Bölme algoritmasını (bölünen = bölen·bölüm + kalan, 0 ≤ kalan < bölen) uygular."},
+  {"id":"TM03.2","t":"2, 3, 4, 5, 8, 9, 10, 11 ile bölünebilme kurallarını uygular."},
+  {"id":"TM03.3","t":"Bileşik bölünebilme (6, 12, 15, 36, 45, 72 …) için aralarında asal çarpanları kullanır."},
+  {"id":"TM03.4","t":"Kalanların toplam ve çarpımdaki davranışını kullanarak kalan bulur."},
+  {"id":"TM03.5","t":"Pozitif bölen sayısını ve bölenler toplamını asal çarpanlardan hesaplar."}
+ ],
+ "st":"Kalan problemlerini 'kalan aritmetiği' ile kısalt: büyük sayıyı değil kalanını taşı. Bileşik bölünebilmede neden aralarında asal çarpanlara ayırmak gerektiğini 12 = 2·6 karşı örneğiyle göster.",
+ "an":"Bölme, şekerleri torbalara eşit paylaştırmaya benzer: torba sayısı bölüm, elde kalan şeker kalandır; kalan, torbaya sığacak kadar çoksa bir torba daha doldurulur, bu yüzden kalan bölenden küçüktür.",
+ "my":["Kalanın bölenden büyük olabileceğini sanmak","12 ile bölünebilmeyi 2 ve 6 ile kontrol etmek","11 kuralında işaret sırasını karıştırmak","Bölen sayısında üslere 1 eklemeyi unutmak"]},
+
+{"id":"TM04","sec":"TM","name":"EBOB – EKOK","w":1,"pre":["TM03"],
+ "k":[
+  {"id":"TM04.1","t":"Asal çarpanlara ayırarak EBOB ve EKOK'u hesaplar; EBOB·EKOK = a·b bağıntısını kullanır."},
+  {"id":"TM04.2","t":"Parçalama/eşit bölme gerektiren problemleri EBOB ile modeller."},
+  {"id":"TM04.3","t":"Birleştirme/tekrar eden olay (döngü) problemlerini EKOK ile modeller."},
+  {"id":"TM04.4","t":"Kalanlı EKOK problemlerini (her birine bölündüğünde kalan …) çözer."}
+ ],
+ "st":"Önce 'parçalıyor muyuz, birleştiriyor muyuz?' sorusunu sordur: parçalama → EBOB, birleştirme/buluşma → EKOK.",
+ "an":"EBOB en büyük ortak 'cetvel'dir: iki tahtayı artıksız ölçebilen en uzun cetvel. EKOK ise iki otobüsün aynı durakta yeniden buluştuğu ilk an gibidir.",
+ "my":["EBOB ile EKOK'u probleme göre karıştırmak","Tüm asal çarpanları en büyük üsle almak yerine ortakları almak (EKOK'ta)","Kalanlı problemlerde kalanı eklemeyi unutmak","Ağaç dikme probleminde uç noktaları saymayı unutmak"]},
+
+{"id":"TM05","sec":"TM","name":"Rasyonel ve Ondalık Sayılar","w":1.5,"pre":["TM01"],
+ "k":[
+  {"id":"TM05.1","t":"Rasyonel sayılarla dört işlemi yapar ve sadeleştirir."},
+  {"id":"TM05.2","t":"Rasyonel sayıları sıralar; kesir karşılaştırma yöntemlerini kullanır."},
+  {"id":"TM05.3","t":"Ondalık sayılarla işlem yapar; ondalık–kesir dönüşümü yapar."},
+  {"id":"TM05.4","t":"Devirli ondalık sayıyı rasyonel sayıya çevirir."},
+  {"id":"TM05.5","t":"Çok katlı (merdiven) kesirli ifadeleri sadeleştirir."}
+ ],
+ "st":"Kesir sıralamada 'paya/paydaya eşitleme' ve 'tamamlayana bakma' stratejilerini ayrı ayrı modelle. Devirli sayıda formülü ezberletmeden önce 10x − x yöntemini türet.",
+ "an":"Payda pastanın kaç dilime bölündüğünü, pay kaç dilim aldığını söyler: 3/8 ile 3/5'te dilim sayısı aynı ama 5'e bölünmüş pastanın dilimleri daha büyüktür.",
+ "my":["Kesirleri toplarken payları ve paydaları ayrı ayrı toplamak","0,3 devirli = 3/10 sanmak","Negatif kesirlerde sıralamayı ters çevirmeyi unutmak","Ondalık çarpmada virgül yerini yanlış koymak"]},
+
+{"id":"TM06","sec":"TM","name":"Basit Eşitsizlikler","w":1,"pre":["TM01","TM05"],
+ "k":[
+  {"id":"TM06.1","t":"Eşitsizliğin özelliklerini (negatifle çarpma/bölmede yön değişimi) uygular."},
+  {"id":"TM06.2","t":"Birinci dereceden bir bilinmeyenli eşitsizlikleri çözer ve çözüm aralığını yazar."},
+  {"id":"TM06.3","t":"Değişken aralıkları verilen ifadelerin (toplam, fark, çarpım, kare) alabileceği değer aralığını bulur."},
+  {"id":"TM06.4","t":"Eşitsizlik içeren sözel durumlarda en büyük/en küçük tam sayı değerlerini belirler."}
+ ],
+ "st":"Aralık toplama/çıkarma ve özellikle çarpımda 'dört köşe çarpımını dene' yöntemini öğret; kare ifadede 0'ı içeren aralık uyarısını mutlaka yap.",
+ "an":"Eşitsizlik bir teraziye benzer: iki kefeye aynı ağırlığı eklersen denge bozulmaz; ama kefeleri −1 ile çarpmak teraziyi ters çevirmek gibidir, ağır taraf hafif olur.",
+ "my":["Negatifle çarpınca yönü çevirmemek","Aralık çıkarmada uç noktaları aynı sırayla çıkarmak","x² aralığında 0'ı unutmak","Kesin/kesin olmayan eşitsizlik uçlarını karıştırmak"]},
+
+{"id":"TM07","sec":"TM","name":"Mutlak Değer","w":1,"pre":["TM06"],
+ "k":[
+  {"id":"TM07.1","t":"Mutlak değeri sayı doğrusunda uzaklık olarak yorumlar ve özelliklerini kullanır."},
+  {"id":"TM07.2","t":"İçindeki ifadenin işaretine göre mutlak değerli ifadeleri sadeleştirir."},
+  {"id":"TM07.3","t":"Mutlak değerli denklemleri çözer."},
+  {"id":"TM07.4","t":"Mutlak değerli eşitsizlikleri çözer."}
+ ],
+ "st":"|x − a| ifadesini her zaman 'x'in a'ya uzaklığı' diye okut; denklem/eşitsizliği sayı doğrusunda çizerek çözdür, sonra cebirsel yönteme geç.",
+ "an":"Mutlak değer bir kilometre taşıdır: şehre doğru ya da şehirden uzağa gitsen de taş yalnızca ne kadar uzakta olduğunu söyler, yönü söylemez.",
+ "my":["|−x| = −x sanmak","İçi negatifken işareti değiştirmeden dışarı almak","|x| < a çözümünü x < a ile sınırlamak","|x| = negatif sayı için çözüm aramak"]},
+
+{"id":"TM08","sec":"TM","name":"Üslü Sayılar","w":1.5,"pre":["TM01","TM05"],
+ "k":[
+  {"id":"TM08.1","t":"Üslü ifadenin tanımını, negatif ve sıfırıncı kuvveti kullanır."},
+  {"id":"TM08.2","t":"Üslü sayılarda çarpma, bölme, kuvvetin kuvveti kurallarını uygular."},
+  {"id":"TM08.3","t":"Ortak çarpan parantezine alarak üslü toplamları sadeleştirir."},
+  {"id":"TM08.4","t":"Üslü denklemleri tabanları eşitleyerek çözer."},
+  {"id":"TM08.5","t":"Üslü sayıları karşılaştırır ve sıralar; bilimsel gösterimi kullanır."}
+ ],
+ "st":"(−2)⁴ ile −2⁴ farkını, 2³+2³ ile 2⁶ farkını yan yana çalıştır. Toplama içeren ifadelerde ortak çarpan parantezini refleks haline getir.",
+ "an":"Üs, 'kaç kez kopyala-çarp' komutudur: 2⁵ beş tane 2'nin zinciridir. Negatif üs zinciri ters çevirir (bölme), 0 üs ise zincirde hiç halka olmaması: geriye çarpmanın etkisiz elemanı 1 kalır.",
+ "my":["−2⁴ = 16 sanmak","aⁿ + aⁿ = a²ⁿ yazmak","Negatif üssü sonucu negatif yapmak sanmak","(aᵐ)ⁿ ile aᵐⁿ (üs kulesi) karıştırmak"]},
+
+{"id":"TM09","sec":"TM","name":"Köklü Sayılar","w":1.5,"pre":["TM08"],
+ "k":[
+  {"id":"TM09.1","t":"Kök–üs ilişkisini kullanır; kök dışına çıkarma ve kök içine alma yapar."},
+  {"id":"TM09.2","t":"Köklü ifadelerde toplama, çıkarma, çarpma, bölme yapar."},
+  {"id":"TM09.3","t":"Paydayı rasyonel yapar (eşlenik ile çarpma)."},
+  {"id":"TM09.4","t":"Köklü sayıları sıralar ve tahmini değerini bulur."},
+  {"id":"TM09.5","t":"√(x²) = |x| ve iç içe kök özelliklerini kullanır."}
+ ],
+ "st":"√a + √b ≠ √(a+b) yanılgısını sayısal karşı örnekle (√9 + √16) kır. Sıralamada tüm kökleri aynı köke/ kök içine alma stratejisini göster.",
+ "an":"Kök almak, alanı bilinen bir karenin kenarını bulmaktır: 49 m²'lik kare bahçenin bir kenarı 7 m. İki bahçenin alanları toplamı, kenarları toplamının karesi değildir.",
+ "my":["√(a+b) = √a + √b sanmak","√(x²) = x yazmak","Eşlenikle çarparken paydayı yanlış hesaplamak","Farklı dereceli kökleri doğrudan çarpmak"]},
+
+{"id":"TM10","sec":"TM","name":"Çarpanlara Ayırma ve Özdeşlikler","w":1.5,"pre":["TM08","TM09"],
+ "k":[
+  {"id":"TM10.1","t":"Ortak çarpan parantezine alma ve gruplandırma yapar."},
+  {"id":"TM10.2","t":"İki kare farkı, tam kare, iki küp toplamı/farkı özdeşliklerini kullanır."},
+  {"id":"TM10.3","t":"x² + bx + c ve ax² + bx + c üç terimlilerini çarpanlarına ayırır."},
+  {"id":"TM10.4","t":"Rasyonel ifadeleri çarpanlarına ayırarak sadeleştirir."},
+  {"id":"TM10.5","t":"Özdeşlikleri kullanarak sayısal ifadeleri (a+b, ab verilmişken a²+b² vb.) hesaplar."}
+ ],
+ "st":"Alan modeli (kare–dikdörtgen kartları) ile (a+b)² ve a²−b²'yi görselleştir. Sadeleştirmede 'çarpım değilse sadeleşmez' kuralını sürekli vurgula.",
+ "an":"Çarpanlara ayırma, bir sayıyı asal çarpanlarına ayırmanın cebirdeki karşılığıdır; tıpkı 91 = 7·13 gibi, x² − 9 da (x−3)(x+3) yapı taşlarından kurulur.",
+ "my":["(a+b)² = a² + b² yazmak","Toplam içindeki terimleri sadeleştirmek","İşaret hatası: (a−b) = −(b−a) dönüşümünü atlamak","a³+b³ özdeşliğinde orta terimin işaretini karıştırmak"]},
+
+{"id":"TM11","sec":"TM","name":"Oran – Orantı","w":1,"pre":["TM05"],
+ "k":[
+  {"id":"TM11.1","t":"Oran ve orantı kavramlarını ayırt eder; orantı sabiti (k) ile işlem yapar."},
+  {"id":"TM11.2","t":"Doğru ve ters orantıyı tanır ve problemlerde kullanır."},
+  {"id":"TM11.3","t":"Bileşik orantı ve çok terimli oranlarla (a:b:c) problem çözer."},
+  {"id":"TM11.4","t":"Ölçek ve harita–gerçek uzunluk dönüşümlerini yapar."}
+ ],
+ "st":"Her orantı sorusunda 'birlikte mi artıyorlar, biri artarken öbürü mü azalıyor?' sorusunu sordur; tabloya (x→y) dökerek k sabitini bulmayı öğret.",
+ "an":"Doğru orantı bir tarif büyütmektir: 2 kişilik tarifi 6 kişiye çıkarınca her malzeme 3 katına çıkar. Ters orantı ise pizzayı paylaşmak: kişi arttıkça dilim küçülür, ama toplam pizza (çarpım) sabit.",
+ "my":["Ters orantıda oranı doğrudan kurmak","a/b = c/d ile a·b = c·d karıştırmak","Ortak terimi eşitlemeden a:b ve b:c oranlarını birleştirmek","Ölçekte birim dönüşümünü (cm–km) atlamak"]},
+
+{"id":"TM12","sec":"TM","name":"Birinci Dereceden Denklemler","w":1,"pre":["TM05","TM10"],
+ "k":[
+  {"id":"TM12.1","t":"Birinci dereceden bir bilinmeyenli denklemleri çözer."},
+  {"id":"TM12.2","t":"Kesirli ve parantezli denklemleri paydaları eşitleyerek çözer."},
+  {"id":"TM12.3","t":"İki bilinmeyenli denklem sistemlerini yok etme ve yerine koyma ile çözer."},
+  {"id":"TM12.4","t":"Denklemin çözüm kümesinin boş küme/sonsuz çözüm olduğu durumları belirler."},
+  {"id":"TM12.5","t":"Sözel ifadeleri denkleme dönüştürür."}
+ ],
+ "st":"Terazi modeliyle 'iki tarafa aynı işlem' ilkesini kur; sözel ifadeleri denkleme çevirmeyi ayrı bir mini beceri olarak (cümle → sembol) çalıştır.",
+ "an":"Denklem dengede duran bir terazidir; x kutusunun ağırlığını bulmak için iki kefeden aynı şeyi alıp kutuyu tek başına bırakırız.",
+ "my":["Taraf değiştirirken işaret değiştirmemek","Paydayla çarparken her terimi çarpmamak","ax = b'de a = 0 durumunu düşünmemek","Sözel ifadede 'fazlası/eksiği' yönünü ters kurmak"]},
+
+{"id":"TM13","sec":"TM","name":"Sayı, Kesir ve Yaş Problemleri","w":3,"pre":["TM12"],
+ "k":[
+  {"id":"TM13.1","t":"Sayı problemlerini değişken atayarak denkleme dönüştürür."},
+  {"id":"TM13.2","t":"Kesir problemlerinde bütün–parça ilişkisini (kalanın kesri) modeller."},
+  {"id":"TM13.3","t":"Yaş problemlerinde yaş farkının sabitliğini ve zaman kaydırmayı kullanır."},
+  {"id":"TM13.4","t":"Tablo/çizim (şerit modeli) ile çok adımlı sözel problemleri çözer."}
+ ],
+ "st":"Şerit (bant) modeli: bütünü bir şerit olarak çizdir, kesirleri bölümlere dök. Yaş problemlerinde zaman çizelgesi tablosu (geçmiş–şimdi–gelecek) kurdur.",
+ "an":"Yaş farkı, aynı raylarda aynı hızla giden iki trenin arasındaki mesafe gibidir: yıllar geçse de aradaki fark asla değişmez.",
+ "my":["Kalanın kesrini bütünün kesri sanmak","Yaş toplamında kişi sayısı kadar yıl eklemeyi unutmak","Bilinmeyeni yanlış büyüklüğe atamak","Soru kökünün istediği değer yerine x'i cevap vermek"]},
+
+{"id":"TM14","sec":"TM","name":"Yüzde, Kâr–Zarar ve Karışım Problemleri","w":2.5,"pre":["TM11","TM12"],
+ "k":[
+  {"id":"TM14.1","t":"Yüzde hesaplarını yapar; ardışık yüzde artış/azalışları çarpan olarak modeller."},
+  {"id":"TM14.2","t":"Alış, satış, kâr ve zarar ilişkilerini maliyete göre kurar."},
+  {"id":"TM14.3","t":"İndirim ve zam ardışık uygulamalarını hesaplar."},
+  {"id":"TM14.4","t":"Karışım ve alaşım problemlerinde saf madde miktarını korur."},
+  {"id":"TM14.5","t":"Basit faiz problemlerini çözer."}
+ ],
+ "st":"Yüzdeyi çarpan olarak düşündür (%20 zam → ×1,2; %20 indirim → ×0,8). Karışımda 'saf madde tablosu' (miktar × oran = saf) kurdur.",
+ "an":"Ardışık yüzdeler, fotokopi makinesinde büyütüp sonra küçültmek gibidir: %20 büyütüp %20 küçültürsen orijinal boyuta değil, biraz daha küçüğüne dönersin (1,2 × 0,8 = 0,96).",
+ "my":["%20 zam ve %20 indirimi birbirini götürür sanmak","Kârı satış fiyatı üzerinden hesaplamak","Karışıma su eklenince saf madde miktarının değiştiğini sanmak","Ardışık yüzdeleri toplamak"]},
+
+{"id":"TM15","sec":"TM","name":"Hareket ve İşçi–Havuz Problemleri","w":2,"pre":["TM11","TM12"],
+ "k":[
+  {"id":"TM15.1","t":"Yol = hız × zaman bağıntısını kullanır; karşılaşma ve yetişme problemlerini çözer."},
+  {"id":"TM15.2","t":"Ortalama hız kavramını doğru kullanır."},
+  {"id":"TM15.3","t":"Akıntı, dairesel pist ve tren–tünel problemlerini modeller."},
+  {"id":"TM15.4","t":"İşçi ve havuz problemlerinde birim zamanda yapılan işi (1/t) kullanır."}
+ ],
+ "st":"Her hareket sorusunu çizgi şemasıyla başlat. İşçi problemlerinde 'saatte yapılan iş' tablosu kurdur; doldurma–boşaltmayı işaretli iş olarak göster.",
+ "an":"İşçi problemlerinde herkes ortak bir duvara tuğla döşer: biri saatte duvarın 1/6'sını, öbürü 1/3'ünü örerse birlikte saatte 1/2'sini örerler; süreleri değil hızları topluyoruz.",
+ "my":["Ortalama hızı hızların aritmetik ortalaması sanmak","İşçi problemlerinde süreleri toplamak","Karşılaşmada bağıl hızı fark almak","Tren–tünel probleminde tren uzunluğunu eklememek"]},
+
+{"id":"TM16","sec":"TM","name":"Grafik–Tablo Yorumlama ve Rutin Olmayan Problemler","w":3,"pre":["TM12","TM14"],
+ "k":[
+  {"id":"TM16.1","t":"Sütun, çizgi ve daire grafiklerinden veri okur ve yorumlar."},
+  {"id":"TM16.2","t":"Tablodaki verileri karşılaştırarak çok adımlı çıkarım yapar."},
+  {"id":"TM16.3","t":"Örüntü ve kuralı verilen yeni nesil problemlerde genelleme yapar."},
+  {"id":"TM16.4","t":"Koşulları sistemli deneme–eleme ile mantıksal olarak çözümler."}
+ ],
+ "st":"'Önce oku, sonra işaretle' rutini: soru kökündeki her koşulu numaralandırıp tabloya dök. Deneme–eleme sorularında sistematik liste tut.",
+ "an":"Yeni nesil soru, bir dedektif dosyasıdır: her cümle bir ipucudur; hepsini panoya asmadan suçluyu aramaya başlarsan bir ipucunu atlarsın.",
+ "my":["Grafik ekseninin ölçeğini okumamak","Daire grafiğinde açıyı yüzdeye çevirmemek","Koşullardan birini kullanmadan sonuca gitmek","Örüntüde ilk terimi n=1 yerine n=0 almak"]},
+
+{"id":"TM17","sec":"TM","name":"Kümeler ve Kartezyen Çarpım","w":1.5,"pre":["TM01"],
+ "k":[
+  {"id":"TM17.1","t":"Küme gösterimlerini, eleman ve alt küme kavramlarını kullanır; alt küme sayısını hesaplar."},
+  {"id":"TM17.2","t":"Birleşim, kesişim, fark ve tümleme işlemlerini yapar; De Morgan kurallarını kullanır."},
+  {"id":"TM17.3","t":"Venn şeması ile küme problemlerini çözer (s(A∪B) formülü)."},
+  {"id":"TM17.4","t":"Sıralı ikili ve kartezyen çarpım kavramlarını kullanır."}
+ ],
+ "st":"Her küme problemini Venn şemasında 'en içten dışa' doldurtarak çözdür; formüle sonra geç.",
+ "an":"Venn şeması iki kulübün üye listesidir: her iki kulübe de üye olanları iki kez saymamak için kesişimi bir kez çıkarırız.",
+ "my":["Eleman ile alt küme sembollerini (∈, ⊂) karıştırmak","Boş kümeyi alt küme olarak saymamak","Kesişimi iki kez saymak","(a,b) = (b,a) sanmak"]},
+
+{"id":"TM18","sec":"TM","name":"Mantık","w":1,"pre":["TM17"],
+ "k":[
+  {"id":"TM18.1","t":"Önerme, değil, ve, veya bağlaçlarının doğruluk değerlerini belirler."},
+  {"id":"TM18.2","t":"Koşullu ve iki yönlü koşullu önermelerin doğruluk değerini belirler; denk önermeleri bulur."},
+  {"id":"TM18.3","t":"Mantık kurallarını (De Morgan, dağılma) kullanarak bileşik önermeleri sadeleştirir."},
+  {"id":"TM18.4","t":"Her (∀) ve bazı (∃) niceleyicili önermelerin değilini yazar."}
+ ],
+ "st":"Koşullu önermeyi 'söz verme' bağlamında öğret; doğruluk tablosunu öğrenciye kendisine kurdur.",
+ "an":"p ⇒ q bir sözdür: 'Yağmur yağarsa şemsiye getiririm.' Söz yalnızca yağmur yağıp şemsiye getirilmezse bozulur; yağmur yağmazsa ne yaparsan yap söz tutulmuş sayılır.",
+ "my":["p ⇒ q ile q ⇒ p'yi denk sanmak","(p ∧ q)' = p' ∧ q' yazmak","Yanlış hipotezli koşullunun yanlış olduğunu sanmak","'Her'in değilini 'hiçbir' yazmak"]},
+
+{"id":"TM19","sec":"TM","name":"Fonksiyonlar (TYT)","w":2,"pre":["TM12","TM17"],
+ "k":[
+  {"id":"TM19.1","t":"Fonksiyon kavramını, tanım ve görüntü kümesini belirler."},
+  {"id":"TM19.2","t":"Fonksiyonda değer bulma ve f(ax+b) türü ifadelerden f(x)'i bulma işlemlerini yapar."},
+  {"id":"TM19.3","t":"Grafiği verilen fonksiyondan değer okur ve yorumlar."},
+  {"id":"TM19.4","t":"Bileşke fonksiyon ve ters fonksiyonun temel uygulamalarını yapar."},
+  {"id":"TM19.5","t":"Doğrusal, sabit, birim ve parçalı fonksiyonları tanır."}
+ ],
+ "st":"Fonksiyonu girdi–çıktı makinesi olarak modelle; bileşkeyi makine zinciri, tersini makineyi geri çalıştırma olarak göster.",
+ "an":"Fonksiyon bir otomattır: her düğmeye (girdi) basınca tek bir ürün (çıktı) düşer. Aynı düğme iki farklı ürün verirse otomat bozuktur, fonksiyon değildir.",
+ "my":["f(x+1) = f(x) + 1 sanmak","f⁻¹(x) = 1/f(x) sanmak","Bileşkede sırayı ters uygulamak","Grafikte x ve y eksenini karıştırmak"]},
+
+{"id":"TM20","sec":"TM","name":"Polinomlar (TYT)","w":1,"pre":["TM10","TM19"],
+ "k":[
+  {"id":"TM20.1","t":"Polinomun derecesini, katsayılarını ve sabit terimini belirler."},
+  {"id":"TM20.2","t":"Katsayılar toplamını P(1), sabit terimi P(0) ile bulur."},
+  {"id":"TM20.3","t":"Polinomlarda dört işlem yapar."},
+  {"id":"TM20.4","t":"Kalan teoremini (P(x)'in x−a ile bölümünden kalan P(a)) kullanır."}
+ ],
+ "st":"P(x)'e sayı vermenin anlamını (katsayılar toplamı, sabit terim, kalan) tek bir tabloda topla.",
+ "an":"Polinom, x yerine ne koyarsan onu işleyen bir tarif kartıdır: x = 1 koymak tüm malzemeleri (katsayıları) bir kez tartmak gibidir.",
+ "my":["Negatif ya da kesirli üslü ifadeyi polinom sanmak","Sabit terimi P(1) ile bulmak","Kalan teoreminde x − a yerine −a koymak","Dereceyi çarpımda toplamak yerine çarpmak"]},
+
+{"id":"TM21","sec":"TM","name":"Sayma: Permütasyon ve Kombinasyon","w":1.5,"pre":["TM01"],
+ "k":[
+  {"id":"TM21.1","t":"Toplama ve çarpma yoluyla sayma ilkelerini kullanır."},
+  {"id":"TM21.2","t":"Permütasyon (sıralama) ve tekrarlı permütasyon hesaplar."},
+  {"id":"TM21.3","t":"Kombinasyon (seçme) hesaplar; seçme ile sıralamayı ayırt eder."},
+  {"id":"TM21.4","t":"Yan yana olma/olmama, dairesel sıralama gibi koşullu sayma problemlerini çözer."}
+ ],
+ "st":"'Sıra önemli mi?' sorusunu her soruda yüksek sesle sordur. Koşullu sorularda 'önce kısıtlı kutuyu doldur' stratejisini kur.",
+ "an":"Kombinasyon bir takım seçmektir (kim var?), permütasyon ise o takımı kürsüye dizmektir (kim kaçıncı?). Aynı üç kişi tek takım, ama 6 farklı kürsü sırası.",
+ "my":["Sıra önemsizken permütasyon kullanmak","Çarpma ile toplama ilkesini karıştırmak","Tekrarlı harflerde bölmeyi unutmak","Dairesel sıralamada (n−1)! yerine n! almak"]},
+
+{"id":"TM22","sec":"TM","name":"Olasılık (TYT)","w":1.5,"pre":["TM21","TM05"],
+ "k":[
+  {"id":"TM22.1","t":"Örnek uzay ve olay kavramlarını belirler; klasik olasılığı hesaplar."},
+  {"id":"TM22.2","t":"Tümleyen olayın olasılığını kullanır."},
+  {"id":"TM22.3","t":"Bağımsız ve ayrık olaylarda olasılık hesaplar."},
+  {"id":"TM22.4","t":"Sayma yöntemlerini olasılık hesabında kullanır."}
+ ],
+ "st":"'En az bir' gören öğrenciye tümleyeni düşündür. Ağaç diyagramıyla ardışık olayları görselleştir.",
+ "an":"Olasılık bir torbadaki 'şanslı bilet' oranıdır: torbayı karıştırıp elini daldırdığında, şanslı biletlerin tüm biletlere oranı kadar şansın vardır.",
+ "my":["Ayrık ile bağımsız olayı karıştırmak","Geri koymadan çekişte örnek uzayı küçültmemek","'En az bir'i doğrudan saymaya çalışıp eksik saymak","Olasılığı 1'den büyük bulup fark etmemek"]},
+
+{"id":"TM23","sec":"TM","name":"Veri ve İstatistik","w":1.5,"pre":["TM05"],
+ "k":[
+  {"id":"TM23.1","t":"Aritmetik ortalama, ortanca (medyan), tepe değer (mod) ve açıklığı hesaplar."},
+  {"id":"TM23.2","t":"Veri eklenip çıkarıldığında merkezi eğilim ölçülerinin değişimini yorumlar."},
+  {"id":"TM23.3","t":"Standart sapmayı yorumlar ve basit verilerde hesaplar."},
+  {"id":"TM23.4","t":"Uygun grafik türünü seçer ve grafikler arası dönüşüm yapar."}
+ ],
+ "st":"Ortalamayı 'denge noktası' olarak, medyanı 'ortadaki kişi' olarak fiziksel modelle; uç değerin ortalamayı çekip medyanı etkilemediğini örnekle.",
+ "an":"Aritmetik ortalama tahterevallinin denge noktasıdır; ağır bir çocuk (uç değer) bir uca oturursa denge noktası ona doğru kayar, ama sıradaki ortanca çocuk yerinde kalır.",
+ "my":["Medyanı sıralamadan bulmak","Çift sayıda veride medyanı yanlış almak","Standart sapmanın tüm verilere sabit eklenince değiştiğini sanmak","Ortalamayı veri sayısını güncellemeden yeniden hesaplamak"]},
+
+{"id":"TG01","sec":"TG","name":"Doğruda ve Üçgende Açılar","w":1.5,"pre":[],
+ "k":[
+  {"id":"TG01.1","t":"Tümler, bütünler, ters açılar ve paralel doğrularda oluşan açıları kullanır."},
+  {"id":"TG01.2","t":"Üçgenin iç ve dış açı özelliklerini kullanır."},
+  {"id":"TG01.3","t":"Kırık çizgi (zigzag, M–W) açı özelliklerini uygular."},
+  {"id":"TG01.4","t":"Açıortay ile oluşan açı bağıntılarını (iç–iç, iç–dış) kullanır."}
+ ],
+ "st":"Şekle verilenleri işaretletmeden işlem yapmaya izin verme; paralel doğru sorularında yardımcı paralel çizdirme alışkanlığı kazandır.",
+ "an":"Paralel doğruları kesen bir doğru, iki ayrı kavşaktaki aynı yöne bakan iki trafik ışığı gibidir: her kavşakta açılar birebir aynı biçimde tekrar eder.",
+ "my":["Yöndeş ve ters açıları karıştırmak","Dış açının komşu olmayan iki iç açının toplamı olduğunu unutmak","Şekilde 'görünüşe göre' eşit açı kabul etmek"]},
+
+{"id":"TG02","sec":"TG","name":"Dik Üçgen ve Özel Üçgenler","w":2,"pre":["TG01","TM09"],
+ "k":[
+  {"id":"TG02.1","t":"Pisagor bağıntısını ve özel dik üçgenleri (3-4-5, 5-12-13, 8-15-17) kullanır."},
+  {"id":"TG02.2","t":"30-60-90 ve 45-45-90 üçgenlerinin kenar oranlarını kullanır."},
+  {"id":"TG02.3","t":"Öklid bağıntılarını (h² = p·k, b² = k·c …) uygular."},
+  {"id":"TG02.4","t":"Dik üçgende temel trigonometrik oranları (sin, cos, tan) kullanır."}
+ ],
+ "st":"Özel üçgen kenar oranlarını 'kalıp' olarak tanıt ve şekil içinde bu kalıpları aramayı (gizli dik üçgen) öğret.",
+ "an":"30-60-90 üçgeni, bir eşkenar üçgenin tam ortadan ikiye kesilmiş yarısıdır: kısa kenar bu yüzden hipotenüsün yarısıdır.",
+ "my":["Pisagorda hipotenüsü yanlış kenar seçmek","30°'nin karşısını hipotenüsün yarısı yerine √3 katı almak","Öklid bağıntısında parçaları karıştırmak"]},
+
+{"id":"TG03","sec":"TG","name":"İkizkenar–Eşkenar Üçgen, Açıortay ve Kenarortay","w":1.5,"pre":["TG01","TG02"],
+ "k":[
+  {"id":"TG03.1","t":"İkizkenar ve eşkenar üçgenin özelliklerini kullanır."},
+  {"id":"TG03.2","t":"İç ve dış açıortay teoremlerini uygular."},
+  {"id":"TG03.3","t":"Kenarortay özelliklerini (ağırlık merkezi 2:1) ve dik üçgende hipotenüse ait kenarortayı kullanır."},
+  {"id":"TG03.4","t":"Üçgen eşitsizliği ve açı–kenar bağıntılarını kullanır."}
+ ],
+ "st":"Ağırlık merkezini karton üçgeni kalem ucunda dengeleyerek göster; 2:1 oranını ölçtür.",
+ "an":"Ağırlık merkezi, karton üçgeni tek bir parmakla dengeleyebildiğin noktadır; her kenarortay bu noktada köşeye uzak parçanın yarısı kadar bir parça bırakır (2:1).",
+ "my":["Açıortay teoreminde oranı karşı kenarlarla kurmak","Ağırlık merkezinde 2:1'i ters almak","Üçgen eşitsizliğinde eşitliği kabul etmek"]},
+
+{"id":"TG04","sec":"TG","name":"Üçgende Eşlik ve Benzerlik","w":1.5,"pre":["TG01","TM11"],
+ "k":[
+  {"id":"TG04.1","t":"Eşlik ve benzerlik kurallarını (AA, KAK, KKK) uygular."},
+  {"id":"TG04.2","t":"Temel benzerlik (paralel doğru) ve Tales teoremini kullanır."},
+  {"id":"TG04.3","t":"Kelebek ve kesişen kirişlerde benzerlik oranlarını kurar."},
+  {"id":"TG04.4","t":"Benzer şekillerde uzunluk oranı k ise alan oranının k² olduğunu kullanır."}
+ ],
+ "st":"Benzer üçgenleri ayrı ayrı, aynı yönde yeniden çizdirerek karşılık gelen kenarları eşleştirt.",
+ "an":"Benzer üçgenler aynı fotoğrafın farklı boy baskılarıdır: kenarlar aynı oranda büyür, ama alan oranın karesi kadar büyür (2 kat büyütülen fotoğrafın kağıdı 4 kat).",
+ "my":["Karşılık gelen kenarları yanlış eşleştirmek","Alan oranını uzunluk oranı ile aynı almak","Tales'te parçayı tüm kenarla karıştırmak"]},
+
+{"id":"TG05","sec":"TG","name":"Üçgende Alan","w":1.5,"pre":["TG02","TG04"],
+ "k":[
+  {"id":"TG05.1","t":"Taban × yükseklik / 2 ve iki kenar–sinüs alan formüllerini kullanır."},
+  {"id":"TG05.2","t":"Yükseklikleri eşit üçgenlerde alan oranı = taban oranı ilişkisini kullanır."},
+  {"id":"TG05.3","t":"Kenarortay ve ağırlık merkezinin alanı bölme özelliklerini kullanır."},
+  {"id":"TG05.4","t":"Eşkenar üçgen ve dik üçgen alan formüllerini uygular."}
+ ],
+ "st":"Alan oranlarını 'ortak yükseklik' bakışıyla öğret: hesap yerine oranla düşünmeyi ödüllendir.",
+ "an":"Aynı yükseklikteki üçgenler aynı tavana dokunan çadırlar gibidir: tabanı iki kat geniş olan çadır iki kat alan kaplar.",
+ "my":["Yüksekliği eğik kenar sanmak","Geniş açılı üçgende yüksekliği dışarıda çizmemek","Ağırlık merkezinin alanı 6 eşit parçaya böldüğünü bilmemek"]},
+
+{"id":"TG06","sec":"TG","name":"Çokgenler ve Dörtgenler","w":1,"pre":["TG01"],
+ "k":[
+  {"id":"TG06.1","t":"Çokgenlerde iç ve dış açılar toplamını, köşegen sayısını hesaplar."},
+  {"id":"TG06.2","t":"Düzgün çokgenlerin açı ve kenar özelliklerini kullanır."},
+  {"id":"TG06.3","t":"Genel dörtgende açı, köşegen ve alan bağıntılarını kullanır."}
+ ],
+ "st":"İç açılar toplamını köşeden üçgenlere bölerek türettir; ezberi türetmeden sonra yap.",
+ "an":"Her çokgen bir köşeden çizilen köşegenlerle üçgen dilimlerine kesilen bir pizzadır: n kenar → (n − 2) dilim → (n − 2)·180°.",
+ "my":["İç açılar toplamında n − 2 yerine n almak","Dış açılar toplamının kenar sayısına bağlı olduğunu sanmak","Köşegen sayısında 2'ye bölmeyi unutmak"]},
+
+{"id":"TG07","sec":"TG","name":"Özel Dörtgenler","w":2,"pre":["TG06","TG02","TG05"],
+ "k":[
+  {"id":"TG07.1","t":"Paralelkenar ve eşkenar dörtgenin özelliklerini kullanır."},
+  {"id":"TG07.2","t":"Dikdörtgen ve karenin özelliklerini kullanır."},
+  {"id":"TG07.3","t":"Yamuk (ikizkenar, dik) özelliklerini ve orta taban bağıntısını kullanır."},
+  {"id":"TG07.4","t":"Deltoid özelliklerini kullanır; özel dörtgenlerde alan hesaplar."}
+ ],
+ "st":"Dörtgen ailesini bir soy ağacı (hiyerarşi) olarak çizdir: kare hem dikdörtgen hem eşkenar dörtgendir.",
+ "an":"Özel dörtgenler bir aile ağacıdır: kare, hem dikdörtgen annesinin hem eşkenar dörtgen babasının bütün özelliklerini miras alan çocuktur.",
+ "my":["Paralelkenarda köşegenlerin eşit olduğunu sanmak","Yamukta orta tabanı tabanların toplamı almak","Eşkenar dörtgen alanında köşegen çarpımını 2'ye bölmemek"]},
+
+{"id":"TG08","sec":"TG","name":"Çember ve Daire","w":1.5,"pre":["TG01","TG02"],
+ "k":[
+  {"id":"TG08.1","t":"Çemberde merkez, çevre, teğet–kiriş ve iç–dış açı ölçülerini yay cinsinden bulur."},
+  {"id":"TG08.2","t":"Teğet ve kiriş özelliklerini (merkezden kirişe dikme, teğet uzunlukları) kullanır."},
+  {"id":"TG08.3","t":"Çemberde kuvvet bağıntılarını kullanır."},
+  {"id":"TG08.4","t":"Dairenin alanı, çevresi, daire dilimi ve yay uzunluğunu hesaplar."}
+ ],
+ "st":"Tüm açı türlerini tek bir çember üzerinde sırayla (merkez → çevre → teğet-kiriş → iç → dış) kurarak bir 'açı haritası' çıkar.",
+ "an":"Çevre açı, stadyumun tribününden sahaya bakmak gibidir: tribünün neresinden bakarsan bak aynı kale direklerini aynı açıyla görürsün; merkezden (sahanın ortasından) bakan kişi ise iki katı açıyla görür.",
+ "my":["Çevre açıyı yay ölçüsüne eşit almak","Teğete merkezden çizilen yarıçapın dik olduğunu unutmak","Dilim alanında açı oranını 360 yerine 180 ile kurmak"]},
+
+{"id":"TG09","sec":"TG","name":"Katı Cisimler","w":1.5,"pre":["TG02","TG07","TG08"],
+ "k":[
+  {"id":"TG09.1","t":"Dikdörtgenler prizması ve küpte alan, hacim ve cisim köşegeni hesaplar."},
+  {"id":"TG09.2","t":"Dik prizmalar ve silindirde alan–hacim hesaplar."},
+  {"id":"TG09.3","t":"Piramit ve konide alan–hacim hesaplar."},
+  {"id":"TG09.4","t":"Kürede alan–hacim hesaplar; açınımları yorumlar."}
+ ],
+ "st":"Kağıttan açınım modelleri kestirerek yüzey alanını somutlaştır; hacimde 'taban alanı × yükseklik' ana fikrine bağla.",
+ "an":"Prizma, taban şeklinde kesilmiş kurabiye hamurlarını üst üste yığmaktır; hacim = bir kat × kat sayısı. Koni ise aynı tabandaki silindirin içine 3 kez dolabilen dondurma külahıdır.",
+ "my":["Koni/piramit hacminde 1/3'ü unutmak","Yüzey alanında taban sayısını eksik almak","Cisim köşegenini yüz köşegeni ile karıştırmak"]},
+
+{"id":"TG10","sec":"TG","name":"Analitik Geometri: Nokta ve Doğru","w":1,"pre":["TG02","TM12"],
+ "k":[
+  {"id":"TG10.1","t":"İki nokta arası uzaklık ve orta nokta formüllerini kullanır."},
+  {"id":"TG10.2","t":"Doğrunun eğimini ve denklemini yazar."},
+  {"id":"TG10.3","t":"Paralel ve dik doğruların eğim ilişkisini kullanır."},
+  {"id":"TG10.4","t":"Noktanın doğruya uzaklığını ve analitik düzlemde alan hesaplar."}
+ ],
+ "st":"Eğimi 'yokuş' olarak modelle: yatayda 1 birim ilerleyince kaç birim yükseliyoruz? Koordinat sorularını mutlaka kaba çizimle başlat.",
+ "an":"Eğim, bir yokuşun dikliğidir: trafik levhasındaki %10 eğim, 100 m ilerleyince 10 m yükselmek demektir.",
+ "my":["Eğimde Δx/Δy almak","Dik doğrularda eğim çarpımını +1 almak","y = mx + n'de n'yi x eksenini kesen nokta sanmak"]},
+
+{"id":"AM01","sec":"AM","name":"Polinomlar (AYT)","w":2,"pre":["TM20","TM10"],
+ "k":[
+  {"id":"AM01.1","t":"Polinom bölmesi yapar; bölüm ve kalanı bulur."},
+  {"id":"AM01.2","t":"İkinci dereceden çarpana göre kalan bulur."},
+  {"id":"AM01.3","t":"Polinomun kökleri ile çarpanları arasındaki ilişkiyi kullanır."},
+  {"id":"AM01.4","t":"Kökler–katsayılar ilişkisini (Vieta) 3. dereceye kadar kullanır."}
+ ],
+ "st":"Kalan sorularını 'bölen = 0 yap, yerine koy' yöntemiyle sistematize et; ikinci dereceden bölende x² yerine koyma hilesini göster.",
+ "an":"Polinom bölmesi sayı bölmesinin aynısıdır; tek fark sayı yerine x'in kuvvetlerinin basamak gibi davranmasıdır.",
+ "my":["Kalanın derecesinin bölenden küçük olduğunu unutmak","Kalan teoreminde yanlış işaret","Katlı kökleri tek saymak"]},
+
+{"id":"AM02","sec":"AM","name":"İkinci Dereceden Denklemler ve Karmaşık Sayılar","w":2.5,"pre":["TM10","TM12"],
+ "k":[
+  {"id":"AM02.1","t":"İkinci dereceden denklemleri çarpanlara ayırma ve diskriminant ile çözer."},
+  {"id":"AM02.2","t":"Kökler toplamı/çarpımı bağıntılarını kullanır; kökleri verilen denklemi kurar."},
+  {"id":"AM02.3","t":"Diskriminanta göre kök durumunu yorumlar."},
+  {"id":"AM02.4","t":"Karmaşık sayılarda i'nin kuvvetleri, eşlenik ve dört işlem yapar."},
+  {"id":"AM02.5","t":"Denkleme dönüştürülebilen (değişken değiştirme) denklemleri çözer."}
+ ],
+ "st":"Diskriminantı kökler arasındaki 'mesafe' olarak yorumlat (|x₁ − x₂| = √Δ/|a|).",
+ "an":"Diskriminant, bir denklemin röntgenidir: çözmeden önce içinde kaç gerçek kök sakladığını gösterir.",
+ "my":["Kökler toplamında işareti −b/a yerine b/a almak","Δ<0'da 'çözüm yok' ile 'gerçek çözüm yok'u karıştırmak","i² = 1 sanmak"]},
+
+{"id":"AM03","sec":"AM","name":"Parabol","w":1,"pre":["AM02","TM19"],
+ "k":[
+  {"id":"AM03.1","t":"Parabolün tepe noktası, simetri ekseni ve eksenleri kestiği noktaları bulur."},
+  {"id":"AM03.2","t":"Grafiği verilen parabolün denklemini yazar."},
+  {"id":"AM03.3","t":"Katsayıların (a, b, c) işaretlerini grafikten yorumlar."},
+  {"id":"AM03.4","t":"Parabol ile doğrunun durumunu ve en büyük/en küçük değer problemlerini çözer."}
+ ],
+ "st":"a, b, c'yi bir kaydırıcı uygulamasıyla tek tek değiştirip grafiğin nasıl değiştiğini gözlemlet.",
+ "an":"Parabol bir su fıskiyesinin yayıdır: su en tepeye ulaşır (tepe noktası) ve simetrik olarak iner; a'nın işareti fıskiyenin yukarı mı aşağı mı baktığını söyler.",
+ "my":["Tepe noktası apsisini b/2a almak","c'yi x eksenini kestiği nokta sanmak","Ortak nokta için Δ'yı yanlış denklemden hesaplamak"]},
+
+{"id":"AM04","sec":"AM","name":"Eşitsizlikler (II. Derece ve İşaret Tablosu)","w":1,"pre":["AM02","TM06"],
+ "k":[
+  {"id":"AM04.1","t":"Çarpım ve bölüm biçimindeki ifadelerin işaret tablosunu oluşturur."},
+  {"id":"AM04.2","t":"İkinci dereceden eşitsizlikleri çözer."},
+  {"id":"AM04.3","t":"Çift katlı kökleri ve paydadaki kökleri işaret tablosunda doğru işler."},
+  {"id":"AM04.4","t":"Eşitsizlik sistemlerini ve her x için sağlanma koşullarını çözer."}
+ ],
+ "st":"İşaret tablosunda 'sağdan en büyük derece katsayısının işaretiyle başla, tek katlıda değiştir' rutinini kur.",
+ "an":"İşaret tablosu bir trafik ışıkları dizisidir: her kök bir ışıktır; tek katlı kökte ışık renk değiştirir, çift katlı kökte aynı renkte kalır.",
+ "my":["Paydadaki kökü çözüm kümesine almak","Çift katlı kökte işaret değiştirmek","Eşitsizliği paydayla çarparak çözmek"]},
+
+{"id":"AM05","sec":"AM","name":"Fonksiyonlar (AYT)","w":2,"pre":["TM19"],
+ "k":[
+  {"id":"AM05.1","t":"Bire bir, örten fonksiyonları tanır; ters fonksiyonu bulur."},
+  {"id":"AM05.2","t":"Bileşke fonksiyonda değer ve kural bulur."},
+  {"id":"AM05.3","t":"Grafik dönüşümlerini (öteleme, yansıma, mutlak değer) uygular."},
+  {"id":"AM05.4","t":"Tek–çift fonksiyon ve fonksiyonun grafiğinden tanım–görüntü yorumunu yapar."}
+ ],
+ "st":"Grafik dönüşümlerini 'içerideki değişiklik yatay ve ters yönde, dışarıdaki dikey ve aynı yönde' kuralıyla özetle.",
+ "an":"f(x − 2), fonksiyonun aynısının 2 adım geç kalmasıdır: x = 2 olduğunda ancak eski x = 0'daki değere ulaşır, bu yüzden grafik sağa kayar.",
+ "my":["f(x−a)'yı sola öteleme sanmak","Bileşkede iç–dış sırasını ters çevirmek","Ters fonksiyonun grafiğini y = x yerine eksenlere göre yansıtmak"]},
+
+{"id":"AM06","sec":"AM","name":"Trigonometri I","w":2,"pre":["TG02"],
+ "k":[
+  {"id":"AM06.1","t":"Derece–radyan dönüşümü ve esas ölçü bulur."},
+  {"id":"AM06.2","t":"Birim çemberde trigonometrik oranları ve işaretlerini belirler."},
+  {"id":"AM06.3","t":"İndirgeme formüllerini kullanır."},
+  {"id":"AM06.4","t":"Trigonometrik fonksiyonların periyot ve grafiklerini yorumlar."},
+  {"id":"AM06.5","t":"Ters trigonometrik fonksiyonları kullanır."}
+ ],
+ "st":"Birim çemberi saat yüzü gibi gezdir; her bölgede (x, y) = (cos, sin) işaretlerini koordinattan okut, ezberlemeye gerek bırakma.",
+ "an":"Birim çember bir dönme dolaptır: kabinin yerden yüksekliği sin, merkeze göre yatay konumu cos'tur; dolap döndükçe değerler periyodik olarak tekrar eder.",
+ "my":["Radyanı dereceyle karıştırmak","II. bölgede cos'un işaretini pozitif almak","sin²x ile sin(x²)'yi karıştırmak"]},
+
+{"id":"AM07","sec":"AM","name":"Trigonometri II","w":2,"pre":["AM06"],
+ "k":[
+  {"id":"AM07.1","t":"Toplam–fark formüllerini kullanır."},
+  {"id":"AM07.2","t":"İki kat açı ve yarım açı formüllerini kullanır."},
+  {"id":"AM07.3","t":"Trigonometrik denklemleri çözer."},
+  {"id":"AM07.4","t":"Sinüs ve kosinüs teoremlerini üçgende uygular."}
+ ],
+ "st":"Formülleri birbirinden türettir (cos2x'in üç biçimini cos²+sin²=1'den çıkar).",
+ "an":"Trigonometri formülleri bir anahtarlıktır: hepsini ezberlemek yerine ana anahtardan (toplam formülü) diğerlerini kopyalayabilirsin.",
+ "my":["sin(a+b) = sin a + sin b sanmak","Denklemde periyodik çözümü (+k·2π) unutmak","cos2x = 2cos x yazmak"]},
+
+{"id":"AM08","sec":"AM","name":"Üstel ve Logaritmik Fonksiyonlar","w":3,"pre":["TM08","AM05"],
+ "k":[
+  {"id":"AM08.1","t":"Logaritmanın tanımını ve üstel–logaritmik dönüşümü yapar."},
+  {"id":"AM08.2","t":"Logaritma kurallarını (çarpım, bölüm, üs, taban değiştirme) uygular."},
+  {"id":"AM08.3","t":"Logaritmik ve üstel denklemleri çözer."},
+  {"id":"AM08.4","t":"Logaritmik eşitsizlikleri ve sıralamayı tabanın 1'den büyük/küçük olmasına göre çözer."},
+  {"id":"AM08.5","t":"Üstel ve logaritmik fonksiyonların grafiklerini ve modelleme problemlerini yorumlar."}
+ ],
+ "st":"'log₂8 = ? → 2 kaça yükseltilirse 8 olur?' sorusunu her yeni logaritmada sordur; tanım üzerinden kural türettir.",
+ "an":"Logaritma bir 'kaç kat?' sayacıdır: log₂(1024), bir kağıdı kaç kez ikiye katlarsan 1024 kat olacağını söyler (10).",
+ "my":["log(a+b) = log a + log b sanmak","Tabanın ve içinin pozitifliğini kontrol etmemek","Taban 1'den küçükken eşitsizlik yönünü değiştirmemek"]},
+
+{"id":"AM09","sec":"AM","name":"Diziler","w":2,"pre":["TM19"],
+ "k":[
+  {"id":"AM09.1","t":"Dizinin genel terimini ve terimlerini bulur; indirgemeli dizileri kullanır."},
+  {"id":"AM09.2","t":"Aritmetik dizinin genel terim ve ilk n terim toplamını kullanır."},
+  {"id":"AM09.3","t":"Geometrik dizinin genel terim ve ilk n terim toplamını kullanır."},
+  {"id":"AM09.4","t":"Toplam (Σ) sembolünü ve dizilerle ilgili gerçek yaşam problemlerini çözer."}
+ ],
+ "st":"Gauss'un 1'den 100'e toplam hikâyesiyle aritmetik dizi toplamını türettir.",
+ "an":"Aritmetik dizi her basamağı eşit yükseklikteki bir merdivendir; geometrik dizi ise her adımda aynı oranda büyüyen bir kartopudur.",
+ "my":["aₙ = a₁ + n·r yazmak (n−1 yerine)","Ortak oranı fark sanmak","Σ'da terim sayısını yanlış hesaplamak"]},
+
+{"id":"AM10","sec":"AM","name":"Limit ve Süreklilik","w":2.5,"pre":["AM05","TM10"],
+ "k":[
+  {"id":"AM10.1","t":"Grafik üzerinden sağdan–soldan limit ve limitin varlığını yorumlar."},
+  {"id":"AM10.2","t":"Limit özelliklerini kullanarak doğrudan yerine koyma ile limit hesaplar."},
+  {"id":"AM10.3","t":"0/0 belirsizliğini çarpanlara ayırma ve eşlenik ile giderir."},
+  {"id":"AM10.4","t":"Parçalı ve mutlak değerli fonksiyonlarda limit ve sürekliliği inceler."},
+  {"id":"AM10.5","t":"Sonsuzda limit ve sonsuz limit kavramlarını kullanır."}
+ ],
+ "st":"Limiti önce sayısal tablo (x = 1.9, 1.99, 1.999 …) ile hissettir; sonra cebirsel yöntemlere geç.",
+ "an":"Limit, bir kapının önüne gelip içeri girmeden içeriyi görmektir: fonksiyon x = a'da tanımsız olsa bile (kapı kilitli), yaklaştıkça hangi değere gittiğini görebiliriz.",
+ "my":["Limit ile fonksiyon değerini karıştırmak","0/0'ı 0 veya 1 sanmak","Sağdan ve soldan limitleri ayrı kontrol etmemek"]},
+
+{"id":"AM11","sec":"AM","name":"Türev ve Türev Alma Kuralları","w":3,"pre":["AM10"],
+ "k":[
+  {"id":"AM11.1","t":"Türevi anlık değişim hızı ve teğetin eğimi olarak yorumlar."},
+  {"id":"AM11.2","t":"Temel türev kurallarını (kuvvet, toplam, çarpım, bölüm) uygular."},
+  {"id":"AM11.3","t":"Zincir kuralını ve bileşke fonksiyonun türevini uygular."},
+  {"id":"AM11.4","t":"Trigonometrik, üstel ve logaritmik fonksiyonların türevini alır."},
+  {"id":"AM11.5","t":"Parçalı/mutlak değerli fonksiyonlarda türevlenebilirliği inceler."}
+ ],
+ "st":"Türevi araç hız göstergesi metaforuyla başlat; kuralları ezberden önce tanımdan bir-iki kez türet.",
+ "an":"Türev arabanın hız göstergesidir: konum fonksiyonu yol aldığın mesafeyi, türev o anda ne kadar hızlı gittiğini söyler.",
+ "my":["Çarpımın türevini türevlerin çarpımı sanmak","Zincir kuralında iç türevi unutmak","Bölüm kuralında pay sırasını ters yazmak"]},
+
+{"id":"AM12","sec":"AM","name":"Türevin Uygulamaları","w":3,"pre":["AM11","AM04"],
+ "k":[
+  {"id":"AM12.1","t":"Teğet ve normal doğru denklemlerini yazar."},
+  {"id":"AM12.2","t":"Artan–azalan aralıkları ve yerel ekstremum noktalarını bulur."},
+  {"id":"AM12.3","t":"İkinci türevle büküm noktası ve konkavlığı yorumlar."},
+  {"id":"AM12.4","t":"f, f′ ve f″ grafikleri arasında yorum yapar."},
+  {"id":"AM12.5","t":"Maksimum–minimum (optimizasyon) problemlerini çözer."}
+ ],
+ "st":"f′ grafiğinden f'yi okuma becerisine ayrı ders ayır; işaret tablosu ↔ artan/azalan bağlantısını görselleştir.",
+ "an":"f′ bir yürüyüşçünün eğim ölçeridir: pozitifse yokuş yukarı, negatifse aşağı; sıfır olduğu yerde bir zirvede ya da çukurdasın.",
+ "my":["f′ = 0 olan her noktayı ekstremum sanmak","f′ grafiğinin değerlerini f'nin değerleri gibi okumak","Optimizasyonda tanım aralığını kontrol etmemek"]},
+
+{"id":"AM13","sec":"AM","name":"Belirsiz İntegral","w":2,"pre":["AM11"],
+ "k":[
+  {"id":"AM13.1","t":"İntegrali türevin tersi olarak yorumlar; temel integral kurallarını uygular."},
+  {"id":"AM13.2","t":"Değişken değiştirme yöntemini kullanır."},
+  {"id":"AM13.3","t":"Trigonometrik ve üstel fonksiyonların integralini alır."},
+  {"id":"AM13.4","t":"Türevi verilen fonksiyonu başlangıç koşuluyla bulur."}
+ ],
+ "st":"Her integrali türev alarak kontrol ettirme alışkanlığı kazandır ('sağlama').",
+ "an":"Belirsiz integral, ayak izlerinden yürüyüşü yeniden kurmaktır: hızı biliyorsun, konumu bulmak istiyorsun; ama başlangıç noktasını bilmeden (+C) tam yeri söyleyemezsin.",
+ "my":["+C'yi unutmak","xⁿ integralinde n+1'e bölmeyi unutmak","Değişken değiştirmede dx'i dönüştürmemek"]},
+
+{"id":"AM14","sec":"AM","name":"Belirli İntegral ve Alan","w":2.5,"pre":["AM13"],
+ "k":[
+  {"id":"AM14.1","t":"Belirli integrali hesaplar ve özelliklerini kullanır."},
+  {"id":"AM14.2","t":"Belirli integrali eğri altındaki işaretli alan olarak yorumlar."},
+  {"id":"AM14.3","t":"İki eğri arasındaki alanı hesaplar."},
+  {"id":"AM14.4","t":"Grafik ve tablo ile verilen belirli integral sorularını çözer."}
+ ],
+ "st":"Riemann toplamını dikdörtgen şeritlerle çizdirip şerit sayısını artırarak integral fikrine götür.",
+ "an":"Belirli integral, bir havuzun eğri tabanına ince tahtalar dizip her tahtanın alanını toplamaktır; tahtalar inceldikçe toplam gerçek alana yaklaşır.",
+ "my":["x ekseni altındaki alanı pozitif almadan toplamak","Sınırları ters çevirince işareti değiştirmemek","İki eğri arasında üst–alt fonksiyonu karıştırmak"]},
+
+{"id":"AM15","sec":"AM","name":"Binom ve Olasılık (AYT)","w":2,"pre":["TM21","TM22"],
+ "k":[
+  {"id":"AM15.1","t":"Binom açılımında terim sayısı, katsayılar toplamı ve genel terimi bulur."},
+  {"id":"AM15.2","t":"Koşullu olasılığı hesaplar."},
+  {"id":"AM15.3","t":"Bağımsız tekrarlı denemelerde olasılık hesaplar."},
+  {"id":"AM15.4","t":"İleri sayma problemlerini (dağıtma, özdeş nesneler) çözer."}
+ ],
+ "st":"Pascal üçgenini kombinasyonlarla eşleştir; koşullu olasılıkta örnek uzayı 'daraltma' fikrini tablo ile göster.",
+ "an":"Koşullu olasılık, bir ipucu aldıktan sonra yeniden tahmin etmektir: 'kart kırmızı' bilgisi gelince destenin yarısı masadan kalkar, kalan yarıda yeniden sayarız.",
+ "my":["Genel terimde r ile r+1'i karıştırmak","P(A|B) ile P(B|A)'yı karıştırmak","Terim sayısını n yerine n+1 almamak"]},
+
+{"id":"AG01","sec":"AG","name":"Üçgen ve Çokgenlerde İleri Problemler","w":3,"pre":["TG03","TG04","TG05","TG07"],
+ "k":[
+  {"id":"AG01.1","t":"Birden fazla üçgen özelliğini birleştiren karma problemleri çözer."},
+  {"id":"AG01.2","t":"Yardımcı eleman (dikme, paralel, simetri) çizerek problem çözer."},
+  {"id":"AG01.3","t":"Çokgen ve dörtgenlerde alan–uzunluk karma problemlerini çözer."},
+  {"id":"AG01.4","t":"Trigonometrik oranları geometri problemlerinde kullanır."}
+ ],
+ "st":"Karma sorularda 'gördüğün özel yapıyı adlandır' (ikizkenar, 30-60-90, benzerlik…) rutini; yardımcı eleman kataloğu oluştur.",
+ "an":"Karma geometri sorusu bir yapbozdur: kenar parçalarını (bilinen özel yapıları) önce yerleştirirsen orta kısım kendiliğinden ortaya çıkar.",
+ "my":["Şekli ölçekli sanıp göz kararı kabul yapmak","Yardımcı eleman çizmeden ilerlemeye çalışmak","Birden fazla benzerlik oranını karıştırmak"]},
+
+{"id":"AG02","sec":"AG","name":"Çember ve Daire (İleri)","w":2,"pre":["TG08","TG04"],
+ "k":[
+  {"id":"AG02.1","t":"Çemberde açı ve kuvvet bağıntılarını karma problemlerde kullanır."},
+  {"id":"AG02.2","t":"İç ve dış teğet çemberler, teğetler dörtgeni ve kirişler dörtgeni özelliklerini kullanır."},
+  {"id":"AG02.3","t":"Üçgenin iç teğet ve çevrel çemberi ile ilgili bağıntıları kullanır."},
+  {"id":"AG02.4","t":"Daire dilimi, daire parçası ve halka alanlarını hesaplar."}
+ ],
+ "st":"Kirişler dörtgeninde karşılıklı açıların bütünler olduğunu çevre açılardan türettir.",
+ "an":"Kirişler dörtgeni, bir çemberin içine gerilmiş bir çadırdır: karşılıklı köşeler aynı yayı ikiye paylaştığı için açıları toplamda yarım tur (180°) eder.",
+ "my":["İç teğet çember yarıçapında alan = r·u (u yarı çevre) bağıntısını tam çevreyle kurmak","Teğetler dörtgeninde karşılıklı kenar toplamlarını karıştırmak"]},
+
+{"id":"AG03","sec":"AG","name":"Analitik Geometri: Doğru ve Çember","w":2,"pre":["TG10","TG08"],
+ "k":[
+  {"id":"AG03.1","t":"Doğru denklemleri ve iki doğrunun durumunu ileri düzeyde kullanır."},
+  {"id":"AG03.2","t":"Çemberin standart ve genel denklemini yazar; merkez–yarıçap bulur."},
+  {"id":"AG03.3","t":"Doğru ile çemberin ve iki çemberin birbirine göre durumunu inceler."},
+  {"id":"AG03.4","t":"Analitik düzlemde alan ve uzaklık içeren karma problemleri çözer."}
+ ],
+ "st":"Genel denklemden merkez bulmayı tam kareye tamamlama ile yaptır; her soruda kaba çizim zorunlu olsun.",
+ "an":"Çember denklemi bir GPS kuralıdır: 'merkeze uzaklığı tam r olan bütün noktalar' — (x − a)² + (y − b)² = r² bu uzaklığın Pisagor ile yazılmışıdır.",
+ "my":["Merkez koordinatlarında işareti ters almak","Genel denklemden r'yi kökten çıkarmayı unutmak","Teğetlikte uzaklığın r'ye eşit olduğunu kullanmamak"]},
+
+{"id":"AG04","sec":"AG","name":"Dönüşüm Geometrisi","w":1,"pre":["TG10"],
+ "k":[
+  {"id":"AG04.1","t":"Öteleme dönüşümünü uygular."},
+  {"id":"AG04.2","t":"Eksenlere, orijine ve y = x doğrusuna göre yansıma yapar."},
+  {"id":"AG04.3","t":"Orijin etrafında 90°, 180°, 270° dönme uygular."},
+  {"id":"AG04.4","t":"Ardışık dönüşümlerin sonucunu bulur."}
+ ],
+ "st":"Kareli kağıtta fiziksel dönüşüm yaptırıp koordinat kuralını öğrencinin bulmasını sağla.",
+ "an":"Yansıma ayna, öteleme kaydırak, dönme ise bir saatin akrebi gibidir: her biri şeklin boyutunu korur, yalnızca yerini veya yönünü değiştirir.",
+ "my":["90° dönmede (x, y) → (−y, x) ile (y, −x)'i karıştırmak","y = x'e göre yansımada koordinatları yer değiştirmemek","Ardışık dönüşümlerde sırayı ters uygulamak"]}
+]
+}
