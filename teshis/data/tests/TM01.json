@@ -135,7 +135,7 @@
    ],
    "d": 2,
    "lvl": "A",
-   "stem": "a, b ve c sıfırdan farklı gerçek sayılar olmak üzere<br>\\(a^2\\cdot b<0,\\quad b\\cdot c^3>0,\\quad \\dfrac{a}{c}<0\\)<br>olduğu biliniyor.<br>Buna göre aşağıdakilerden hangisi <b>kesinlikle</b> pozitiftir?",
+   "stem": "a, b ve c sıfırdan farklı gerçek sayılar olmak üzere<br>\\(a^2\\cdot b\\lt 0,\\quad b\\cdot c^3>0,\\quad \\dfrac{a}{c}\\lt 0\\)<br>olduğu biliniyor.<br>Buna göre aşağıdakilerden hangisi <b>kesinlikle</b> pozitiftir?",
    "opts": [
     "\\(a-b\\)",
     "\\(a\\cdot b\\)",
@@ -150,7 +150,7 @@
     "D": "a/c < 0 iken a·c'nin işaretinin farklı olabileceğini sandı",
     "E": "c³'ü c² gibi pozitif sayıp c > 0 aldı"
    },
-   "sol": "\\(a^2>0\\) olduğundan \\(b<0\\); \\(b<0\\) ve \\(b\\cdot c^3>0\\) ise \\(c^3<0\\), yani \\(c<0\\); \\(\\frac{a}{c}<0\\) ise \\(a>0\\). Pozitiften negatif çıkarılırsa sonuç pozitif olur: \\(a-b>0\\).",
+   "sol": "\\(a^2>0\\) olduğundan \\(b\\lt 0\\); \\(b\\lt 0\\) ve \\(b\\cdot c^3>0\\) ise \\(c^3\\lt 0\\), yani \\(c\\lt 0\\); \\(\\frac{a}{c}\\lt 0\\) ise \\(a>0\\). Pozitiften negatif çıkarılırsa sonuç pozitif olur: \\(a-b>0\\).",
    "t": 90
   },
   {
@@ -210,7 +210,7 @@
    ],
    "d": 2,
    "lvl": "A",
-   "stem": "x ve y tam sayılar olmak üzere<br>\\(-4<x\\le 3\\quad\\) ve \\(\\quad -2\\le y<5\\)<br>olduğuna göre \\(x^2-3y\\) ifadesinin alabileceği en büyük değer kaçtır?",
+   "stem": "x ve y tam sayılar olmak üzere<br>\\(-4\\lt x\\le 3\\quad\\) ve \\(\\quad -2\\le y\\lt 5\\)<br>olduğuna göre \\(x^2-3y\\) ifadesinin alabileceği en büyük değer kaçtır?",
    "opts": [
     "\\(-3\\)",
     "9",

@@ -10,7 +10,7 @@
    ],
    "d": 1,
    "lvl": "K",
-   "stem": "\\(a<b<0\\) olmak üzere,<br>I. \\(-a>-b\\)<br>II. \\(a^2<b^2\\)<br>III. \\(\\dfrac{1}{a}>\\dfrac{1}{b}\\)<br>ifadelerinden hangileri her zaman doğrudur?",
+   "stem": "\\(a\\lt b\\lt 0\\) olmak üzere,<br>I. \\(-a>-b\\)<br>II. \\(a^2\\lt b^2\\)<br>III. \\(\\dfrac{1}{a}>\\dfrac{1}{b}\\)<br>ifadelerinden hangileri her zaman doğrudur?",
    "opts": [
     "Yalnız I",
     "Yalnız II",
@@ -60,7 +60,7 @@
    ],
    "d": 1,
    "lvl": "U",
-   "stem": "x ve y gerçek sayılar olmak üzere \\(-2<x<5\\) ve \\(1<y<4\\) olduğuna göre, \\(x-y\\) ifadesinin alabileceği kaç farklı tam sayı değeri vardır?",
+   "stem": "x ve y gerçek sayılar olmak üzere \\(-2\\lt x\\lt 5\\) ve \\(1\\lt y\\lt 4\\) olduğuna göre, \\(x-y\\) ifadesinin alabileceği kaç farklı tam sayı değeri vardır?",
    "opts": [
     "3",
     "6",
@@ -75,7 +75,7 @@
     "D": "Aralığın uzunluğunu tam sayı sayısı sanmak",
     "E": "Kesin eşitsizlik uçlarını da saymak"
    },
-   "sol": "\\(-4<-y<-1\\) yazılıp taraf tarafa toplanır: \\(-6<x-y<4\\). Tam sayılar \\(-5,\\dots,3\\): 9 tane.",
+   "sol": "\\(-4\\lt -y\\lt -1\\) yazılıp taraf tarafa toplanır: \\(-6\\lt x-y\\lt 4\\). Tam sayılar \\(-5,\\dots,3\\): 9 tane.",
    "t": 60
   },
   {
@@ -85,7 +85,7 @@
    ],
    "d": 2,
    "lvl": "U",
-   "stem": "\\(\\dfrac{x-1}{3}-\\dfrac{x+2}{4}<\\dfrac{1}{6}\\) eşitsizliğini sağlayan en büyük x tam sayısı kaçtır?",
+   "stem": "\\(\\dfrac{x-1}{3}-\\dfrac{x+2}{4}\\lt \\dfrac{1}{6}\\) eşitsizliğini sağlayan en büyük x tam sayısı kaçtır?",
    "opts": [
     "\\(-9\\)",
     "\\(-1\\)",
@@ -100,7 +100,7 @@
     "C": "−3(x + 2)'yi −3x − 2 diye açmak",
     "D": "Paydaları eşitlerken sağ tarafı 12 ile çarpmamak"
    },
-   "sol": "Her iki taraf 12 ile çarpılır: \\(4(x-1)-3(x+2)<2\\Rightarrow x-10<2\\Rightarrow x<12\\). En büyük tam sayı 11.",
+   "sol": "Her iki taraf 12 ile çarpılır: \\(4(x-1)-3(x+2)\\lt 2\\Rightarrow x-10\\lt 2\\Rightarrow x\\lt 12\\). En büyük tam sayı 11.",
    "t": 85
   },
   {
@@ -110,7 +110,7 @@
    ],
    "d": 2,
    "lvl": "U",
-   "stem": "x gerçek sayı ve \\(-4<x<3\\) olduğuna göre, \\(x^2-2\\) ifadesinin alabileceği kaç farklı tam sayı değeri vardır?",
+   "stem": "x gerçek sayı ve \\(-4\\lt x\\lt 3\\) olduğuna göre, \\(x^2-2\\) ifadesinin alabileceği kaç farklı tam sayı değeri vardır?",
    "opts": [
     "6",
     "15",
@@ -125,7 +125,7 @@
     "D": "x² < 16 kesinken 16'yı dahil etmek",
     "E": "(−4)² yerine −4² = −16 almak"
    },
-   "sol": "Aralık 0'ı içerdiğinden \\(0\\le x^2<16\\) (en büyük kare \\((-4)^2\\)'ye yaklaşır, alınmaz). \\(-2\\le x^2-2<14\\): \\(-2,\\dots,13\\), 16 tam sayı.",
+   "sol": "Aralık 0'ı içerdiğinden \\(0\\le x^2\\lt 16\\) (en büyük kare \\((-4)^2\\)'ye yaklaşır, alınmaz). \\(-2\\le x^2-2\\lt 14\\): \\(-2,\\dots,13\\), 16 tam sayı.",
    "t": 85
   },
   {
@@ -135,7 +135,7 @@
    ],
    "d": 2,
    "lvl": "A",
-   "stem": "a ve b gerçek sayılar olmak üzere \\(-2<a<3\\) ve \\(-5<b<1\\) olduğuna göre, \\(a\\cdot b\\) çarpımının alabileceği kaç farklı tam sayı değeri vardır?",
+   "stem": "a ve b gerçek sayılar olmak üzere \\(-2\\lt a\\lt 3\\) ve \\(-5\\lt b\\lt 1\\) olduğuna göre, \\(a\\cdot b\\) çarpımının alabileceği kaç farklı tam sayı değeri vardır?",
    "opts": [
     "6",
     "12",
@@ -150,7 +150,7 @@
     "C": "(−2)·(−5) = 10 köşe çarpımını denememek",
     "E": "Kesin eşitsizlik uçlarını da saymak"
    },
-   "sol": "Dört köşe çarpımı: \\(10,\\ -2,\\ -15,\\ 3\\). En küçük \\(-15\\), en büyük \\(10\\): \\(-15<ab<10\\). Tam sayılar \\(-14,\\dots,9\\): 24 tane.",
+   "sol": "Dört köşe çarpımı: \\(10,\\ -2,\\ -15,\\ 3\\). En küçük \\(-15\\), en büyük \\(10\\): \\(-15\\lt ab\\lt 10\\). Tam sayılar \\(-14,\\dots,9\\): 24 tane.",
    "t": 90
   },
   {
@@ -185,7 +185,7 @@
    ],
    "d": 2,
    "lvl": "U",
-   "stem": "\\(-3<2-x\\le 4\\) olduğuna göre, x'in alabileceği tam sayı değerlerinin toplamı kaçtır?",
+   "stem": "\\(-3\\lt 2-x\\le 4\\) olduğuna göre, x'in alabileceği tam sayı değerlerinin toplamı kaçtır?",
    "opts": [
     "\\(-7\\)",
     "7",
@@ -200,7 +200,7 @@
     "D": "Kesin ucu (5) da dahil etmek",
     "E": "Uçların kesinliğini karıştırmak (−2 < x ≤ 5)"
    },
-   "sol": "2 çıkarılır: \\(-5<-x\\le 2\\); −1 ile çarpınca yön döner: \\(-2\\le x<5\\). Toplam \\(-2-1+0+1+2+3+4=7\\).",
+   "sol": "2 çıkarılır: \\(-5\\lt -x\\le 2\\); −1 ile çarpınca yön döner: \\(-2\\le x\\lt 5\\). Toplam \\(-2-1+0+1+2+3+4=7\\).",
    "t": 85
   },
   {
@@ -210,7 +210,7 @@
    ],
    "d": 3,
    "lvl": "A",
-   "stem": "x ve y gerçek sayılar olmak üzere \\(-3\\le x<2\\) ve \\(-1<y\\le 4\\) olduğuna göre, \\(2x-3y\\) ifadesinin alabileceği en büyük tam sayı değeri kaçtır?",
+   "stem": "x ve y gerçek sayılar olmak üzere \\(-3\\le x\\lt 2\\) ve \\(-1\\lt y\\le 4\\) olduğuna göre, \\(2x-3y\\) ifadesinin alabileceği en büyük tam sayı değeri kaçtır?",
    "opts": [
     "\\(-9\\)",
     "0",
@@ -225,7 +225,7 @@
     "C": "x'i 2 ile çarpmayı unutmak",
     "E": "Kesin eşitsizlik ucunu (7) dahil etmek"
    },
-   "sol": "\\(-6\\le 2x<4\\) ve \\(-12\\le -3y<3\\) (−3 ile çarpınca yön döner). Toplam: \\(-18\\le 2x-3y<7\\); en büyük tam sayı 6.",
+   "sol": "\\(-6\\le 2x\\lt 4\\) ve \\(-12\\le -3y\\lt 3\\) (−3 ile çarpınca yön döner). Toplam: \\(-18\\le 2x-3y\\lt 7\\); en büyük tam sayı 6.",
    "t": 125
   },
   {
@@ -261,7 +261,7 @@
    ],
    "d": 3,
    "lvl": "A",
-   "stem": "x ve y pozitif tam sayılardır.<br>\\(x+3y=40\\) ve \\(x<2y\\)<br>olduğuna göre, x'in alabileceği en büyük değer kaçtır?",
+   "stem": "x ve y pozitif tam sayılardır.<br>\\(x+3y=40\\) ve \\(x\\lt 2y\\)<br>olduğuna göre, x'in alabileceği en büyük değer kaçtır?",
    "opts": [
     "1",
     "9",
@@ -276,7 +276,7 @@
     "D": "x < 2y'yi x ≤ 2y gibi alıp y = 8 kabul etmek",
     "E": "−5y < −40'ta yönü çevirmeyip y < 8 bulmak"
    },
-   "sol": "\\(x=40-3y<2y\\Rightarrow 5y>40\\Rightarrow y>8\\). x'in en büyük olması için y en küçük, \\(y=9\\): \\(x=40-27=13\\).",
+   "sol": "\\(x=40-3y\\lt 2y\\Rightarrow 5y>40\\Rightarrow y>8\\). x'in en büyük olması için y en küçük, \\(y=9\\): \\(x=40-27=13\\).",
    "t": 130
   }
  ]

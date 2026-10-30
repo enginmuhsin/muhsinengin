@@ -210,7 +210,7 @@
    ],
    "d": 3,
    "lvl": "A",
-   "stem": "a ve b pozitif tam sayılar ve \\(a<b\\) olmak üzere \\(\\mathrm{EBOB}(a,b)=12\\) ve \\(\\mathrm{EKOK}(a,b)=720\\) olduğuna göre, kaç farklı \\((a,b)\\) ikilisi vardır?",
+   "stem": "a ve b pozitif tam sayılar ve \\(a\\lt b\\) olmak üzere \\(\\mathrm{EBOB}(a,b)=12\\) ve \\(\\mathrm{EKOK}(a,b)=720\\) olduğuna göre, kaç farklı \\((a,b)\\) ikilisi vardır?",
    "opts": [
     "3",
     "4",
@@ -225,7 +225,7 @@
     "D": "a < b koşulunu ihmal edip sıralı ikili saymak",
     "E": "Aralarında asallığı ve a < b'yi ihmal etmek (bölen sayısı)"
    },
-   "sol": "\\(a=12x,\\ b=12y\\), \\(\\mathrm{EBOB}(x,y)=1\\), \\(xy=\\frac{720}{12}=60\\). Aralarında asal ve \\(x<y\\): (1,60), (3,20), (4,15), (5,12) → 4 ikili.",
+   "sol": "\\(a=12x,\\ b=12y\\), \\(\\mathrm{EBOB}(x,y)=1\\), \\(xy=\\frac{720}{12}=60\\). Aralarında asal ve \\(x\\lt y\\): (1,60), (3,20), (4,15), (5,12) → 4 ikili.",
    "t": 130
   },
   {

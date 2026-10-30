@@ -37,11 +37,11 @@
    "lvl": "K",
    "stem": "\\(a=\\dfrac{5}{7},\\ b=\\dfrac{7}{9},\\ c=\\dfrac{4}{5}\\) olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
    "opts": [
-    "\\(a<b<c\\)",
-    "\\(a<c<b\\)",
-    "\\(b<a<c\\)",
-    "\\(c<a<b\\)",
-    "\\(c<b<a\\)"
+    "\\(a\\lt b\\lt c\\)",
+    "\\(a\\lt c\\lt b\\)",
+    "\\(b\\lt a\\lt c\\)",
+    "\\(c\\lt a\\lt b\\)",
+    "\\(c\\lt b\\lt a\\)"
    ],
    "ans": "A",
    "dist": {
@@ -50,7 +50,7 @@
     "D": "Yalnızca paylara göre sıralamak (4 < 5 < 7)",
     "E": "Tamamlayanı büyük olan kesri büyük sanmak"
    },
-   "sol": "Tamamlayanlara bakılır: \\(1-a=\\frac{2}{7}\\), \\(1-b=\\frac{2}{9}\\), \\(1-c=\\frac{1}{5}=\\frac{2}{10}\\). Tamamlayanı küçük olan büyüktür: \\(a<b<c\\).",
+   "sol": "Tamamlayanlara bakılır: \\(1-a=\\frac{2}{7}\\), \\(1-b=\\frac{2}{9}\\), \\(1-c=\\frac{1}{5}=\\frac{2}{10}\\). Tamamlayanı küçük olan büyüktür: \\(a\\lt b\\lt c\\).",
    "t": 55
   },
   {
@@ -212,11 +212,11 @@
    "lvl": "A",
    "stem": "\\(a=-\\dfrac{13}{14},\\ b=-\\dfrac{25}{27},\\ c=-\\dfrac{12}{13}\\) olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
    "opts": [
-    "\\(a<b<c\\)",
-    "\\(a<c<b\\)",
-    "\\(b<a<c\\)",
-    "\\(c<a<b\\)",
-    "\\(c<b<a\\)"
+    "\\(a\\lt b\\lt c\\)",
+    "\\(a\\lt c\\lt b\\)",
+    "\\(b\\lt a\\lt c\\)",
+    "\\(c\\lt a\\lt b\\)",
+    "\\(c\\lt b\\lt a\\)"
    ],
    "ans": "A",
    "dist": {
@@ -225,7 +225,7 @@
     "D": "Yalnızca paydalara göre sıralamak (13 < 14 < 27)",
     "E": "Negatif sayılarda sıralamayı ters çevirmeyi unutmak"
    },
-   "sol": "Mutlak değerlerin tamamlayanları \\(\\frac{1}{14}=\\frac{2}{28}<\\frac{2}{27}<\\frac{2}{26}=\\frac{1}{13}\\); bu yüzden \\(|a|>|b|>|c|\\). Negatiflerde mutlak değeri büyük olan küçüktür: \\(a<b<c\\).",
+   "sol": "Mutlak değerlerin tamamlayanları \\(\\frac{1}{14}=\\frac{2}{28}\\lt \\frac{2}{27}\\lt \\frac{2}{26}=\\frac{1}{13}\\); bu yüzden \\(|a|>|b|>|c|\\). Negatiflerde mutlak değeri büyük olan küçüktür: \\(a\\lt b\\lt c\\).",
    "t": 120
   },
   {
