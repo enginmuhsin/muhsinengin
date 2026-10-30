@@ -60,7 +60,7 @@
    ],
    "d": 1,
    "lvl": "K",
-   "stem": "\\((a-3)x=b+2\\)<br>denkleminin çözüm kümesi gerçek sayılar kümesi olduğuna göre, \\(b-a\\) farkı kaçtır?",
+   "stem": "\\(a\\) ve \\(b\\) gerçek sayılar olmak üzere,<br>\\((a-3)x=b+2\\)<br>denkleminin çözüm kümesi gerçek sayılar kümesi olduğuna göre, \\(b-a\\) farkı kaçtır?",
    "opts": [
     "−5",
     "−3",
@@ -223,7 +223,7 @@
    "dist": {
     "A": "0x = 0'ı boş, 0x = 12'yi çözümlü; x = 0'ı çözümsüz sanmak",
     "B": "Sağ taraf 0 olunca x = 0'ı 'çözüm yok' sanmak",
-    "C": "0x = 0 denkleminin çözüm kümesini boş küme sanmak",
+    "C": "0x = 0'ı boş küme sanmak; −3x = 0'da x = 0'ı 'çözüm yok' saymak",
     "E": "a = 0 iken b'ye bakmadan hep boş küme demek"
    },
    "sol": "\\(m=2\\): \\(0x=0\\), çözüm kümesi \\(\\mathbb{R}\\) (I yanlış). \\(m=-2\\): \\(0x=12\\), boş küme (II doğru). \\(m=1\\): \\(-3x=0\\), \\(x=0\\) (III doğru).",

@@ -87,7 +87,7 @@
    "lvl": "U",
    "stem": "\\(x^2-5x-14\\) ifadesi \\((x+a)(x+b)\\) biçiminde çarpanlarına ayrılıyor.<br>\\(a>b\\) olduğuna göre, \\(2a-b\\) kaçtır?",
    "opts": [
-    "−16",
+    "\\(-16\\)",
     "3",
     "11",
     "12",
@@ -135,7 +135,7 @@
    ],
    "d": 2,
    "lvl": "U",
-   "stem": "Paydaları sıfır yapmayan \\(x\\) gerçek sayıları için<br>\\(\\dfrac{x^2-9}{x^2-5x+6}:\\dfrac{x^2+6x+9}{x^2-4}\\)<br>ifadesinin en sade biçimi aşağıdakilerden hangisidir?",
+   "stem": "İfadeyi tanımlı yapan \\(x\\) gerçek sayıları için<br>\\(\\dfrac{x^2-9}{x^2-5x+6}:\\dfrac{x^2+6x+9}{x^2-4}\\)<br>ifadesinin en sade biçimi aşağıdakilerden hangisidir?",
    "opts": [
     "\\(\\dfrac{x-2}{x+3}\\)",
     "\\(\\dfrac{x+3}{x+2}\\)",

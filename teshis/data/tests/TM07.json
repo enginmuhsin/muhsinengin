@@ -47,8 +47,8 @@
    "dist": {
     "A": "III'te |x| = x alıp |x| + x = 2x ≠ 0 sanmak",
     "B": "|x| = x sanıp −x içeren eşitliği negatif diye elemek",
-    "D": "−x'i negatif sanıp I'i elemek, |x| = x kabul etmek",
-    "E": "|x| = x sanıp öncülleri sayı deneyerek kontrol etmemek"
+    "D": "−x'i negatif sanıp I'i elemek; II ve III'ü x = 0 ile denemek",
+    "E": "x'in negatif olma koşulunu atlayıp öncülleri x = 0 ile denemek"
    },
    "sol": "\\(x \\lt 0\\) iken \\(-x \\gt 0\\) olduğundan \\(|-x| = -x\\) (I doğru). \\(|x| = -x \\ne x\\) olduğundan II yanlış; \\(|x| + x = -x + x = 0\\) (III doğru).",
    "t": 50

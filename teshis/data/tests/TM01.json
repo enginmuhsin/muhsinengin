@@ -121,7 +121,7 @@
    "ans": "D",
    "dist": {
     "A": "Rasyonel + irrasyonel toplamın rasyonel olabileceğini sandı",
-    "B": "II'yi doğru sandı; doğal sayıların rasyonel olduğunu görmedi",
+    "B": "N'yi Q'da saymadı, II'yi doğru sandı, III'ü 0·√2 = 0 ile çürüttü",
     "C": "II'de √2 + (−√2) = 0 karşı örneğini görmedi; III'ü eledi",
     "E": "II için √2 + (−√2) = 0 karşı örneğini düşünmedi"
    },
@@ -260,7 +260,7 @@
    ],
    "d": 3,
    "lvl": "A",
-   "stem": "a ve b doğal sayılar olmak üzere<br>\\(a!=6\\cdot b!\\)<br>eşitliğini sağlayan tüm \\((a,\\,b)\\) ikilileri için \\(a+b\\) toplamının alabileceği değerlerin toplamı kaçtır?",
+   "stem": "a ve b doğal sayılar (0 dâhil) olmak üzere<br>\\(a!=6\\cdot b!\\)<br>eşitliğini sağlayan tüm \\((a,\\,b)\\) ikilileri için \\(a+b\\) toplamının alabileceği değerlerin toplamı kaçtır?",
    "opts": [
     "7",
     "11",
@@ -273,7 +273,7 @@
     "A": "Yalnız a = 3 durumunu buldu; (6, 5) ikilisini kaçırdı",
     "B": "Yalnız ardışık (6, 5) çözümünü buldu",
     "C": "(3, 1) ikilisini gözden kaçırdı",
-    "D": "0! = 0 sanıp (3, 0) ikilisini saymadı"
+    "D": "0'ı doğal sayı saymadı ya da 0! = 0 sanıp (3, 0)'ı atladı"
    },
    "sol": "\\(\\frac{a!}{b!}=6\\) olmalıdır. \\(a!=6\\) ve \\(b!=1\\) için \\(a=3\\), \\(b\\in\\{0,1\\}\\) (\\(0!=1!=1\\)); ardışık durumda \\(\\frac{6!}{5!}=6\\) için \\((6,5)\\). Toplamlar 3, 4, 11 olup toplamları 18'dir.",
    "t": 130

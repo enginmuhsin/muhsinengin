@@ -22,7 +22,7 @@
    "dist": {
     "A": "İlk iki kesirde payları ve paydaları ayrı toplamak",
     "B": "Payları ve paydaları ayrı ayrı toplayıp çıkarmak",
-    "C": "Genişletmede yalnızca paydayı çarpmak (2/3 → 2/12)",
+    "C": "Yalnız 2/3'ü genişletirken payı çarpmayı unutmak: 2/3 → 2/12",
     "E": "Son terimi çıkarmak yerine eklemek"
    },
    "sol": "Paydalar 12'de eşitlenir: \\(\\frac{8}{12}+\\frac{9}{12}-\\frac{10}{12}=\\frac{7}{12}\\).",
@@ -137,11 +137,11 @@
    "lvl": "A",
    "stem": "Bir manavda kilogramı 36,40 TL olan elmadan 2,5 kg ve kilogramı 12,80 TL olan havuçtan 0,75 kg alan Ayşe, kasaya 200 TL veriyor.<br>Buna göre, Ayşe'nin alacağı para üstü kaç TL'dir?",
    "opts": [
-    "13,00 TL",
-    "99,40 TL",
-    "100,60 TL",
-    "117,10 TL",
-    "181,30 TL"
+    "13,00",
+    "99,40",
+    "100,60",
+    "117,10",
+    "181,30"
    ],
    "ans": "B",
    "dist": {
