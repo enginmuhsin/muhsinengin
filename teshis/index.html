@@ -407,7 +407,7 @@ function renderStu(){
   if(b.dataset.adding==='1'){ b.innerHTML=`<input type="text" id="newStu" placeholder="Öğrenci adı" aria-label="Öğrenci adı"><button class="btn primary" id="addStuOk">Ekle</button><button class="btn ghost" id="addStuNo">Vazgeç</button>`;
     $('#addStuOk').onclick=async()=>{const n=$('#newStu').value.trim(); if(!n)return; const id=uid(); b.dataset.adding=''; await Store.put('students',id,{name:n,created:new Date().toISOString()}); setSid(id); toast(n+' eklendi')};
     $('#addStuNo').onclick=()=>{b.dataset.adding='';render()}; $('#newStu').focus(); return; }
-  b.innerHTML=`<label for="stuSel">Öğrenci</label><select id="stuSel">${S.students.length?S.students.map(s=>`<option value="${s.id}" ${s.id===S.sid?'selected':''}>${esc(s.name)}</option>`).join(''):'<option value="">Henüz öğrenci yok</option>'}</select><button class="btn" id="addStu">+ Öğrenci</button>${S.mode==='cloud'?'<button class="btn ghost" id="logout">Çıkış</button>':''}`;
+  b.innerHTML=`<label for="stuSel">Öğrenci</label><select id="stuSel">${S.students.length?S.students.map(s=>`<option value="${s.id}" ${s.id===S.sid?'selected':''}>${esc(s.name)}</option>`).join(''):'<option value="">Henüz öğrenci yok</option>'}</select><button class="btn" id="addStu">+ Öğrenci</button>${S.mode==='cloud'?`<a class="btn" style="text-decoration:none;color:inherit" href="https://ders.muhsinengin.com/${S.sid?'#/?ogr='+encodeURIComponent(S.sid):''}" target="_blank" rel="noopener" title="Seçili öğrenciye birebir ders planla">Birebir ders ↗</a><button class="btn ghost" id="logout">Çıkış</button>`:''}`;
   const lo=$('#logout'); if(lo) lo.onclick=()=>Store.logout();
   $('#stuSel').onchange=e=>setSid(e.target.value);
   $('#addStu').onclick=()=>{b.dataset.adding='1';renderStu()};
