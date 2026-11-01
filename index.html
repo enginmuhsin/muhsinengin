@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Muhsin ENGİN</title>
-<meta name="description" content="Muhsin ENGİN'in eğitim projeleri: Master Class Sayılar ve DNA'ları, Geometri Atölyesi, Haftanın Soruları, Öğretmen Masası, SekmeÖlçer.">
+<meta name="description" content="Muhsin ENGİN'in projeleri: matematik ve geometri oyunları (Master Class, Geometri Atölyesi, MEDAR), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
 <meta name="theme-color" content="#f5f7fa">
 <link rel="icon" href="simge.svg" type="image/svg+xml">
 <style>
@@ -56,14 +56,38 @@ a { color: inherit; }
   -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); }
 body { overflow-x: clip; }
 /* Defter ayracı gibi üst sekmeler */
-.ayrac { display: flex; justify-content: flex-end; gap: 5px; padding-top: 18px; flex-wrap: wrap; }
-.ayrac a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 8px 11px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep);
+.ayrac { display: flex; justify-content: flex-end; gap: 6px; padding-top: 18px; flex-wrap: wrap; }
+.ayrac > a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep);
   background: var(--kagit); color: var(--murekkep); }
-.ayrac a[aria-current="page"] { border-bottom-color: var(--kirmizi); color: var(--metin); }
-.ayrac a:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
-@media (max-width: 760px) { .ayrac { justify-content: flex-start; padding-left: 14px; } }
-h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 500; font-style: italic; font-size: clamp(2.8rem, 8vw, 5.6rem); line-height: 1; letter-spacing: -.01em; margin: 0 0 22px; color: var(--metin); font-variation-settings: "SOFT" 100; }
-h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: .06em; color: var(--murekkep); margin-top: .04em; }
+.ayrac > a[aria-current="page"] { border-bottom-color: var(--kirmizi); color: var(--metin); }
+.ayrac > a:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
+/* Grup sekmeleri: tıklayınca altında alt girişler açılır */
+.ayrac { position: relative; z-index: 30; }
+.sekme-grup { position: relative; }
+.ayrac > a, .sekme { text-decoration: none; font: inherit; font-weight: 700; font-size: .95rem; line-height: 1.6; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep); background: var(--kagit); color: var(--murekkep); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.sekme:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
+.sekme[aria-expanded="true"] { border-bottom-color: var(--kirmizi); color: var(--metin); background: color-mix(in srgb, var(--murekkep) 6%, var(--kagit)); }
+.sekme-ok { width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform .2s; }
+.sekme[aria-expanded="true"] .sekme-ok { transform: translateY(1px) rotate(-135deg); }
+.acilir { position: absolute; top: calc(100% + 6px); left: 0; width: 320px; padding: 6px; background: var(--kagit); border: 1.5px solid var(--kare-kalin); border-top: 3px solid var(--kirmizi); border-radius: 0 0 14px 14px; box-shadow: 0 14px 34px rgba(10, 18, 50, .18); }
+.acilir[hidden] { display: none; }
+.acilir a { display: block; text-decoration: none; padding: 8px 12px; border-radius: 8px; color: var(--metin); }
+.acilir a:hover, .acilir a:focus-visible { background: color-mix(in srgb, var(--murekkep) 9%, var(--kagit)); }
+.acilir b { display: block; font-family: var(--baslik); font-weight: 700; font-size: 1rem; color: var(--murekkep); }
+.acilir small { display: block; font-size: .85rem; color: var(--kursun); line-height: 1.35; }
+.acilir a.alt { padding: 4px 12px 4px 30px; position: relative; }
+.acilir a.alt b { font-family: var(--yazi); font-size: .92rem; font-weight: 600; }
+.acilir a.alt::before { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; border-top: 1.5px solid var(--kare-kalin); }
+.acilir .tumu { margin-top: 4px; border-top: 1px dashed var(--kare-kalin); border-radius: 0 0 8px 8px; font-size: .88rem; font-weight: 700; color: var(--kirmizi); }
+.sekme-grup:last-of-type .acilir { left: auto; right: 0; }
+@media (max-width: 760px) {
+  .ayrac { justify-content: flex-start; padding-left: 14px; gap: 4px; }
+  .ayrac > a, .sekme { font-size: .88rem; padding: 7px 10px 8px; }
+  .sekme-grup { position: static; }
+  .acilir, .sekme-grup:last-of-type .acilir { left: 14px; right: 0; width: auto; }
+}
+h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 500; font-style: italic; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 18px; color: var(--metin); font-variation-settings: "SOFT" 100; }
+h1 span { font-style: normal; font-weight: 600; letter-spacing: .05em; color: var(--murekkep); }
 .tanitim { font-size: clamp(1.05rem, 2.2vw, 1.3rem); max-width: 34ch; margin: 0 0 14px; }
 .tanitim-ek { color: var(--kursun); max-width: 46ch; margin: 0; font-size: 1rem; }
 .sahne { position: relative; aspect-ratio: 1 / 1; max-width: 520px; width: 100%; margin-left: auto; touch-action: none; cursor: grab; }
@@ -78,6 +102,9 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
 .d4 { bottom: 3%; right: 1%; font-size: clamp(1.05rem, 2.4vw, 1.4rem); transform: rotate(-3deg); }
 .d5 { top: 8%; left: 1%; font-size: clamp(.8rem, 1.6vw, .95rem); transform: rotate(-2deg); }
 .d6 { top: 1%; left: 31%; font-size: clamp(.85rem, 1.7vw, 1.05rem); transform: rotate(-5deg); }
+.d7 { top: 46%; left: 0; font-size: clamp(.95rem, 2vw, 1.2rem); transform: rotate(-3deg); }
+.d8 { bottom: 23%; left: 1%; font-size: clamp(.78rem, 1.5vw, .92rem); transform: rotate(2deg); }
+.d9 { bottom: 10%; left: 33%; font-size: clamp(.85rem, 1.7vw, 1.02rem); transform: rotate(-2deg); }
 /* MEDAR tahtası: koordinat sisteminin orijininde, cismin arkasında. Dış çemberi birim çemberle çakışır. */
 .medar { position: absolute; left: 31.25%; top: 14.25%; width: 57.5%; aspect-ratio: 1; pointer-events: none; opacity: .42; }
 .medar .disk { fill: color-mix(in srgb, #1f2a5c 10%, transparent); stroke-width: 4; }
@@ -90,6 +117,7 @@ h1 span { display: block; font-style: normal; font-weight: 600; letter-spacing: 
   .denklem { animation: suz 7s ease-in-out infinite; }
   .d2 { animation-duration: 8.5s; animation-delay: -2s; } .d3 { animation-duration: 6.5s; animation-delay: -4s; }
   .d4 { animation-duration: 9s; animation-delay: -1s; } .d6 { animation-duration: 7.5s; animation-delay: -3s; } .d5 { animation-duration: 8s; animation-delay: -5s; }
+  .d7 { animation-duration: 8.2s; animation-delay: -6s; } .d8 { animation-duration: 6.8s; animation-delay: -2.5s; } .d9 { animation-duration: 7.7s; animation-delay: -4.5s; }
 }
 @keyframes suz { 50% { translate: 0 -7px; } }
 .yaz { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 1px 12px 2px; border: 1.5px solid var(--murekkep); border-radius: 999px; color: var(--murekkep); text-decoration: none; font-weight: 700; font-size: .92rem; white-space: nowrap; }
@@ -143,6 +171,34 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 .proje.yakinda h3 { color: var(--kursun); }
 .proje p a { color: var(--murekkep); text-underline-offset: 3px; }
 
+/* Proje grupları: açılır kapanır defter bölümleri */
+.gruplar { display: grid; gap: 14px; }
+.grup { border: 1.5px solid var(--kare-kalin); border-left: 4px solid var(--murekkep); border-radius: 12px; background: color-mix(in srgb, var(--kagit) 94%, var(--murekkep)); scroll-margin-top: 16px; }
+.grup[open] { border-left-color: var(--kirmizi); background: var(--kagit); }
+.grup > summary { list-style: none; display: grid; grid-template-columns: 60px minmax(0, 1fr) auto 22px; gap: 4px 18px; align-items: center; padding: 16px 18px 16px 12px; cursor: pointer; border-radius: 10px; }
+.grup > summary::-webkit-details-marker { display: none; }
+.grup > summary:hover { background: color-mix(in srgb, var(--murekkep) 6%, transparent); }
+.grup-ikon svg { width: 52px; height: 52px; display: block; }
+.grup-ikon svg * { fill: none; stroke: var(--murekkep); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.grup-ikon svg .dolu { fill: var(--murekkep); stroke: none; } .grup-ikon svg .kirmizi { stroke: var(--kirmizi); } .grup-ikon svg .dolu.kirmizi { fill: var(--kirmizi); }
+.grup-yazi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.grup-ad { font-family: var(--baslik); font-weight: 800; font-size: 1.45rem; line-height: 1.15; color: var(--metin); }
+.grup-acik { color: var(--kursun); font-size: .98rem; }
+.grup-onizleme { color: var(--murekkep); font-size: .9rem; font-weight: 600; }
+.grup[open] .grup-onizleme { display: none; }
+.grup-sayi { font-size: .85rem; font-weight: 700; color: var(--kursun); border: 1.5px solid var(--kare-kalin); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+.grup-ok { width: 11px; height: 11px; border-right: 2.5px solid var(--murekkep); border-bottom: 2.5px solid var(--murekkep); transform: rotate(45deg) translate(-3px, -3px); transition: transform .25s; justify-self: center; }
+.grup[open] .grup-ok { transform: rotate(-135deg) translate(-2px, -2px); border-color: var(--kirmizi); }
+.grup .liste { margin: 0 14px 10px; }
+.grup .proje:last-child { border-bottom: 0; }
+.proje h3 a.kart-baslik { text-decoration: none; color: inherit; }
+.proje h3 a.kart-baslik:hover { text-decoration: underline; text-underline-offset: 4px; }
+.proje > div > a.adres { text-decoration: underline; }
+.alt-girisler { margin-top: 10px; }
+.alt-girisler .yaz { margin-left: 0; }
+@media (prefers-reduced-motion: no-preference) { .grup[open] .liste { animation: grupAc .28s ease; } }
+@keyframes grupAc { from { opacity: 0; transform: translateY(-6px); } }
+
 /* ---------- Takvim (geri sayım) ---------- */
 .takvim-bolum { margin-top: 32px; }
 .sayac { display: grid; grid-template-columns: repeat(auto-fit, minmax(172px, 1fr)); gap: 10px; }
@@ -180,6 +236,11 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   .proje > a, .proje > div { grid-template-columns: 48px minmax(0, 1fr); padding: 16px 4px; }
   .proje svg, .proje .ikon { width: 44px; height: 44px; }
   .adres, .durum { grid-row: auto; grid-column: 2; white-space: normal; overflow-wrap: anywhere; }
+  .grup > summary { grid-template-columns: 44px minmax(0, 1fr) 18px; gap: 2px 12px; padding: 14px 12px 14px 10px; }
+  .grup-ikon svg { width: 40px; height: 40px; }
+  .grup-sayi { display: none; }
+  .grup-ad { font-size: 1.25rem; }
+  .grup .liste { margin: 0 8px 8px; }
 }
 </style>
 </head>
@@ -187,14 +248,38 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <div class="sayfa"><div class="ic">
 
 <nav class="ayrac" aria-label="Bölümler">
-  <a href="#projeler" aria-current="page">Projeler</a>
+  <div class="sekme-grup">
+    <button type="button" class="sekme" aria-expanded="false" aria-controls="m-mat">Matematik &amp; Geometri<span class="sekme-ok" aria-hidden="true"></span></button>
+    <div class="acilir" id="m-mat" hidden>
+        <a href="https://masterclass.muhsinengin.com/"><b>Master Class <span aria-hidden="true">↗</span></b><small>Sayılar ve DNA'ları</small></a>
+        <a href="https://masterclass.muhsinengin.com/geometri/"><b>Geometri Atölyesi <span aria-hidden="true">↗</span></b><small>Cetvel, pergel ve Öklid görevleri</small></a>
+        <a href="https://masterclass.muhsinengin.com/hafta/"><b>Haftanın Soruları <span aria-hidden="true">↗</span></b><small>Her pazartesi iki olimpiyat sorusu</small></a>
+        <a href="https://medar.hazirlabeni.com/"><b>MEDAR <span aria-hidden="true">↗</span></b><small>Özgün strateji oyunu</small></a>
+        <a class="tumu" href="#g-mat" data-grup="g-mat">Hepsini listede gör ↓</a>
+    </div>
+  </div>
+  <div class="sekme-grup">
+    <button type="button" class="sekme" aria-expanded="false" aria-controls="m-egitim">Eğitim<span class="sekme-ok" aria-hidden="true"></span></button>
+    <div class="acilir" id="m-egitim" hidden>
+        <a href="teshis/"><b>YKS Teşhis Defteri</b><small>Kazanım bazlı teşhis testleri</small></a>
+        <a href="https://ders.muhsinengin.com/"><b>Birebir Ders <span aria-hidden="true">↗</span></b><small>Ortak tahta ve görüntülü ders</small></a>
+        <a href="https://masterclass.muhsinengin.com/ogretmen/"><b>Öğretmen Masası <span aria-hidden="true">↗</span></b><small>Kazanım bazlı ders etkinlikleri</small></a>
+        <a class="tumu" href="#g-egitim" data-grup="g-egitim">Hepsini listede gör ↓</a>
+    </div>
+  </div>
+  <div class="sekme-grup">
+    <button type="button" class="sekme" aria-expanded="false" aria-controls="m-muh">Mühendislik<span class="sekme-ok" aria-hidden="true"></span></button>
+    <div class="acilir" id="m-muh" hidden>
+        <a href="dron/"><b>Dron Hangarı</b><small>Tasarla, dengele, uç</small></a>
+        <a class="alt" href="dron-lab/"><b>Tasarım Laboratuvarı</b></a>
+        <a class="alt" href="pid-oyunu/"><b>PID Ayar Oyunu</b></a>
+        <a class="alt" href="dron/fpv.html"><b>FPV Rehberi</b></a>
+        <a href="https://sekmeolcer.muhsinengin.com/"><b>SekmeÖlçer <span aria-hidden="true">↗</span></b><small>Sekme katsayısını sesle ölç</small></a>
+        <a class="tumu" href="#g-muh" data-grup="g-muh">Hepsini listede gör ↓</a>
+    </div>
+  </div>
   <a href="#takvim">Takvim</a>
   <a href="#baglantilar">Bağlantılar</a>
-  <a href="https://masterclass.muhsinengin.com/hafta/">Haftanın Soruları <span aria-hidden="true">↗</span></a>
-  <a href="https://masterclass.muhsinengin.com/ogretmen/">Öğretmen Masası <span aria-hidden="true">↗</span></a>
-  <a href="teshis/">Teşhis Defteri</a>
-  <a href="dron/">Dron</a>
-  <a href="https://ders.muhsinengin.com/">Birebir Ders <span aria-hidden="true">↗</span></a>
 </nav>
 
 <header class="acilis">
@@ -206,7 +291,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <p class="tanitim-ek tanitim-not">Buradaki araçlar ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
   <figure class="cizim-kutu">
-    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, etrafında matematiksel ifadeler; arkada üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
+    <div class="sahne" id="sahne" role="img" aria-label="Düzgün onikiyüzlü ve içine yerleşmiş bir küp, çevresinde yörüngede dolaşan bir quadcopter dron, köşede birbirini çeviren iki dişli; etrafında matematik ve fizik ifadeleri, arkada üçgenleri dönen MEDAR oyun tahtası. Sürükleyerek çevrilebilir.">
       <div class="medar" aria-hidden="true"><svg class="medar-tahta" id="medarTahta" viewBox="110 90 600 600"></svg></div>
       <canvas id="tuval"></canvas>
       <span class="denklem d1 d-mavi">e<sup>iπ</sup> + 1 = 0</span>
@@ -215,8 +300,11 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <span class="denklem d4 d-mavi">∑ 1/n² = π²/6</span>
       <span class="denklem d5 d-kursun">20 − 30 + 12 = 2</span>
       <span class="denklem d6 d-kirmizi">a² + b² = c²</span>
+      <span class="denklem d7 d-kirmizi">F = m · a</span>
+      <span class="denklem d8 d-kursun">ω₁r₁ = ω₂r₂</span>
+      <span class="denklem d9 d-mavi">T = 2π√(L/g)</span>
     </div>
-    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Cismin arkasında, kenarı birim çembere oturan tahta da oyunum MEDAR; üçgenleri sırayla 120° döner. Cismi sürükleyerek çevirebilirsin.</figcaption>
+    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Cismin arkasında, kenarı birim çembere oturan tahta da oyunum MEDAR; üçgenleri sırayla 120° döner. Cismin çevresinde pervaneleri dönen bir dron yörüngede dolaşıyor; köşedeki 12 ve 8 dişli çarklar ω₁r₁ = ω₂r₂ kuralıyla birbirini çeviriyor. Cismi sürükleyerek çevirebilirsin.</figcaption>
   </figure>
 </header>
 
@@ -228,16 +316,19 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 
 <main class="icindekiler" id="projeler">
   <h2>Projeler</h2>
-  <p class="aciklama">Araçların hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir.</p>
-  <ul class="liste">
+  <p class="aciklama">Araçların hepsi tarayıcıda çalışır; kurulum gerekmez. Akıllı tahtada tam ekran kullanılabilir. Bir gruba dokununca içindeki projeler açılır.</p>
+  <div class="gruplar">
+  <details class="grup" id="g-mat">
+    <summary>
+      <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L50 46 H6 Z"/><circle class="kirmizi" cx="28" cy="32" r="9"/><circle class="dolu kirmizi" cx="28" cy="6" r="2.6"/></svg></span>
+      <span class="grup-yazi"><span class="grup-ad">Matematik ve Geometri</span><span class="grup-acik">Sayı oyunları, olimpiyat soruları, cetvel-pergel atölyesi ve strateji oyunu</span><span class="grup-onizleme">Master Class · Geometri Atölyesi · Haftanın Soruları · MEDAR</span></span>
+      <span class="grup-sayi">4 proje</span><span class="grup-ok" aria-hidden="true"></span>
+    </summary>
+    <ul class="liste">
     <li class="proje"><a href="https://masterclass.muhsinengin.com/">
       <svg viewBox="14 8 34 34" aria-hidden="true"><circle class="dolu" cx="28" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="34" cy="22" r="2.6"/><circle class="dolu" cx="28" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="22" r="2.6"/><circle class="dolu" cx="22" cy="28" r="2.6"/><circle class="dolu kirmizi" cx="22" cy="34" r="2.6"/><circle class="dolu" cx="28" cy="34" r="2.6"/><circle class="dolu" cx="34" cy="34" r="2.6"/><circle class="dolu" cx="40" cy="34" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="28" r="2.6"/><circle class="dolu" cx="40" cy="22" r="2.6"/><circle class="dolu kirmizi" cx="40" cy="16" r="2.6"/><path d="M28 28 h6 v-6 h-12 v12 h18 v-18"/></svg>
       <h3>Master Class: Sayılar ve DNA'ları</h3><span class="adres">masterclass.muhsinengin.com</span>
       <p>Asal sayıları, bölenleri ve fonksiyonların büyümesini oyunlarla, 3B görsellerle ve sıralama tablosuyla keşfetmek için.</p></a></li>
-    <li class="proje"><a href="https://masterclass.muhsinengin.com/ogretmen/">
-      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M10 8 h30 a4 4 0 0 1 4 4 v36 h-30 a4 4 0 0 1 -4 -4 z"/><path d="M10 40 a4 4 0 0 1 4 -4 h30"/><path class="kirmizi" d="M18 16 h18 M18 23 h12"/><path class="kirmizi" d="M44 16 l6 -4 v14 l-6 -4"/><circle class="dolu" cx="20" cy="30" r="2"/></svg>
-      <h3>Öğretmen Masası</h3><span class="adres">masterclass.muhsinengin.com/ogretmen</span>
-      <p>Destek, BYF, ÖYG ve PÜY yıllık planlarındaki her kazanım için akıllı tahtada açılan etkinlik ve ders akışı. Kazanımı deftere kopyala, etkinliğe tek dokunuşla geç.</p></a></li>
     <li class="proje"><a href="https://masterclass.muhsinengin.com/geometri/">
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 8 L16 46 M28 8 L40 46 M21 30 h14"/><circle class="dolu" cx="28" cy="8" r="2.4"/><path class="kirmizi" d="M10 46 A 30 30 0 0 1 46 46"/></svg>
       <h3>Geometri Atölyesi</h3><span class="adres">masterclass.muhsinengin.com/geometri</span>
@@ -246,7 +337,20 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M8 44 L28 14 L48 44 Z"/><path class="kirmizi" d="M28 44 V27"/><path class="dolu kirmizi" d="M28 4 l2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.6-4.8 2.6 1-5.4-4-3.7 5.4-.7z"/></svg>
       <h3>Haftanın Soruları</h3><span class="adres">masterclass.muhsinengin.com/hafta</span>
       <p>Her pazartesi bir matematik ve bir geometri olimpiyat sorusu, pazar akşamı tam çözümü. Geçmiş sorular yazdırılabilir bir soru bankasında birikir.</p></a></li>
-        <li class="proje"><a href="teshis/">
+    <li class="proje"><div>
+      <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
+      <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
+      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="https://medar.hazirlabeni.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyunu gör</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
+    </ul>
+  </details>
+  <details class="grup" id="g-egitim">
+    <summary>
+      <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 20 L28 9 L52 20 L28 31 Z"/><path d="M14 25 V38 q14 9 28 0 V25"/><path class="kirmizi" d="M50 21 V36"/><circle class="dolu kirmizi" cx="50" cy="38" r="2.6"/></svg></span>
+      <span class="grup-yazi"><span class="grup-ad">Eğitim</span><span class="grup-acik">Teşhis, birebir ders, ders etkinlikleri ve proje danışmanlığı</span><span class="grup-onizleme">YKS Teşhis Defteri · Birebir Ders · Öğretmen Masası · PİKRAM</span></span>
+      <span class="grup-sayi">4 proje</span><span class="grup-ok" aria-hidden="true"></span>
+    </summary>
+    <ul class="liste">
+    <li class="proje"><a href="teshis/">
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M8 48 H48"/><path d="M14 48 V30"/><path d="M24 48 V20"/><path d="M34 48 V34"/><path class="kirmizi" d="M44 48 V12"/><circle class="dolu kirmizi" cx="44" cy="8" r="3.4"/></svg>
       <h3>YKS Teşhis Defteri</h3><span class="adres">muhsinengin.com/teshis</span>
       <p>TYT ve AYT matematik-geometri için kazanım bazlı teşhis testleri. Öğrencinin eksik kazanımlarını ve kavram yanılgılarını bulur, öncelik sırasına göre kişisel ders planı üretir.</p></a></li>
@@ -254,23 +358,34 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="0 0 56 56" aria-hidden="true"><rect x="6" y="10" width="44" height="30" rx="3"/><path d="M22 48 l6 -8 l6 8"/><path class="kirmizi" d="M13 31 q6 -12 12 -4 t12 -9"/><circle class="dolu kirmizi" cx="41" cy="16" r="2.6"/></svg>
       <h3>Birebir Ders</h3><span class="adres">ders.muhsinengin.com</span>
       <p>Öğretmen ile öğrencinin aynı anda yazdığı ortak tahta, görüntülü görüşme ve ders defteri. Teşhis Defteri'nin bulduğu eksikler derse taşınır. Davetli öğretmenler için; öğrenci, öğretmeninin verdiği link ve PIN ile girer.</p></a></li>
-    <li class="proje"><a href="https://sekmeolcer.muhsinengin.com/">
-      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
-      <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
-      <p>Telefonun mikrofonuyla topun yere çarpma seslerini dinleyip sekme katsayısını ölçen bir saha aracı. Fizik dersinde deney defteri gibi kullanılır.</p></a></li>
-    <li class="proje"><a href="dron/">
-      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M16 16 L40 40 M40 16 L16 40"/><rect x="22" y="22" width="12" height="12" rx="3"/><path class="kirmizi" d="M7 16 h18 M31 16 h18 M7 40 h18 M31 40 h18"/><circle class="dolu" cx="16" cy="16" r="2.4"/><circle class="dolu" cx="40" cy="16" r="2.4"/><circle class="dolu" cx="16" cy="40" r="2.4"/><circle class="dolu" cx="40" cy="40" r="2.4"/></svg>
-      <h3>Dron Hangarı</h3><span class="adres">muhsinengin.com/dron</span>
-      <p>Bir dron tasarlayıp uçup uçmayacağını hesaplayan Tasarım Laboratuvarı, PID kazançlarıyla sanal dronu dengede tutan PID Ayar Oyunu ve benzetmelerle anlatılan bir FPV Rehberi.</p></a></li>
-    <li class="proje"><div>
-      <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
-      <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
-      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="https://medar.hazirlabeni.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyunu gör</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
+    <li class="proje"><a href="https://masterclass.muhsinengin.com/ogretmen/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M10 8 h30 a4 4 0 0 1 4 4 v36 h-30 a4 4 0 0 1 -4 -4 z"/><path d="M10 40 a4 4 0 0 1 4 -4 h30"/><path class="kirmizi" d="M18 16 h18 M18 23 h12"/><path class="kirmizi" d="M44 16 l6 -4 v14 l-6 -4"/><circle class="dolu" cx="20" cy="30" r="2"/></svg>
+      <h3>Öğretmen Masası</h3><span class="adres">masterclass.muhsinengin.com/ogretmen</span>
+      <p>Destek, BYF, ÖYG ve PÜY yıllık planlarındaki her kazanım için akıllı tahtada açılan etkinlik ve ders akışı. Kazanımı deftere kopyala, etkinliğe tek dokunuşla geç.</p></a></li>
     <li class="proje yakinda"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 8 h26 l8 8 v32 h-34 z"/><path d="M38 8 v8 h8"/><path d="M19 26 h18 M19 33 h18 M19 40 h11"/><circle class="dolu kirmizi" cx="42" cy="42" r="4"/></svg>
       <h3>PİKRAM</h3><span class="durum">Hazırlanıyor</span>
       <p>Bilim projelerini yazarken öğrenciye ve danışman öğretmene eşlik eden bir proje asistanı.</p></div></li>
-  </ul>
+    </ul>
+  </details>
+  <details class="grup" id="g-muh">
+    <summary>
+      <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="22" cy="30" r="12"/><circle cx="22" cy="30" r="4"/><path d="M22 14 v4 M22 42 v4 M6 30 h4 M34 30 h4 M11 19 l3 3 M30 38 l3 3 M11 41 l3 -3 M30 22 l3 -3"/><circle class="kirmizi" cx="42" cy="16" r="7"/><circle class="dolu kirmizi" cx="42" cy="16" r="2"/></svg></span>
+      <span class="grup-yazi"><span class="grup-ad">Mühendislik</span><span class="grup-acik">Ölçen, hesaplayan ve uçan şeyler: sahada deney ve dron tasarımı</span><span class="grup-onizleme">Dron Hangarı · SekmeÖlçer</span></span>
+      <span class="grup-sayi">2 proje</span><span class="grup-ok" aria-hidden="true"></span>
+    </summary>
+    <ul class="liste">
+    <li class="proje"><div>
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M16 16 L40 40 M40 16 L16 40"/><rect x="22" y="22" width="12" height="12" rx="3"/><path class="kirmizi" d="M7 16 h18 M31 16 h18 M7 40 h18 M31 40 h18"/><circle class="dolu" cx="16" cy="16" r="2.4"/><circle class="dolu" cx="40" cy="16" r="2.4"/><circle class="dolu" cx="16" cy="40" r="2.4"/><circle class="dolu" cx="40" cy="40" r="2.4"/></svg>
+      <h3><a class="kart-baslik" href="dron/">Dron Hangarı</a></h3><a class="adres" href="dron/">muhsinengin.com/dron</a>
+      <p>Bir dron tasarlayıp uçup uçmayacağını hesaplamak, PID kazançlarıyla sanal bir dronu dengede tutmak ve FPV dünyasını benzetmelerle tanımak için. <span class="dugmeler alt-girisler"><a class="yaz" href="dron-lab/">Tasarım Laboratuvarı</a><a class="yaz" href="pid-oyunu/">PID Ayar Oyunu</a><a class="yaz" href="dron/fpv.html">FPV Rehberi</a></span></p></div></li>
+    <li class="proje"><a href="https://sekmeolcer.muhsinengin.com/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
+      <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
+      <p>Telefonun mikrofonuyla topun yere çarpma seslerini dinleyip sekme katsayısını ölçen bir saha aracı. Fizik dersinde deney defteri gibi kullanılır.</p></a></li>
+    </ul>
+  </details>
+  </div>
 </main>
 
 <section class="icindekiler" id="baglantilar" aria-labelledby="bagBaslik">
@@ -372,13 +487,62 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     });
     return P;
   }
+  /* Mühendislik katmanı: cismin çevresinde yörüngede dolaşan bir quadcopter (pervaneleri döner)
+     ve sahnenin köşesinde birbirini çeviren iki dişli (ω₁·r₁ = ω₂·r₂). */
+  let dronAci = 2.2, pervane = 0, disli = 0;
+  function dronCiz(mavi, turuncu, metin) {
+    const R = 3.0, c = [R * Math.cos(dronAci), -1.95 + .12 * Math.sin(2 * dronAci), R * Math.sin(dronAci)];
+    const yon = -dronAci, L = .68, pr = .36;
+    const yerel = (dx, dz, dy = 0) => [c[0] + dx * Math.cos(yon) - dz * Math.sin(yon), c[1] + dy, c[2] + dx * Math.sin(yon) + dz * Math.cos(yon)];
+    const merkez = don(c), on = Math.max(0, Math.min(1, (merkez.z + 2.8) / 5.6));
+    const alfa = .35 + .65 * on, kal = .7 + .6 * on;
+    const cizgi = (A, B, rk, k) => { const a = don(A), b = don(B); g.strokeStyle = rk; g.lineWidth = k; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); };
+    g.globalAlpha = alfa;
+    const motorlar = [0, 1, 2, 3].map((i) => { const a = Math.PI / 4 + i * Math.PI / 2; return [L * Math.cos(a), L * Math.sin(a)]; });
+    motorlar.forEach(([mx, mz]) => cizgi(yerel(0, 0), yerel(mx, mz), metin, 2.6 * kal));
+    // gövde
+    const gv = [[-.2, -.12], [.2, -.12], [.2, .12], [-.2, .12]].map(([x, z]) => don(yerel(x, z, -.04)));
+    g.fillStyle = mavi; g.beginPath(); gv.forEach((p, i) => i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)); g.closePath(); g.fill();
+    motorlar.forEach(([mx, mz], i) => {
+      // pervane diski (soluk) ve dönen iki kanat
+      g.globalAlpha = alfa * .35; g.strokeStyle = turuncu; g.lineWidth = 1;
+      g.beginPath(); for (let k = 0; k <= 20; k++) { const t = k / 20 * 2 * Math.PI, p = don(yerel(mx + pr * Math.cos(t), mz + pr * Math.sin(t), -.06)); k ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y); } g.stroke();
+      g.globalAlpha = alfa;
+      const t = pervane * (i % 2 ? -1 : 1) + i;
+      cizgi(yerel(mx - pr * Math.cos(t), mz - pr * Math.sin(t), -.06), yerel(mx + pr * Math.cos(t), mz + pr * Math.sin(t), -.06), turuncu, 2.2 * kal);
+      const m = don(yerel(mx, mz, -.06)); g.fillStyle = metin; g.beginPath(); g.arc(m.x, m.y, 2.4 * kal, 0, 7); g.fill();
+    });
+    g.globalAlpha = 1;
+    return merkez.z;
+  }
+  function disliCiz(cx, cy, r, dis, aci, rk) {
+    const h = r * .16; g.strokeStyle = rk; g.lineWidth = 1.6; g.beginPath();
+    for (let i = 0; i < dis; i++) {
+      const a0 = aci + i * 2 * Math.PI / dis, w = Math.PI / dis;
+      const nokta = (a, rr) => [cx + rr * Math.cos(a), cy + rr * Math.sin(a)];
+      const p = [nokta(a0 - w * .5, r - h), nokta(a0 - w * .32, r + h), nokta(a0 + w * .32, r + h), nokta(a0 + w * .5, r - h), nokta(a0 + w * 1.5, r - h)];
+      p.forEach(([x, y], k) => (i || k) ? g.lineTo(x, y) : g.moveTo(x, y));
+    }
+    g.closePath(); g.stroke();
+    g.beginPath(); g.arc(cx, cy, r * .28, 0, 7); g.stroke();
+    for (let k = 0; k < 3; k++) { const a = aci + k * 2 * Math.PI / 3; g.beginPath(); g.moveTo(cx + r * .28 * Math.cos(a), cy + r * .28 * Math.sin(a)); g.lineTo(cx + (r - h * 1.6) * Math.cos(a), cy + (r - h * 1.6) * Math.sin(a)); g.stroke(); }
+  }
   function kare() {
     g.clearRect(0, 0, W, H); g.lineCap = "round";
-    const mavi = renk("--murekkep"), kirmizi = renk("--kirmizi");
-    zeminCiz(mavi, kirmizi, renk("--kursun"));
+    const mavi = renk("--murekkep"), kirmizi = renk("--kirmizi"), kursun = renk("--kursun"), turuncu = renk("--turuncu"), metin = renk("--metin");
+    zeminCiz(mavi, kirmizi, kursun);
+    // dişliler (sol alt köşe): N₁ = 12, N₂ = 8 diş; ω₂ = −ω₁·N₁/N₂
+    const r1 = W * .062, r2 = r1 * 8 / 12, gx = W * .1, gy = H * .86;
+    g.globalAlpha = .7; disliCiz(gx, gy, r1, 12, disli, kursun);
+    g.globalAlpha = .85; disliCiz(gx + r1 + r2 + r1 * .02, gy - r1 * .05, r2, 8, -disli * 12 / 8 + Math.PI / 8, kirmizi);
+    g.globalAlpha = 1;
+    // dron cismin arkasındaysa önce, önündeyse sonra çizilir
+    const arkada = don([3.0 * Math.cos(dronAci), -1.95, 3.0 * Math.sin(dronAci)]).z < 0;
+    if (arkada) dronCiz(mavi, turuncu, metin);
     const P = ciz(D, DE, mavi, 2.4); ciz(kup, KE, kirmizi, 2.2);
     g.globalAlpha = 1; g.fillStyle = mavi; P.forEach((p) => { g.globalAlpha = .3 + .7 * (p.z + f) / (2 * f); g.beginPath(); g.arc(p.x, p.y, 2.6, 0, 7); g.fill(); });
     g.globalAlpha = 1;
+    if (!arkada) dronCiz(mavi, turuncu, metin);
   }
 
   let teta = .9;
@@ -441,7 +605,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     z.globalAlpha = .25; z.beginPath(); z.arc(qx, py, 10, 0, 7); z.fill();
     z.restore();
   }
-  function medarIlerle() { teta += .009; if (teta > 2 * Math.PI) teta -= 2 * Math.PI; }
+  function medarIlerle() { teta += .009; if (teta > 2 * Math.PI) teta -= 2 * Math.PI; dronAci += .006; pervane += .9; disli += .012; }
   const yumusak = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function dongu() {
     if (!az.matches) medarIlerle();
@@ -553,6 +717,23 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !kutu.hidden) { kutu.hidden = true; a.setAttribute("aria-expanded", "false"); a.focus(); } });
 });
+</script>
+<script>
+/* Üst menüdeki grup sekmeleri: tıklayınca alt girişler açılır; dışarı tıklayınca ya da Esc ile kapanır.
+   "Hepsini listede gör" bağlantısı aşağıdaki ilgili grubu açar ve oraya kaydırır. */
+(function () {
+  const sekmeler = [...document.querySelectorAll(".sekme")];
+  const kapat = (haric) => sekmeler.forEach((b) => { if (b !== haric) { b.setAttribute("aria-expanded", "false"); document.getElementById(b.getAttribute("aria-controls")).hidden = true; } });
+  sekmeler.forEach((b) => b.addEventListener("click", () => {
+    const acik = b.getAttribute("aria-expanded") === "true";
+    kapat(b); b.setAttribute("aria-expanded", String(!acik)); document.getElementById(b.getAttribute("aria-controls")).hidden = acik;
+  }));
+  document.addEventListener("click", (e) => { if (!e.target.closest(".sekme-grup")) kapat(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { const a = sekmeler.find((b) => b.getAttribute("aria-expanded") === "true"); if (a) { kapat(); a.focus(); } } });
+  const grubuAc = (id) => { const d = document.getElementById(id); if (d && d.tagName === "DETAILS") d.open = true; };
+  document.querySelectorAll(".acilir .tumu").forEach((a) => a.addEventListener("click", () => { grubuAc(a.dataset.grup); kapat(); }));
+  if (location.hash) grubuAc(location.hash.slice(1));
+})();
 </script>
 </body>
 </html>
