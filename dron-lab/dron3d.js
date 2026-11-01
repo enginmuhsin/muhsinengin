@@ -193,22 +193,28 @@
     g.globalAlpha = 1;
   }
 
+  /* Model uzayındaki bir noktanın ekrandaki yeri: [x, y, derinlik] */
+  function izdusur(p, poz, kam) {
+    const q = don(p, poz, kam), d = (kam.mesafe || 7) - q[2];
+    return [kam.cx + q[0] * kam.f / d, kam.cy - q[1] * kam.f / d, d];
+  }
+
   /* Zemindeki gölge ve kareli zemin */
   function zeminCiz(g, kam, poz, sec) {
     const mes = kam.mesafe || 7, f = kam.f;
     const izd = (p) => { const q = don(p, { olcek: 1 }, kam), d = mes - q[2]; return [kam.cx + q[0] * f / d, kam.cy - q[1] * f / d, d]; };
-    const zy = sec.zeminY;
+    const zy = sec.zeminY, so = sec.olcek || 1;
     if (sec.izgara) {
       g.strokeStyle = sec.izgaraRenk; g.lineWidth = 1;
       for (let i = -6; i <= 6; i++) {
-        for (const [a, b] of [[[i * .5, zy, -3], [i * .5, zy, 3]], [[-3, zy, i * .5], [3, zy, i * .5]]]) {
+        for (const [a, b] of [[[i * .5 * so, zy, -3 * so], [i * .5 * so, zy, 3 * so]], [[-3 * so, zy, i * .5 * so], [3 * so, zy, i * .5 * so]]]) {
           const A = izd(a), B = izd(b);
           g.globalAlpha = .55 * (1 - Math.abs(i) / 7); g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.stroke();
         }
       }
     }
     // Yumuşak gölge: iç içe, giderek koyulaşan elipsler
-    const yuk = Math.max(0, (poz.y || 0) - zy), r0 = (sec.golgeR || 1.2) * (1 + yuk * .2);
+    const yuk = Math.max(0, (poz.y || 0) - zy) / so, r0 = (sec.golgeR || 1.2) * (1 + yuk * .2);
     g.fillStyle = sec.golgeRenk || '#000';
     for (const [k, a] of [[1, .035], [.78, .045], [.56, .06], [.36, .07]]) {
       const pts = daire([poz.x || 0, zy, poz.z || 0], r0 * k, 28).map(izd);
@@ -299,5 +305,5 @@
     };
   }
 
-  kok.Dron3D = { model, ciz, zeminCiz, palet, Sahne, ton, tasarimdan };
+  kok.Dron3D = { model, ciz, zeminCiz, palet, Sahne, ton, tasarimdan, izdusur };
 })(window);

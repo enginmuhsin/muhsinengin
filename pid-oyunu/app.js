@@ -337,6 +337,39 @@
     c.restore();
   }
 
+  /* 3B dron (../dron/dron3d.js kopyası: dron3d.js). Dron 3/4 arkadan görünür; eğim (roll)
+     gövdeyle birlikte uygulanır, itki okları motorlarla birlikte yatar. Kütüphane yüklenmezse
+     eski 2B çizim kullanılır. */
+  function droneCiz3B(c, x, y, aci, olcek, itkiFark, zamanSn) {
+    if (!window.Dron3D) return droneCiz(c, x, y, aci, olcek, itkiFark, zamanSn);
+    const D = window.Dron3D;
+    const kam = { yaw: Math.PI + 0.38, pitch: 0.3, mesafe: 1400, f: 1400, cx: x, cy: y };
+    const poz = { olcek: olcek / 1.45, roll: aci };
+    const r = D.palet({ pervane: renk('--c2'), plaka: renk('--accent'), batarya: renk('--c4') });
+    // Zemin ızgarası ve yumuşak gölge: derinlik hissi
+    D.zeminCiz(c, kam, { x: 0, y: 0, z: 0 }, { zeminY: -olcek * 0.95, izgara: true, izgaraRenk: renk('--grid'), olcek: olcek * 0.7, golgeR: olcek * 0.95, golgeRenk: '#000' });
+    const prim = D.model({ kol: 4, L: 1, pervane: 0.5, kanat: 3, t: zamanSn * 42 }, r);
+    // Arkada kalan itki okları önce, öndekiler sonra çizilsin diye ikiye ayır
+    const oklar = [];
+    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([sx, sz]) => {
+      const itki = sinirla(0.5 + 0.5 * sx * itkiFark, 0, 1);   // +x (ekranda sol) motorlar u ile artar
+      const uz = 0.2 + 0.85 * itki, mx = sx * 0.707, mz = sz * 0.707;
+      const a = D.izdusur([mx, 0.28, mz], poz, kam), b = D.izdusur([mx, 0.28 + uz, mz], poz, kam);
+      oklar.push({ a, b, d: a[2] });
+    });
+    const okCiz = (o) => {
+      const dx = o.b[0] - o.a[0], dy = o.b[1] - o.a[1], m = Math.hypot(dx, dy) || 1, ux = dx / m, uy = dy / m;
+      c.strokeStyle = renk('--c3'); c.lineWidth = 3; c.lineCap = 'round'; c.globalAlpha = 0.9;
+      c.beginPath(); c.moveTo(o.a[0], o.a[1]); c.lineTo(o.b[0], o.b[1]); c.stroke();
+      c.beginPath(); c.moveTo(o.b[0] - ux * 9 - uy * 5, o.b[1] - uy * 9 + ux * 5); c.lineTo(o.b[0], o.b[1]); c.lineTo(o.b[0] - ux * 9 + uy * 5, o.b[1] - uy * 9 - ux * 5); c.stroke();
+      c.globalAlpha = 1;
+    };
+    const ort = oklar.reduce((t, o) => t + o.d, 0) / 4;
+    oklar.filter(o => o.d >= ort).forEach(okCiz);
+    D.ciz(c, prim, kam, poz);
+    oklar.filter(o => o.d < ort).forEach(okCiz);
+  }
+
   function sahneCiz() {
     const { c, w, h } = tuvalHazirla($('sahne'));
     const cx = w / 2, cy = h * 0.55;
@@ -368,7 +401,7 @@
     c.beginPath(); c.moveTo(-olcek * 1.2, 0); c.lineTo(olcek * 1.2, 0); c.stroke();
     c.restore(); c.setLineDash([]);
     // Dron
-    droneCiz(c, cx, cy, sim.teta, olcek, sim.tauMotor / P.TAU_MAKS, sim.t);
+    droneCiz3B(c, cx, cy, sim.teta, olcek, sim.tauMotor / P.TAU_MAKS, sim.t);
     // Rüzgâr okları (bozucu tork varsa)
     const tb = sim.tauBozucu;
     if (Math.abs(tb) > 0.003) {
