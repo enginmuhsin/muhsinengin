@@ -1,0 +1,57 @@
+/* =====================================================================
+   DRON HANGARI — hangar.css
+   Yalnızca açılış sayfasına özgü stiller. Ortak tema style.css'tedir
+   (iki araçla AYNI dosya); burada onun renk değişkenleri kullanılır.
+   ===================================================================== */
+.hero { display: grid; gap: 24px; align-items: center; margin: .5rem 0 1.5rem; }
+@media (min-width: 800px) { .hero { grid-template-columns: 1.3fr 1fr; } }
+.hero h1 { font-size: 2rem; }
+.hero .alt { color: var(--muted); max-width: 60ch; font-size: 1.05rem; }
+.hero-gorsel {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--yaricap);
+  box-shadow: var(--golge); padding: 12px; display: grid; place-items: center;
+}
+.hero-gorsel svg { width: min(100%, 320px); height: auto; }
+.pervane { transform-box: fill-box; transform-origin: center; animation: don .35s linear infinite; }
+.pervane.ters { animation-direction: reverse; }
+@keyframes don { to { transform: rotate(360deg); } }
+.gövde-gezin { animation: salin 4s ease-in-out infinite; transform-origin: 160px 160px; }
+@keyframes salin { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-6px) rotate(1.5deg); } }
+@media (prefers-reduced-motion: reduce) { .pervane, .gövde-gezin { animation: none; } }
+
+.dugme-satir { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+.dugme {
+  display: inline-block; text-decoration: none; font-weight: 700;
+  padding: .6rem 1.1rem; border-radius: 999px; border: 2px solid var(--accent);
+  color: var(--accent); background: transparent;
+}
+.dugme.birincil { background: var(--accent); color: var(--accent-ink); }
+.dugme:hover { filter: brightness(1.08); }
+
+.bolum { margin: 2rem 0 1rem; }
+.bolum > p { color: var(--muted); max-width: 70ch; }
+.izgara { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 1rem; }
+.adim-kart { position: relative; padding-top: 44px; }
+.adim-no {
+  position: absolute; top: 12px; left: 16px; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--accent-ink);
+}
+.benzetme { background: var(--panel-2); border-left: 4px solid var(--c3); padding: .5rem .75rem; border-radius: 6px; margin-top: .6rem; font-size: .95rem; }
+.etiket-kucuk { display: inline-block; font-size: .78rem; font-weight: 700; padding: .1rem .55rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.kavram dt { font-weight: 700; margin-top: .9rem; }
+.kavram dd { margin: .2rem 0 0; color: var(--text); }
+.kavram dd .teknik { color: var(--muted); font-size: .92rem; }
+.gorev-liste { padding-left: 1.2rem; }
+.gorev-liste li { margin: .5rem 0; }
+.yakinda { border-style: dashed; }
+
+/* ---------- FPV Rehberi sayfası ---------- */
+.tablo-kaydir { overflow-x: auto; }
+table.karsilastir { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .95rem; }
+table.karsilastir th, table.karsilastir td { border: 1px solid var(--border); padding: .5rem .65rem; text-align: left; vertical-align: top; }
+table.karsilastir thead th { background: var(--panel-2); }
+table.karsilastir tbody th { background: var(--panel-2); white-space: nowrap; }
+.uyari-kutu { border: 2px solid var(--warn); border-radius: var(--yaricap); padding: .75rem 1rem; background: var(--panel); }
+.uyari-kutu strong:first-child { color: var(--warn); }
+.kaynaklar li { margin: .35rem 0; }
+.tarih-not { color: var(--muted); font-size: .9rem; }

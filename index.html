@@ -56,8 +56,8 @@ a { color: inherit; }
   -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); mask-image: linear-gradient(90deg, transparent 0, transparent 44%, #000 56%); }
 body { overflow-x: clip; }
 /* Defter ayracı gibi üst sekmeler */
-.ayrac { display: flex; justify-content: flex-end; gap: 6px; padding-top: 18px; flex-wrap: wrap; }
-.ayrac a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep);
+.ayrac { display: flex; justify-content: flex-end; gap: 5px; padding-top: 18px; flex-wrap: wrap; }
+.ayrac a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 8px 11px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep);
   background: var(--kagit); color: var(--murekkep); }
 .ayrac a[aria-current="page"] { border-bottom-color: var(--kirmizi); color: var(--metin); }
 .ayrac a:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
@@ -193,6 +193,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <a href="https://masterclass.muhsinengin.com/hafta/">Haftanın Soruları <span aria-hidden="true">↗</span></a>
   <a href="https://masterclass.muhsinengin.com/ogretmen/">Öğretmen Masası <span aria-hidden="true">↗</span></a>
   <a href="teshis/">Teşhis Defteri</a>
+  <a href="dron/">Dron</a>
   <a href="https://ders.muhsinengin.com/">Birebir Ders <span aria-hidden="true">↗</span></a>
 </nav>
 
@@ -257,6 +258,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
       <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
       <p>Telefonun mikrofonuyla topun yere çarpma seslerini dinleyip sekme katsayısını ölçen bir saha aracı. Fizik dersinde deney defteri gibi kullanılır.</p></a></li>
+    <li class="proje"><a href="dron/">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M16 16 L40 40 M40 16 L16 40"/><rect x="22" y="22" width="12" height="12" rx="3"/><path class="kirmizi" d="M7 16 h18 M31 16 h18 M7 40 h18 M31 40 h18"/><circle class="dolu" cx="16" cy="16" r="2.4"/><circle class="dolu" cx="40" cy="16" r="2.4"/><circle class="dolu" cx="16" cy="40" r="2.4"/><circle class="dolu" cx="40" cy="40" r="2.4"/></svg>
+      <h3>Dron Hangarı</h3><span class="adres">muhsinengin.com/dron</span>
+      <p>Bir dron tasarlayıp uçup uçmayacağını hesaplayan Tasarım Laboratuvarı, PID kazançlarıyla sanal dronu dengede tutan PID Ayar Oyunu ve benzetmelerle anlatılan bir FPV Rehberi.</p></a></li>
     <li class="proje"><div>
       <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
       <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>

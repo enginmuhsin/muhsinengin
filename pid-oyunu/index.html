@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PID Ayar Oyunu</title>
+  <meta name="description" content="P, I ve D kazançlarını ayarlayarak sanal bir dronu rüzgâra karşı dengede tut. PID kontrolü oynayarak öğren.">
+  <script>
+    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Araçlar">
+      <a class="logo" href="../">muhsinengin.com</a>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../dron/index.html">Dron Hangarı</a>
+        <a class="nav-link" href="../dron/fpv.html">FPV Rehberi</a>
+        <a class="nav-link" href="../dron-lab/index.html">Tasarım Laboratuvarı</a>
+        <a class="nav-link" href="index.html" aria-current="page">PID Ayar Oyunu</a>
+      </div>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+    </nav>
+  </header>
+
+  <main id="ana">
+    <div class="sayfa-baslik">
+      <h1>PID Ayar Oyunu</h1>
+      <p>Dronu yandan görüyorsun; yalnızca sağa-sola yatabiliyor. P, I ve D kazançlarını ayarlayarak onu rüzgâra ve darbelere karşı dengede tut. Kısayollar: <kbd>Boşluk</kbd> başlat/duraklat, <kbd>R</kbd> sıfırla, <kbd>W</kbd> rüzgâr ver.</p>
+    </div>
+
+    <div class="pid-duzen">
+      <!-- ============ SAHNE + GRAFİKLER (telefonda en üstte) ============ -->
+      <div class="sutun sahne-sutun">
+        <section class="kart o2" aria-labelledby="sahneBaslik">
+          <h2 id="sahneBaslik">Simülasyon <span class="rozet" id="durumRozet">Hazır</span></h2>
+          <div class="sahne-kutu">
+            <canvas id="sahne" role="img" aria-label="Yandan görünen dron ve hedef açı çizgisi"></canvas>
+          </div>
+          <div class="durum-cubuk" aria-live="off">
+            <span>Süre: <strong id="gSure">0,0</strong> sn</span>
+            <span>Açı: <strong id="gAci">0,0</strong>°</span>
+            <span>Hedef: <strong id="gHedef">0</strong>°</span>
+            <span>Kontrol: <strong id="gKontrol">0,00</strong> N·m</span>
+          </div>
+          <div class="dugme-satiri" style="margin-top:.6rem">
+            <button class="btn" id="baslatDugme" type="button">▶ Başlat</button>
+            <button class="btn btn-ikincil" id="sifirlaDugme" type="button">↺ Sıfırla</button>
+            <button class="btn btn-ikincil" id="ruzgarDugme" type="button">💨 Rüzgâr ver</button>
+            <button class="btn btn-ikincil" id="hedefDugme" type="button" title="Serbest denemede kullanılabilir">🎯 Hedefi değiştir</button>
+          </div>
+        </section>
+
+        <section class="kart o5" aria-labelledby="grafikBaslik">
+          <h2 id="grafikBaslik">Son 8 saniye</h2>
+          <div class="grafik-kutu kucuk"><canvas id="aciGrafik" role="img" aria-label="Açı ve hedef açının zamana göre grafiği"></canvas></div>
+          <div class="lejant"><span style="--renk:var(--c1)">Açı (°)</span><span style="--renk:var(--c2)">Hedef (°)</span></div>
+          <div class="grafik-kutu kucuk" style="margin-top:.6rem"><canvas id="kontrolGrafik" role="img" aria-label="Kontrol çıkışının zamana göre grafiği"></canvas></div>
+          <div class="lejant"><span style="--renk:var(--c3)">Kontrol torku (N·m)</span><span style="--renk:var(--bad)">Motor sınırı</span></div>
+        </section>
+
+        <section class="kart o4" id="sonucKart" aria-labelledby="sonucBaslik" aria-live="polite">
+          <h2 id="sonucBaslik">Sonuç</h2>
+          <div id="sonucIcerik"><p class="not">Bir deneme bitince puanın burada görünecek.</p></div>
+          <div class="dugme-satiri" style="margin-top:.6rem">
+            <button class="btn btn-ikincil" id="nedenDugme" type="button">🤔 Neden böyle oldu?</button>
+            <button class="btn btn-ikincil" id="ipucuDugme" type="button">💡 İpucu</button>
+          </div>
+          <div id="geriBildirim"></div>
+        </section>
+      </div>
+
+      <!-- ============ KONTROLLER ============ -->
+      <div class="sutun kontrol-sutun">
+        <section class="kart o1" aria-labelledby="seviyeBaslik">
+          <h2 id="seviyeBaslik">Seviyeler</h2>
+          <div class="seviye-liste" id="seviyeListe" role="group" aria-label="Seviye seçimi"></div>
+          <p class="gorev" id="gorevMetni" style="margin-top:.7rem"></p>
+          <button class="btn btn-ikincil" id="hepsiniAc" type="button" style="margin-top:.4rem">Tüm seviyeleri aç (öğretmen modu)</button>
+        </section>
+
+        <section class="kart o3" aria-labelledby="kazancBaslik">
+          <h2 id="kazancBaslik">Kazançlar</h2>
+          <p class="not">Deneme sürerken de değiştirebilirsin; etkisini anında görürsün.</p>
+
+          <div class="alan">
+            <label for="kp">P (oransal) — Kp</label>
+            <span class="sayi-kutu"><input type="number" id="kpSayi" min="0" max="3" step="0.01" aria-label="Kp sayı girişi"><span class="birim">N·m/rad</span></span>
+            <input type="range" id="kp" min="0" max="3" step="0.01">
+          </div>
+          <details class="merak" data-mini="P">
+            <summary>P nedir? (duş musluğu benzetmesi)</summary>
+            <div class="icerik">
+              <p><strong>Duşta musluğu sert çevirmek:</strong> hata ne kadar büyükse o kadar sert müdahale. Çok sertse su bir yanar bir donar.</p>
+              <canvas class="mini-anim" id="miniP" role="img" aria-label="Solda uygun P, sağda çok yüksek P ile salınan dron"></canvas>
+              <p class="not">Solda: uygun P (+ biraz D). Sağda: P çok yüksek, D yok → durmadan sallanıyor.</p>
+            </div>
+          </details>
+
+          <div class="alan">
+            <label for="ki">I (integral) — Ki</label>
+            <span class="sayi-kutu"><input type="number" id="kiSayi" min="0" max="3" step="0.01" aria-label="Ki sayı girişi"><span class="birim">N·m/(rad·s)</span></span>
+            <input type="range" id="ki" min="0" max="3" step="0.01">
+          </div>
+          <details class="merak" data-mini="I">
+            <summary>I nedir? (hatayı hatırlamak)</summary>
+            <div class="icerik">
+              <p><strong>Hatayı biriktirip hatırlamak:</strong> sıcaklık hep biraz düşük kalıyorsa musluğu yavaş yavaş açmaya devam etmek.</p>
+              <canvas class="mini-anim" id="miniI" role="img" aria-label="Sürekli rüzgârda solda I yok, sağda I var"></canvas>
+              <p class="not">İkisinde de sürekli rüzgâr var. Solda I = 0 → hep eğik kalıyor. Sağda I var → yavaşça düzeliyor.</p>
+            </div>
+          </details>
+
+          <div class="alan">
+            <label for="kd">D (türev) — Kd</label>
+            <span class="sayi-kutu"><input type="number" id="kdSayi" min="0" max="0.4" step="0.005" aria-label="Kd sayı girişi"><span class="birim">N·m·s/rad</span></span>
+            <input type="range" id="kd" min="0" max="0.4" step="0.005">
+          </div>
+          <details class="merak" data-mini="D">
+            <summary>D nedir? (fren)</summary>
+            <div class="icerik">
+              <p><strong>Değişim hızına bakıp frene basmak:</strong> sıcaklık çok hızlı yükseliyorsa durmadan önce musluğu geri çevirmek.</p>
+              <canvas class="mini-anim" id="miniD" role="img" aria-label="Solda D yok, sağda D var"></canvas>
+              <p class="not">Solda D = 0 → hedefi geçip geri dönüyor. Sağda D var → yumuşakça duruyor.</p>
+            </div>
+          </details>
+
+          <div class="dugme-satiri" style="margin-top:.4rem">
+            <button class="btn btn-ikincil" id="kazancSifir" type="button">Kazançları sıfırla</button>
+            <button class="btn btn-ikincil" id="enIyiYukle" type="button">Bu seviyedeki en iyi ayarım</button>
+          </div>
+        </section>
+
+        <section class="kart o6" aria-labelledby="znBaslik">
+          <details>
+            <summary id="znBaslik">Otomatik ayar göster (Ziegler–Nichols)</summary>
+            <div class="icerik">
+              <p>1942'den kalma, hâlâ öğretilen bir "tarif". Adımlar:</p>
+              <ol>
+                <li><strong>I ve D'yi sıfırla.</strong> Yalnızca P kalsın.</li>
+                <li><strong>P'yi yavaş yavaş artır.</strong> Dron, salınımı ne büyüyen ne sönen, <em>sabit genlikle</em> sallanmaya başlayınca dur. Bu P değerine <strong>kritik kazanç Ku</strong> denir.</li>
+                <li><strong>Salınımın periyodunu ölç</strong> (bir tepeden sonraki tepeye kadar geçen süre): <strong>Tu</strong>.</li>
+                <li><strong>Tarif:</strong> Kp = 0,6·Ku &nbsp; Ki = 1,2·Ku/Tu &nbsp; Kd = 0,075·Ku·Tu</li>
+              </ol>
+              <div class="alan"><label for="znKu">Ku (kritik kazanç)</label><span class="sayi-kutu"><input type="number" id="znKu" min="0" step="0.01"></span></div>
+              <div class="alan"><label for="znTu">Tu (periyot)</label><span class="sayi-kutu"><input type="number" id="znTu" min="0" step="0.01"><span class="birim">sn</span></span></div>
+              <div class="dugme-satiri">
+                <button class="btn btn-ikincil" id="znOlc" type="button">Benim için ölç</button>
+                <button class="btn btn-ikincil" id="znHesapla" type="button">Tarifi hesapla</button>
+                <button class="btn" id="znUygula" type="button" disabled>Kaydırıcılara yaz</button>
+              </div>
+              <p id="znSonuc" class="not" aria-live="polite"></p>
+              <p class="not">Not: Ziegler–Nichols bilerek "atak" sonuç verir (yaklaşık %25 aşım hedefler). Gürültülü seviyelerde D'yi biraz azaltman gerekebilir. Bir başlangıç noktasıdır, son söz değildir.</p>
+            </div>
+          </details>
+        </section>
+
+        <section class="kart o7">
+          <details class="varsayim">
+            <summary>Varsayımlar ve sınırlar</summary>
+            <div class="icerik">
+              <ul>
+                <li><strong>Tek eksen:</strong> Gerçek dron 3 eksende döner ve yer değiştirir; burada yalnızca yatış (roll) açısı var. Eksenler arası etkileşim yok.</li>
+                <li><strong>Dinamik:</strong> J·θ'' = τ_motor + τ_bozucu − b·θ'. J = 0,01 kg·m², b = 0,02 N·m·s/rad. Bunlar 5 inçlik bir dron için kaba büyüklük mertebesidir, ölçülmüş değerler değildir.</li>
+                <li><strong>Motorlar:</strong> En fazla ±0,5 N·m tork; komuta 30 ms zaman sabitli birinci dereceden gecikmeyle uyar. Gerçek motorların itki–devir ilişkisi doğrusal değildir.</li>
+                <li><strong>Kontrolcü:</strong> Türev terimi ölçülen açısal hızdan (jiroskop) alınır. İntegralin torka katkısı ±0,25 N·m ile sınırlıdır (anti-windup). Gerçek uçuş kontrolcülerinde (Betaflight vb.) ayrıca filtreler, ileri besleme (feedforward) ve iç-dış döngüler vardır.</li>
+                <li><strong>Entegrasyon:</strong> Sabit adım dt = 1/240 s, yarı-örtük Euler yöntemi. Çizim saniyede ~60 kare.</li>
+                <li><strong>Gürültü:</strong> Açı ölçümüne σ = 0,3°, jiroskopa σ = 0,15 rad/s Gauss gürültüsü eklenir (4. ve 5. seviye).</li>
+                <li><strong>Titreşim endeksi:</strong> Kontrol komutunun bir adımdan diğerine değişiminin karekök-ortalama değeri × 1000 (motor sınırına oranla). Birimsizdir, seviyeleri karşılaştırmak içindir.</li>
+                <li><strong>Kazanç birimleri:</strong> Kp [N·m/rad], Ki [N·m/(rad·s)], Kd [N·m·s/rad]. Bu sayılar Betaflight'taki P/I/D sayılarıyla aynı ölçekte değildir; doğrudan aktarılamaz.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Bu oyun tamamen tarayıcında çalışır. En iyi skorların yalnızca bu tarayıcıda (localStorage) saklanır; hiçbir veri dışarı gönderilmez, çerez kullanılmaz.
+  </footer>
+
+  <script src="fizik.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

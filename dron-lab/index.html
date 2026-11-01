@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dron Tasarım Laboratuvarı</title>
+  <meta name="description" content="Bir quadcopter tasarla; uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesapla.">
+  <!-- Tema seçimini sayfa çizilmeden önce uygula (yanıp sönmeyi önler). -->
+  <script>
+    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="lab">
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <!-- ÜST GEZİNME ÇUBUĞU (iki araçta da aynı) -->
+  <header class="ust-cubuk">
+    <nav aria-label="Araçlar">
+      <a class="logo" href="../">muhsinengin.com</a>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../dron/index.html">Dron Hangarı</a>
+        <a class="nav-link" href="../dron/fpv.html">FPV Rehberi</a>
+        <a class="nav-link" href="index.html" aria-current="page">Tasarım Laboratuvarı</a>
+        <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
+      </div>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+    </nav>
+  </header>
+
+  <main id="ana">
+    <div class="sayfa-baslik">
+      <h1>Dron Tasarım Laboratuvarı</h1>
+      <p>Parçaları seç, dronun uçup uçmayacağını ve nasıl uçacağını gör. Tüm sonuçlar basitleştirilmiş fizik modellerine dayanan <strong>yaklaşık</strong> tahminlerdir.</p>
+    </div>
+
+    <div class="iki-sutun">
+      <!-- ================= SOL SÜTUN: GİRDİLER ================= -->
+      <div class="sutun">
+        <section class="kart girdi-kart" aria-labelledby="girdiBaslik">
+          <h2 id="girdiBaslik">Tasarım</h2>
+          <div class="alan">
+            <label for="sablon">Hazır şablon</label>
+            <select id="sablon">
+              <option value="">— Seç —</option>
+            </select>
+          </div>
+          <!-- Girdi alanları app.js tarafından GRUPLAR listesine göre buraya eklenir -->
+          <div id="girdiler"></div>
+        </section>
+
+        <section class="kart girdi-kart" aria-labelledby="paylasBaslik">
+          <h2 id="paylasBaslik">Kaydet, paylaş, karşılaştır</h2>
+          <div class="dugme-satiri">
+            <button class="btn" id="linkKopyala" type="button">🔗 Bağlantıyı kopyala</button>
+            <button class="btn btn-ikincil" id="jsonIndir" type="button">⬇ JSON indir</button>
+            <button class="btn btn-ikincil" id="jsonYukleDugme" type="button">⬆ JSON yükle</button>
+            <input type="file" id="jsonDosya" accept=".json,application/json" hidden>
+            <button class="btn btn-ikincil yazdirma" id="yazdir" type="button">🖨 Yazdır</button>
+          </div>
+          <p class="not" id="paylasDurum" role="status" aria-live="polite"></p>
+          <hr style="border:none;border-top:1px solid var(--border)">
+          <div class="dugme-satiri">
+            <button class="btn btn-ikincil" id="slotA" type="button">A yuvasına koy</button>
+            <button class="btn btn-ikincil" id="slotB" type="button">B yuvasına koy</button>
+          </div>
+          <p class="not">İki tasarımı A ve B yuvalarına koy; sağda yan yana karşılaştırma tablosu çıkar.</p>
+        </section>
+      </div>
+
+      <!-- ================= SAĞ SÜTUN: SONUÇLAR ================= -->
+      <div class="sutun">
+        <section class="kart" aria-labelledby="degBaslik">
+          <h2 id="degBaslik">Değerlendirme</h2>
+          <div id="degerlendirme" class="degerlendirme" aria-live="polite"></div>
+        </section>
+
+        <section class="kart" aria-labelledby="sonucBaslik">
+          <h2 id="sonucBaslik">Sonuçlar <span class="yaklasik">yaklaşık</span></h2>
+          <div class="sonuc-grid" id="sonuclar"></div>
+
+          <details class="merak">
+            <summary>Merak edenlere: İtki/ağırlık oranı (TWR)</summary>
+            <div class="icerik">
+              <p>Bir bisikletçinin güç/ağırlık oranı gibi düşün: dağa tırmanmak için güç/ağırlık yüksek olmalı. TWR = 2 demek, motorların tam gazda dronun ağırlığının iki katı kadar itebilmesi demek. Fazlası tırmanmaya, hızlanmaya ve rüzgârla mücadeleye gider.</p>
+            </div>
+          </details>
+          <details class="merak">
+            <summary>Merak edenlere: Hover gazı</summary>
+            <div class="icerik">
+              <p>Arabanın rölantide durması gibi: aracı yerinde tutmak için basman gereken gaz yüzdesi. Hover gazı düşükse elinde bolca "yedek güç" var; %70'in üstündeyse dron neredeyse tüm gücünü sadece havada durmaya harcıyor.</p>
+            </div>
+          </details>
+          <details class="merak">
+            <summary>Merak edenlere: Uçuş süresi</summary>
+            <div class="icerik">
+              <p>Depodaki yakıt / tüketim hesabı. Batarya kapasitesi (mAh) depo büyüklüğü, hover akımı (A) da saatteki tüketim gibidir. Bataryayı tamamen boşaltmak ona zarar verir; bu yüzden yalnızca %80'ini kullanıyoruz.</p>
+              <p>Hesaplanan süre <strong>sakin havada asılı kalma</strong> içindir. Hızlı ve agresif uçuşta akım birkaç kat artar; gerçek süre bunun yarısı, hatta üçte biri olabilir.</p>
+            </div>
+          </details>
+          <details class="merak">
+            <summary>Merak edenlere: Pervane neden itki üretir?</summary>
+            <div class="icerik">
+              <p>Pervane, havayı sürekli aşağı iten dönen bir kanattır. Kürek çekmek gibi: suyu geriye ittikçe kayık ileri gider. İtki devrin karesiyle (n²) ve çapın dördüncü kuvvetiyle (D⁴) artar. Yani çapı biraz büyütmek itkiyi çok artırır ama motorun çektiği güç (n³·D⁵) daha da hızlı yükselir.</p>
+            </div>
+          </details>
+        </section>
+
+        <section class="kart" aria-labelledby="grafikBaslik">
+          <h2 id="grafikBaslik">Grafikler</h2>
+          <h3>İtki – gaz eğrisi <span class="yaklasik">yaklaşık</span></h3>
+          <div class="grafik-kutu"><canvas id="itkiGrafik" role="img" aria-label="Gaz yüzdesine göre toplam itki grafiği"></canvas></div>
+          <div class="lejant"><span style="--renk:var(--c1)">Toplam itki (g)</span><span style="--renk:var(--c2)">Dronun ağırlığı (g)</span></div>
+          <p class="grafik-aciklama">Mavi eğrinin turuncu çizgiyi kestiği nokta hover gazıdır.</p>
+
+          <h3 style="margin-top:1rem">Uçuş süresi – ek yük <span class="yaklasik">yaklaşık</span></h3>
+          <div class="grafik-kutu"><canvas id="sureGrafik" role="img" aria-label="Ek yüke göre tahmini uçuş süresi grafiği"></canvas></div>
+          <div class="lejant"><span style="--renk:var(--c3)">Hover uçuş süresi (dk)</span><span style="--renk:var(--c2)">Şu anki ek yük</span></div>
+          <p class="grafik-aciklama">Eğri, dronun ancak havada kalabildiği yükte biter.</p>
+
+          <h3 style="margin-top:1rem">Ağırlık dağılımı</h3>
+          <div class="agirlik-bar" id="agirlikBar" role="img" aria-label="Ağırlık dağılımı"></div>
+          <div class="lejant" id="agirlikLejant"></div>
+        </section>
+
+        <section class="kart" aria-labelledby="formulBaslik">
+          <h2 id="formulBaslik">Kullanılan formüller (şu anki değerlerle)</h2>
+          <div id="formuller" class="formul" style="overflow-x:auto"></div>
+        </section>
+
+        <section class="kart" id="karsilastirKart" aria-labelledby="karsBaslik" hidden>
+          <h2 id="karsBaslik">Karşılaştırma: A ve B</h2>
+          <div class="tablo-kap"><table id="karsilastirTablo"></table></div>
+          <div class="dugme-satiri" style="margin-top:.6rem">
+            <button class="btn btn-ikincil" id="yukleA" type="button">A'yı düzenle</button>
+            <button class="btn btn-ikincil" id="yukleB" type="button">B'yi düzenle</button>
+          </div>
+        </section>
+
+        <!-- Yalnızca yazdırırken görünen girdi özeti -->
+        <section class="kart yalniz-yazdir">
+          <h2>Tasarım girdileri</h2>
+          <table id="yazdirGirdiler"></table>
+        </section>
+
+        <section class="kart">
+          <details class="varsayim">
+            <summary>Varsayımlar ve sınırlar</summary>
+            <div class="icerik">
+              <ul>
+                <li><strong>Hava yoğunluğu:</strong> P = 101325·(1 − 2,25577·10⁻⁵·h)^5,25588 (Standart Atmosfer) ve ρ = P/(R·T), R = 287,05 J/(kg·K). Nem ihmal edildi (nemli hava biraz daha hafiftir).</li>
+                <li><strong>Batarya gerilimi:</strong> Hücre başına 3,7 V nominal. Yük altında gerilim düşümü için iç direnç R ≈ 0,5/(Ah·C) Ω varsayıldı. Bu benim kaba yaklaşımımdır; gerçek paketlerin iç direnci üreticiye ve yaşa göre çok değişir. Batarya boşaldıkça gerilim de düşer; bu etki modellenmedi.</li>
+                <li><strong>Motor devri:</strong> RPM ≈ KV · V_yük · 0,80. Gerçekte yük altındaki devir, pervanenin ne kadar "ağır" olduğuna ve motorun sargı direncine bağlıdır. Ağır pervanede oran 0,70'e iner, hafifte 0,85'e çıkar.</li>
+                <li><strong>Pervane katsayıları:</strong> Ct ≈ (0,07 + 0,06·hatve/çap)·k, Cp ≈ (0,02 + 0,06·hatve/çap)·k; 3 kanat için k = 1,25 (Ct) ve 1,40 (Cp). Bu doğrusal ilişkiler benim basitleştirmemdir; yalnızca yayımlanmış statik pervane ölçümlerinin genel aralığına oturacak şekilde seçildi. Belirli bir pervane için hata ±%20–30 olabilir. Kanal (duct), pervane şekli ve malzeme etkisi yoktur.</li>
+                <li><strong>Verim:</strong> Tam gazda motor+ESC verimi η = 0,75, hover'da 0,62 kabul edildi. Elektronik için sabit 3 W eklendi.</li>
+                <li><strong>Hover gazı:</strong> "İtki gazın karesiyle artar" (T ∝ gaz²) kabulüyle √(W/T_maks). Gerçek ESC'lerde gaz-devir ilişkisi tam doğrusal değildir.</li>
+                <li><strong>Uçuş süresi:</strong> Sakin havada sabit hover için; bataryanın %80'i kullanılır. İleri uçuş, rüzgâr, manevra ve soğuk hava süreyi kısaltır. Agresif uçuşta gerçek süre yarıya veya üçte bire düşebilir.</li>
+                <li><strong>Çeviklik puanı:</strong> Fiziksel bir birim değildir; TWR ve pervane boyutundan türetilmiş öğretici bir endekstir.</li>
+                <li><strong>Ne zaman sapar?</strong> Pervane ucu ses hızına yaklaşınca (Mach &gt; 0,7), çok küçük pervanelerde (düşük Reynolds sayısı), aşırı yüklü bataryalarda ve 6/8 motorlu yapılarda pervanelerin birbirini etkilediği durumlarda sonuçlar iyimser olabilir.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Telefonda altta görünen kısa özet (geniş ekranda gizli) -->
+  <div class="ozet-serit" id="ozetSerit" aria-hidden="true"></div>
+
+  <footer>
+    Bu araç tamamen tarayıcında çalışır; hiçbir veri toplanmaz, çerez kullanılmaz, dışarıya istek gönderilmez.
+  </footer>
+
+  <script src="hesap.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

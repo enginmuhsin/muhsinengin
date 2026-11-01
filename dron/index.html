@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dron Hangarı</title>
+  <meta name="description" content="Dron tasarla, hesapla ve dengede tut: Dron Tasarım Laboratuvarı ile PID Ayar Oyunu'nun buluştuğu hangar.">
+  <script>
+    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="hangar.css">
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Araçlar">
+      <a class="logo" href="../">muhsinengin.com</a>
+      <div class="nav-linkler">
+        <a class="nav-link" href="index.html" aria-current="page">Dron Hangarı</a>
+        <a class="nav-link" href="fpv.html">FPV Rehberi</a>
+        <a class="nav-link" href="../dron-lab/index.html">Tasarım Laboratuvarı</a>
+        <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
+      </div>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+    </nav>
+  </header>
+
+  <main id="ana">
+    <section class="hero">
+      <div>
+        <h1>Dron Hangarı</h1>
+        <p class="alt">Bir dronu önce kâğıt üzerinde tasarlarsın, sonra onu havada dengede tutmayı öğrenirsin. Hangarda iki araç var: biri <strong>atölye</strong>, öbürü <strong>uçuş simülatörü</strong>. İkisi de tarayıcında çalışır; kurulum, hesap ya da veri paylaşımı yok.</p>
+        <div class="dugme-satir">
+          <a class="dugme birincil" href="../dron-lab/index.html">Atölyeye gir: Tasarım Laboratuvarı</a>
+          <a class="dugme" href="../pid-oyunu/index.html">Simülatöre geç: PID Ayar Oyunu</a>
+          <a class="dugme" href="fpv.html">FPV Rehberi</a>
+        </div>
+      </div>
+      <div class="hero-gorsel" aria-hidden="true">
+        <svg viewBox="0 0 320 320" role="img" focusable="false">
+          <g class="gövde-gezin">
+            <g stroke="var(--text)" stroke-width="8" stroke-linecap="round">
+              <line x1="70" y1="70" x2="250" y2="250"/><line x1="250" y1="70" x2="70" y2="250"/>
+            </g>
+            <rect x="130" y="130" width="60" height="60" rx="14" fill="var(--accent)"/>
+            <circle cx="160" cy="160" r="9" fill="var(--accent-ink)"/>
+            <g fill="var(--muted)">
+              <circle cx="70" cy="70" r="12"/><circle cx="250" cy="70" r="12"/><circle cx="70" cy="250" r="12"/><circle cx="250" cy="250" r="12"/>
+            </g>
+            <g fill="var(--c2)" opacity=".85">
+              <ellipse class="pervane" cx="70" cy="70" rx="44" ry="7"/>
+              <ellipse class="pervane ters" cx="250" cy="70" rx="44" ry="7"/>
+              <ellipse class="pervane ters" cx="70" cy="250" rx="44" ry="7"/>
+              <ellipse class="pervane" cx="250" cy="250" rx="44" ry="7"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="bolum" aria-labelledby="yol">
+      <h2 id="yol">Önerilen yol: üç adım</h2>
+      <p>Bir pilot gibi düşün: önce uçağı tasarlarsın, sonra uçmayı öğrenirsin, en sonunda gerçek dünyayla karşılaştırırsın.</p>
+      <div class="izgara">
+        <article class="kart adim-kart">
+          <span class="adim-no" aria-hidden="true">1</span>
+          <h3>Tasarla</h3>
+          <p>Çerçeve, motor, pervane ve bataryayı seç. Laboratuvar dronun uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesaplar.</p>
+          <p class="benzetme"><strong>Benzetme:</strong> Bir yemek tarifinin malzeme listesini hazırlamak gibi. Henüz pişirmiyorsun ama sonucun lezzetli mi yanık mı olacağını tahmin edebiliyorsun.</p>
+          <div class="dugme-satir"><a class="dugme" href="../dron-lab/index.html">Laboratuvara git</a></div>
+        </article>
+        <article class="kart adim-kart">
+          <span class="adim-no" aria-hidden="true">2</span>
+          <h3>Dengele</h3>
+          <p>P, I ve D kazançlarını ayarlayarak sanal dronu rüzgâra ve darbelere karşı dengede tut. Beş seviye var; her denemeden sonra "Neden böyle oldu?" diye sorabilirsin.</p>
+          <p class="benzetme"><strong>Benzetme:</strong> Bisiklet sürmeyi öğrenmek gibi. Direksiyonu çok sert kırarsan sallanırsın, hiç kırmazsan devrilirsin; doğru ölçüyü deneyerek bulursun.</p>
+          <div class="dugme-satir"><a class="dugme" href="../pid-oyunu/index.html">Oyuna git</a></div>
+        </article>
+        <article class="kart adim-kart">
+          <span class="adim-no" aria-hidden="true">3</span>
+          <h3>Gerçekle karşılaştır</h3>
+          <p>Lab'ın tahminlerini motor üreticisinin itki test tablosuyla karşılaştır, hata yüzdesini hesapla ve katsayıları kendi donanımına göre ayarla.</p>
+          <p class="benzetme"><strong>Benzetme:</strong> Hava durumu tahminini pencereden bakarak kontrol etmek gibi. Tahmin ne kadar tutuyorsa ona o kadar güvenirsin.</p>
+          <p><span class="etiket-kucuk">Rehber: BENİ-OKU, bölüm 4 ve 5</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bolum" aria-labelledby="sozluk">
+      <h2 id="sozluk">Beş kavram, beş benzetme</h2>
+      <p>Araçlarda sık göreceğin terimlerin gündelik hayattaki karşılıkları:</p>
+      <div class="kart">
+        <dl class="kavram">
+          <dt>İtki/ağırlık oranı (TWR)</dt>
+          <dd>Bir halterci kendi ağırlığının kaç katını kaldırabiliyorsa, dron da kendi ağırlığının o kadar katı itki üretir. 1'in altında yerden hiç kalkamaz.
+            <div class="teknik">Teknik: tüm motorların toplam itkisi ÷ dronun ağırlığı.</div></dd>
+          <dt>Hover gazı</dt>
+          <dd>Bisikletle düz yolda sabit hızda gitmek için pedala vereceğin güç. Ne kadar azsa verimlisin, ne kadar çoksa yoruluyorsun.
+            <div class="teknik">Teknik: dronu havada sabit tutmak için gereken gaz yüzdesi.</div></dd>
+          <dt>KV değeri</dt>
+          <dd>Bisikletin vites oranı gibi: yüksek KV'de motor "hafif vitesle" çok hızlı döner ama zayıf çeker; düşük KV'de yavaş ama güçlü döner, büyük pervane çevirir.
+            <div class="teknik">Teknik: motorun yüksüz, volt başına dev/dk değeri.</div></dd>
+          <dt>C değeri</dt>
+          <dd>Batarya bir su deposuysa kapasite deponun hacmi, C değeri çıkıştaki musluğun kalınlığıdır. Büyük depo da olsa ince musluktan hızlı su alamazsın.
+            <div class="teknik">Teknik: sürekli akım sınırı = kapasite × C.</div></dd>
+          <dt>PID kontrolü</dt>
+          <dd>Arabayı şeritte tutmak gibi. <strong>P</strong> şeride dönmek için direksiyonu çevirme şiddeti, <strong>I</strong> rüzgâr hep aynı yana itiyorsa direksiyonu biraz sürekli çevirili tutmak, <strong>D</strong> ise fazla savrulmayı önleyen fren ve amortisör.
+            <div class="teknik">Teknik: oransal, integral ve türev geri besleme kazançları.</div></dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="bolum" aria-labelledby="gorev">
+      <h2 id="gorev">Mini görevler</h2>
+      <p>Araçları keşfetmek için küçük meydan okumalar. Hepsini bir arkadaşınla yarışarak da deneyebilirsin.</p>
+      <div class="kart">
+        <ol class="gorev-liste">
+          <li><strong>Hafif ve uzun:</strong> Laboratuvarda hover süresi 10 dakikayı geçen ama TWR değeri 4'ün altına düşmeyen bir 5" dron tasarla. Hangi parçayı değiştirmek en çok işe yarıyor?</li>
+          <li><strong>Tek başına P:</strong> PID oyununun 1. seviyesini yalnızca P kazancıyla geçmeye çalış. Dron neden sallanıyor? Sonra D'yi ekle ve farkı gör.</li>
+          <li><strong>Sürpriz rüzgâr:</strong> 3. seviyede I kazancını sıfırdan başlayıp çok küçük adımlarla artır. Rüzgârın kalıcı itişini ne zaman "hatırlamaya" başlıyor?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="bolum" aria-labelledby="yakinda">
+      <h2 id="yakinda">Hangara eklenebilecek fikirler</h2>
+      <p>Bunlar henüz yapılmadı; sadece planlanan fikirler.</p>
+      <div class="izgara">
+        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>Lab'dan oyuna aktarım</h3><p>Laboratuvardaki tasarımının ağırlığı ve itkisi PID oyununda dronun gerçek "hantallığını" belirlesin. Ağır dron daha yavaş tepki versin.</p></article>
+        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>3B dron modeli</h3><p>Seçtiğin pervane ve çerçeve boyutuna göre dönen, ölçekli bir dron görünümü.</p></article>
+        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>Gerçek uçuş kaydı yükle</h3><p>Kendi dronunun uçuş verisini yükleyip Lab'ın tahminiyle aynı grafikte karşılaştır.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Bu sayfa ve iki araç tamamen tarayıcında çalışır; hiçbir veri toplanmaz, çerez kullanılmaz, dışarıya istek gönderilmez. Sonuçlar basitleştirilmiş modellere dayanan tahminlerdir.
+  </footer>
+
+  <script src="hangar.js"></script>
+</body>
+</html>
