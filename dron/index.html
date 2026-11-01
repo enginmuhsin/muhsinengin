@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dron Hangarı</title>
   <meta name="description" content="Dron tasarla, hesapla ve dengede tut: Dron Tasarım Laboratuvarı ile PID Ayar Oyunu'nun buluştuğu hangar.">
-  <script>
-    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
-  </script>
+  <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
+  <script src="../tema.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="hangar.css">
 </head>
@@ -23,7 +22,7 @@
         <a class="nav-link" href="../dron-lab/index.html">Tasarım Laboratuvarı</a>
         <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
       </div>
-      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
     </nav>
   </header>
 

@@ -7,6 +7,8 @@
 <meta name="description" content="Muhsin ENGİN'in projeleri: matematik ve geometri oyunları (Master Class, Geometri Atölyesi, MEDAR), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
 <meta name="theme-color" content="#f5f7fa">
 <link rel="icon" href="simge.svg" type="image/svg+xml">
+<!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
+<script src="tema.js"></script>
 <style>
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -64,8 +66,10 @@ body { overflow-x: clip; }
 /* Grup sekmeleri: tıklayınca altında alt girişler açılır */
 .ayrac { position: relative; z-index: 30; }
 .sekme-grup { position: relative; }
-.ayrac > a, .sekme { text-decoration: none; font: inherit; font-weight: 700; font-size: .95rem; line-height: 1.6; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep); background: var(--kagit); color: var(--murekkep); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.sekme:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
+.ayrac > a, .sekme, .tema-sekme { text-decoration: none; font: inherit; font-weight: 700; font-size: .95rem; line-height: 1.6; padding: 8px 14px 9px; border-radius: 10px 10px 0 0; border: 1.5px solid var(--kare-kalin); border-bottom: 3px solid var(--murekkep); background: var(--kagit); color: var(--murekkep); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.tema-sekme { gap: 7px; }
+.tema-ikon { font-size: 1.05em; line-height: 1; }
+.tema-sekme:hover, .sekme:hover { background: color-mix(in srgb, var(--murekkep) 8%, var(--kagit)); }
 .sekme[aria-expanded="true"] { border-bottom-color: var(--kirmizi); color: var(--metin); background: color-mix(in srgb, var(--murekkep) 6%, var(--kagit)); }
 .sekme-ok { width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform .2s; }
 .sekme[aria-expanded="true"] .sekme-ok { transform: translateY(1px) rotate(-135deg); }
@@ -82,7 +86,7 @@ body { overflow-x: clip; }
 .sekme-grup:last-of-type .acilir { left: auto; right: 0; }
 @media (max-width: 760px) {
   .ayrac { justify-content: flex-start; padding-left: 14px; gap: 4px; }
-  .ayrac > a, .sekme { font-size: .88rem; padding: 7px 10px 8px; }
+  .ayrac > a, .sekme, .tema-sekme { font-size: .88rem; padding: 7px 10px 8px; }
   .sekme-grup { position: static; }
   .acilir, .sekme-grup:last-of-type .acilir { left: 14px; right: 0; width: auto; }
 }
@@ -310,6 +314,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   </div>
   <a href="#takvim">Takvim</a>
   <a href="#baglantilar">Bağlantılar</a>
+  <button type="button" class="tema-sekme" data-tema-dugme aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
 </nav>
 
 <header class="acilis">

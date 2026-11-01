@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PID Ayar Oyunu</title>
   <meta name="description" content="P, I ve D kazançlarını ayarlayarak sanal bir dronu rüzgâra karşı dengede tut. PID kontrolü oynayarak öğren.">
-  <script>
-    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
-  </script>
+  <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
+  <script src="../tema.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,7 +21,7 @@
         <a class="nav-link" href="../dron-lab/index.html">Tasarım Laboratuvarı</a>
         <a class="nav-link" href="index.html" aria-current="page">PID Ayar Oyunu</a>
       </div>
-      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
     </nav>
   </header>
 

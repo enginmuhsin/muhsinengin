@@ -59,15 +59,8 @@
   /* ===================================================================
      3) TEMA DÜĞMESİ (Dron Lab ile aynı)
      =================================================================== */
-  $('temaDugme').addEventListener('click', () => {
-    const kok = document.documentElement;
-    const koyu = kok.getAttribute('data-theme') === 'dark' ||
-      (!kok.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    const yeni = koyu ? 'light' : 'dark';
-    kok.setAttribute('data-theme', yeni);
-    try { localStorage.setItem('site-tema', yeni); } catch (e) { /* sessizce geç */ }
-    ciz();
-  });
+  // Düğme ../tema.js tarafından bağlanır; tema değişince sahne ve grafikler yeniden çizilsin
+  document.addEventListener('temadegisti', () => ciz());
 
   /* ===================================================================
      4) KAZANÇ KAYDIRICILARI

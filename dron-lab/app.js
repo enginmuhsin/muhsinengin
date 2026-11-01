@@ -68,15 +68,8 @@
      1) TEMA DÜĞMESİ — açık/koyu arasında geçiş yapar, seçimi hatırlar.
      =================================================================== */
   function temaKur() {
-    $('temaDugme').addEventListener('click', () => {
-      const kok = document.documentElement;
-      const suAnKoyu = kok.getAttribute('data-theme') === 'dark' ||
-        (!kok.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      const yeni = suAnKoyu ? 'light' : 'dark';
-      kok.setAttribute('data-theme', yeni);
-      try { localStorage.setItem('site-tema', yeni); } catch (e) { /* sessizce geç */ }
-      guncelle();   // grafik renkleri değişsin
-    });
+    // Düğme ../tema.js tarafından bağlanır; tema değişince grafik renkleri yenilensin
+    document.addEventListener('temadegisti', () => guncelle());
   }
 
   /* ===================================================================

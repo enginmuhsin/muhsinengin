@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dron Tasarım Laboratuvarı</title>
   <meta name="description" content="Bir quadcopter tasarla; uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesapla.">
-  <!-- Tema seçimini sayfa çizilmeden önce uygula (yanıp sönmeyi önler). -->
-  <script>
-    try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
-  </script>
+  <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
+  <script src="../tema.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="lab">
@@ -24,7 +22,7 @@
         <a class="nav-link" href="index.html" aria-current="page">Tasarım Laboratuvarı</a>
         <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
       </div>
-      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Temayı değiştir">🌓 Tema</button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
     </nav>
   </header>
 
