@@ -206,9 +206,30 @@
     agirlikCiz(s);
     yazdirTablosu();
     karsilastirmaCiz();
+    onizlemeGuncelle(s);
     // Adres çubuğunu çok sık değiştirmemek için kısa bir gecikme
     clearTimeout(hashZamanlayici);
     hashZamanlayici = setTimeout(hashYaz, 300);
+  }
+
+  /* 3B önizleme (dron3d.js): girdilerden ölçekli model; uçamıyorsa yerde, uçuyorsa
+     pervaneler hover gazıyla orantılı hızda döner. */
+  let onizleme = null;
+  function onizlemeGuncelle(s) {
+    const tv = $('dron3b');
+    if (!tv || !window.Dron3D) return;
+    if (!onizleme) {
+      onizleme = Dron3D.Sahne(tv, { yakinlik: 1.85 });
+      const pd = $('labPatlat');
+      if (pd) pd.addEventListener('click', () => {
+        const acik = pd.getAttribute('aria-pressed') !== 'true';
+        pd.setAttribute('aria-pressed', String(acik)); pd.textContent = acik ? 'Parçaları birleştir' : 'Parçaları ayır';
+        onizleme.patlat(acik ? 1 : 0);
+      });
+    }
+    onizleme.ayarla(Dron3D.tasarimdan(tasarim));
+    onizleme.ucus(!!s.ucabilir);
+    onizleme.hiz(s.ucabilir ? .45 + 1.4 * Math.min(1, s.hoverGaz) : .25);
   }
 
   function degerlendirmeCiz(d) {

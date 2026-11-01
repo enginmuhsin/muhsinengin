@@ -70,6 +70,12 @@
 
       <!-- ================= SAĞ SÜTUN: SONUÇLAR ================= -->
       <div class="sutun">
+        <section class="kart onizleme-kart" aria-labelledby="onizBaslik">
+          <h2 id="onizBaslik">3B önizleme <span class="yaklasik">ölçekli şema</span></h2>
+          <canvas id="dron3b" class="dron3b-tuval" role="img" aria-label="Tasarımın 3B şeması: motor sayısı, kol uzunluğu, pervane çapı, kanat sayısı ve batarya boyutu girdilere göre değişir."></canvas>
+          <p class="not">Sürükleyerek çevir. Pervaneler hover gazına göre hızlanır; tasarım uçamıyorsa dron yerde bekler. <button type="button" class="metin-dugme" id="labPatlat" aria-pressed="false">Parçaları ayır</button></p>
+        </section>
+
         <section class="kart" aria-labelledby="degBaslik">
           <h2 id="degBaslik">Değerlendirme</h2>
           <div id="degerlendirme" class="degerlendirme" aria-live="polite"></div>
@@ -172,6 +178,7 @@
     Bu araç tamamen tarayıcında çalışır; hiçbir veri toplanmaz, çerez kullanılmaz, dışarıya istek gönderilmez.
   </footer>
 
+  <script src="dron3d.js"></script>
   <script src="hesap.js"></script>
   <script src="app.js"></script>
 </body>

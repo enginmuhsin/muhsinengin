@@ -150,6 +150,25 @@ figcaption a { color: var(--murekkep); }
 @keyframes ciz { to { stroke-dashoffset: 0; } }
 @keyframes belir { to { opacity: 1; } }
 
+/* İsmin üstünde uçan dronlar */
+#filo { display: block; width: 100%; height: clamp(110px, 13vw, 150px); margin: 0 0 2px; pointer-events: none; }
+/* Görsel açıklaması: tıklanınca açılan panel */
+.sahne-bilgi { margin-top: 10px; position: relative; z-index: 6; }
+.sahne-bilgi > summary { list-style: none; display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; cursor: pointer; padding: 6px 14px 6px 6px; border: 1.5px solid var(--kare-kalin); border-radius: 999px; background: var(--kagit); color: var(--murekkep); font-weight: 700; font-size: .95rem; transition: border-color .15s, background .15s; }
+.sahne-bilgi > summary::-webkit-details-marker { display: none; }
+.sahne-bilgi > summary:hover { border-color: var(--murekkep); background: color-mix(in srgb, var(--murekkep) 6%, var(--kagit)); }
+.sb-i { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--murekkep); color: var(--kagit); font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: .95rem; }
+.sb-ipucu { font-weight: 400; color: var(--kursun); font-size: .85rem; }
+.sahne-bilgi[open] > summary { border-color: var(--kirmizi); }
+.sb-izgara { position: absolute; left: 0; right: 0; bottom: calc(100% + 10px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px; background: var(--kagit); border: 1.5px solid var(--kare-kalin); border-top: 3px solid var(--kirmizi); border-radius: 14px; box-shadow: 0 18px 40px rgba(10, 18, 50, .2); max-height: min(70vh, 560px); overflow: auto; }
+.sb-kart { background: color-mix(in srgb, var(--kagit) 92%, var(--murekkep)); border: 1px solid var(--kare-kalin); border-left: 4px solid var(--sb); border-radius: 10px; padding: 10px 12px; }
+.sb-kart h4 { margin: 0 0 3px; font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.12rem; color: var(--metin); }
+.sb-kart p { margin: 0; font-size: .9rem; line-height: 1.5; color: var(--kursun); }
+.sb-kart i { font-family: "Fraunces", Georgia, serif; color: var(--metin); }
+@media (prefers-reduced-motion: no-preference) { .sahne-bilgi[open] .sb-kart { animation: sbAc .35s ease both; } .sahne-bilgi[open] .sb-kart:nth-child(2) { animation-delay: .04s; } .sahne-bilgi[open] .sb-kart:nth-child(3) { animation-delay: .08s; } .sahne-bilgi[open] .sb-kart:nth-child(4) { animation-delay: .12s; } .sahne-bilgi[open] .sb-kart:nth-child(5) { animation-delay: .16s; } .sahne-bilgi[open] .sb-kart:nth-child(6) { animation-delay: .2s; } }
+@keyframes sbAc { from { opacity: 0; transform: translateY(6px); } }
+@media (max-width: 560px) { .sb-izgara { position: static; grid-template-columns: minmax(0, 1fr); margin-top: 10px; box-shadow: none; max-height: none; } }
+
 /* ---------- İçindekiler ---------- */
 .icindekiler { margin-top: 32px; }
 h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6vw, 2.2rem); margin: 0 0 6px; color: var(--kirmizi); letter-spacing: -.01em; }
@@ -285,6 +304,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <header class="acilis">
   <canvas id="zemin" aria-hidden="true"></canvas>
   <div>
+    <canvas id="filo" aria-hidden="true"></canvas>
     <h1>Muhsin <span>ENGİN</span></h1>
     <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
     <p class="tanitim-ek">Uzun yıllar pek çok özel ve devlet okulunda uzman matematik öğretmeni, proje koordinatörü ve öğrenci araştırma projelerinde mentör olarak çalıştım. Bugün BİLSEM'de öğrencilerle bilim projeleri yürütüyorum. Matematiksel yazılım ve geometri, emek vermeyi en çok sevdiğim iki alan.</p>
@@ -304,7 +324,17 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <span class="denklem d8 d-kursun">ω₁r₁ = ω₂r₂</span>
       <span class="denklem d9 d-mavi">T = 2π√(L/g)</span>
     </div>
-    <figcaption>Düzgün onikiyüzlünün içine kırmızı bir küp sığar; Öklid bunu Elemanlar'ın son kitabında gösterir. Arkada birim çemberde dönen nokta, yüksekliğini sağa taşıyarak sinüs eğrisini çiziyor. Cismin arkasında, kenarı birim çembere oturan tahta da oyunum MEDAR; üçgenleri sırayla 120° döner. Cismin çevresinde pervaneleri dönen bir dron yörüngede dolaşıyor; köşedeki 12 ve 8 dişli çarklar ω₁r₁ = ω₂r₂ kuralıyla birbirini çeviriyor. Cismi sürükleyerek çevirebilirsin.</figcaption>
+    <details class="sahne-bilgi">
+      <summary><span class="sb-i" aria-hidden="true">i</span><span class="sb-baslik">Bu görselde neler var?</span><span class="sb-ipucu">Cismi sürükleyerek çevirebilirsin</span></summary>
+      <div class="sb-izgara">
+        <div class="sb-kart" style="--sb: var(--murekkep)"><h4>Onikiyüzlü ve küp</h4><p>Düzgün onikiyüzlünün içine kırmızı bir küp tam olarak sığar. Öklid bunu <i>Elemanlar</i>'ın son kitabında gösterir.</p></div>
+        <div class="sb-kart" style="--sb: var(--murekkep)"><h4>Birim çember ve sinüs</h4><p>Çemberde dönen nokta, yüksekliğini sağa taşıyarak <i>y = sin x</i> eğrisini kalemle çiziyormuş gibi koyulaştırır.</p></div>
+        <div class="sb-kart" style="--sb: var(--kirmizi)"><h4>MEDAR</h4><p>Cismin arkasındaki tahta, kenarı birim çembere oturan strateji oyunum; üçgenleri sırayla 120° döner.</p></div>
+        <div class="sb-kart" style="--sb: var(--turuncu)"><h4>Dronlar</h4><p>Komşu pervaneler ters yönlere döner; böylece dönme etkileri birbirini sıfırlar ve dron kendi etrafında dönmez.</p></div>
+        <div class="sb-kart" style="--sb: var(--kursun)"><h4>Dişliler</h4><p>12 ve 8 dişli çarklar: küçüğü 1,5 kat hızlı ve ters yönde döner, çünkü kenar hızları eşittir: <i>ω₁r₁ = ω₂r₂</i>.</p></div>
+        <div class="sb-kart" style="--sb: var(--kirmizi)"><h4>Fizik formülleri</h4><p><i>F = m·a</i> Newton'un ikinci yasası; <i>T = 2π√(L/g)</i> küçük salınımlı bir sarkacın periyodu.</p></div>
+      </div>
+    </details>
   </figure>
 </header>
 
@@ -733,6 +763,56 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   const grubuAc = (id) => { const d = document.getElementById(id); if (d && d.tagName === "DETAILS") d.open = true; };
   document.querySelectorAll(".acilir .tumu").forEach((a) => a.addEventListener("click", () => { grubuAc(a.dataset.grup); kapat(); }));
   if (location.hash) grubuAc(location.hash.slice(1));
+})();
+</script>
+<script src="dron/dron3d.js"></script>
+<script>
+/* Görsel açıklama paneli: dışarı tıklayınca ya da Esc ile kapanır */
+(function () {
+  const d = document.querySelector(".sahne-bilgi"); if (!d) return;
+  document.addEventListener("click", (e) => { if (d.open && !d.contains(e.target)) d.open = false; });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && d.open) { d.open = false; d.querySelector("summary").focus(); } });
+})();
+/* İsmin üstünde uçan iki dron (dron/dron3d.js ile çizilir). Sekiz çizer gibi dolaşırlar,
+   gittikleri yöne döner ve burunlarını hafifçe öne eğerler; arkalarında kesik çizgili bir iz kalır. */
+(function () {
+  const tv = document.getElementById("filo"); if (!tv || !window.Dron3D) return;
+  const g = tv.getContext("2d"), az = matchMedia("(prefers-reduced-motion: reduce)");
+  let W = 0, H = 0, oran = 1, t = 3, son = 0, gorunur = true;
+  const renk = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
+  const D = [
+    { renk: "#16a394", hiz: .3, faz: 2.6, r: 30, kanat: 2, iz: [] },
+    { renk: "#e8892a", hiz: .4, faz: 0, r: 40, kanat: 3, iz: [] },
+  ];
+  function boyut() { const r = tv.getBoundingClientRect(); oran = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; tv.width = W * oran; tv.height = H * oran; g.setTransform(oran, 0, 0, oran, 0, 0); }
+  function konum(d, t) {
+    const a = t * d.hiz + d.faz, b = 2 * a + d.faz;
+    return { x: W * (.5 + .42 * Math.sin(a)), y: H * (.5 + .26 * Math.sin(b)), vx: .42 * W * Math.cos(a) * d.hiz, vy: .52 * H * Math.cos(b) * d.hiz };
+  }
+  function kare() {
+    if (!W) return;
+    g.clearRect(0, 0, W, H);
+    const metin = renk("--metin") || "#1b2433";
+    D.forEach((d, i) => {
+      const k = konum(d, t);
+      d.iz.push([k.x, k.y]); if (d.iz.length > 90) d.iz.shift();
+      g.strokeStyle = d.renk; g.lineWidth = 1.4; g.setLineDash([2, 6]); g.globalAlpha = .5;
+      g.beginPath(); d.iz.forEach((p, j) => (j ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.stroke(); g.setLineDash([]);
+      g.globalAlpha = .08; g.fillStyle = "#000"; g.beginPath(); g.ellipse(k.x, k.y + d.r * .9, d.r * 1.1, d.r * .28, 0, 0, 7); g.fill(); g.globalAlpha = 1;
+      const r = { cerceve: metin, plaka: d.renk, motor: "#7d8794", motorUst: "#d8dee5", pervane: d.renk, pcb: "#1f8a4c", vtx: "#2c5aa0", batarya: d.renk, kamera: "#1c1f24", lens: "#0b0d10", anten: d.renk };
+      const prim = Dron3D.model({ kol: 4, L: 1, pervane: .52, kanat: d.kanat, batarya: .85, t: t * 45 + i }, r);
+      const yaw = Math.atan2(k.vx, -k.vy), donus = Math.max(-.35, Math.min(.35, (k.vx * Math.cos(t * d.hiz * 2) ) / (W * .9)));
+      Dron3D.ciz(g, prim, { yaw: 0, pitch: .78, mesafe: 400, f: 400, cx: k.x, cy: k.y }, { olcek: d.r / 1.52, yaw, pitch: .2, roll: donus });
+    });
+  }
+  function dongu(zm) {
+    const dt = Math.min(.05, (zm - (son || zm)) / 1000); son = zm;
+    if (gorunur && !az.matches) { t += dt; kare(); }
+    requestAnimationFrame(dongu);
+  }
+  new ResizeObserver(() => { boyut(); kare(); }).observe(tv);
+  if ("IntersectionObserver" in window) new IntersectionObserver((e) => { gorunur = e[0].isIntersecting; }).observe(tv);
+  boyut(); kare(); requestAnimationFrame(dongu);
 })();
 </script>
 </body>

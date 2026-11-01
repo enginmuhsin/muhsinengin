@@ -300,3 +300,9 @@ kbd { font-family: inherit; font-size: .8rem; border: 1px solid var(--border); b
   body.lab { padding-bottom: 52px; }
 }
 @media print { .ozet-serit { display: none !important; } }
+
+/* ---------- 3B önizleme (dron3d.js) ---------- */
+.dron3b-tuval { display: block; width: 100%; height: 260px; border-radius: 10px;
+  background: radial-gradient(120% 90% at 50% 15%, var(--panel) 35%, var(--panel-2) 100%); border: 1px solid var(--border); }
+.metin-dugme { font: inherit; font-weight: 700; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+@media print { .onizleme-kart { display: none !important; } }

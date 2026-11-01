@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FPV Rehberi</title>
-  <meta name="description" content="FPV nedir, hangi video sistemi seçilir, Betaflight ne işe yarar, nereden başlanır ve Türkiye'de hangi kurallara dikkat edilir? Benzetmelerle başlangıç rehberi.">
+  <meta name="description" content="FPV nedir, bir FPV dronunun içinde neler var, hangi video sistemi seçilir, gecikme nedir, nereden başlanır ve Türkiye'de hangi kurallara dikkat edilir? Etkileşimli başlangıç rehberi.">
   <script>
     try { var t = localStorage.getItem('site-tema'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
   </script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="hangar.css">
 </head>
-<body>
+<body class="fpv-sayfa">
   <a class="atla" href="#ana">İçeriğe atla</a>
 
   <header class="ust-cubuk">
@@ -28,121 +28,195 @@
   </header>
 
   <main id="ana">
-    <div class="sayfa-baslik">
-      <h1>FPV Rehberi</h1>
-      <p>FPV, dronu <strong>dronun gözünden</strong> uçurmaktır. Bu sayfa, bu dünyaya yeni giren biri için ekipmanı, video sistemlerini, yazılımı ve ilk adımları sade bir dille anlatır.</p>
-      <p class="tarih-not">Bilgiler Kasım 2026 itibarıyla derlendi. Ürünler ve kurallar hızlı değiştiği için sayfanın sonundaki kaynaklardan güncel durumu kontrol et.</p>
-    </div>
+    <!-- ============ AÇILIŞ: GÖZLÜK GÖRÜNTÜSÜ ============ -->
+    <section class="fpv-hero">
+      <div class="fpv-hero-yazi">
+        <span class="ust-etiket">Etkileşimli başlangıç rehberi</span>
+        <h1>Dronun gözünden uçmak</h1>
+        <p class="alt">FPV, "First Person View" yani <strong>birinci şahıs görüşü</strong> demektir. Dronun burnundaki küçük kamera, görüntüyü anında gözlüğüne yollar; küçücük bir kokpitin içinde oturuyormuşsun gibi uçarsın. Yandaki ekran, böyle bir gözlüğün içinden görünen manzarayı canlandırıyor.</p>
+        <nav class="icerik-cipleri" aria-label="Bu sayfada">
+          <a href="#parcalar">Dronun içi</a><a href="#video">Video sistemi</a><a href="#gecikme">Gecikme</a><a href="#yazilim">Yazılım</a><a href="#baslangic">Nereden başlamalı?</a><a href="#guvenlik">Kurallar</a><a href="#sozluk">Sözlük</a>
+        </nav>
+        <p class="tarih-not">Bilgiler Kasım 2026 itibarıyla derlendi; ürünler ve kurallar hızlı değişir, sayfa sonundaki kaynaklardan kontrol et.</p>
+      </div>
+      <figure class="gozluk">
+        <div class="gozluk-cerceve">
+          <canvas id="gozluk" role="img" aria-label="Sanal FPV gözlüğü görüntüsü: dron tarlanın üzerinde turuncu yarış kapılarının içinden geçiyor; ekranın köşelerinde batarya gerilimi, süre, irtifa ve hız yazıyor."></canvas>
+        </div>
+        <div class="gozluk-kontrol">
+          <div class="secici" role="group" aria-label="Görüntü sistemi">
+            <button type="button" data-gozluk="dijital" aria-pressed="true">Dijital</button>
+            <button type="button" data-gozluk="analog" aria-pressed="false">Analog</button>
+          </div>
+          <button type="button" class="kucuk-dugme" id="gozlukDur">❚❚ Duraklat</button>
+        </div>
+        <figcaption id="gozlukNot" aria-live="polite"></figcaption>
+      </figure>
+    </section>
 
-    <section class="bolum" aria-labelledby="nedir">
-      <h2 id="nedir">FPV nedir?</h2>
-      <div class="kart">
-        <p>FPV, "First Person View" yani "birinci şahıs görüşü" demektir. Dronun burnundaki küçük kamera, görüntüyü anında gözlüğüne yollar. Sanki küçücük bir kokpitin içinde oturuyormuşsun gibi uçarsın.</p>
-        <p class="benzetme"><strong>Benzetme:</strong> Uzaktan kumandalı arabayı kenardan izlemekle, arabanın tavanına bir kamera takıp sürücü koltuğundan sürmek arasındaki fark gibi. İkincisinde hız ve dönüşler çok daha gerçek hissedilir.</p>
-        <p>Bu rehberdeki <a href="../dron-lab/index.html">Tasarım Laboratuvarı</a> ve <a href="../pid-oyunu/index.html">PID Ayar Oyunu</a>, FPV dronların arkasındaki fiziği ve kontrol mantığını anlamana yardım eder.</p>
+    <!-- ============ 3B PARÇA GEZGİNİ ============ -->
+    <section class="bolum" id="parcalar" aria-labelledby="parcaH">
+      <h2 id="parcaH">Bir FPV dronunun içi</h2>
+      <p>Bir parçaya dokun: dronda parlasın, içeride kalan kartlar görünsün diye dron katlarına ayrılsın.</p>
+      <div class="parca-duzen kart belir-kaydir">
+        <canvas id="parca3b" class="dron3b-tuval" role="img" aria-label="Döndürülebilir 3B FPV dronu; seçilen parça vurgulanır."></canvas>
+        <div class="parca-panel">
+          <div class="parca-dugmeler" role="group" aria-label="Parçalar">
+            <button type="button" data-parca="cerceve">Çerçeve</button>
+            <button type="button" data-parca="motor">Motorlar</button>
+            <button type="button" data-parca="pervane">Pervaneler</button>
+            <button type="button" data-parca="fc">Uçuş kartı</button>
+            <button type="button" data-parca="vtx">Video verici</button>
+            <button type="button" data-parca="kamera">Kamera</button>
+            <button type="button" data-parca="anten">Anten</button>
+            <button type="button" data-parca="batarya">Batarya</button>
+          </div>
+          <div class="parca-bilgi" aria-live="polite">
+            <h3 id="parcaBaslik">Bir parçaya dokun</h3>
+            <p id="parcaMetin"></p>
+            <p class="benzetme" id="parcaBenzetme"></p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="ara-baslik">Dronun dışında: tam bir FPV sistemi</h3>
+      <div class="izgara sistem-izgara">
+        <article class="kart sistem-kart belir-kaydir">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 10 L38 38 M38 10 L10 38"/><circle cx="10" cy="10" r="6"/><circle cx="38" cy="10" r="6"/><circle cx="10" cy="38" r="6"/><circle cx="38" cy="38" r="6"/><rect x="19" y="19" width="10" height="10" rx="2" class="dolgu"/></svg>
+          <h3>Dron</h3><p>Çerçeve, motorlar, pervaneler, uçuş kartı ve kamera.</p><span class="benzetme-kucuk">Arabanın kendisi</span></article>
+        <article class="kart sistem-kart belir-kaydir">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="16" width="36" height="22" rx="6"/><circle cx="16" cy="27" r="4"/><circle cx="32" cy="27" r="4"/><path d="M14 16 V6 M34 16 V8"/></svg>
+          <h3>Kumanda</h3><p>Komutları dronun alıcısına yollar. Yaygın bağlantı: açık kaynaklı ExpressLRS (ELRS).</p><span class="benzetme-kucuk">Direksiyon ve pedallar</span></article>
+        <article class="kart sistem-kart belir-kaydir">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 18 q0 -6 6 -6 h26 q6 0 6 6 v8 q0 6 -6 6 h-7 l-3 -4 h-6 l-3 4 h-7 q-6 0 -6 -6 z"/><circle cx="16" cy="22" r="3" class="dolgu"/><circle cx="32" cy="22" r="3" class="dolgu"/></svg>
+          <h3>Gözlük</h3><p>Kamera ve video vericiyle aynı sistemden olmalı. En önemli seçim budur.</p><span class="benzetme-kucuk">Ön cam ve ekran</span></article>
+        <article class="kart sistem-kart belir-kaydir">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="30" height="24" rx="3"/><path d="M38 20 h4 v8 h-4"/><path d="M22 16 l-5 9 h7 l-4 9" class="vurgu-cizgi"/></svg>
+          <h3>Pil ve şarj</h3><p>LiPo bataryalar çok güç verir ama dikkat ister (aşağıda).</p><span class="benzetme-kucuk">Yakıt deposu</span></article>
       </div>
     </section>
 
-    <section class="bolum" aria-labelledby="parcalar">
-      <h2 id="parcalar">Bir FPV sistemi dört parçadan oluşur</h2>
-      <p>Bir arabanın motoru, direksiyonu, camı ve deposu gibi, her parçanın ayrı bir işi var.</p>
-      <div class="izgara">
-        <article class="kart"><h3>1. Dron</h3><p>Çerçeve, motorlar, pervaneler ve uçuş kontrol kartı. Bu parçaların ağırlığını ve gücünü Tasarım Laboratuvarı'nda deneyebilirsin.</p><p class="benzetme">Arabanın kendisi.</p></article>
-        <article class="kart"><h3>2. Kumanda (radyo)</h3><p>Komutları dronun alıcısına gönderir. Günümüzde yaygın bağlantı protokolü ExpressLRS (ELRS). Bu protokol açık kaynaklıdır ve hem hızlı hem uzun menzillidir.</p><p class="benzetme">Direksiyon ve pedallar.</p></article>
-        <article class="kart"><h3>3. Video sistemi</h3><p>Dronda kamera ve video vericisi (VTX), sende gözlük. Üç parça birbiriyle uyumlu olmak zorunda; bu yüzden en önemli seçim budur.</p><p class="benzetme">Ön cam ve torpido ekranı.</p></article>
-        <article class="kart"><h3>4. Pil ve şarj</h3><p>LiPo bataryalar çok güç verir ama dikkat ister. Şarj cihazı ve batarya güvenliği ayrı bir konudur (aşağıda).</p><p class="benzetme">Yakıt deposu ve yakıt pompası.</p></article>
+    <!-- ============ VİDEO SİSTEMİ ============ -->
+    <section class="bolum" id="video" aria-labelledby="videoH">
+      <h2 id="videoH">Video sistemi: analog mu dijital mi?</h2>
+      <p>Yukarıdaki gözlükte iki düğmeyle farkı görebilirsin. Analog, cızırtılı bir telsiz gibidir: kaba ama anlık. Dijital, canlı televizyon yayını gibidir: net ama çok küçük bir gecikmeyle. Gecikme ve menzil sayıları kaynağa ve ayara göre değiştiği için burada kesin sayı yerine karakterleri veriyorum.</p>
+      <div class="izgara sistem-kartlari">
+        <article class="kart vs-kart belir-kaydir" style="--vs: #8a8f98"><h3>Analog</h3>
+          <p class="vs-arti">En ucuz, çok düşük gecikme, her marka birbiriyle uyumlu.</p><p class="vs-eksi">Görüntü düşük kaliteli ve parazitli.</p><p class="vs-kim">Bütçesi kısıtlı olanlar, minik dronlar, yarışçılar</p></article>
+        <article class="kart vs-kart belir-kaydir" style="--vs: #2f6fdb"><h3>DJI (O4)</h3>
+          <p class="vs-arti">En iyi görüntü kalitesi, güvenilir bağlantı, dronda 4K kayıt.</p><p class="vs-eksi">Kapalı sistem: yalnızca DJI gözlükle çalışır; pahalı.</p><p class="vs-kim">Sinematik ve serbest stil uçuşu</p></article>
+        <article class="kart vs-kart belir-kaydir" style="--vs: #1aa38f"><h3>Walksnail Avatar</h3>
+          <p class="vs-arti">Fiyat/performans dengesi, farklı gözlüklerle esneklik.</p><p class="vs-eksi">Görüntü ve gecikmede DJI ile HDZero arasında.</p><p class="vs-kim">Dijitale daha uygun fiyatla geçmek isteyenler</p></article>
+        <article class="kart vs-kart belir-kaydir" style="--vs: #e0731e"><h3>HDZero</h3>
+          <p class="vs-arti">Çok düşük ve sabit gecikme; sinyal zayıflayınca analog gibi yavaş yavaş bozulur.</p><p class="vs-eksi">Çözünürlük daha düşük.</p><p class="vs-kim">Yarışçılar</p></article>
+        <article class="kart vs-kart belir-kaydir" style="--vs: #8b5cf6"><h3>OpenIPC</h3>
+          <p class="vs-arti">Açık kaynak, kurcalama ve öğrenme ruhu.</p><p class="vs-eksi">Yeni ve henüz olgunlaşmamış.</p><p class="vs-kim">Meraklılar ve yazılımcılar</p></article>
+      </div>
+      <p class="benzetme"><strong>Benzetme:</strong> Telefon markası seçmek gibi. DJI kendi dünyasında kusursuz çalışan ama başka markalarla konuşmayan bir sistemdir. Analog ve HDZero ise farklı üreticilerin birbirine bağlanabildiği daha açık bir pazar gibidir. <strong>İlk kez başlıyorsan</strong> önce gözlüğü seç; kamera ve verici ona uymak zorunda.</p>
+    </section>
+
+    <!-- ============ GECİKME DENEYİ ============ -->
+    <section class="bolum" id="gecikme" aria-labelledby="gecikmeH">
+      <h2 id="gecikmeH">Gecikmeyi hisset</h2>
+      <p>Görüntü gözlüğe ulaşana kadar geçen süreye gecikme denir. Aşağıdaki alanda imleci ya da parmağını gezdir: <span class="mavi-yazi">mavi dron</span> gerçek yeri, <span class="turuncu-yazi">turuncu dron</span> gözlükte gördüğündür. Kaydırıcıyla gecikmeyi değiştir.</p>
+      <div class="kart gecikme-kart belir-kaydir">
+        <canvas id="gecikmeAlan" class="gecikme-tuval" role="img" aria-label="Gecikme deneyi: mavi dron imleci izler, turuncu dron seçilen gecikme kadar geriden gelir."></canvas>
+        <div class="gecikme-kontrol">
+          <label for="gecikmeMs">Gecikme</label>
+          <input type="range" id="gecikmeMs" min="0" max="200" step="5" value="40">
+          <output id="gecikmeEtiket" for="gecikmeMs">40 ms</output>
+        </div>
+        <p id="gecikmeMesafe" class="gecikme-sonuc" aria-live="polite"></p>
       </div>
     </section>
 
-    <section class="bolum" aria-labelledby="video">
-      <h2 id="video">Video sistemi: analog mu dijital mi?</h2>
-      <p>Analog sistem cızırtılı bir telsiz gibi çalışır: görüntü kaba ama anlıktır. Dijital sistem ise canlı televizyon yayını gibidir: net ama çok küçük bir gecikmeyle gelir. Sayısal gecikme ve menzil değerleri kaynağa ve ayara göre değiştiği için aşağıda kesin sayılar yerine genel karakterleri veriyorum.</p>
-      <div class="tablo-kaydir kart">
-        <table class="karsilastir">
-          <caption class="sr-only">FPV video sistemlerinin karşılaştırması</caption>
-          <thead><tr><th scope="col">Sistem</th><th scope="col">Güçlü yanı</th><th scope="col">Zayıf yanı</th><th scope="col">Kime uygun</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Analog</th><td>En ucuz, çok düşük gecikme, her marka birbiriyle uyumlu</td><td>Görüntü kalitesi düşük, parazitli</td><td>Bütçesi kısıtlı olanlar, minik whoop'lar, yarışçılar</td></tr>
-            <tr><th scope="row">DJI (O4)</th><td>En iyi görüntü kalitesi ve güvenilir link, dronda 4K kayıt</td><td>Kapalı ekosistem: yalnızca DJI gözlükle çalışır; pahalı</td><td>Sinematik ve serbest stil uçuşu</td></tr>
-            <tr><th scope="row">Walksnail Avatar</th><td>Fiyat/performans dengesi, farklı gözlüklerle esneklik</td><td>Görüntü ve gecikmede DJI ile HDZero arasında bir yerde</td><td>Dijital deneyimi daha uygun fiyata isteyenler</td></tr>
-            <tr><th scope="row">HDZero</th><td>Çok düşük ve sabit gecikme, sinyal zayıflayınca analog gibi kademeli bozulma</td><td>Görüntü çözünürlüğü daha düşük</td><td>Yarışçılar</td></tr>
-            <tr><th scope="row">OpenIPC</th><td>Açık kaynak, deneme ruhu</td><td>Yeni ve henüz olgunlaşmamış</td><td>Meraklılar ve yazılımcılar</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="benzetme"><strong>Benzetme:</strong> Telefon markası seçmek gibi. DJI, kendi dünyasında her şeyin kusursuz çalıştığı ama başka markalarla konuşmayan bir sistem gibidir. Analog ve HDZero ise farklı üreticilerin birbirine bağlanabildiği, daha açık bir pazar gibi.</p>
-      <p><strong>İlk kez başlıyorsan:</strong> Önce gözlüğü seç; gözlük hangi sistemi destekliyorsa kamera ve verici de ona uymalı. Bütçe önemliyse analogla başlamak mantıklı, ama dijitale geçmeyi düşünüyorsan baştan dijital sistem almak daha ucuza gelir.</p>
-    </section>
-
-    <section class="bolum" aria-labelledby="yazilim">
-      <h2 id="yazilim">Dronun beyni: uçuş yazılımı</h2>
-      <div class="kart">
-        <p>Uçuş kontrol kartındaki yazılıma <strong>firmware</strong> denir. Pilotun komutlarını okur, sensörlerden dronun eğimini öğrenir ve motorlara saniyede binlerce kez yeni hız gönderir. Bu iş PID kontrolüyle yapılır; PID Ayar Oyunu'nda bunun küçük bir benzerini oynuyorsun.</p>
-        <dl class="kavram">
-          <dt>Betaflight</dt>
-          <dd>Yarış ve serbest stil için en yaygın yazılım. Ücretsiz ve açık kaynak. Sürüm numarası yeni bir düzene geçti: 2025.12'den itibaren "yıl.ay" biçiminde, ve Haziran 2026'da 2026.6 sürümü çıktı. Ayarlar <a href="https://app.betaflight.com/">app.betaflight.com</a> adresindeki web uygulamasıyla yapılır.</dd>
-          <dt>INAV</dt>
-          <dd>GPS'li, rota izleyen uçuşlar için güçlü seçenek. Uzun menzil ve otomatik görevlerde tercih edilir.</dd>
-          <dt>ArduPilot</dt>
-          <dd>Büyük ve profesyonel sistemlerde, haritalama ve otonom görevlerde kullanılır.</dd>
-        </dl>
-        <p class="benzetme"><strong>Benzetme:</strong> Firmware, bilgisayardaki işletim sistemi gibidir. Donanım aynı kalsa da yazılımı değiştirince davranış değişir. Betaflight'ı güncellemek için kullandığın Configurator sürümü, kartın yazılım sürümüyle uyumlu olmalıdır.</p>
+    <!-- ============ YAZILIM ============ -->
+    <section class="bolum" id="yazilim" aria-labelledby="yazilimH">
+      <h2 id="yazilimH">Dronun beyni: uçuş yazılımı</h2>
+      <div class="yazilim-duzen">
+        <figure class="kart dongu-kart belir-kaydir">
+          <svg class="dongu-svg" viewBox="0 0 320 240" role="img" aria-label="Kontrol döngüsü: sensör eğimi ölçer, uçuş kartı PID ile hesaplar, motorlar hızlanır ya da yavaşlar, dronun eğimi değişir ve döngü yeniden başlar.">
+            <path id="donguYol" d="M160 30 A 110 90 0 1 1 159.9 30" class="dongu-yol"/>
+            <g class="dugum"><rect x="110" y="10" width="100" height="40" rx="12"/><text x="160" y="35">Sensör</text></g>
+            <g class="dugum vurgu"><rect x="230" y="100" width="84" height="40" rx="12"/><text x="272" y="125">PID</text></g>
+            <g class="dugum"><rect x="110" y="190" width="100" height="40" rx="12"/><text x="160" y="215">Motorlar</text></g>
+            <g class="dugum"><rect x="6" y="100" width="94" height="40" rx="12"/><text x="53" y="125">Eğim</text></g>
+            <circle r="7" class="dongu-nokta"><animateMotion dur="2.6s" repeatCount="indefinite" rotate="auto"><mpath href="#donguYol"/></animateMotion></circle>
+            <text x="160" y="126" class="dongu-orta">saniyede</text><text x="160" y="144" class="dongu-orta">binlerce kez</text>
+          </svg>
+          <figcaption>Uçuş kartı bu döngüyü durmadan çevirir. <a href="../pid-oyunu/index.html">PID Ayar Oyunu</a>'nda bu döngünün küçük bir benzerini kendin ayarlayabilirsin.</figcaption>
+        </figure>
+        <div class="kart belir-kaydir">
+          <p>Uçuş kartındaki yazılıma <strong>firmware</strong> denir. Pilotun komutlarını okur, sensörlerden eğimi öğrenir ve motorlara yeni hız gönderir.</p>
+          <dl class="kavram">
+            <dt>Betaflight</dt>
+            <dd>Yarış ve serbest stil için en yaygın yazılım; ücretsiz ve açık kaynak. Sürüm numaraları 2025.12'den itibaren "yıl.ay" biçiminde; Haziran 2026'da 2026.6 sürümü çıktı. Ayarlar <a href="https://app.betaflight.com/">app.betaflight.com</a> web uygulamasıyla yapılır.</dd>
+            <dt>INAV</dt><dd>GPS'li, rota izleyen uçuşlar ve uzun menzil için güçlü seçenek.</dd>
+            <dt>ArduPilot</dt><dd>Büyük ve profesyonel sistemlerde, haritalama ve otonom görevlerde.</dd>
+          </dl>
+          <p class="benzetme"><strong>Benzetme:</strong> Firmware, bilgisayardaki işletim sistemi gibidir: donanım aynı kalsa da yazılım değişince davranış değişir.</p>
+        </div>
       </div>
     </section>
 
-    <section class="bolum" aria-labelledby="baslangic">
-      <h2 id="baslangic">Nereden başlamalı? Dört basamak</h2>
-      <div class="izgara">
-        <article class="kart adim-kart"><span class="adim-no" aria-hidden="true">1</span><h3>Simülatör</h3><p>Gerçek dron almadan önce bilgisayarda uç. Liftoff, Velocidrone ve DRL Simulator yaygın seçeneklerdir. Gerçek kumandanı USB ile bağlayabilirsin; böylece parmaklarının hafızası gerçek uçuşa taşınır.</p><p class="benzetme">Direksiyon dersinden önce simülatörde araba kullanmak gibi. Hatanın bedeli sıfır.</p></article>
-        <article class="kart adim-kart"><span class="adim-no" aria-hidden="true">2</span><h3>Minik whoop</h3><p>Pervane korumalı, hafif ve ucuz küçük dronlarla evin içinde başla. Düşünce kırılmaz, kimseye zarar vermez.</p><p class="benzetme">Bisikletin yan tekerlekleri.</p></article>
-        <article class="kart adim-kart"><span class="adim-no" aria-hidden="true">3</span><h3>Hazır set (BNF)</h3><p>"Bind-and-Fly" hazır dronlar alıcıyla gelir, sen sadece kumandanı eşleştirirsin. Kendin dron yapmadan önce kalibrasyon ve ayar mantığını öğrenmek için iyi bir yoldur.</p><p class="benzetme">Mobilya montajı yerine hazır dolap almak.</p></article>
-        <article class="kart adim-kart"><span class="adim-no" aria-hidden="true">4</span><h3>Kendi dronunu yap</h3><p>Parçaları seçip lehimleyerek 5 inç bir dron kur. Önce Tasarım Laboratuvarı'nda parça uyumunu ve hover gazını hesaplayabilirsin.</p><p class="benzetme">Yemek yapmayı öğrenmenin son aşaması: kendi tarifini yazmak.</p><div class="dugme-satir"><a class="dugme" href="../dron-lab/index.html">Laboratuvara git</a></div></article>
+    <!-- ============ BAŞLANGIÇ YOLU ============ -->
+    <section class="bolum" id="baslangic" aria-labelledby="baslangicH">
+      <h2 id="baslangicH">Nereden başlamalı? Dört basamak</h2>
+      <ol class="zaman-cizgisi">
+        <li class="belir-kaydir"><span class="zc-no">1</span><div class="kart"><h3>Simülatör</h3><p>Bilgisayarda uç: Liftoff, Velocidrone, DRL Simulator yaygın seçenekler. Gerçek kumandanı USB ile bağla; parmak hafızan gerçek uçuşa taşınır.</p><p class="benzetme-kucuk">Direksiyon dersinden önce simülatör. Hatanın bedeli sıfır.</p></div></li>
+        <li class="belir-kaydir"><span class="zc-no">2</span><div class="kart"><h3>Minik dron</h3><p>Pervane korumalı, hafif ve ucuz küçük dronlarla evin içinde başla. Düşünce kırılmaz, kimseye zarar vermez.</p><p class="benzetme-kucuk">Bisikletin yan tekerlekleri.</p></div></li>
+        <li class="belir-kaydir"><span class="zc-no">3</span><div class="kart"><h3>Hazır set (BNF)</h3><p>"Bind-and-Fly" dronlar alıcıyla gelir; sadece kumandanı eşleştirirsin. Ayar mantığını öğrenmek için iyi bir yol.</p><p class="benzetme-kucuk">Mobilya montajı yerine hazır dolap.</p></div></li>
+        <li class="belir-kaydir"><span class="zc-no">4</span><div class="kart"><h3>Kendi dronunu yap</h3><p>Parçaları seç, lehimle, kur. Önce <a href="../dron-lab/index.html">Tasarım Laboratuvarı</a>'nda parça uyumunu ve hover gazını hesapla.</p><p class="benzetme-kucuk">Yemek yapmanın son aşaması: kendi tarifini yazmak.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- ============ GÜVENLİK ============ -->
+    <section class="bolum" id="guvenlik" aria-labelledby="guvenlikH">
+      <h2 id="guvenlikH">Güvenlik ve kurallar</h2>
+      <div class="uyari-kutu belir-kaydir">
+        <p><strong>Önemli:</strong> Bu bölüm genel bilgi verir, hukuki danışmanlık değildir. Mevzuat yeni değişti; uçmadan önce SHGM'nin resmi sayfalarından güncel durumu kontrol et.</p>
+      </div>
+      <div class="izgara guvenlik-izgara">
+        <div class="kart belir-kaydir">
+          <h3>Türkiye'de neler biliniyor?</h3>
+          <ul class="ikonlu">
+            <li>Sivil dron uçuşlarını Sivil Havacılık Genel Müdürlüğü (SHGM) düzenler; kayıtlar <a href="https://iha.shgm.gov.tr">iha.shgm.gov.tr</a> üzerinden yapılır.</li>
+            <li>Haberlere ve hukuk bürolarının rehberlerine göre 500 gram ve üzeri insansız hava araçları için kayıt zorunlu; daha hafif hobi dronlar için kayıt zorunlu olmasa da uçuş kuralları geçerli.</li>
+            <li>Haberlere göre SHGM'nin yeni İHA Sistemleri Talimatı 30 Temmuz 2026'da yürürlüğe girdi; geçiş hükümleri nedeniyle ayrıntılar değişebilir.</li>
+            <li>Havalimanı çevresi ve yasak bölgelerde izinsiz uçuş ciddi yaptırımlara yol açabilir. Başkalarının mahremiyetine saygı zorunludur.</li>
+          </ul>
+          <p>Dronunun ağırlığını <a href="../dron-lab/index.html">Tasarım Laboratuvarı</a>'ndaki "Toplam kütle" kartında görebilirsin.</p>
+        </div>
+        <div class="kart belir-kaydir">
+          <h3>LiPo batarya güvenliği</h3>
+          <ul class="ikonlu">
+            <li>Şişmiş, ezilmiş ya da hasarlı bataryayı kullanma ve şarj etme.</li>
+            <li>Şarj ederken yanında ol; yanmaz bir kapta ya da LiPo çantasında şarj et.</li>
+            <li>Kullandıktan sonra bataryayı depolama gerilimine getir; dolu halde günlerce bekletme.</li>
+            <li>Pervaneleri ancak uçuş alanında tak; masada pervaneli dron çalıştırma.</li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <section class="bolum" aria-labelledby="guvenlik">
-      <h2 id="guvenlik">Güvenlik ve kurallar</h2>
-      <div class="uyari-kutu">
-        <p><strong>Önemli:</strong> Bu bölüm genel bilgi verir, hukuki danışmanlık değildir. Mevzuat yeni değişti; uçuş yapmadan önce mutlaka SHGM'nin resmi sayfalarından güncel durumu kontrol et.</p>
-      </div>
-      <div class="kart">
-        <h3>Türkiye'de neler biliniyor?</h3>
-        <ul>
-          <li>Sivil dron uçuşları Sivil Havacılık Genel Müdürlüğü (SHGM) tarafından düzenleniyor ve kayıt işlemleri <a href="https://iha.shgm.gov.tr">iha.shgm.gov.tr</a> üzerinden yürütülüyor.</li>
-          <li>Haberlere ve hukuk bürolarının rehberlerine göre 500 gram ve üzeri insansız hava araçları için kayıt zorunlu; 500 gramın altındaki hobi dronlar için kayıt zorunlu olmasa da uçuş kuralları geçerli.</li>
-          <li>Haberlere göre SHGM'nin yeni İHA Sistemleri Talimatı 30 Temmuz 2026'da yürürlüğe girdi. Kayıt, pilot yetkilendirme ve izin süreçlerini kapsıyor; geçiş hükümleri nedeniyle uygulamanın ayrıntıları değişebilir.</li>
-          <li>Havalimanı çevresi ve yasak bölgelerde izinsiz uçuş ciddi yaptırımlara yol açabilir. Başkalarının mahremiyetine saygı göstermek de bir zorunluluktur.</li>
-        </ul>
-        <p>Dronunun ağırlığını bilmek bu yüzden önemli: Tasarım Laboratuvarı'ndaki "Toplam kütle" kartı, tasarımın 250 gram ya da 500 gram sınırına göre nerede durduğunu hızlıca görmeni sağlar.</p>
-      </div>
-      <div class="kart" style="margin-top:16px">
-        <h3>LiPo batarya güvenliği</h3>
-        <ul>
-          <li>Şişmiş, ezilmiş ya da hasarlı bataryayı kullanma ve şarj etme.</li>
-          <li>Şarj ederken yanında ol, yanmaz bir kapta ya da LiPo çantasında şarj et.</li>
-          <li>Kullandıktan sonra bataryayı depolama gerilimine getir; dolu halde günlerce bekletme.</li>
-          <li>Pervane takılıyken dronu masada çalıştırma; pervaneleri ancak uçuş alanında tak.</li>
-        </ul>
+    <!-- ============ SÖZLÜK ============ -->
+    <section class="bolum" id="sozluk" aria-labelledby="sozlukH">
+      <h2 id="sozlukH">Mini sözlük</h2>
+      <div class="sozluk-izgara">
+        <div class="sozluk-kart belir-kaydir"><b>VTX</b><span>Video verici. Kameranın görüntüsünü gözlüğe yollayan küçük radyo.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>ELRS</b><span>ExpressLRS. Kumanda ile dron arasındaki açık kaynaklı radyo bağlantısı.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>Acro modu</b><span>Dron kendini düzeltmez, eğimi sen yönetirsin. Angle modunda dron kendiliğinden yatay kalmaya çalışır.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>Whoop</b><span>Pervane korumalı, çok küçük ve hafif dron.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>BNF</b><span>"Bind-and-Fly": alıcısı takılı hazır dron.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>Hover</b><span>Dronun havada sabit durması. Hover gazı düştükçe güç payın artar.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>PID</b><span>Hedef eğimi tutturan üç kazanç: oransal, integral, türev. <a href="../pid-oyunu/index.html">Oyunda dene</a>.</span></div>
+        <div class="sozluk-kart belir-kaydir"><b>OSD</b><span>Gözlük görüntüsünün üstüne yazılan batarya, süre, hız gibi bilgiler.</span></div>
       </div>
     </section>
 
-    <section class="bolum" aria-labelledby="sozluk">
-      <h2 id="sozluk">Mini sözlük</h2>
-      <div class="kart">
-        <dl class="kavram">
-          <dt>VTX</dt><dd>Video verici. Kameranın görüntüsünü gözlüğe yollayan küçük radyo.</dd>
-          <dt>ELRS</dt><dd>ExpressLRS. Kumanda ile dron arasında konuşan açık kaynaklı radyo bağlantısı.</dd>
-          <dt>Acro modu</dt><dd>Dron kendini düzeltmez; eğimi sen yönetirsin. Hem eğlenceli hem zor. Angle modunda ise dron kendiliğinden yatay kalmaya çalışır.</dd>
-          <dt>Whoop</dt><dd>Pervane korumalı, çok küçük ve hafif dron.</dd>
-          <dt>BNF</dt><dd>"Bind-and-Fly". Alıcısı takılı hazır dron; kumandanı eşleştirip uçarsın.</dd>
-          <dt>Hover</dt><dd>Dronun havada sabit durması. Hover gazı ne kadar düşükse güç payın o kadar fazladır.</dd>
-          <dt>PID</dt><dd>Dronun hedef eğimini tutturmasını sağlayan üç kazanç: oransal, integral ve türev. Oyunda denemek için <a href="../pid-oyunu/index.html">PID Ayar Oyunu</a>'na bak.</dd>
-        </dl>
-      </div>
-    </section>
-
-    <section class="bolum" aria-labelledby="kaynak">
-      <h2 id="kaynak">Kaynaklar ve daha fazlası</h2>
+    <!-- ============ KAYNAKLAR ============ -->
+    <section class="bolum" id="kaynak" aria-labelledby="kaynakH">
+      <h2 id="kaynakH">Kaynaklar ve daha fazlası</h2>
       <div class="kart">
         <ul class="kaynaklar">
           <li><a href="https://oscarliang.com/fpv-system/">Oscar Liang: 2026'da hangi FPV sistemi alınmalı?</a> (video sistemlerinin ayrıntılı karşılaştırması)</li>
@@ -151,7 +225,7 @@
           <li><a href="https://intofpv.com">IntoFPV forumu</a> (başlangıç soruları için büyük bir topluluk)</li>
           <li><a href="https://iha.shgm.gov.tr">SHGM İHA Kayıt Sistemi</a> (resmi kayıt ve mevzuat)</li>
         </ul>
-        <p class="tarih-not">Bu sayfa tavsiye değil, bilgilendirme amaçlıdır. Ürün adları ilgili şirketlere aittir.</p>
+        <p class="tarih-not">Bu sayfa tavsiye değil, bilgilendirme amaçlıdır. Ürün adları ilgili şirketlere aittir. Gözlük görüntüsü ve gecikme deneyi öğretici canlandırmalardır; gerçek sistemlerin birebir kopyası değildir.</p>
       </div>
     </section>
   </main>
@@ -160,6 +234,8 @@
     Bu sayfa tamamen tarayıcında çalışır; hiçbir veri toplanmaz, çerez kullanılmaz. Bilgiler Kasım 2026 itibarıyla derlenmiştir.
   </footer>
 
+  <script src="dron3d.js"></script>
   <script src="hangar.js"></script>
+  <script src="fpv.js"></script>
 </body>
 </html>

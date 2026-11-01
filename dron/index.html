@@ -38,25 +38,21 @@
           <a class="dugme" href="fpv.html">FPV Rehberi</a>
         </div>
       </div>
-      <div class="hero-gorsel" aria-hidden="true">
-        <svg viewBox="0 0 320 320" role="img" focusable="false">
-          <g class="gövde-gezin">
-            <g stroke="var(--text)" stroke-width="8" stroke-linecap="round">
-              <line x1="70" y1="70" x2="250" y2="250"/><line x1="250" y1="70" x2="70" y2="250"/>
-            </g>
-            <rect x="130" y="130" width="60" height="60" rx="14" fill="var(--accent)"/>
-            <circle cx="160" cy="160" r="9" fill="var(--accent-ink)"/>
-            <g fill="var(--muted)">
-              <circle cx="70" cy="70" r="12"/><circle cx="250" cy="70" r="12"/><circle cx="70" cy="250" r="12"/><circle cx="250" cy="250" r="12"/>
-            </g>
-            <g fill="var(--c2)" opacity=".85">
-              <ellipse class="pervane" cx="70" cy="70" rx="44" ry="7"/>
-              <ellipse class="pervane ters" cx="250" cy="70" rx="44" ry="7"/>
-              <ellipse class="pervane ters" cx="70" cy="250" rx="44" ry="7"/>
-              <ellipse class="pervane" cx="250" cy="250" rx="44" ry="7"/>
-            </g>
-          </g>
-        </svg>
+      <div class="hero-gorsel hangar-3b">
+        <canvas id="hangar3b" class="dron3b-tuval" role="img" aria-label="Döndürülebilir 3B dron modeli. Seçilen şablona göre kol uzunluğu, pervane ve motor sayısı değişir."></canvas>
+        <div class="sablon-satir" role="group" aria-label="Dron şablonu">
+          <button type="button" class="sablon" data-sablon="mikro">Mikro 2"</button>
+          <button type="button" class="sablon" data-sablon="sinematik3">Sinematik 3"</button>
+          <button type="button" class="sablon" data-sablon="yaris5" aria-pressed="true">Yarış 5"</button>
+          <button type="button" class="sablon" data-sablon="uzun7">Uzun menzil 7"</button>
+          <button type="button" class="sablon" data-sablon="yuk10" data-kol="6">Hexa 10"</button>
+        </div>
+        <div class="hangar-alt">
+          <span class="ipucu-3b">↔ Sürükleyerek çevir</span>
+          <button type="button" class="kucuk-dugme" id="patlatDugme" aria-pressed="false">Parçaları ayır</button>
+          <a class="kucuk-dugme dolu" id="labaAc" href="../dron-lab/index.html">Bu dronu Laboratuvar'da aç →</a>
+        </div>
+        <p class="sablon-bilgi" id="sablonBilgi" aria-live="polite"></p>
       </div>
     </section>
 
@@ -64,21 +60,21 @@
       <h2 id="yol">Önerilen yol: üç adım</h2>
       <p>Bir pilot gibi düşün: önce uçağı tasarlarsın, sonra uçmayı öğrenirsin, en sonunda gerçek dünyayla karşılaştırırsın.</p>
       <div class="izgara">
-        <article class="kart adim-kart">
+        <article class="kart adim-kart belir-kaydir">
           <span class="adim-no" aria-hidden="true">1</span>
           <h3>Tasarla</h3>
           <p>Çerçeve, motor, pervane ve bataryayı seç. Laboratuvar dronun uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesaplar.</p>
           <p class="benzetme"><strong>Benzetme:</strong> Bir yemek tarifinin malzeme listesini hazırlamak gibi. Henüz pişirmiyorsun ama sonucun lezzetli mi yanık mı olacağını tahmin edebiliyorsun.</p>
           <div class="dugme-satir"><a class="dugme" href="../dron-lab/index.html">Laboratuvara git</a></div>
         </article>
-        <article class="kart adim-kart">
+        <article class="kart adim-kart belir-kaydir">
           <span class="adim-no" aria-hidden="true">2</span>
           <h3>Dengele</h3>
           <p>P, I ve D kazançlarını ayarlayarak sanal dronu rüzgâra ve darbelere karşı dengede tut. Beş seviye var; her denemeden sonra "Neden böyle oldu?" diye sorabilirsin.</p>
           <p class="benzetme"><strong>Benzetme:</strong> Bisiklet sürmeyi öğrenmek gibi. Direksiyonu çok sert kırarsan sallanırsın, hiç kırmazsan devrilirsin; doğru ölçüyü deneyerek bulursun.</p>
           <div class="dugme-satir"><a class="dugme" href="../pid-oyunu/index.html">Oyuna git</a></div>
         </article>
-        <article class="kart adim-kart">
+        <article class="kart adim-kart belir-kaydir">
           <span class="adim-no" aria-hidden="true">3</span>
           <h3>Gerçekle karşılaştır</h3>
           <p>Lab'ın tahminlerini motor üreticisinin itki test tablosuyla karşılaştır, hata yüzdesini hesapla ve katsayıları kendi donanımına göre ayarla.</p>
@@ -91,7 +87,7 @@
     <section class="bolum" aria-labelledby="sozluk">
       <h2 id="sozluk">Beş kavram, beş benzetme</h2>
       <p>Araçlarda sık göreceğin terimlerin gündelik hayattaki karşılıkları:</p>
-      <div class="kart">
+      <div class="kart belir-kaydir">
         <dl class="kavram">
           <dt>İtki/ağırlık oranı (TWR)</dt>
           <dd>Bir halterci kendi ağırlığının kaç katını kaldırabiliyorsa, dron da kendi ağırlığının o kadar katı itki üretir. 1'in altında yerden hiç kalkamaz.
@@ -128,9 +124,9 @@
       <h2 id="yakinda">Hangara eklenebilecek fikirler</h2>
       <p>Bunlar henüz yapılmadı; sadece planlanan fikirler.</p>
       <div class="izgara">
-        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>Lab'dan oyuna aktarım</h3><p>Laboratuvardaki tasarımının ağırlığı ve itkisi PID oyununda dronun gerçek "hantallığını" belirlesin. Ağır dron daha yavaş tepki versin.</p></article>
-        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>3B dron modeli</h3><p>Seçtiğin pervane ve çerçeve boyutuna göre dönen, ölçekli bir dron görünümü.</p></article>
-        <article class="kart yakinda"><span class="etiket-kucuk">Fikir</span><h3>Gerçek uçuş kaydı yükle</h3><p>Kendi dronunun uçuş verisini yükleyip Lab'ın tahminiyle aynı grafikte karşılaştır.</p></article>
+        <article class="kart yakinda belir-kaydir"><span class="etiket-kucuk">Fikir</span><h3>Lab'dan oyuna aktarım</h3><p>Laboratuvardaki tasarımının ağırlığı ve itkisi PID oyununda dronun gerçek "hantallığını" belirlesin. Ağır dron daha yavaş tepki versin.</p></article>
+        <article class="kart yakinda belir-kaydir"><span class="etiket-kucuk">Fikir</span><h3>Rüzgâr tüneli</h3><p>Tasarladığın dronu sanal bir rüzgârın içine koy; hangi hızda ne kadar yattığını ve ne kadar akım çektiğini gör.</p></article>
+        <article class="kart yakinda belir-kaydir"><span class="etiket-kucuk">Fikir</span><h3>Gerçek uçuş kaydı yükle</h3><p>Kendi dronunun uçuş verisini yükleyip Lab'ın tahminiyle aynı grafikte karşılaştır.</p></article>
       </div>
     </section>
   </main>
@@ -139,6 +135,8 @@
     Bu sayfa ve iki araç tamamen tarayıcında çalışır; hiçbir veri toplanmaz, çerez kullanılmaz, dışarıya istek gönderilmez. Sonuçlar basitleştirilmiş modellere dayanan tahminlerdir.
   </footer>
 
+  <script src="dron3d.js"></script>
+  <script src="../dron-lab/hesap.js"></script>
   <script src="hangar.js"></script>
 </body>
 </html>
