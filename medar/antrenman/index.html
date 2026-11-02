@@ -1021,7 +1021,8 @@ $('bsnd').onclick=()=>$('tSnd').click();
 function musUI(){const v=MUS.on;$('tMus').classList.toggle('on',v);$('tMus').textContent='Müzik: '+(v?'açık':'kapalı');$('bmus').classList.toggle('off',!v);}
 $('tMus').onclick=()=>{MUS.set(!MUS.on);musUI();};$('bmus').onclick=()=>$('tMus').click();musUI();
 // tarayıcılar sesi ancak ilk dokunuştan sonra başlatır: menüde ilk dokunuşta müzik açılır
-document.addEventListener('pointerdown',function ilk(){document.removeEventListener('pointerdown',ilk,true);SFX.unlock();if(MUS.on)MUS.start();},true);
+// telefonda yalnızca dokunup bırakma (touchend/click) ya da tuş sesi açar; ekrana ilk değme (pointerdown) açmaz
+['touchend','click','pointerup','keydown'].forEach(o=>document.addEventListener(o,function ilk(){const a=SFX.ctx();try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(a&&a.state!=='running')a.resume().catch(()=>{});if(MUS.on)MUS.start();},true));
 document.addEventListener('visibilitychange',()=>{try{const a=SFX.ctx();if(a)document.hidden?a.suspend():a.resume();}catch(e){}});
 $('bpau').onclick=togglePause;$('bresume').onclick=togglePause;
 $('bquit').onclick=()=>{G.paused=false;G.running=false;MUS.mood('menu');$('pctl').classList.add('hidden');$('pausebox').classList.add('hidden');$('hud').classList.add('hidden');$('hint').classList.add('hidden');$('menu').classList.remove('hidden');};
