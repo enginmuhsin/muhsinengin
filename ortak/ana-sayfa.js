@@ -14,6 +14,7 @@
    2) <doner-kureler boyut="64"></doner-kureler>
       Üç boyutlu yörüngede dönen, düzgün altıgen (petek) kabuklu turuncu küreler (yükleniyor göstergesi ya da süs).
         boyut  piksel (varsayılan 48) · hiz  bir turun saniyesi (varsayılan 2.4)
+        cekirdek  ortada lacivert çekirdek · yorunge  yörünge çizgileri de görünür (atom gibi)
 
    3) Sayfa geçişi: betik etiketine data-gecis yazılırsa, başka bir bölüme giden bağlantıya
       tıklanınca yeni sayfa gelene kadar ortada dönen küreler görünür (yavaş okul ağlarında
@@ -30,43 +31,56 @@
   var betik = document.currentScript;
 
   /* ---------- dönen küreler: CSS 3B (tuval yok, işlemciyi yormaz) ----------
-     Bir halka 66° yatırılıp kendi ekseninde döner; küreler halkanın üstünde durur ama her biri
-     halkanın dönüşünü tersine çevirerek hep bize bakar (billboard). Arkadaki küre perspektif
-     nedeniyle küçülür ve soluklaşır: göz bunu derinlik olarak okur. */
-  /* Düzgün altıgen (petek) kabuk deseni. Bir döşeme 17,32 × 30 birim: ortada bir altıgen ve alttaki iki altıgenin
-     ortak dikey kenarı; yan yana dizilince kusursuz bal peteği olur. Hücreler hafif dolgulu: kabuk yüzlü görünür. */
-  function petek(cizgi, dolgu) {
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.32 30"><g fill="none" stroke="' + cizgi + '" stroke-width="1.15" stroke-linejoin="round">' +
+     ATOM MODELİ: her küre kendi yörüngesinde döner. Yörüngeler 72° yatırılır ve 0°, 60°, 120° açılarla
+     çevrilir; böylece bir küre yatay, ikisi çapraz (yukarıdan aşağıya) hareket eder. Yörüngelerin hızları
+     farklıdır, küreler hiç aynı anda hizalanmaz. Her küre, bağlı olduğu dönüşlerin tersini uygulayarak hep
+     bize bakar (billboard); hepsi aynı 3B sahnede olduğu için öndeki küre çekirdeğin önünden, arkadaki
+     arkasından geçer ve perspektifle küçülür. */
+  /* Düzgün altıgen (petek) kabuk deseni. Bir döşeme 17,32 × 30 birim: ortada bir altıgen ve alttaki iki
+     altıgenin ortak dikey kenarı; yan yana dizilince kusursuz bal peteği olur.
+     Küçük kürelerde (rozet, imza) hücreler iri, çizgiler kalın tutulur: yoksa petek göze görünmez. */
+  function petek(cizgi, dolgu, kalin) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.32 30"><g fill="none" stroke="' + cizgi + '" stroke-width="' + kalin + '" stroke-linejoin="round">' +
       '<path d="M8.66 0L17.32 5V15L8.66 20L0 15V5Z" fill="' + dolgu + '"/><path d="M8.66 20V30"/></g></svg>';
     return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
   }
-  var PETEK_T = petek('rgba(110,28,0,.62)', 'rgba(255,240,215,.10)');
-  var PETEK_L = petek('rgba(190,210,255,.55)', 'rgba(255,255,255,.06)');
+  var PT = petek('rgba(110,28,0,.62)', 'rgba(255,240,215,.10)', 1.15), PT_K = petek('rgba(95,20,0,.85)', 'rgba(255,236,205,.22)', 2.6);
+  var PL = petek('rgba(190,210,255,.55)', 'rgba(255,255,255,.06)', 1.15), PL_K = petek('rgba(205,222,255,.85)', 'rgba(255,255,255,.12)', 2.6);
+  var EGIM = 72;
   function kureCSS(on) {
+    var e = EGIM;
     return '' +
       '.y{position:relative;width:var(--s);height:var(--s);perspective:calc(var(--s)*4);}' +
-      '.h{position:absolute;inset:0;transform-style:preserve-3d;animation:' + on + 'h var(--t) linear infinite;}' +
-      '.k{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateZ(var(--a));}' +
+      '.sh{position:absolute;inset:0;transform-style:preserve-3d;}' +
+      '.y::before{content:"";position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(circle,rgba(255,150,60,.22) 0,rgba(255,150,60,.08) 45%,transparent 70%);}' +
+      '.o{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateZ(var(--f));}' +
+      '.h{position:absolute;inset:0;transform-style:preserve-3d;animation:' + on + 'h var(--d) linear infinite;animation-delay:var(--g);}' +
+      '.y.iz .h::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,140,50,.28);}' +
       '.b{position:absolute;left:50%;top:0;width:var(--b);height:var(--b);margin-left:calc(var(--b)/-2);margin-top:calc(var(--b)/-2);border-radius:50%;' +
       // katmanlar (üstten alta): kenar gölgesi (deseni küreye sarar) · parlama · petek kabuk · turuncu gövde
-      'background:radial-gradient(circle at 50% 50%,transparent 52%,rgba(90,22,0,.6) 100%),radial-gradient(circle at 32% 26%,rgba(255,250,235,.95) 0,rgba(255,220,170,.5) 12%,transparent 30%),' + PETEK_T + ' 0 0/calc(var(--b)*.36) calc(var(--b)*.6235),' +
-      'radial-gradient(circle at 36% 32%,#ffd1a0 0,#ff9a3c 32%,#ec610f 66%,#9a3204 100%);' +
-      'box-shadow:0 0 calc(var(--b)*.5) rgba(255,120,30,.55);' +
-      'animation:' + on + 'b var(--t) linear infinite,' + on + 'p calc(var(--t)*1.6) linear infinite;}' +
+      'background:radial-gradient(circle at 50% 50%,transparent 50%,rgba(90,22,0,.6) 100%),radial-gradient(circle at 32% 26%,rgba(255,250,235,.95) 0,rgba(255,220,170,.45) 11%,transparent 27%),' +
+      'var(--pt) 0 0/calc(var(--b)*var(--hc)) calc(var(--b)*var(--hc)*1.732),radial-gradient(circle at 36% 32%,#ffd1a0 0,#ff9a3c 32%,#ec610f 66%,#9a3204 100%);' +
+      'animation:' + on + 'b var(--d) linear infinite,' + on + 'p calc(var(--d)*1.5) linear infinite;animation-delay:var(--g),0s;}' +
       '.c{position:absolute;left:50%;top:50%;width:var(--c);height:var(--c);margin:calc(var(--c)/-2) 0 0 calc(var(--c)/-2);border-radius:50%;' +
-      'background:radial-gradient(circle at 50% 50%,transparent 52%,rgba(5,12,40,.65) 100%),radial-gradient(circle at 33% 27%,rgba(235,242,255,.9) 0,transparent 30%),' + PETEK_L + ' 0 0/calc(var(--c)*.36) calc(var(--c)*.6235),' +
-      'radial-gradient(circle at 35% 30%,#8fa8ff 0,#3654b8 35%,#1d3b8b 65%,#0b1a4a 100%);box-shadow:0 0 calc(var(--c)*.4) rgba(60,90,200,.45);' +
-      'animation:' + on + 'c var(--t) linear infinite,' + on + 'p calc(var(--t)*2.4) linear infinite reverse;}' +
-      '@keyframes ' + on + 'p{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--b,var(--c))*.72) 0,0 0}}' +
-      '@keyframes ' + on + 'c{from{transform:rotateZ(0deg) rotateX(-66deg)}to{transform:rotateZ(-360deg) rotateX(-66deg)}}' +
-      '@keyframes ' + on + 'h{from{transform:rotateX(66deg) rotateZ(0)}to{transform:rotateX(66deg) rotateZ(360deg)}}' +
-      '@keyframes ' + on + 'b{from{transform:rotateZ(calc(var(--a)*-1)) rotateX(-66deg)}to{transform:rotateZ(calc(var(--a)*-1 - 360deg)) rotateX(-66deg)}}' +
-      '@media (prefers-reduced-motion:reduce){.h,.b,.c{animation:none}.c{transform:rotateX(-66deg)}.h{transform:rotateX(66deg)}.b{transform:rotateZ(calc(var(--a)*-1)) rotateX(-66deg)}}';
+      'background:radial-gradient(circle at 50% 50%,transparent 50%,rgba(5,12,40,.65) 100%),radial-gradient(circle at 33% 27%,rgba(235,242,255,.9) 0,transparent 28%),' +
+      'var(--pl) 0 0/calc(var(--c)*var(--hc)) calc(var(--c)*var(--hc)*1.732),radial-gradient(circle at 35% 30%,#8fa8ff 0,#3654b8 35%,#1d3b8b 65%,#0b1a4a 100%);' +
+      'animation:' + on + 'q calc(var(--t)*2.2) linear infinite reverse;}' +
+      '.y{--pt:' + PT + ';--pl:' + PL + ';--hc:.36;}.y.kc{--pt:' + PT_K + ';--pl:' + PL_K + ';--hc:.62;}' +
+      '@keyframes ' + on + 'p{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--b)*var(--hc)*2) 0,0 0}}' +
+      '@keyframes ' + on + 'q{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--c)*var(--hc)*2) 0,0 0}}' +
+      '@keyframes ' + on + 'h{from{transform:rotateX(' + e + 'deg) rotateZ(0)}to{transform:rotateX(' + e + 'deg) rotateZ(360deg)}}' +
+      '@keyframes ' + on + 'b{from{transform:rotateZ(0deg) rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}to{transform:rotateZ(-360deg) rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}}' +
+      '@media (prefers-reduced-motion:reduce){.h,.b,.c{animation:none}.h{transform:rotateX(' + e + 'deg)}.b{transform:rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}}';
   }
-  function kureHTML(n, cekirdek) {
-    var s = '<div class="y"><div class="h">';
-    for (var i = 0; i < n; i++) s += '<div class="k" style="--a:' + (i * 360 / n) + 'deg"><div class="b" style="--b:calc(var(--s)*' + (n > 3 ? 0.22 : 0.26) + ')"></div></div>';
-    s += (cekirdek ? '<div class="c"></div>' : '') + '</div></div>';
+  // n küre, her biri kendi yörüngesinde; kucuk: iri hücreli kalın petek; iz: yörünge çizgileri görünsün
+  function kureHTML(n, cekirdek, kucuk, iz) {
+    var hiz = [1, 1.31, 0.82, 1.17, 0.93], s = '<div class="y' + (kucuk ? ' kc' : '') + (iz ? ' iz' : '') + '"><div class="sh">';
+    for (var i = 0; i < n; i++) {
+      var d = 'calc(var(--t)*' + hiz[i % 5] + ')';
+      s += '<div class="o" style="--f:' + (i * 180 / n) + 'deg;--d:' + d + ';--g:calc(' + d + '*' + (-i / n).toFixed(3) + ')"><div class="h">' +
+        '<div class="b" style="--b:calc(var(--s)*' + (kucuk ? 0.31 : 0.24) + ')"></div></div></div>';
+    }
+    s += (cekirdek ? '<div class="c" style="--c:calc(var(--s)*' + (kucuk ? 0.36 : 0.3) + ')"></div>' : '') + '</div></div>';
     return s;
   }
 
@@ -80,8 +94,8 @@
     'a:hover{transform:translateY(-1px);border-color:#ff8a2b;box-shadow:var(--g),0 0 0 3px rgba(255,138,43,.18);}' +
     'a:active{transform:translateY(0) scale(.98);}' +
     'a:focus-visible{outline:3px solid #ff8a2b;outline-offset:2px;}' +
-    '.r{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(255,170,90,.18),transparent 70%);}' +
-    '.y{--s:26px;--t:5.5s;--c:9px;}a:hover .h,a:hover .b{animation-duration:1.6s;}' +
+    '.r{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(255,170,90,.18),transparent 70%);}' +
+    '.y{--s:30px;--t:5.5s;}a:hover .y{--t:2s;}' +
     '.m{display:flex;flex-direction:column;gap:2px;}.m small{font-weight:500;font-size:10.5px;opacity:.68;letter-spacing:.02em;}' +
     ':host([kisa]) .m{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}:host([kisa]) a{padding:4px;}' +
     '@media (max-width:480px){.m small{display:none}}';
@@ -96,7 +110,7 @@
       connectedCallback() {
         if (this.shadowRoot) return;
         var r = this.attachShadow({ mode: 'open' });
-        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" aria-label="Ana sayfaya dön: muhsinengin.com"><span class="r">' + kureHTML(3, true) +
+        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" aria-label="Ana sayfaya dön: muhsinengin.com"><span class="r">' + kureHTML(3, true, true) +
           '</span><span class="m"><span>Ana sayfa</span><small>muhsinengin.com</small></span></a>';
         var el = this, guncelle = function () { el.classList.toggle('koyu-site', !el.hasAttribute('tema') && koyuMu()); };
         guncelle();
@@ -111,7 +125,8 @@
         if (this.shadowRoot) return;
         var s = parseFloat(this.getAttribute('boyut')) || 48, t = parseFloat(this.getAttribute('hiz')) || 2.4, n = parseInt(this.getAttribute('sayi'), 10) || 3;
         var r = this.attachShadow({ mode: 'open' });
-        r.innerHTML = '<style>:host{display:inline-block;vertical-align:middle}' + kureCSS('dk') + '.y{--s:' + s + 'px;--t:' + t + 's;--c:' + (s * 0.3) + 'px}</style>' + kureHTML(n, this.hasAttribute('cekirdek'));
+        r.innerHTML = '<style>:host{display:inline-block;vertical-align:middle}' + kureCSS('dk') + '.y{--s:' + s + 'px;--t:' + t + 's}</style>' +
+          kureHTML(n, this.hasAttribute('cekirdek'), s < 72, this.hasAttribute('yorunge'));
         if (!this.hasAttribute('aria-label') && !this.hasAttribute('aria-hidden')) { this.setAttribute('role', 'img'); this.setAttribute('aria-label', 'Yükleniyor'); }
       }
     });
