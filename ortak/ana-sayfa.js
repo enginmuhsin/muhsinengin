@@ -12,7 +12,7 @@
         <ana-sayfa-dugmesi><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
 
    2) <doner-kureler boyut="64"></doner-kureler>
-      Üç boyutlu yörüngede dönen turuncu küreler (yükleniyor göstergesi ya da süs).
+      Üç boyutlu yörüngede dönen, düzgün altıgen (petek) kabuklu turuncu küreler (yükleniyor göstergesi ya da süs).
         boyut  piksel (varsayılan 48) · hiz  bir turun saniyesi (varsayılan 2.4)
 
    3) Sayfa geçişi: betik etiketine data-gecis yazılırsa, başka bir bölüme giden bağlantıya
@@ -33,25 +33,40 @@
      Bir halka 66° yatırılıp kendi ekseninde döner; küreler halkanın üstünde durur ama her biri
      halkanın dönüşünü tersine çevirerek hep bize bakar (billboard). Arkadaki küre perspektif
      nedeniyle küçülür ve soluklaşır: göz bunu derinlik olarak okur. */
+  /* Düzgün altıgen (petek) kabuk deseni. Bir döşeme 17,32 × 30 birim: ortada bir altıgen ve alttaki iki altıgenin
+     ortak dikey kenarı; yan yana dizilince kusursuz bal peteği olur. Hücreler hafif dolgulu: kabuk yüzlü görünür. */
+  function petek(cizgi, dolgu) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.32 30"><g fill="none" stroke="' + cizgi + '" stroke-width="1.15" stroke-linejoin="round">' +
+      '<path d="M8.66 0L17.32 5V15L8.66 20L0 15V5Z" fill="' + dolgu + '"/><path d="M8.66 20V30"/></g></svg>';
+    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  }
+  var PETEK_T = petek('rgba(110,28,0,.62)', 'rgba(255,240,215,.10)');
+  var PETEK_L = petek('rgba(190,210,255,.55)', 'rgba(255,255,255,.06)');
   function kureCSS(on) {
     return '' +
       '.y{position:relative;width:var(--s);height:var(--s);perspective:calc(var(--s)*4);}' +
       '.h{position:absolute;inset:0;transform-style:preserve-3d;animation:' + on + 'h var(--t) linear infinite;}' +
       '.k{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateZ(var(--a));}' +
       '.b{position:absolute;left:50%;top:0;width:var(--b);height:var(--b);margin-left:calc(var(--b)/-2);margin-top:calc(var(--b)/-2);border-radius:50%;' +
-      'background:radial-gradient(circle at 34% 30%,#fff1df 0,#ffc27a 14%,#ff8a2b 42%,#e5560a 72%,#8f2c00 100%);' +
-      'box-shadow:0 0 calc(var(--b)*.5) rgba(255,120,30,.55),inset calc(var(--b)*-.08) calc(var(--b)*-.12) calc(var(--b)*.2) rgba(120,30,0,.45);' +
-      'animation:' + on + 'b var(--t) linear infinite;}' +
+      // katmanlar (üstten alta): kenar gölgesi (deseni küreye sarar) · parlama · petek kabuk · turuncu gövde
+      'background:radial-gradient(circle at 50% 50%,transparent 52%,rgba(90,22,0,.6) 100%),radial-gradient(circle at 32% 26%,rgba(255,250,235,.95) 0,rgba(255,220,170,.5) 12%,transparent 30%),' + PETEK_T + ' 0 0/calc(var(--b)*.36) calc(var(--b)*.6235),' +
+      'radial-gradient(circle at 36% 32%,#ffd1a0 0,#ff9a3c 32%,#ec610f 66%,#9a3204 100%);' +
+      'box-shadow:0 0 calc(var(--b)*.5) rgba(255,120,30,.55);' +
+      'animation:' + on + 'b var(--t) linear infinite,' + on + 'p calc(var(--t)*1.6) linear infinite;}' +
       '.c{position:absolute;left:50%;top:50%;width:var(--c);height:var(--c);margin:calc(var(--c)/-2) 0 0 calc(var(--c)/-2);border-radius:50%;' +
-      'background:radial-gradient(circle at 35% 30%,#8fa8ff 0,#3654b8 35%,#1d3b8b 65%,#0b1a4a 100%);box-shadow:0 0 calc(var(--c)*.4) rgba(60,90,200,.45);}' +
+      'background:radial-gradient(circle at 50% 50%,transparent 52%,rgba(5,12,40,.65) 100%),radial-gradient(circle at 33% 27%,rgba(235,242,255,.9) 0,transparent 30%),' + PETEK_L + ' 0 0/calc(var(--c)*.36) calc(var(--c)*.6235),' +
+      'radial-gradient(circle at 35% 30%,#8fa8ff 0,#3654b8 35%,#1d3b8b 65%,#0b1a4a 100%);box-shadow:0 0 calc(var(--c)*.4) rgba(60,90,200,.45);' +
+      'animation:' + on + 'c var(--t) linear infinite,' + on + 'p calc(var(--t)*2.4) linear infinite reverse;}' +
+      '@keyframes ' + on + 'p{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--b,var(--c))*.72) 0,0 0}}' +
+      '@keyframes ' + on + 'c{from{transform:rotateZ(0deg) rotateX(-66deg)}to{transform:rotateZ(-360deg) rotateX(-66deg)}}' +
       '@keyframes ' + on + 'h{from{transform:rotateX(66deg) rotateZ(0)}to{transform:rotateX(66deg) rotateZ(360deg)}}' +
       '@keyframes ' + on + 'b{from{transform:rotateZ(calc(var(--a)*-1)) rotateX(-66deg)}to{transform:rotateZ(calc(var(--a)*-1 - 360deg)) rotateX(-66deg)}}' +
-      '@media (prefers-reduced-motion:reduce){.h,.b{animation:none}.h{transform:rotateX(66deg)}.b{transform:rotateZ(calc(var(--a)*-1)) rotateX(-66deg)}}';
+      '@media (prefers-reduced-motion:reduce){.h,.b,.c{animation:none}.c{transform:rotateX(-66deg)}.h{transform:rotateX(66deg)}.b{transform:rotateZ(calc(var(--a)*-1)) rotateX(-66deg)}}';
   }
   function kureHTML(n, cekirdek) {
     var s = '<div class="y"><div class="h">';
     for (var i = 0; i < n; i++) s += '<div class="k" style="--a:' + (i * 360 / n) + 'deg"><div class="b" style="--b:calc(var(--s)*' + (n > 3 ? 0.22 : 0.26) + ')"></div></div>';
-    s += '</div>' + (cekirdek ? '<div class="c"></div>' : '') + '</div>';
+    s += (cekirdek ? '<div class="c"></div>' : '') + '</div></div>';
     return s;
   }
 
