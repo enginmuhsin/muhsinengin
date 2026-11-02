@@ -2,8 +2,19 @@
    ORTAK BİLEŞENLER — ortak/ana-sayfa.js
    muhsinengin.com'un bütün bölümlerinde (alt alan adları dahil) aynı görünen parçalar.
 
-   1) <ana-sayfa-dugmesi></ana-sayfa-dugmesi>
-      muhsinengin.com ana sayfasına dönen düğme. Rozetinde turuncu küreler yavaşça döner.
+   1) <me-imza boyut="72"></me-imza>
+      Muhsin ENGİN imzası "Yörüngeli Küp": içinde M okunan izometrik küp (altıgen) ve çevresindeki
+      eğik yörüngede dönen üç turuncu elektron. Ayrıntılı açıklama aşağıda, motorun başında.
+        boyut    piksel (varsayılan 48)
+        hiz      elektronların bir turu, saniye (varsayılan 6)
+        duragan  hareket etmez (alt bilgi, yazdırma gibi yerler)
+        izsiz    elektronların arkasındaki ışık izi çizilmez (40 pikselin altında zaten çizilmez)
+        tema     "acik" | "koyu"; yazılmazsa sitenin ve cihazın temasına uyar
+      Eski adı <doner-kureler> da aynı imzayı çizer (eski sayfalar bozulmasın diye).
+      Durağan sürümü: muhsinengin.com/ortak/imza.svg (açık zemin), imza-koyu.svg, sekme simgesi /simge.svg.
+
+   2) <ana-sayfa-dugmesi></ana-sayfa-dugmesi>
+      muhsinengin.com ana sayfasına dönen düğme; rozeti küçük imzadır, üstüne gelince elektronlar hızlanır.
       Öznitelikler:
         tema="koyu"     koyu zeminli başlıklar için (oyunlar, ders odası). Yazılmazsa sitenin
                         açık/koyu temasına (ve cihazın temasına) kendiliğinden uyar.
@@ -11,13 +22,8 @@
       Betik yüklenemezse (örn. internetsiz) içine yazılan sade bağlantı görünür:
         <ana-sayfa-dugmesi><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
 
-   2) <doner-kureler boyut="64"></doner-kureler>
-      Üç boyutlu yörüngede dönen, düzgün altıgen (petek) kabuklu turuncu küreler (yükleniyor göstergesi ya da süs).
-        boyut  piksel (varsayılan 48) · hiz  bir turun saniyesi (varsayılan 2.4)
-        cekirdek  ortada lacivert çekirdek · yorunge  yörünge çizgileri de görünür (atom gibi)
-
    3) Sayfa geçişi: betik etiketine data-gecis yazılırsa, başka bir bölüme giden bağlantıya
-      tıklanınca yeni sayfa gelene kadar ortada dönen küreler görünür (yavaş okul ağlarında
+      tıklanınca yeni sayfa gelene kadar ortada hızlı dönen imza görünür (yavaş okul ağlarında
       "tıkladım ama bir şey olmadı mı?" duygusunu giderir).
 
    Neden "custom element"? Bileşen kendi gölge DOM'unda yaşar: sayfanın kendi CSS'i onu bozamaz,
@@ -30,62 +36,130 @@
   var ANA = 'https://muhsinengin.com/';
   var betik = document.currentScript;
 
-  /* ---------- dönen küreler: CSS 3B (tuval yok, işlemciyi yormaz) ----------
-     ATOM MODELİ: her küre kendi yörüngesinde döner. Yörüngeler 72° yatırılır ve 0°, 60°, 120° açılarla
-     çevrilir; böylece bir küre yatay, ikisi çapraz (yukarıdan aşağıya) hareket eder. Yörüngelerin hızları
-     farklıdır, küreler hiç aynı anda hizalanmaz. Her küre, bağlı olduğu dönüşlerin tersini uygulayarak hep
-     bize bakar (billboard); hepsi aynı 3B sahnede olduğu için öndeki küre çekirdeğin önünden, arkadaki
-     arkasından geçer ve perspektifle küçülür. */
-  /* Düzgün altıgen (petek) kabuk deseni. Bir döşeme 17,32 × 30 birim: ortada bir altıgen ve alttaki iki
-     altıgenin ortak dikey kenarı; yan yana dizilince kusursuz bal peteği olur.
-     Küçük kürelerde (rozet, imza) hücreler iri, çizgiler kalın tutulur: yoksa petek göze görünmez. */
-  function petek(cizgi, dolgu, kalin) {
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.32 30"><g fill="none" stroke="' + cizgi + '" stroke-width="' + kalin + '" stroke-linejoin="round">' +
-      '<path d="M8.66 0L17.32 5V15L8.66 20L0 15V5Z" fill="' + dolgu + '"/><path d="M8.66 20V30"/></g></svg>';
-    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  /* =====================================================================
+     MUHSİN ENGİN İMZASI — "Yörüngeli Küp"
+     Üç düşünce tek şekilde:
+       · GEOMETRİ: düzgün altıgen. Merkezden üç kola ayrılınca izometrik bir KÜP olur (3B tasarım, üretim).
+       · İMZA: küpün ön kenarları bir M çizer: sol kenar yukarı, merkeze iniş, sağ köşeye çıkış, sağ kenar aşağı.
+               M'nin dibi tam merkezde, atomun çekirdeğinin olacağı yerde durur.
+       · FİZİK: küpün çevresinde eğik bir yörünge ve üç turuncu elektron. Yörünge düzlemi yavaşça yalpalar
+               (precession), bu yüzden elektronlar hem sağa-sola hem yukarı-aşağı gezer.
+       · MEDAR: altıgen, MEDAR tahtasının biçimi; küpün üç yüzü üç ton gölgeyle ayrılır.
+     Gerçek 3B hesap yapılır: yörüngenin arka yarısı ve arkadaki elektron küpün ARKASINDAN geçer
+     ve küçülür; öndeki büyür. Her elektronun ardında sönen kısa bir ışık izi kalır.
+     Bütün imzalar tek bir requestAnimationFrame saatiyle çizilir; ekranda görünmeyen ya da
+     arka sekmedeki imza hesap yapmaz. "Hareketi azalt" ayarında durağan logo gösterilir.
+     ===================================================================== */
+  var NS = 'http://www.w3.org/2000/svg', C30 = Math.cos(Math.PI / 6);
+  var RENK = {
+    acik: { ink: '#1d3b8b', yuz: ['rgba(29,59,139,.10)', 'rgba(29,59,139,.22)', 'rgba(29,59,139,.36)'], cizgi: 'rgba(29,59,139,.55)', yor: '#e08a1e' },
+    koyu: { ink: '#d6e0ff', yuz: ['rgba(155,179,255,.16)', 'rgba(155,179,255,.28)', 'rgba(155,179,255,.42)'], cizgi: 'rgba(190,206,255,.6)', yor: '#ffb04a' }
+  };
+  var G = { cx: 32, cy: 32, R: 27, r: 15.5, egim: 70, don: -22, faz: [62, 160, 250] };   // durağan logo bu anın fotoğrafıdır
+  function kupSVG(k) {
+    var r = G.r, cx = G.cx, cy = G.cy, P = { T: [0, -r], UR: [r * C30, -r / 2], LR: [r * C30, r / 2], B: [0, r], LL: [-r * C30, r / 2], UL: [-r * C30, -r / 2], C: [0, 0] };
+    var q = function (n) { return (cx + P[n][0]).toFixed(2) + ' ' + (cy + P[n][1]).toFixed(2); };
+    return '<path d="M' + q('T') + 'L' + q('UR') + 'L' + q('C') + 'L' + q('UL') + 'Z" fill="' + k.yuz[0] + '"/>' +
+      '<path d="M' + q('UL') + 'L' + q('C') + 'L' + q('B') + 'L' + q('LL') + 'Z" fill="' + k.yuz[1] + '"/>' +
+      '<path d="M' + q('C') + 'L' + q('UR') + 'L' + q('LR') + 'L' + q('B') + 'Z" fill="' + k.yuz[2] + '"/>' +
+      '<path d="M' + q('UL') + 'L' + q('T') + 'L' + q('UR') + 'M' + q('LR') + 'L' + q('B') + 'L' + q('LL') + 'M' + q('C') + 'L' + q('B') + '" fill="none" stroke="' + k.cizgi + '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M' + q('LL') + 'L' + q('UL') + 'L' + q('C') + 'L' + q('UR') + 'L' + q('LR') + '" fill="none" stroke="' + k.ink + '" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>';
   }
-  var PT = petek('rgba(110,28,0,.62)', 'rgba(255,240,215,.10)', 1.15), PT_K = petek('rgba(95,20,0,.85)', 'rgba(255,236,205,.22)', 2.6);
-  var PL = petek('rgba(190,210,255,.55)', 'rgba(255,255,255,.06)', 1.15), PL_K = petek('rgba(205,222,255,.85)', 'rgba(255,255,255,.12)', 2.6);
-  var EGIM = 72;
-  function kureCSS(on) {
-    var e = EGIM;
-    return '' +
-      '.y{position:relative;width:var(--s);height:var(--s);perspective:calc(var(--s)*4);}' +
-      '.sh{position:absolute;inset:0;transform-style:preserve-3d;}' +
-      '.y::before{content:"";position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(circle,rgba(255,150,60,.22) 0,rgba(255,150,60,.08) 45%,transparent 70%);}' +
-      '.o{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateZ(var(--f));}' +
-      '.h{position:absolute;inset:0;transform-style:preserve-3d;animation:' + on + 'h var(--d) linear infinite;animation-delay:var(--g);}' +
-      '.y.iz .h::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,140,50,.28);}' +
-      '.b{position:absolute;left:50%;top:0;width:var(--b);height:var(--b);margin-left:calc(var(--b)/-2);margin-top:calc(var(--b)/-2);border-radius:50%;' +
-      // katmanlar (üstten alta): kenar gölgesi (deseni küreye sarar) · parlama · petek kabuk · turuncu gövde
-      'background:radial-gradient(circle at 50% 50%,transparent 50%,rgba(90,22,0,.6) 100%),radial-gradient(circle at 32% 26%,rgba(255,250,235,.95) 0,rgba(255,220,170,.45) 11%,transparent 27%),' +
-      'var(--pt) 0 0/calc(var(--b)*var(--hc)) calc(var(--b)*var(--hc)*1.732),radial-gradient(circle at 36% 32%,#ffd1a0 0,#ff9a3c 32%,#ec610f 66%,#9a3204 100%);' +
-      'animation:' + on + 'b var(--d) linear infinite,' + on + 'p calc(var(--d)*1.5) linear infinite;animation-delay:var(--g),0s;}' +
-      '.c{position:absolute;left:50%;top:50%;width:var(--c);height:var(--c);margin:calc(var(--c)/-2) 0 0 calc(var(--c)/-2);border-radius:50%;' +
-      'background:radial-gradient(circle at 50% 50%,transparent 50%,rgba(5,12,40,.65) 100%),radial-gradient(circle at 33% 27%,rgba(235,242,255,.9) 0,transparent 28%),' +
-      'var(--pl) 0 0/calc(var(--c)*var(--hc)) calc(var(--c)*var(--hc)*1.732),radial-gradient(circle at 35% 30%,#8fa8ff 0,#3654b8 35%,#1d3b8b 65%,#0b1a4a 100%);' +
-      'animation:' + on + 'q calc(var(--t)*2.2) linear infinite reverse;}' +
-      '.y{--pt:' + PT + ';--pl:' + PL + ';--hc:.36;}.y.kc{--pt:' + PT_K + ';--pl:' + PL_K + ';--hc:.62;}' +
-      '@keyframes ' + on + 'p{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--b)*var(--hc)*2) 0,0 0}}' +
-      '@keyframes ' + on + 'q{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 0,0 0,calc(var(--c)*var(--hc)*2) 0,0 0}}' +
-      '@keyframes ' + on + 'h{from{transform:rotateX(' + e + 'deg) rotateZ(0)}to{transform:rotateX(' + e + 'deg) rotateZ(360deg)}}' +
-      '@keyframes ' + on + 'b{from{transform:rotateZ(0deg) rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}to{transform:rotateZ(-360deg) rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}}' +
-      '@media (prefers-reduced-motion:reduce){.h,.b,.c{animation:none}.h{transform:rotateX(' + e + 'deg)}.b{transform:rotateX(-' + e + 'deg) rotateZ(calc(var(--f)*-1))}}';
+  // yörünge üzerindeki a açılı noktanın ekran konumu ve derinliği (z>0: önde)
+  function nokta(a, egim, don) {
+    var e = egim * Math.PI / 180, d = don * Math.PI / 180, x = G.R * Math.cos(a), y = G.R * Math.sin(a) * Math.cos(e), z = G.R * Math.sin(a) * Math.sin(e);
+    return [G.cx + x * Math.cos(d) - y * Math.sin(d), G.cy + x * Math.sin(d) + y * Math.cos(d), z / G.R];
   }
-  // n küre, her biri kendi yörüngesinde; kucuk: iri hücreli kalın petek; iz: yörünge çizgileri görünsün
-  function kureHTML(n, cekirdek, kucuk, iz) {
-    var hiz = [1, 1.31, 0.82, 1.17, 0.93], s = '<div class="y' + (kucuk ? ' kc' : '') + (iz ? ' iz' : '') + '"><div class="sh">';
-    for (var i = 0; i < n; i++) {
-      var d = 'calc(var(--t)*' + hiz[i % 5] + ')';
-      s += '<div class="o" style="--f:' + (i * 180 / n) + 'deg;--d:' + d + ';--g:calc(' + d + '*' + (-i / n).toFixed(3) + ')"><div class="h">' +
-        '<div class="b" style="--b:calc(var(--s)*' + (kucuk ? 0.31 : 0.24) + ')"></div></div></div>';
+  var IZ = 7, IZ_ADIM = 0.12;   // iz: 7 parça, her biri 0,12 radyan geride
+  function Imza(kok, boyut, secenek) {
+    this.boyut = boyut; this.iz = secenek.iz; this.hiz = secenek.hiz; this.kat = 1; this.hedefKat = 1;
+    this.aci = 0; this.zaman = 0; this.gorunur = true; this.tema = null;
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 64 64'); svg.setAttribute('width', '100%'); svg.setAttribute('height', '100%');
+    svg.setAttribute('aria-hidden', 'true'); svg.style.overflow = 'visible'; svg.style.display = 'block';
+    svg.innerHTML = '<defs><radialGradient id="e" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#ffe7c9"/><stop offset=".42" stop-color="#ff9a3c"/><stop offset="1" stop-color="#b8400a"/></radialGradient></defs>' +
+      '<g class="arka"><path class="hy" fill="none" stroke-width="1.4" stroke-linecap="round" opacity=".6"/></g><g class="kup"></g><g class="on"><path class="hy" fill="none" stroke-width="1.6" stroke-linecap="round"/></g>';
+    kok.appendChild(svg); this.svg = svg;
+    this.kupG = svg.querySelector('.kup'); this.hyA = svg.querySelector('.arka .hy'); this.hyO = svg.querySelector('.on .hy');
+    this.el = []; var self = this;
+    G.faz.forEach(function () {
+      var o = { iz: [] };
+      ['arka', 'on'].forEach(function (k) {
+        var g = svg.querySelector('.' + k);
+        for (var i = 0; i < (self.iz ? IZ : 0); i++) { var l = document.createElementNS(NS, 'line'); l.setAttribute('stroke-linecap', 'round'); g.appendChild(l); o.iz.push({ k: k, l: l, i: i }); }
+        var c = document.createElementNS(NS, 'circle'); c.setAttribute('fill', 'url(#e)'); g.appendChild(c); o[k] = c;
+      });
+      self.el.push(o);
+    });
+  }
+  Imza.prototype.renk = function (koyu) {
+    var t = koyu ? 'koyu' : 'acik'; if (t === this.tema) return; this.tema = t;
+    var k = RENK[t]; this.kupG.innerHTML = kupSVG(k); this.hyA.setAttribute('stroke', k.yor); this.hyO.setAttribute('stroke', k.yor);
+    this.el.forEach(function (o) { o.iz.forEach(function (p) { p.l.setAttribute('stroke', k.yor); }); });
+  };
+  Imza.prototype.ciz = function () {
+    // yalpalama: eğim 56°–80° arasında (yörünge açılıp kapanır, elektronlar küpün üstünden-altından geçer), dönme ±34°
+    var t = this.zaman, egim = G.egim - 2 + 12 * Math.sin(t * 0.37), don = G.don + 34 * Math.sin(t * 0.19), self = this;
+    // yörünge: alt yarı (sin a > 0) önde, üst yarı arkada
+    var on = '', arka = '';
+    for (var i = 0; i <= 48; i++) {
+      var p = nokta(Math.PI * i / 48, egim, don), q = nokta(Math.PI + Math.PI * i / 48, egim, don);
+      on += (i ? 'L' : 'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2); arka += (i ? 'L' : 'M') + q[0].toFixed(2) + ' ' + q[1].toFixed(2);
     }
-    s += (cekirdek ? '<div class="c" style="--c:calc(var(--s)*' + (kucuk ? 0.36 : 0.3) + ')"></div>' : '') + '</div></div>';
-    return s;
+    this.hyO.setAttribute('d', on); this.hyA.setAttribute('d', arka);
+    this.el.forEach(function (o, n) {
+      var a = self.aci + G.faz[n] * Math.PI / 180, p = nokta(a, egim, don), onde = p[2] >= 0, rr = 3.15 + 0.85 * p[2];
+      o.on.style.display = onde ? '' : 'none'; o.arka.style.display = onde ? 'none' : '';
+      var c = onde ? o.on : o.arka; c.setAttribute('cx', p[0].toFixed(2)); c.setAttribute('cy', p[1].toFixed(2)); c.setAttribute('r', rr.toFixed(2));
+      o.iz.forEach(function (s) {
+        var a1 = a - s.i * IZ_ADIM - 0.05, a2 = a1 - IZ_ADIM, p1 = nokta(a1, egim, don), p2 = nokta(a2, egim, don), ond = (p1[2] + p2[2]) >= 0;
+        if ((s.k === 'on') !== ond) { s.l.style.display = 'none'; return; }
+        s.l.style.display = ''; s.l.setAttribute('x1', p1[0].toFixed(2)); s.l.setAttribute('y1', p1[1].toFixed(2)); s.l.setAttribute('x2', p2[0].toFixed(2)); s.l.setAttribute('y2', p2[1].toFixed(2));
+        var w = (3.15 + 0.85 * p1[2]) * 1.15 * (1 - s.i / (IZ + 2)); s.l.setAttribute('stroke-width', w.toFixed(2)); s.l.setAttribute('stroke-opacity', (0.5 * (1 - s.i / IZ)).toFixed(2));
+      });
+    });
+  };
+  // tek saat: bütün imzalar
+  var IMZALAR = [], saat = null, onceki = 0;
+  var hareketsiz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tik(ts) {
+    var dt = Math.min(0.05, onceki ? (ts - onceki) / 1000 : 0); onceki = ts; var calisan = false;
+    IMZALAR.forEach(function (m) {
+      if (!m.gorunur || m.duragan) return; calisan = true;
+      m.kat += (m.hedefKat - m.kat) * Math.min(1, dt * 4);
+      m.zaman += dt * (0.6 + 0.4 * m.kat); m.aci += dt * m.kat * 2 * Math.PI / m.hiz; m.ciz();
+    });
+    saat = (calisan && !document.hidden) ? requestAnimationFrame(tik) : null; if (!saat) onceki = 0;
+  }
+  function saatiKur() { if (!saat && !hareketsiz && !document.hidden) saat = requestAnimationFrame(tik); }
+  document.addEventListener('visibilitychange', saatiKur);
+  var gozcu = window.IntersectionObserver ? new IntersectionObserver(function (gl) {
+    gl.forEach(function (g) { var m = g.target.__imza; if (m) { m.gorunur = g.isIntersecting; } }); saatiKur();
+  }) : null;
+  function koyuMu() {
+    var k = document.documentElement, t = k.getAttribute('data-theme');
+    if (t === 'dark') return true; if (t === 'light') return false;
+    return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  // <me-imza> (ve eski adıyla <doner-kureler>)
+  function imzaKur(host) {
+    if (host.shadowRoot) return host.__imza;
+    var boyut = parseFloat(host.getAttribute('boyut')) || 48;
+    var r = host.attachShadow({ mode: 'open' }); // boyut varsayılandır; sayfa CSS'i genişlik/yükseklik verirse (örn. 1.8em) imza yazıyla birlikte ölçeklenir
+    r.innerHTML = '<style>:host{display:inline-block;vertical-align:middle;line-height:0;width:' + boyut + 'px;height:' + boyut + 'px}</style>';
+    var m = new Imza(r, boyut, { iz: boyut >= 40 && !host.hasAttribute('izsiz'), hiz: parseFloat(host.getAttribute('hiz')) || 6 });
+    m.duragan = hareketsiz || host.hasAttribute('duragan'); host.__imza = m;
+    var renkle = function () { var t = host.getAttribute('tema'); m.renk(t ? t === 'koyu' : koyuMu()); };
+    renkle(); m.ciz();
+    document.addEventListener('temadegisti', renkle);
+    try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renkle); } catch (e) { /* eski tarayıcı */ }
+    new MutationObserver(renkle).observe(host, { attributes: true, attributeFilter: ['tema'] });
+    IMZALAR.push(m); if (gozcu) gozcu.observe(host); saatiKur();
+    if (!host.hasAttribute('aria-label') && !host.hasAttribute('aria-hidden')) { host.setAttribute('role', 'img'); host.setAttribute('aria-label', 'Muhsin ENGİN imzası'); }
+    return m;
   }
 
   /* ---------- 1) ana sayfa düğmesi ---------- */
-  var DUGME_CSS = kureCSS('as') +
+  var DUGME_CSS =
     ':host{display:inline-flex;vertical-align:middle;--z:rgba(255,255,255,.9);--y:#1d3b8b;--c1:rgba(29,59,139,.22);--g:0 1px 2px rgba(15,25,60,.08),0 4px 14px rgba(15,25,60,.10);font:600 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;}' +
     ':host([tema="koyu"]){--z:rgba(16,22,46,.72);--y:#ffd9a8;--c1:rgba(255,190,120,.35);--g:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);}' +
     ':host(.koyu-site){--z:rgba(22,29,39,.85);--y:#c9d6ff;--c1:rgba(155,179,255,.3);--g:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.3);}' +
@@ -94,42 +168,33 @@
     'a:hover{transform:translateY(-1px);border-color:#ff8a2b;box-shadow:var(--g),0 0 0 3px rgba(255,138,43,.18);}' +
     'a:active{transform:translateY(0) scale(.98);}' +
     'a:focus-visible{outline:3px solid #ff8a2b;outline-offset:2px;}' +
-    '.r{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(255,170,90,.18),transparent 70%);}' +
-    '.y{--s:30px;--t:5.5s;}a:hover .y{--t:2s;}' +
+    '.r{display:grid;place-items:center;width:32px;height:32px;}' +
     '.m{display:flex;flex-direction:column;gap:2px;}.m small{font-weight:500;font-size:10.5px;opacity:.68;letter-spacing:.02em;}' +
     ':host([kisa]) .m{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}:host([kisa]) a{padding:4px;}' +
     '@media (max-width:480px){.m small{display:none}}';
 
-  function koyuMu() {
-    var k = document.documentElement, t = k.getAttribute('data-theme');
-    if (t === 'dark') return true; if (t === 'light') return false;
-    return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
-  }
   if (window.customElements) {
     customElements.define('ana-sayfa-dugmesi', class extends HTMLElement {
       connectedCallback() {
         if (this.shadowRoot) return;
         var r = this.attachShadow({ mode: 'open' });
-        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" aria-label="Ana sayfaya dön: muhsinengin.com"><span class="r">' + kureHTML(3, true, true) +
+        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" aria-label="Ana sayfaya dön: muhsinengin.com"><span class="r"><me-imza boyut="30" aria-hidden="true"></me-imza>' +
           '</span><span class="m"><span>Ana sayfa</span><small>muhsinengin.com</small></span></a>';
-        var el = this, guncelle = function () { el.classList.toggle('koyu-site', !el.hasAttribute('tema') && koyuMu()); };
+        var el = this, imza = r.querySelector('me-imza'), a = r.querySelector('a');
+        var guncelle = function () { var koyu = el.getAttribute('tema') === 'koyu' || (!el.hasAttribute('tema') && koyuMu()); el.classList.toggle('koyu-site', !el.hasAttribute('tema') && koyuMu()); imza.setAttribute('tema', koyu ? 'koyu' : 'acik'); };
         guncelle();
         document.addEventListener('temadegisti', guncelle);
         try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', guncelle); } catch (e) { /* eski tarayıcı */ }
+        // üstüne gelince elektronlar hızlanır
+        a.addEventListener('pointerenter', function () { if (imza.__imza) imza.__imza.hedefKat = 3.5; });
+        a.addEventListener('pointerleave', function () { if (imza.__imza) imza.__imza.hedefKat = 1; });
       }
     });
 
-    /* ---------- 2) dönen küreler ---------- */
-    customElements.define('doner-kureler', class extends HTMLElement {
-      connectedCallback() {
-        if (this.shadowRoot) return;
-        var s = parseFloat(this.getAttribute('boyut')) || 48, t = parseFloat(this.getAttribute('hiz')) || 2.4, n = parseInt(this.getAttribute('sayi'), 10) || 3;
-        var r = this.attachShadow({ mode: 'open' });
-        r.innerHTML = '<style>:host{display:inline-block;vertical-align:middle}' + kureCSS('dk') + '.y{--s:' + s + 'px;--t:' + t + 's}</style>' +
-          kureHTML(n, this.hasAttribute('cekirdek'), s < 72, this.hasAttribute('yorunge'));
-        if (!this.hasAttribute('aria-label') && !this.hasAttribute('aria-hidden')) { this.setAttribute('role', 'img'); this.setAttribute('aria-label', 'Yükleniyor'); }
-      }
-    });
+    /* ---------- 2) imza: <me-imza boyut="72"> · eski ad <doner-kureler> da aynı imzayı çizer ---------- */
+    var ImzaEl = class extends HTMLElement { connectedCallback() { imzaKur(this); } };
+    customElements.define('me-imza', ImzaEl);
+    customElements.define('doner-kureler', class extends HTMLElement { connectedCallback() { imzaKur(this); } });
   }
 
   /* ---------- 3) sayfa geçişi göstergesi ---------- */
@@ -151,7 +216,7 @@
       kapat();
       zaman = setTimeout(function () {                    // hızlı açılan sayfada hiç görünmesin
         perde = document.createElement('div'); perde.className = 'me-gecis';
-        perde.innerHTML = '<div><doner-kureler boyut="64" cekirdek aria-hidden="true"></doner-kureler><span>Açılıyor…</span></div>';
+        perde.innerHTML = '<div><me-imza boyut="76" hiz="2.6" aria-hidden="true"></me-imza><span>Açılıyor…</span></div>';
         document.body.appendChild(perde); requestAnimationFrame(function () { if (perde) perde.classList.add('gor'); });
       }, 250);
     });
