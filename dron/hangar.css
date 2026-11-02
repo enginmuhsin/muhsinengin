@@ -133,8 +133,8 @@ table.karsilastir tbody th { background: var(--panel-2); white-space: nowrap; }
 /* Gecikme deneyi */
 .gecikme-tuval { display: block; width: 100%; height: 250px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--border); cursor: crosshair; }
 .gecikme-kontrol { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-weight: 700; }
-.gecikme-kontrol input { flex: 1; accent-color: var(--c2); }
-.gecikme-kontrol output { min-width: 4.5em; text-align: right; font-variant-numeric: tabular-nums; color: var(--c2); font-size: 1.1rem; }
+.gecikme-kontrol input { flex: 1; min-width: 0; accent-color: var(--c2); }   /* min-width: dar ekranda kaydırıcı daralabilsin */
+.gecikme-kontrol output { min-width: 3.6em; text-align: right; font-variant-numeric: tabular-nums; color: var(--c2); font-size: 1.1rem; }
 .gecikme-sonuc { color: var(--muted); min-height: 3em; }
 .mavi-yazi { color: var(--accent); font-weight: 700; } .turuncu-yazi { color: var(--c2); font-weight: 700; }
 
