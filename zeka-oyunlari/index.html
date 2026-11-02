@@ -128,6 +128,10 @@ h2 { font-family: var(--baslik); font-weight: 800; font-size: clamp(1.6rem, 3.6v
 .cubuk i { display: block; height: 100%; width: var(--g); border-radius: 7px; background: var(--murekkep); }
 .basamak.cozuk .cubuk i { background: linear-gradient(90deg, var(--murekkep), color-mix(in srgb, var(--murekkep) 60%, #5bb5a6)); }
 .basamak.acik .cubuk i { background: linear-gradient(90deg, var(--kirmizi), var(--turuncu)); }
+.basamak.medar .ad { color: var(--murekkep); }
+.basamak.medar .cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--turuncu) 35%, transparent); }
+.basamak.medar .sayi { color: var(--turuncu); }
+.lejant .l-medar::before { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
 .basamak.kiyas .cubuk i { background: repeating-linear-gradient(135deg, var(--kursun) 0 6px, color-mix(in srgb, var(--kursun) 55%, transparent) 6px 12px); }
 .basamak .sayi { font: italic 600 1.05rem/1.2 "Fraunces", Georgia, serif; color: var(--murekkep); text-align: right; white-space: nowrap; }
 .basamak .sayi sup { font-size: .7em; }
@@ -219,6 +223,9 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
         <p>Bir üçgeni 120° çevirmek, köşelerindeki üç taşı döngüyle kaydırır: A, B'nin yerine; B, C'nin yerine; C, A'nın yerine geçer. Üç kez çevirince (3 × 120° = 360°) her şey eski yerine döner. Matematikçiler bu küçük dünyaya <b>üç elemanlı dönme grubu</b> der:</p>
         <p class="mk-formul">r³ = e &nbsp;·&nbsp; r⁻¹ = r²</p>
         <p>İkinci eşitlik şunu söyler: bir çevirmeyi “geri almak” için ters yöne çevirmek gerekmez; aynı yöne iki kez daha çevirmek aynı işi görür, çünkü −120° ile +240° aynı yere varır (360'a göre denktir). Bilgisayarın her dönüşü hesaplarken kullandığı formül de kısadır: (x, y) noktası 120° dönünce (−x/2 − (√3/2)y, (√3/2)x − y/2) olur.</p>
+        <p><b>Kaç farklı tahta var?</b> 24 deliğe 12 siyah ve 12 beyaz taş sırayla konur. Oyunun her anında iki rengin taş sayıları ya eşittir ya da başlayan renk bir taş öndedir. Bütün ara konumları toplayınca:</p>
+        <p class="mk-formul">Σ C(24, n) · C(n, ⌈n/2⌉) ≈ 5,5 × 10<sup>10</sup> konum &nbsp;·&nbsp; tahta dolunca C(24, 12) = 2.704.156</p>
+        <p>Olası oyun sayısı çok daha büyüktür: sırayla 24, 23, …, 1 boş delik vardır ve her hamlede 3 seçenek (çevirme yok, sola, sağa) bulunur; çarpım en fazla 24! · 3<sup>24</sup> ≈ 1,8 × 10<sup>35</sup> eder. Bu iki sayı <a href="#merdiven">Sayıların merdiveni</a>'nde öteki oyunlarla yan yana.</p>
         <p class="mk-benzetme"><b>Benzetme</b> Yalnızca üç durağı olan bir saat düşün: akrep 12'den 4'e, 4'ten 8'e, 8'den yine 12'ye gider. Kaç kez çevirirsen çevir, hangi durakta olduğunu bulmak için çevirme sayısını 3'e bölüp kalana bakman yeter.</p>
       </div>
     </details>
@@ -378,21 +385,24 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <p class="aciklama">Oyunların büyüklüğünü yan yana koyunca ortaya çıkan manzara. Çubuk uzunluğu, sayının <b>basamak sayısıyla</b> orantılı (logaritmik ölçek): bir çubuk ötekinin iki katı uzunsa, sayı ötekinin karesi kadardır.</p>
   <ol class="merdiven" id="merdivenListe">
     <li class="basamak cozuk" style="--g: 1.8%"><span class="ad">Mastermind<small>olası gizli kod</small></span><span class="cubuk"><i></i></span><span class="sayi">1296</span></li>
+    <li class="basamak medar" style="--g: 6.3%"><span class="ad">MEDAR<small>kurala uygun konum · 24 delik, 12 + 12 taş</small></span><span class="cubuk"><i></i></span><span class="sayi">5,5 × 10<sup>10</sup></span></li>
     <li class="basamak cozuk" style="--g: 9.1%"><span class="ad">Pentago<small>konum, simetriler ayıklanmış · çözüldü</small></span><span class="cubuk"><i></i></span><span class="sayi">3 × 10<sup>15</sup></span></li>
     <li class="basamak" style="--g: 12.8%"><span class="ad">Sudoku<small>doldurulmuş tablo</small></span><span class="cubuk"><i></i></span><span class="sayi">6,7 × 10<sup>21</sup></span></li>
     <li class="basamak cozuk" style="--g: 16.4%"><span class="ad">Othello<small>konum · çözüldü</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>28</sup></span></li>
+    <li class="basamak medar" style="--g: 20.7%"><span class="ad">MEDAR<small>olası oyun (üst sınır: 24! · 3<sup>24</sup>)</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 1,8 × 10<sup>35</sup></span></li>
     <li class="basamak acik" style="--g: 26.2%"><span class="ad">Satranç<small>kurala uygun konum</small></span><span class="cubuk"><i></i></span><span class="sayi">4,8 × 10<sup>44</sup></span></li>
     <li class="basamak kiyas" style="--g: 46.9%"><span class="ad">Evrendeki atomlar<small>kıyas için</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>80</sup></span></li>
     <li class="basamak acik" style="--g: 70.4%"><span class="ad">Satranç<small>olası oyun (Shannon tahmini)</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>120</sup></span></li>
     <li class="basamak acik" style="--g: 100%"><span class="ad">Go (19 × 19)<small>kurala uygun konum</small></span><span class="cubuk"><i></i></span><span class="sayi">2,1 × 10<sup>170</sup></span></li>
   </ol>
-  <p class="lejant"><span>Çözüldü ya da sayıldı</span><span class="l-acik">Çözülmedi</span><span class="l-kiyas">Kıyas</span></p>
+  <p class="lejant"><span class="l-medar">MEDAR</span><span>Çözüldü ya da sayıldı</span><span class="l-acik">Çözülmedi</span><span class="l-kiyas">Kıyas</span></p>
   <details class="mat-kutu">
     <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">Neden normal bir grafik çizilemez?</span></summary>
     <div class="mk-ic">
       <p>Bu sayıları normal (doğrusal) bir grafikte gösterseydik, Go'nun çubuğu ekrana sığsın diye öteki bütün çubuklar mikroskopla bile görünmeyecek kadar kısa kalırdı. Bu yüzden çubuğun uzunluğu sayının kendisini değil, <b>logaritmasını</b>, yani yaklaşık kaç basamaklı olduğunu gösteriyor:</p>
       <p class="mk-formul">log<sub>10</sub>(10<sup>a</sup>) = a &nbsp;·&nbsp; log(x²) = 2 · log(x)</p>
       <p>İkinci eşitlik, “iki kat uzun çubuk = karesi kadar büyük sayı” kuralının kaynağı. Satranç konumlarının çubuğu (44 basamak) atomlarınkinin (80 basamak) yarısı kadar görünür, ama aradaki fark 10<sup>36</sup> kattır.</p>
+      <p><b>MEDAR'ın ilginç durumu.</b> Konum sayısı (yaklaşık 5,5 × 10<sup>10</sup>) Pentago'nunkinden on binlerce kat küçük; yani bir okul bilgisayar laboratuvarının gücü, oyunu tamamen çözmeye yetecek ölçekte. Olası oyun sayısı ise (en fazla 1,8 × 10<sup>35</sup>) Othello'nun konum sayısını geçer: tahta küçük ama yollar çok. Bu fark, dönmelerin aynı konuma çok farklı yollardan varılmasını sağlamasından gelir.</p>
       <p class="mk-benzetme"><b>Benzetme</b> Bu grafik bir asansör gibidir: her kat, sayıyı 10 ile çarpar. Mastermind 3. katta oturur, Go ise 170. katta.</p>
     </div>
   </details>
