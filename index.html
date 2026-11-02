@@ -91,11 +91,54 @@ body { overflow-x: clip; }
 .acilir a.alt::before { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; border-top: 1.5px solid var(--kare-kalin); }
 .acilir .tumu { margin-top: 4px; border-top: 1px dashed var(--kare-kalin); border-radius: 0 0 8px 8px; font-size: .88rem; font-weight: 700; color: var(--kirmizi); }
 .sekme-grup:last-of-type .acilir { left: auto; right: 0; }
+/* ---------- Telefon: üst çubuk ve tam genişlik menü ----------
+   Masaüstünde sekmeler defter ayracı gibi yan yana durur. Telefonda yedi sekme üç-dört satıra dağılıp
+   düzensiz görünüyordu; burada tek bir ince çubuk (imza + ad + Menü) kalır, sekmeler Menü'ye basınca
+   tam genişlikte, alt alta açılan bir listeye dönüşür. Gruplar (Matematik, Eğitim, Mühendislik)
+   açılır-kapanır bölmeler gibi çalışır. */
+.mobil-cubuk { display: none; }
 @media (max-width: 760px) {
-  .ayrac { justify-content: flex-start; padding-left: 14px; gap: 4px; }
-  .ayrac > a, .sekme, .tema-sekme { font-size: .88rem; padding: 7px 10px 8px; }
-  .sekme-grup { position: static; }
-  .acilir, .sekme-grup:last-of-type .acilir { left: 14px; right: 0; width: auto; }
+  body { padding-top: 60px; }
+  .mobil-cubuk { display: flex; align-items: center; justify-content: space-between; gap: 10px; position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    height: 60px; padding: 0 max(14px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
+    background: color-mix(in srgb, var(--kagit) 88%, transparent); -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+    border-bottom: 1.5px solid var(--kare-kalin); }
+  .mc-marka { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--metin); min-width: 0; }
+  .mc-marka span { font-family: "Fraunces", Georgia, serif; font-size: 1.22rem; line-height: 1; white-space: nowrap; }
+  .mc-marka i { font-weight: 500; }
+  .mc-marka b { font-weight: 600; letter-spacing: .05em; color: var(--murekkep); font-style: normal; }
+  .mc-menu { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 16px 0 14px; border-radius: 999px; border: 1.5px solid var(--kare-kalin);
+    background: var(--kagit); color: var(--murekkep); font: inherit; font-weight: 700; font-size: .95rem; cursor: pointer; }
+  .mc-menu[aria-expanded="true"] { border-color: var(--kirmizi); color: var(--metin); }
+  .mc-hamburger { position: relative; width: 18px; height: 14px; }
+  .mc-hamburger i { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s, opacity .2s, top .25s; }
+  .mc-hamburger i:nth-child(1) { top: 0; } .mc-hamburger i:nth-child(2) { top: 6px; } .mc-hamburger i:nth-child(3) { top: 12px; }
+  .mc-menu[aria-expanded="true"] .mc-hamburger i:nth-child(1) { top: 6px; transform: rotate(45deg); }
+  .mc-menu[aria-expanded="true"] .mc-hamburger i:nth-child(2) { opacity: 0; }
+  .mc-menu[aria-expanded="true"] .mc-hamburger i:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+  /* Menü kapalıyken sekmeler gizli; açılınca çubuğun altında tam ekran liste */
+  .ayrac { display: none; }
+  .ayrac.acik { display: flex; flex-direction: row; flex-wrap: wrap; align-content: flex-start; justify-content: stretch; gap: 8px;
+    position: fixed; top: 60px; left: 0; right: 0; bottom: 0; z-index: 59; overflow-y: auto; overscroll-behavior: contain;
+    padding: 14px max(16px, env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background: var(--kagit); animation: menuGel .22s ease both; }
+  @keyframes menuGel { from { opacity: 0; transform: translateY(-8px); } }
+  .ayrac .sekme-grup { position: static; flex: 1 1 100%; }
+  .ayrac .sekme { width: 100%; }
+  .ayrac > a, .ayrac .sekme { flex: 1 1 100%; display: flex; justify-content: space-between; align-items: center; min-height: 52px;
+    padding: 12px 16px; border-radius: 14px; border: 1.5px solid var(--kare-kalin); border-left: 4px solid var(--murekkep); font-size: 1.05rem; text-align: left; }
+  .ayrac .sekme[aria-expanded="true"] { border-left-color: var(--kirmizi); border-bottom-color: var(--kare-kalin); border-radius: 14px 14px 0 0; }
+  .ayrac .acilir, .ayrac .sekme-grup:last-of-type .acilir { position: static; width: auto; margin: 0; padding: 6px 6px 8px; border: 1.5px solid var(--kare-kalin); border-top: 0;
+    border-left: 4px solid var(--kirmizi); border-radius: 0 0 14px 14px; box-shadow: none; }
+  .ayrac .acilir a { padding: 10px 12px; }
+  .ayrac .tema-sekme { flex: 1 1 calc(50% - 4px); justify-content: center; min-height: 48px; border-radius: 14px; border: 1.5px solid var(--kare-kalin); font-size: .95rem; }
+  html.menu-acik { overflow: hidden; }
+}
+@media (max-width: 380px) {
+  .mc-marka span { font-size: 1.05rem; }
+  .mc-yazi { display: none; }            /* çok dar ekranda yalnız üç çizgi */
+  .mc-menu { padding: 0 13px; }
+  .imza { display: none; }            /* imza zaten üst çubukta; dar ekranda başlık tek satırda kalsın */
 }
 h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 500; font-style: italic; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 18px; color: var(--metin); font-variation-settings: "SOFT" 100; }
 h1 span { font-style: normal; font-weight: 600; letter-spacing: .05em; color: var(--murekkep); }
@@ -291,7 +334,12 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <body>
 <div class="sayfa"><div class="ic">
 
-<nav class="ayrac" aria-label="Bölümler">
+<!-- Telefon üst çubuğu: imza + ad solda, Menü düğmesi sağda (yalnız 760 pikselin altında görünür) -->
+<div class="mobil-cubuk">
+  <a class="mc-marka" href="#" aria-label="Muhsin ENGİN, sayfanın başına dön"><me-imza boyut="34" izsiz aria-hidden="true"></me-imza><span><i>Muhsin</i> <b>ENGİN</b></span></a>
+  <button type="button" class="mc-menu" aria-expanded="false" aria-controls="anaMenu"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+</div>
+<nav class="ayrac" id="anaMenu" aria-label="Bölümler">
   <div class="sekme-grup">
     <button type="button" class="sekme" aria-expanded="false" aria-controls="m-mat">Matematik &amp; Geometri<span class="sekme-ok" aria-hidden="true"></span></button>
     <div class="acilir" id="m-mat" hidden>
@@ -822,6 +870,19 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   const grubuAc = (id) => { const d = document.getElementById(id); if (d && d.tagName === "DETAILS") d.open = true; };
   document.querySelectorAll(".acilir .tumu").forEach((a) => a.addEventListener("click", () => { grubuAc(a.dataset.grup); kapat(); }));
   if (location.hash) grubuAc(location.hash.slice(1));
+  // Telefon menüsü: aç/kapa, bağlantıya basınca kapan, Esc ile kapan, açıkken sayfa kaymasın
+  const mb = document.querySelector(".mc-menu"), menu = document.getElementById("anaMenu");
+  const menuKapat = () => { menu.classList.remove("acik"); mb.setAttribute("aria-expanded", "false"); document.documentElement.classList.remove("menu-acik"); };
+  mb.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const ac = !menu.classList.contains("acik");
+    menu.classList.toggle("acik", ac); mb.setAttribute("aria-expanded", String(ac)); document.documentElement.classList.toggle("menu-acik", ac);
+    if (ac) { const ilk = menu.querySelector(".sekme"); if (ilk) ilk.focus({ preventScroll: true }); }
+  });
+  menu.addEventListener("click", (e) => { if (e.target.closest("a[href]")) menuKapat(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && menu.classList.contains("acik")) { menuKapat(); mb.focus(); } });
+  matchMedia("(min-width: 761px)").addEventListener("change", (m) => { if (m.matches) menuKapat(); });
+  document.querySelector(".mc-marka").addEventListener("click", (e) => { e.preventDefault(); menuKapat(); scrollTo({ top: 0, behavior: "smooth" }); });
 })();
 </script>
 <script src="dron/dron3d.js"></script>
