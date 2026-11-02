@@ -258,12 +258,15 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 .sy.kritik .sy-gun { color: var(--kirmizi); }
 .tanitim-not { margin-top: 10px; font-size: .92rem; }
 /* ---------- Bağlantılar ---------- */
-.baglantilar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 28px; border-top: 2px solid var(--metin); padding-top: 14px; }
+/* Gazete sütunları: gruplar boşluk bırakmadan alt alta akar (kısa grubun altı boş kalmaz) */
+.baglantilar { columns: 3 250px; column-gap: 28px; border-top: 2px solid var(--metin); padding-top: 14px; }
+.bag-grup { break-inside: avoid; margin-bottom: 18px; }
 .bag-grup h3 { font-family: var(--baslik); font-size: 1.05rem; margin: 0 0 6px; color: var(--kirmizi); letter-spacing: .02em; }
 .bag-grup ul { list-style: none; margin: 0; padding: 0; }
 .bag-grup li { border-bottom: 1px solid var(--kare-kalin); }
 .bag-grup a { display: flex; justify-content: space-between; gap: 10px; padding: 7px 2px; text-decoration: none; color: var(--murekkep); font-weight: 600; font-size: .98rem; }
 .bag-grup a::after { content: "↗"; color: var(--kursun); font-weight: 400; }
+.bag-grup a small { display: block; font-weight: 400; font-size: .82rem; color: var(--kursun); margin-top: 1px; }
 .bag-grup a:hover { background: color-mix(in srgb, var(--murekkep) 6%, transparent); }
 
 footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
@@ -446,7 +449,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 
 <section class="icindekiler" id="baglantilar" aria-labelledby="bagBaslik">
   <h2 id="bagBaslik">Bağlantılar</h2>
-  <p class="aciklama">Öğretmenlerin ve proje yürüten öğrencilerin sık açtığı resmî sayfalar.</p>
+  <p class="aciklama">Öğretmenlerin ve proje yürüten öğrencilerin sık açtığı resmî sayfalar, yarışma sistemleri ve güvenilir bilim kaynakları.</p>
   <div class="baglantilar">
     <div class="bag-grup"><h3>TÜBİTAK</h3><ul>
       <li><a href="https://tubitak.gov.tr/tr/yarismalar/icerik-lise-ogrencileri-arastirma-projeleri-yarismasi" target="_blank" rel="noopener">2204-A Lise Öğrencileri Araştırma Projeleri</a></li>
@@ -454,6 +457,12 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <li><a href="https://tybs.tubitak.gov.tr/" target="_blank" rel="noopener">TYBS · başvuru sistemi</a></li>
       <li><a href="https://arbis.tubitak.gov.tr/" target="_blank" rel="noopener">ARBİS · araştırmacı kaydı</a></li>
       <li><a href="https://bilimolimpiyatlari.tubitak.gov.tr/" target="_blank" rel="noopener">Bilim Olimpiyatları</a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>TEKNOFEST ve Teknoloji</h3><ul>
+      <li><a href="https://teknofest.org/tr/yarismalar/" target="_blank" rel="noopener"><span>TEKNOFEST yarışmaları<small>Şartnameler, takvim, kategoriler</small></span></a></li>
+      <li><a href="https://www.t3kys.com/" target="_blank" rel="noopener"><span>T3KYS · başvuru sistemi<small>Takım kurma, rapor yükleme, sonuçlar</small></span></a></li>
+      <li><a href="https://www.deneyap.org/" target="_blank" rel="noopener"><span>Deneyap Teknoloji Atölyeleri<small>Ortaokul ve lise için ücretsiz atölyeler</small></span></a></li>
+      <li><a href="https://www.t3vakfi.org/" target="_blank" rel="noopener"><span>T3 Vakfı<small>Türkiye Teknoloji Takımı Vakfı</small></span></a></li>
     </ul></div>
     <div class="bag-grup"><h3>MEB</h3><ul>
       <li><a href="https://mebbis.meb.gov.tr/" target="_blank" rel="noopener">MEBBİS</a></li>
@@ -465,6 +474,29 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <div class="bag-grup"><h3>Sınavlar</h3><ul>
       <li><a href="https://odsgm.meb.gov.tr/" target="_blank" rel="noopener">MEB ÖDSGM · LGS</a></li>
       <li><a href="https://www.osym.gov.tr/" target="_blank" rel="noopener">ÖSYM · YKS</a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>Bilim ve Mühendislik Yayınları</h3><ul>
+      <li><a href="https://bilimteknik.tubitak.gov.tr/" target="_blank" rel="noopener"><span>Bilim ve Teknik<small>TÜBİTAK’ın popüler bilim dergisi</small></span></a></li>
+      <li><a href="https://bilimgenc.tubitak.gov.tr/" target="_blank" rel="noopener"><span>Bilim Genç<small>TÜBİTAK’ın gençlere yönelik dijital yayını</small></span></a></li>
+      <li><a href="https://www.quantamagazine.org/" target="_blank" rel="noopener"><span>Quanta Magazine<small>Matematik, fizik ve bilgisayar bilimi · İngilizce</small></span></a></li>
+      <li><a href="https://www.scientificamerican.com/" target="_blank" rel="noopener"><span>Scientific American<small>Bilim haberleri ve makaleler · İngilizce</small></span></a></li>
+      <li><a href="https://spectrum.ieee.org/" target="_blank" rel="noopener"><span>IEEE Spectrum<small>Mühendislik ve teknoloji · İngilizce</small></span></a></li>
+      <li><a href="https://science.nasa.gov/" target="_blank" rel="noopener"><span>NASA Science<small>Uzay ve yer bilimleri · İngilizce</small></span></a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>Ansiklopedi ve Akademik</h3><ul>
+      <li><a href="https://tr.wikipedia.org/" target="_blank" rel="noopener"><span>Vikipedi<small>Özgür ansiklopedi · Türkçe</small></span></a></li>
+      <li><a href="https://en.wikipedia.org/" target="_blank" rel="noopener"><span>Wikipedia<small>The free encyclopedia · İngilizce</small></span></a></li>
+      <li><a href="https://dergipark.org.tr/" target="_blank" rel="noopener"><span>DergiPark<small>Türkiye’deki akademik dergiler</small></span></a></li>
+      <li><a href="https://scholar.google.com.tr/" target="_blank" rel="noopener"><span>Google Akademik<small>Makale ve atıf arama</small></span></a></li>
+      <li><a href="https://arxiv.org/" target="_blank" rel="noopener"><span>arXiv<small>Fizik, matematik, bilgisayar ön baskıları</small></span></a></li>
+      <li><a href="https://tr.khanacademy.org/" target="_blank" rel="noopener"><span>Khan Academy Türkçe<small>Ücretsiz ders videoları ve alıştırmalar</small></span></a></li>
+    </ul></div>
+    <div class="bag-grup"><h3>Matematik Araçları</h3><ul>
+      <li><a href="https://www.geogebra.org/" target="_blank" rel="noopener"><span>GeoGebra<small>Dinamik geometri ve grafik</small></span></a></li>
+      <li><a href="https://www.desmos.com/calculator?lang=tr" target="_blank" rel="noopener"><span>Desmos<small>Grafik hesap makinesi</small></span></a></li>
+      <li><a href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>Wolfram|Alpha<small>Hesaplama ve bilgi motoru</small></span></a></li>
+      <li><a href="https://mathworld.wolfram.com/" target="_blank" rel="noopener"><span>MathWorld<small>Matematik ansiklopedisi · İngilizce</small></span></a></li>
+      <li><a href="https://oeis.org/" target="_blank" rel="noopener"><span>OEIS<small>Tam sayı dizileri ansiklopedisi</small></span></a></li>
     </ul></div>
   </div>
 </section>
