@@ -142,6 +142,51 @@ h2 { font-family: var(--baslik); font-weight: 800; font-size: clamp(1.6rem, 3.6v
 .lejant .l-acik::before { background: linear-gradient(90deg, var(--kirmizi), var(--turuncu)); }
 .lejant .l-kiyas::before { background: var(--kursun); }
 
+/* ---------- Çok yönlü karşılaştırma ---------- */
+.olcutler { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.olcut { padding: 14px 16px 12px; border-radius: 16px; background: var(--kart); border: 1.5px solid var(--kare-kalin); display: flex; flex-direction: column; }
+.olcut h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.12rem; margin: 0; color: var(--murekkep); }
+.olcut .olc-ne { font-size: .84rem; color: var(--kursun); margin: 2px 0 10px; line-height: 1.4; }
+.olcut .tur { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 0 7px; border-radius: 999px; border: 1.5px solid currentColor; margin-left: 6px; vertical-align: 2px; }
+.olcut .tur.olcum { color: var(--murekkep); } .olcut .tur.yorum { color: var(--turuncu); }
+.satirlar { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.satirlar li { display: grid; grid-template-columns: 86px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: .84rem; }
+.satirlar .o-ad { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.satirlar li.medar .o-ad { color: var(--turuncu); }
+.satirlar .o-cubuk { height: 10px; border-radius: 5px; background: var(--kare); overflow: hidden; }
+.satirlar .o-cubuk i { display: block; height: 100%; border-radius: 5px; background: var(--murekkep); width: calc(var(--p) * 20%); }
+.satirlar li.medar .o-cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
+.satirlar li.yok .o-cubuk { background: repeating-linear-gradient(135deg, var(--kare) 0 5px, transparent 5px 10px); }
+.satirlar .o-deger { font-size: .78rem; color: var(--kursun); white-space: nowrap; text-align: right; min-width: 70px; }
+.olcut .olc-kural { margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed var(--kare-kalin); font-size: .78rem; color: var(--kursun); line-height: 1.45; }
+.onde { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.onde li { font-size: .86rem; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--kare-kalin); background: var(--kart); }
+.onde li b { color: var(--murekkep); }
+.agirlik { margin-top: 26px; padding: 18px; border-radius: 18px; background: var(--kart); border: 1.5px solid var(--kare-kalin); border-top: 5px solid var(--turuncu); }
+.agirlik h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.3rem; margin: 0 0 4px; }
+.agirlik > p { margin: 0 0 12px; font-size: .95rem; max-width: 70ch; }
+.hazir { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.hazir button { font: inherit; font-size: .88rem; font-weight: 700; padding: 5px 14px; border-radius: 999px; border: 1.5px solid var(--murekkep); background: var(--kagit); color: var(--murekkep); cursor: pointer; }
+.hazir button[aria-pressed="true"] { background: var(--murekkep); color: var(--kagit); }
+.agirlik-izgara { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 22px; align-items: start; }
+.surgu { display: grid; grid-template-columns: minmax(0, 1fr) 110px 22px; gap: 8px; align-items: center; font-size: .88rem; padding: 3px 0; }
+.surgu input { width: 100%; accent-color: var(--murekkep); }
+.surgu output { font-weight: 700; text-align: right; color: var(--murekkep); }
+.sira { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sira li { display: grid; grid-template-columns: 24px 96px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: .9rem; transition: transform .3s; }
+.sira .s-no { font-weight: 800; color: var(--kursun); text-align: right; }
+.sira .s-ad { font-weight: 700; }
+.sira li.medar .s-ad { color: var(--turuncu); }
+.sira .s-cubuk { height: 14px; border-radius: 7px; background: var(--kare); overflow: hidden; }
+.sira .s-cubuk i { display: block; height: 100%; border-radius: 7px; background: var(--murekkep); transition: width .45s cubic-bezier(.3, .7, .2, 1); }
+.sira li.medar .s-cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
+.sira .s-puan { font: italic 600 .98rem/1 "Fraunces", Georgia, serif; text-align: right; color: var(--murekkep); }
+.sira .s-eksik { grid-column: 3 / -1; font-size: .74rem; color: var(--kirmizi); margin-top: -4px; }
+.bulmaca-sec { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; margin: 0 0 14px; cursor: pointer; }
+.bulmaca-sec input { width: 18px; height: 18px; accent-color: var(--murekkep); }
+.agirlik-not { margin: 14px 0 0; font-size: .85rem; color: var(--kursun); }
+@media (max-width: 760px) { .agirlik-izgara { grid-template-columns: minmax(0, 1fr); } .satirlar li { grid-template-columns: 74px minmax(0, 1fr) auto; } .sira li { grid-template-columns: 22px 84px minmax(0, 1fr) 36px; } .surgu { grid-template-columns: minmax(0, 1fr) 90px 22px; } }
+
 /* ---------- Kaynaklar ve alt bilgi ---------- */
 .kaynaklar { font-size: .88rem; color: var(--kursun); columns: 2 320px; column-gap: 28px; padding-left: 18px; margin: 0; }
 .kaynaklar li { margin-bottom: 4px; break-inside: avoid; }
@@ -187,6 +232,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
     <a class="ust-link" href="#medar">MEDAR</a>
     <a class="ust-link" href="#populer">Popüler oyunlar</a>
     <a class="ust-link" href="#merdiven">Sayıların merdiveni</a>
+    <a class="ust-link" href="#kiyas">Karşılaştırma</a>
   </div>
   <button type="button" class="ust-dugme muzik-sekme" id="muzikDugme" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="muzik-yazi">Müzik</span></button>
   <button type="button" class="ust-dugme" data-tema-dugme aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
@@ -198,7 +244,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <p class="giris">İyi bir zeka oyununun kuralları bir dakikada öğrenilir, ustalığı bir ömür sürer. Burada kendi tasarladığım MEDAR'ı ve dünyanın en sevilen zeka oyunlarını bulacaksın. Her oyunun altındaki <b>“Bunun arkasındaki matematik”</b> kutusu, o oyunu matematikçilerin neden bu kadar sevdiğini kısaca anlatıyor.</p>
   <ul class="cipler">
     <li><a href="#medar">MEDAR</a></li><li><a href="#satranc">Satranç</a></li><li><a href="#go">Go</a></li><li><a href="#mangala">Mangala</a></li><li><a href="#pentago">Pentago</a></li>
-    <li><a href="#reversi">Reversi</a></li><li><a href="#hex">Hex</a></li><li><a href="#mastermind">Mastermind</a></li><li><a href="#sudoku">Sudoku</a></li><li><a href="#merdiven">Sayıların merdiveni</a></li>
+    <li><a href="#reversi">Reversi</a></li><li><a href="#hex">Hex</a></li><li><a href="#mastermind">Mastermind</a></li><li><a href="#sudoku">Sudoku</a></li><li><a href="#merdiven">Sayıların merdiveni</a></li><li><a href="#kiyas">Çok yönlü karşılaştırma</a></li>
   </ul>
 </header>
 
@@ -386,6 +432,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <ol class="merdiven" id="merdivenListe">
     <li class="basamak cozuk" style="--g: 1.8%"><span class="ad">Mastermind<small>olası gizli kod</small></span><span class="cubuk"><i></i></span><span class="sayi">1296</span></li>
     <li class="basamak medar" style="--g: 6.3%"><span class="ad">MEDAR<small>kurala uygun konum · 24 delik, 12 + 12 taş</small></span><span class="cubuk"><i></i></span><span class="sayi">5,5 × 10<sup>10</sup></span></li>
+    <li class="basamak" style="--g: 7.7%"><span class="ad">Mangala<small>konum, üst sınır: 48 taşın 14 çukura dağılışı</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 1,3 × 10<sup>13</sup></span></li>
     <li class="basamak cozuk" style="--g: 9.1%"><span class="ad">Pentago<small>konum, simetriler ayıklanmış · çözüldü</small></span><span class="cubuk"><i></i></span><span class="sayi">3 × 10<sup>15</sup></span></li>
     <li class="basamak" style="--g: 12.8%"><span class="ad">Sudoku<small>doldurulmuş tablo</small></span><span class="cubuk"><i></i></span><span class="sayi">6,7 × 10<sup>21</sup></span></li>
     <li class="basamak cozuk" style="--g: 16.4%"><span class="ad">Othello<small>konum · çözüldü</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>28</sup></span></li>
@@ -404,6 +451,41 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
       <p>İkinci eşitlik, “iki kat uzun çubuk = karesi kadar büyük sayı” kuralının kaynağı. Satranç konumlarının çubuğu (44 basamak) atomlarınkinin (80 basamak) yarısı kadar görünür, ama aradaki fark 10<sup>36</sup> kattır.</p>
       <p><b>MEDAR'ın ilginç durumu.</b> Konum sayısı (yaklaşık 5,5 × 10<sup>10</sup>) Pentago'nunkinden on binlerce kat küçük; yani bir okul bilgisayar laboratuvarının gücü, oyunu tamamen çözmeye yetecek ölçekte. Olası oyun sayısı ise (en fazla 1,8 × 10<sup>35</sup>) Othello'nun konum sayısını geçer: tahta küçük ama yollar çok. Bu fark, dönmelerin aynı konuma çok farklı yollardan varılmasını sağlamasından gelir.</p>
       <p class="mk-benzetme"><b>Benzetme</b> Bu grafik bir asansör gibidir: her kat, sayıyı 10 ile çarpar. Mastermind 3. katta oturur, Go ise 170. katta.</p>
+    </div>
+  </details>
+</section>
+
+<section class="bolum" id="kiyas" aria-labelledby="kiyasBaslik">
+  <h2 id="kiyasBaslik">Çok yönlü karşılaştırma</h2>
+  <p class="aciklama">Hangi oyun “daha iyi”? Bu sorunun tek bir cevabı yok, çünkü cevap neye baktığına bağlı. Aşağıda dokuz oyunu yedi ayrı ölçütle karşılaştırıyoruz. Her grafikte başka oyunlar önde. Puanlar 1–5 arasında; <b>ölçüm</b> etiketli ölçütler hesaplanmış sayılara, <b>yorum</b> etiketli olanlar ise açıkça yazılmış gerekçelere dayanıyor. Çizgili çubuk, o ölçütün o oyuna uymadığını gösterir.</p>
+  <div class="olcutler" id="olcutler"></div>
+  <ul class="onde" id="onde" aria-label="Her ölçütte önde olan oyunlar"></ul>
+
+  <div class="agirlik" id="agirlik">
+    <h3>Ortalama alalım mı? Önce sen karar ver.</h3>
+    <p>Tek bir “genel puan” almak için ölçütlere ağırlık vermek gerekir, ve hangi ölçütün ne kadar önemli olduğu tamamen bakış açısına bağlıdır. Hazır bakış açılarından birini seç ya da kaydırıcılarla kendi ağırlıklarını ver: sıralamanın nasıl değiştiğini izle.</p>
+    <div class="hazir" role="group" aria-label="Hazır bakış açıları">
+      <button type="button" data-hazir="esit">Hepsi eşit</button>
+      <button type="button" data-hazir="bilgisayar">Bilgisayar bilimcisi</button>
+      <button type="button" data-hazir="ogretmen">Öğretmen</button>
+      <button type="button" data-hazir="oyuncu">Oyuncu</button>
+      <button type="button" data-hazir="arastirmaci">Genç araştırmacı</button>
+    </div>
+    <label class="bulmaca-sec"><input type="checkbox" id="bulmacaKat"> Tek kişilik bulmacaları (Mastermind, Sudoku) da sıralamaya kat</label>
+    <div class="agirlik-izgara">
+      <div id="surguler"></div>
+      <ol class="sira" id="sira" aria-live="polite"></ol>
+    </div>
+    <p class="agirlik-not">Bulmacaları katınca bir deney daha yapmış olursun: Mastermind ve Sudoku tek kişilik ya da tahtasız oldukları için bazı ölçütlere uymuyor. Ortalama yalnızca uyan ölçütlerle alındığından, zayıf olabilecekleri yönler hesaba girmiyor ve bu iki oyun hemen en üste çıkıyor. Bu, ortalamanın bilinen tuzaklarından biri: eksik veri, sonucu sessizce değiştirir.</p>
+  </div>
+
+  <details class="mat-kutu">
+    <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">Ağırlıklı ortalama ve neden tek bir şampiyon yok?</span></summary>
+    <div class="mk-ic">
+      <p>Genel puan bir <b>ağırlıklı ortalamadır</b>: her ölçütün puanı kendi ağırlığıyla çarpılır, toplam ağırlığa bölünür.</p>
+      <p class="mk-formul">G = (w₁p₁ + w₂p₂ + … + wₙpₙ) / (w₁ + w₂ + … + wₙ)</p>
+      <p>Bazı ölçütler birbirinin tersine çalışır: oyun ağacı büyüdükçe oyunu tam çözmek zorlaşır. Bir oyunun bir ölçütte önde olması, çoğu zaman başka bir ölçütte geride olmasının bedelidir. Matematikçiler buna <i>Pareto</i> düşüncesi der: hiçbir ölçütte geride kalmadan bir başkasında öne geçmek mümkün değilse, o seçenek “Pareto-en iyi”dir. Buradaki dokuz oyunun neredeyse hepsi böyledir.</p>
+      <p class="mk-benzetme"><b>Benzetme</b> Bir karnedeki not ortalaması gibi: matematiği 5, müziği 2 olan öğrenciyle tersi aynı ortalamayı alır, ama ikisi çok farklı öğrencilerdir. Bir okul matematiğe iki kat ağırlık verirse sıralama hemen değişir. Oyunlar için de öyle.</p>
     </div>
   </details>
 </section>
@@ -429,6 +511,92 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
 
 </div></div>
 <script>
+// ---------- Çok yönlü karşılaştırma: veriler, küçük grafikler ve ağırlık deneyi ----------
+(function () {
+  var OYUN = ['Satranç', 'Go', 'Mangala', 'Pentago', 'Reversi', 'Hex', 'Mastermind', 'Sudoku', 'MEDAR'];
+  // Her ölçüt: ad, tür (ölçüm/yorum), açıklama, puan kuralı, oyun başına [puan, gösterilen değer] (puan null: ölçüt uymuyor)
+  var OLCUT = [
+    { id: 'agac', ad: 'Olası oyun sayısı', tur: 'olcum', ne: 'Oyun ağacının büyüklüğü (log₁₀): oyunun ne kadar çok farklı yoldan oynanabileceği.',
+      kural: 'Puan: 10¹⁰⁰ ve üstü 5 · 10⁶⁰–10¹⁰⁰ arası 4 · 10⁴⁰–10⁶⁰ arası 3 · 10²⁰–10⁴⁰ arası 2. Pentago ve MEDAR için yayımlanmış tahmin olmadığından hamle sayılarının çarpımı (üst sınır) kullanıldı.',
+      v: { 'Satranç': [5, '10¹²³'], 'Go': [5, '10³⁶⁰'], 'Mangala': [null, 'bilinmiyor'], 'Pentago': [4, '≤ 10⁷⁴'], 'Reversi': [3, '10⁵⁸'], 'Hex': [4, '10⁹⁸ (11×11)'], 'Mastermind': [null, 'tek kişilik'], 'Sudoku': [null, 'tek kişilik'], 'MEDAR': [2, '≤ 10³⁵'] } },
+    { id: 'simetri', ad: 'Simetri', tur: 'olcum', ne: 'Boş tahtayı oyuncuların rollerini bozmadan kendi üstüne getiren döndürme ve yansımaların sayısı. Simetri, bilgisayarın inceleyeceği konumları bu sayı kadar azaltabilir.',
+      kural: 'Puan: 12 simetri 5 · 8 simetri 4 · 4 simetri 3 · 2 simetri 2. Satranç tahtasının renkli kareleri 90° dönmeyi bozar; Mangala\'da taşlar tek yöne dağıtılır; Hex\'te yansımalar kenar renklerini değiştirir.',
+      v: { 'Satranç': [3, '4'], 'Go': [4, '8'], 'Mangala': [2, '2'], 'Pentago': [4, '8'], 'Reversi': [4, '8'], 'Hex': [2, '2'], 'Mastermind': [null, 'tahtasız'], 'Sudoku': [4, '8'], 'MEDAR': [5, '12 (altıgen)'] } },
+    { id: 'cozum', ad: 'Bugünkü çözüm durumu', tur: 'olcum', ne: 'Kusursuz oyunun sonucu ve stratejisi ne kadar biliniyor?',
+      kural: 'Puan: tamamen çözüldü 5 · başlangıçtan çözüldü 4 · kazanan taraf kanıtlı ama strateji bilinmiyor 3 · yalnız parçaları çözüldü 2 · çözümden çok uzak ya da henüz denenmedi 1.',
+      v: { 'Satranç': [2, '7 taşlı oyun sonları'], 'Go': [1, 'çok uzak'], 'Mangala': [2, 'akraba Kalah çözüldü'], 'Pentago': [5, 'tam (2014)'], 'Reversi': [4, 'beraberlik (2023)'], 'Hex': [3, 'ilk başlayan kazanır'], 'Mastermind': [5, 'en çok 5 tahmin'], 'Sudoku': [5, 'her bulmaca anında'], 'MEDAR': [1, 'henüz denenmedi'] } },
+    { id: 'uygulama', ad: 'Okulda tam çözüm uygulanabilirliği', tur: 'olcum', ne: 'Konum sayısına göre, oyunu baştan sona çözmek hangi bilgisayar gücünü ister?',
+      kural: 'Puan: 10¹¹ konuma kadar okul bilgisayarları yeter 5 · 10¹⁴\'e kadar güçlü bir bilgisayar grubu 4 · 10²⁰\'ye kadar süperbilgisayar 3 · 10³⁰\'a kadar dev hesaplama 2 · daha büyüğü bugün imkânsız 1.',
+      v: { 'Satranç': [1, '10⁴⁴ konum'], 'Go': [1, '10¹⁷⁰ konum'], 'Mangala': [4, '≤ 10¹³ konum'], 'Pentago': [3, '10¹⁵ konum'], 'Reversi': [2, '10²⁸ konum'], 'Hex': [1, '10⁵⁷ konum'], 'Mastermind': [5, '1296 kod'], 'Sudoku': [5, 'tek bulmaca'], 'MEDAR': [5, '5,5 × 10¹⁰ konum'] } },
+    { id: 'etki', ad: 'Bilimsel ve tarihsel etki', tur: 'yorum', ne: 'Oyun, matematik ya da bilgisayar biliminde iz bıraktı mı?',
+      kural: 'Gerekçe: satranç (Deep Blue, yapay zekânın “deney tüpü”) ve Go (AlphaGo) 5 · Hex (Nash, Brouwer), Sudoku (graf boyama, 17 ipucu kanıtı), Mastermind (Knuth, bilgi kuramı) 4 · Reversi, Pentago (büyük ölçekli hesaplama), Mangala (kültürel miras, kuyu oyunları kuramı) 3 · MEDAR yeni, henüz incelenmedi 1.',
+      v: { 'Satranç': [5, ''], 'Go': [5, ''], 'Mangala': [3, ''], 'Pentago': [3, ''], 'Reversi': [3, ''], 'Hex': [4, ''], 'Mastermind': [4, ''], 'Sudoku': [4, ''], 'MEDAR': [1, ''] } },
+    { id: 'firsat', ad: 'Öğrenci araştırma fırsatı', tur: 'yorum', ne: 'Bir lise öğrencisinin özgün bir soru bulup bilgisayarla cevaplayabileceği açık alan ne kadar geniş?',
+      kural: 'Gerekçe: MEDAR çözülmemiş ve çözülebilir ölçekte 5 · Mangala\'nın Türk kuralları için bildiğimiz yayımlanmış tam çözüm yok 4 · Pentago, Hex, Mastermind ve Sudoku\'da küçük tahta ve kural değişiklikleri hâlâ açık 3 · satranç, Go ve Reversi çok iyi çalışılmış, yeni bir şey bulmak zor 2.',
+      v: { 'Satranç': [2, ''], 'Go': [2, ''], 'Mangala': [4, ''], 'Pentago': [3, ''], 'Reversi': [2, ''], 'Hex': [3, ''], 'Mastermind': [3, ''], 'Sudoku': [3, ''], 'MEDAR': [5, ''] } },
+    { id: 'sadelik', ad: 'Kuralların sadeliği', tur: 'yorum', ne: 'Yeni başlayan biri kuralları ne kadar kolay öğrenir?',
+      kural: 'Gerekçe: Go, Reversi, Hex, Mastermind ve Sudoku birkaç cümlede anlatılır 5 · Pentago ve Mangala bir ek kural ister (dönme, çift sayı) 4 · MEDAR\'da bölge ve köprü puanlaması var 3 · satrançta altı taş türü ve özel hamleler var 2.',
+      v: { 'Satranç': [2, ''], 'Go': [5, ''], 'Mangala': [4, ''], 'Pentago': [4, ''], 'Reversi': [5, ''], 'Hex': [5, ''], 'Mastermind': [5, ''], 'Sudoku': [5, ''], 'MEDAR': [3, ''] } }
+  ];
+  var kap = document.getElementById('olcutler');
+  kap.innerHTML = OLCUT.map(function (o) {
+    var sirali = OYUN.slice().sort(function (a, b) { return (o.v[b][0] || 0) - (o.v[a][0] || 0); });
+    return '<article class="olcut"><h3>' + o.ad + '<span class="tur ' + o.tur + '">' + (o.tur === 'olcum' ? 'ölçüm' : 'yorum') + '</span></h3>' +
+      '<p class="olc-ne">' + o.ne + '</p><ul class="satirlar">' + sirali.map(function (g) {
+        var p = o.v[g][0], d = o.v[g][1];
+        return '<li class="' + (g === 'MEDAR' ? 'medar ' : '') + (p == null ? 'yok' : '') + '"><span class="o-ad">' + g + '</span>' +
+          '<span class="o-cubuk" role="img" aria-label="' + g + ': ' + (p == null ? 'uymuyor' : p + ' / 5') + '"><i style="--p:' + (p || 0) + '"></i></span>' +
+          '<span class="o-deger">' + (p == null ? d : p + (d ? ' · ' + d : '')) + '</span></li>';
+      }).join('') + '</ul><p class="olc-kural">' + o.kural + '</p></article>';
+  }).join('');
+  // Her ölçütte önde olanlar
+  document.getElementById('onde').innerHTML = OLCUT.map(function (o) {
+    var en = Math.max.apply(null, OYUN.map(function (g) { return o.v[g][0] || 0; }));
+    return '<li>' + o.ad + ': <b>' + OYUN.filter(function (g) { return o.v[g][0] === en; }).join(', ') + '</b></li>';
+  }).join('');
+  // Ağırlık deneyi
+  var HAZIR = {
+    esit: { agac: 1, simetri: 1, cozum: 1, uygulama: 1, etki: 1, firsat: 1, sadelik: 1 },
+    bilgisayar: { agac: 3, simetri: 2, cozum: 1, uygulama: 3, etki: 2, firsat: 1, sadelik: 0 },
+    ogretmen: { agac: 1, simetri: 1, cozum: 1, uygulama: 1, etki: 2, firsat: 2, sadelik: 3 },
+    oyuncu: { agac: 3, simetri: 0, cozum: 0, uygulama: 0, etki: 1, firsat: 0, sadelik: 2 },
+    arastirmaci: { agac: 0, simetri: 2, cozum: 0, uygulama: 3, etki: 1, firsat: 3, sadelik: 1 }
+  };
+  var W = Object.assign({}, HAZIR.esit);
+  var sg = document.getElementById('surguler');
+  sg.innerHTML = OLCUT.map(function (o) {
+    return '<label class="surgu"><span>' + o.ad + '</span><input type="range" min="0" max="3" step="1" data-o="' + o.id + '"><output></output></label>';
+  }).join('');
+  var sira = document.getElementById('sira');
+  function hesapla() {
+    sg.querySelectorAll('input').forEach(function (i) { i.value = W[i.dataset.o]; i.nextElementSibling.textContent = W[i.dataset.o] + '×'; });
+    var katil = document.getElementById('bulmacaKat').checked;
+    var sonuc = OYUN.filter(function (g) { return katil || (g !== 'Mastermind' && g !== 'Sudoku'); }).map(function (g) {
+      var top = 0, ag = 0, eksik = 0;
+      OLCUT.forEach(function (o) { var p = o.v[g][0], w = W[o.id]; if (!w) return; if (p == null) { eksik++; return; } top += w * p; ag += w; });
+      return { g: g, p: ag ? top / ag : 0, eksik: eksik };
+    }).sort(function (a, b) { return b.p - a.p; });
+    sira.innerHTML = sonuc.map(function (r, i) {
+      return '<li class="' + (r.g === 'MEDAR' ? 'medar' : '') + '"><span class="s-no">' + (i + 1) + '</span><span class="s-ad">' + r.g + '</span>' +
+        '<span class="s-cubuk"><i style="width:' + (r.p * 20).toFixed(1) + '%"></i></span><span class="s-puan">' + r.p.toFixed(2).replace('.', ',') + '</span>' +
+        (r.eksik ? '<span class="s-eksik">' + r.eksik + ' ölçüt uymadı, ortalamaya katılmadı</span>' : '') + '</li>';
+    }).join('');
+  }
+  function hazirSec(ad) {
+    W = Object.assign({}, HAZIR[ad]);
+    document.querySelectorAll('[data-hazir]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.hazir === ad)); });
+    hesapla();
+  }
+  document.querySelectorAll('[data-hazir]').forEach(function (b) { b.addEventListener('click', function () { hazirSec(b.dataset.hazir); }); });
+  sg.addEventListener('input', function (e) {
+    var i = e.target; if (!i.dataset.o) return;
+    W[i.dataset.o] = +i.value;
+    document.querySelectorAll('[data-hazir]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    hesapla();
+  });
+  document.getElementById('bulmacaKat').addEventListener('change', hesapla);
+  hazirSec('esit');
+})();
 // Merdiven görününce çubuklar soldan dolar
 (function () {
   var m = document.getElementById('merdivenListe');
