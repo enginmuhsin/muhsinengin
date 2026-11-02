@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Muhsin ENGİN</title>
-<meta name="description" content="Muhsin ENGİN'in projeleri: matematik ve geometri oyunları (Master Class, Geometri Atölyesi, MEDAR), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
+<meta name="description" content="Muhsin ENGİN'in projeleri: matematik ve geometri (Master Class, Geometri Atölyesi), zeka oyunları (MEDAR, popüler zeka oyunları ve matematikleri), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
 <meta name="theme-color" content="#f5f7fa">
 <link rel="icon" href="simge.svg" type="image/svg+xml">
 <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
@@ -91,6 +91,7 @@ body { overflow-x: clip; }
 .acilir a.alt::before { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; border-top: 1.5px solid var(--kare-kalin); }
 .acilir .tumu { margin-top: 4px; border-top: 1px dashed var(--kare-kalin); border-radius: 0 0 8px 8px; font-size: .88rem; font-weight: 700; color: var(--kirmizi); }
 .sekme-grup:last-of-type .acilir { left: auto; right: 0; }
+@media (min-width: 761px) { .ayrac > a, .sekme, .tema-sekme { padding-left: 12px; padding-right: 12px; } .ayrac .muzik-yazi, .ayrac .tema-yazi { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .ayrac .tema-sekme { min-width: 44px; justify-content: center; } }
 /* ---------- Telefon: üst çubuk ve tam genişlik menü ----------
    Masaüstünde sekmeler defter ayracı gibi yan yana durur. Telefonda yedi sekme üç-dört satıra dağılıp
    düzensiz görünüyordu; burada tek bir ince çubuk (imza + ad + Menü) kalır, sekmeler Menü'ye basınca
@@ -346,8 +347,18 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
         <a href="https://masterclass.muhsinengin.com/"><b>Master Class <span aria-hidden="true">↗</span></b><small>Sayılar ve DNA'ları</small></a>
         <a href="https://masterclass.muhsinengin.com/geometri/"><b>Geometri Atölyesi <span aria-hidden="true">↗</span></b><small>Cetvel, pergel ve Öklid görevleri</small></a>
         <a href="https://masterclass.muhsinengin.com/hafta/"><b>Haftanın Soruları <span aria-hidden="true">↗</span></b><small>Her pazartesi iki olimpiyat sorusu</small></a>
-        <a href="medar/"><b>MEDAR</b><small>Strateji oyunu ve antrenman</small></a>
         <a class="tumu" href="#g-mat" data-grup="g-mat">Hepsini listede gör ↓</a>
+    </div>
+  </div>
+  <div class="sekme-grup">
+    <button type="button" class="sekme" aria-expanded="false" aria-controls="m-zeka">Zeka Oyunları<span class="sekme-ok" aria-hidden="true"></span></button>
+    <div class="acilir" id="m-zeka" hidden>
+        <a href="medar/"><b>MEDAR</b><small>Benim tasarladığım strateji oyunu</small></a>
+        <a class="alt" href="medar/oyun/"><b>Sınıf Sürümü</b></a>
+        <a class="alt" href="medar/antrenman/"><b>MEDAR Patlat antrenmanı</b></a>
+        <a href="zeka-oyunlari/#populer"><b>Popüler Zeka Oyunları</b><small>Satranç, Go, Mangala, Pentago ve dahası</small></a>
+        <a href="zeka-oyunlari/#merdiven"><b>Sayıların merdiveni</b><small>Hangi oyun ne kadar büyük?</small></a>
+        <a class="tumu" href="#g-zeka" data-grup="g-zeka">Hepsini listede gör ↓</a>
     </div>
   </div>
   <div class="sekme-grup">
@@ -372,8 +383,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   </div>
   <a href="#takvim">Takvim</a>
   <a href="#baglantilar">Bağlantılar</a>
-  <button type="button" class="tema-sekme muzik-sekme" id="muzikDugme" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="muzik-yazi">Müzik</span></button>
-  <button type="button" class="tema-sekme" data-tema-dugme aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
+  <button type="button" class="tema-sekme muzik-sekme" id="muzikDugme" aria-pressed="true" aria-label="Müzik" title="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="muzik-yazi">Müzik</span></button>
+  <button type="button" class="tema-sekme" data-tema-dugme aria-label="Tema" title="Tema: Otomatik / Açık / Koyu / Saate göre"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
 </nav>
 
 <header class="acilis">
@@ -429,8 +440,8 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <details class="grup" id="g-mat">
     <summary>
       <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L50 46 H6 Z"/><circle class="kirmizi" cx="28" cy="32" r="9"/><circle class="dolu kirmizi" cx="28" cy="6" r="2.6"/></svg></span>
-      <span class="grup-yazi"><span class="grup-ad">Matematik ve Geometri</span><span class="grup-acik">Sayı oyunları, olimpiyat soruları, cetvel-pergel atölyesi ve strateji oyunu</span><span class="grup-onizleme">Master Class · Geometri Atölyesi · Haftanın Soruları · MEDAR</span></span>
-      <span class="grup-sayi">4 proje</span><span class="grup-ok" aria-hidden="true"></span>
+      <span class="grup-yazi"><span class="grup-ad">Matematik ve Geometri</span><span class="grup-acik">Sayı oyunları, olimpiyat soruları ve cetvel-pergel atölyesi</span><span class="grup-onizleme">Master Class · Geometri Atölyesi · Haftanın Soruları</span></span>
+      <span class="grup-sayi">3 proje</span><span class="grup-ok" aria-hidden="true"></span>
     </summary>
     <ul class="liste">
     <li class="proje"><a href="https://masterclass.muhsinengin.com/">
@@ -445,10 +456,23 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M8 44 L28 14 L48 44 Z"/><path class="kirmizi" d="M28 44 V27"/><path class="dolu kirmizi" d="M28 4 l2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.6-4.8 2.6 1-5.4-4-3.7 5.4-.7z"/></svg>
       <h3>Haftanın Soruları</h3><span class="adres">masterclass.muhsinengin.com/hafta</span>
       <p>Her pazartesi bir matematik ve bir geometri olimpiyat sorusu, pazar akşamı tam çözümü. Geçmiş sorular yazdırılabilir bir soru bankasında birikir.</p></a></li>
+    </ul>
+  </details>
+  <details class="grup" id="g-zeka">
+    <summary>
+      <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><rect x="7" y="7" width="18" height="18" rx="3"/><rect x="31" y="7" width="18" height="18" rx="3"/><rect x="7" y="31" width="18" height="18" rx="3"/><rect x="31" y="31" width="18" height="18" rx="3"/><circle class="dolu" cx="16" cy="16" r="3.4"/><circle class="dolu kirmizi" cx="40" cy="40" r="3.4"/><circle cx="40" cy="16" r="3.4"/><circle class="kirmizi" cx="16" cy="40" r="3.4"/><path class="kirmizi" d="M3.5 28 A 25 25 0 0 1 28 3.5"/><path class="kirmizi" d="M24 2 l4.5 1.5 l-3 3.6"/></svg></span>
+      <span class="grup-yazi"><span class="grup-ad">Zeka Oyunları</span><span class="grup-acik">Kendi strateji oyunum ve dünyanın sevilen zeka oyunları, arkalarındaki matematikle</span><span class="grup-onizleme">MEDAR · Popüler Zeka Oyunları</span></span>
+      <span class="grup-sayi">2 proje</span><span class="grup-ok" aria-hidden="true"></span>
+    </summary>
+    <ul class="liste">
     <li class="proje"><div>
       <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
       <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
-      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="medar/oyun/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyna</a><a class="yaz" href="medar/antrenman/">Antrenman</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
+      <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="medar/oyun/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyna</a><a class="yaz" href="medar/antrenman/">Antrenman</a><a class="yaz" href="zeka-oyunlari/#medar">∑ Arkasındaki matematik</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
+    <li class="proje"><a href="zeka-oyunlari/#populer">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M6 6 H50 V50 H6 Z"/><path d="M17 6 V50 M28 6 V50 M39 6 V50 M6 17 H50 M6 28 H50 M6 39 H50"/><circle class="dolu" cx="17" cy="17" r="4.4"/><circle class="dolu kirmizi" cx="28" cy="28" r="4.4"/><circle cx="39" cy="28" r="4.4"/><circle class="dolu" cx="28" cy="39" r="4.4"/><circle class="dolu kirmizi" cx="39" cy="39" r="4.4"/></svg>
+      <h3>Popüler Zeka Oyunları</h3><span class="adres">muhsinengin.com/zeka-oyunlari</span>
+      <p>Satranç, Go, Mangala, Pentago, Reversi, Hex, Mastermind ve Sudoku: kısa tarihleri, nasıl oynandıkları ve her birinin altında “Bunun arkasındaki matematik” kutusu.</p></a></li>
     </ul>
   </details>
   <details class="grup" id="g-egitim">
