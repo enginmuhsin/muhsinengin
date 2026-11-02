@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>YKS Teşhis Defteri</title>
+<script src="../ortak/ana-sayfa.js" defer></script>
 <script src="../muzik/muzik.js" data-tema="odak" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -209,7 +210,7 @@ mjx-container{max-width:100%}
 
 <header class="top">
   <div class="wrap row1">
-    <div class="brand"><h1>YKS Teşhis Defteri</h1><span class="tag" id="modeTag">yükleniyor…</span></div>
+    <div class="brand"><ana-sayfa-dugmesi><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi><h1>YKS Teşhis Defteri</h1><span class="tag" id="modeTag">yükleniyor…</span></div>
     <div class="stu" id="stuBox"></div>
   </div>
   <div class="wrap"><nav class="tabs" id="tabs">
@@ -220,7 +221,7 @@ mjx-container{max-width:100%}
     <a href="#yontem" data-v="yontem">Yöntem</a>
   </nav></div>
 </header>
-<main class="wrap" id="main"><div class="empty muted">Kazanım haritası yükleniyor…</div></main>
+<main class="wrap" id="main"><div class="empty muted" style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:48px 0"><doner-kureler boyut="56" cekirdek aria-hidden="true"></doner-kureler>Kazanım haritası yükleniyor…</div></main>
 <div id="layer"></div>
 
 <script>
