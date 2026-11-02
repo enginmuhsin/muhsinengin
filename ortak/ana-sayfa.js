@@ -197,6 +197,19 @@
     customElements.define('doner-kureler', class extends HTMLElement { connectedCallback() { imzaKur(this); } });
   }
 
+  /* ---------- 4) telefon menüsü: <button data-menu-dugme> içinde bulunduğu <nav>'ı açar/kapar ----------
+     nav'a "acik" sınıfı eklenir (görünüm sayfanın CSS'indedir). Bağlantıya basınca, Esc ile, menü dışına
+     dokununca ya da ekran genişleyince kapanır. */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-menu-dugme]');
+    var acikNav = document.querySelector('nav.acik');
+    if (b) { var n = b.closest('nav'); if (!n) return; var ac = !n.classList.contains('acik'); n.classList.toggle('acik', ac); b.setAttribute('aria-expanded', String(ac)); return; }
+    if (acikNav && (!acikNav.contains(e.target) || e.target.closest('a[href]'))) menuyuKapat();
+  });
+  function menuyuKapat() { document.querySelectorAll('nav.acik').forEach(function (n) { n.classList.remove('acik'); var b = n.querySelector('[data-menu-dugme]'); if (b) b.setAttribute('aria-expanded', 'false'); }); }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.querySelector('nav.acik')) { var b = document.querySelector('nav.acik [data-menu-dugme]'); menuyuKapat(); if (b) b.focus(); } });
+  try { matchMedia('(min-width: 761px)').addEventListener('change', function (m) { if (m.matches) menuyuKapat(); }); } catch (e) { /* eski tarayıcı */ }
+
   /* ---------- 3) sayfa geçişi göstergesi ---------- */
   if (betik && betik.hasAttribute('data-gecis')) {
     var perde = null, zaman = null;
