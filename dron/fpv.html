@@ -12,6 +12,7 @@
   <script src="../muzik/muzik.js" data-tema="muhendislik" defer></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="hangar.css">
+<link rel="stylesheet" href="../ortak/matematik.css">
 </head>
 <body class="fpv-sayfa">
   <a class="atla" href="#ana">İçeriğe atla</a>
@@ -133,6 +134,15 @@
         </div>
         <p id="gecikmeMesafe" class="gecikme-sonuc" aria-live="polite"></p>
       </div>
+      <details class="mat-kutu">
+        <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">40 milisaniye kaç metre eder?</span></summary>
+        <div class="mk-ic">
+          <p>Gecikme sırasında dron durmaz. Gözlükte gördüğün yer ile dronun gerçek yeri arasındaki fark, hız ile gecikmenin çarpımıdır:</p>
+          <p class="mk-formul">mesafe = hız × gecikme &nbsp;·&nbsp; 100 km/sa ≈ 27,8 m/s → 27,8 × 0,040 s ≈ 1,1 m</p>
+          <p>Yani saatte 100 km hızla uçarken 40 ms gecikme, dronu gördüğünden yaklaşık bir metre ileride uçurur; dar bir kapıdan geçerken bu çok büyük bir farktır. Gecikmenin bir kısmı kameradan gelir: saniyede 60 kare çeken bir kamerada iki kare arası 1/60 s ≈ 16,7 ms'dir; 120 karede bu süre yarıya, yaklaşık 8,3 ms'ye iner.</p>
+          <p class="mk-benzetme"><b>Benzetme</b> Gökgürültüsü gibi: şimşek ile gürültü arasındaki saniyeleri sayıp fırtınanın uzaklığını bulursun. FPV'de de “ne kadar geç görüyorum” sorusu, “ne kadar geride kalıyorum” sorusuna çarpmayla dönüşür.</p>
+        </div>
+      </details>
     </section>
 
     <!-- ============ YAZILIM ============ -->

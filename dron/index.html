@@ -12,6 +12,7 @@
   <script src="../muzik/muzik.js" data-tema="muhendislik" defer></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="hangar.css">
+<link rel="stylesheet" href="../ortak/matematik.css">
 </head>
 <body>
   <a class="atla" href="#ana">İçeriğe atla</a>
@@ -111,7 +112,17 @@
             <div class="teknik">Teknik: oransal, integral ve türev geri besleme kazançları.</div></dd>
         </dl>
       </div>
-    </section>
+      <details class="mat-kutu">
+        <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">Dron nasıl ileri gider, neden kendi etrafında dönmez?</span></summary>
+        <div class="mk-ic">
+          <p><b>Eğik itki, vektör bileşenleri.</b> Pervaneler hep dronun “tavanına” doğru iter. Dron ileri gitmek için burnunu eğer; itki vektörü <i>T</i>, θ açısıyla eğilince ikiye ayrılır: dikey bileşen dronu taşır, yatay bileşen ileri iter.</p>
+          <p class="mk-formul">dikey = T · cos θ &nbsp;·&nbsp; yatay = T · sin θ &nbsp;·&nbsp; havada kalmak için T = m·g / cos θ</p>
+          <p>Bu yüzden eğilen dron yükseklik kaybetmemek için gazı artırmalıdır: 45° eğimde gereken itki ağırlığın 1/cos 45° = √2 ≈ 1,41 katıdır. TWR değeri 1,41'in altındaki bir dron 45° eğimle düz uçamaz.</p>
+          <p><b>Tork dengesi.</b> Her pervane havayı döndürürken gövdeyi ters yöne çevirmeye çalışır. Dört pervanenin ikisi saat yönünde, ikisi tersine döner; torkların toplamı sıfır olur. Dron sola dönmek isterse saat yönünde dönen iki motoru biraz hızlandırır, öbür ikisini yavaşlatır: toplam itki aynı kalır ama tork dengesi bozulur ve gövde döner.</p>
+          <p class="mk-benzetme"><b>Benzetme</b> Bir kızağı ipten çektiğini düşün. İpi yere paralel tutarsan bütün gücün kızağı ilerletir; ipi yukarı kaldırdıkça gücün bir kısmı kızağı yukarı çekmeye gider. Dronun itkisi de eğildikçe “taşımak” ve “ilerletmek” arasında paylaşılır.</p>
+        </div>
+      </details>
+      </section>
 
     <section class="bolum" aria-labelledby="gorev">
       <h2 id="gorev">Mini görevler</h2>
