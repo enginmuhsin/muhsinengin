@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MEDAR · Muhsin ENGİN</title>
+<meta name="description" content="MEDAR: altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün strateji oyunu. Sınıf sürümü ve MEDAR Patlat antrenmanı tarayıcıda, kurulumsuz çalışır.">
+<meta name="theme-color" content="#f5f7fa">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MEDAR">
+<script src="../tema.js"></script>
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext-800-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../fonts/onest-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../fonts/onest-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../fonts/onest-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../fonts/onest-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Sitenin ana sayfasıyla aynı defter dili: kareli kâğıt, mavi mürekkep, kırmızı marj */
+:root {
+  --kagit: #f5f7fa; --kare: #dde5ef; --kare-kalin: #c9d5e4;
+  --murekkep: #1d3b8b; --metin: #1b2433; --kursun: #5c6778; --kirmizi: #c8323b; --altin: #b8860b;
+  --kart: color-mix(in srgb, #fff 82%, var(--kagit));
+  --yazi: "Onest", "Segoe UI", system-ui, sans-serif; --baslik: "Bricolage", "Arial Black", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --altin: #f2b81c; --kart: #151c29; color-scheme: dark; } }
+:root[data-theme="dark"] { --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --altin: #f2b81c; --kart: #151c29; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--metin); font: 18px/1.6 var(--yazi); background-color: var(--kagit);
+  background-image:
+    linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
+    linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--kirmizi); outline-offset: 4px; border-radius: 4px; }
+.sayfa { position: relative; max-width: 1040px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)) 64px; }
+.sayfa::before { content: ""; position: absolute; top: 0; bottom: 0; left: max(20px, env(safe-area-inset-left)); width: 2px; background: var(--kirmizi); opacity: .35; }
+.ic { padding-left: 40px; }
+
+/* Üst şerit */
+.ust { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 18px; flex-wrap: wrap; }
+.geri { text-decoration: none; font-weight: 700; color: var(--murekkep); font-size: .95rem; }
+.geri:hover { text-decoration: underline; }
+.tema-dugme { font: inherit; font-weight: 700; font-size: .9rem; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--kare-kalin); background: var(--kagit); color: var(--murekkep); cursor: pointer; }
+
+/* Açılış */
+.acilis { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; padding: 44px 0 28px; }
+.simge { width: clamp(96px, 16vw, 150px); aspect-ratio: 1; border-radius: 28px; box-shadow: 0 10px 30px -12px rgba(7,10,18,.55); }
+h1 { font-family: var(--baslik); font-weight: 800; font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: 1; margin: 0; letter-spacing: .04em; color: var(--murekkep); }
+.alt { font-style: italic; color: var(--kursun); margin: 6px 0 10px; }
+.durum { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--kirmizi); border: 1.5px solid currentColor; border-radius: 999px; padding: 1px 10px; }
+.giris { max-width: 60ch; margin: 12px 0 0; }
+
+/* İki kapı: Oyun ve Antrenman */
+.kapilar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 18px; }
+.kapi { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 22px; border-radius: 18px; background: var(--kart);
+  border: 1.5px solid var(--kare-kalin); border-top: 5px solid var(--murekkep); text-decoration: none; color: var(--metin);
+  transition: transform .18s, box-shadow .18s; }
+.kapi.antrenman { border-top-color: var(--altin); }
+.kapi:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -18px rgba(29,59,139,.6); }
+.etiket { font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--kursun); }
+.kapi h2 { font-family: var(--baslik); font-weight: 800; font-size: 1.75rem; line-height: 1.15; margin: 0; color: var(--murekkep); }
+.kapi.antrenman h2 { color: var(--altin); }
+.kapi p { margin: 0; color: var(--kursun); font-size: .98rem; }
+.modlar { list-style: none; padding: 0; margin: 4px 0 6px; display: flex; flex-direction: column; gap: 7px; font-size: .97rem; }
+.modlar li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.modlar li::before { content: ""; width: 12px; height: 12px; margin-top: 7px; border: 2px solid var(--murekkep); transform: rotate(45deg); border-radius: 2px; }
+.kapi.antrenman .modlar li::before { border-color: var(--altin); }
+.modlar b { font-weight: 700; }
+.basla { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px 10px; border-radius: 999px;
+  background: var(--murekkep); color: var(--kagit); font-weight: 700; }
+.kapi.antrenman .basla { background: var(--altin); color: #1b1300; }
+.basla svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Bölümler */
+.bolum { margin-top: 44px; }
+.bolum h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.35rem; margin: 0 0 10px; color: var(--murekkep); }
+.bolum p { margin: 0 0 10px; max-width: 70ch; }
+.kur-izgara { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
+.kur { padding: 14px 16px; border-radius: 12px; border: 1.5px dashed var(--kare-kalin); background: var(--kagit); font-size: .93rem; }
+.kur b { display: block; font-family: var(--baslik); color: var(--murekkep); margin-bottom: 4px; }
+#yukle { font: inherit; font-weight: 700; padding: 9px 20px 10px; border-radius: 999px; border: 0; background: var(--kirmizi); color: #fff; cursor: pointer; margin-top: 8px; }
+.not { font-size: .88rem; color: var(--kursun); }
+footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare-kalin); font-size: .9rem; color: var(--kursun); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .ic { padding-left: 22px; }
+  .acilis { grid-template-columns: 1fr; gap: 16px; padding-top: 28px; }
+  .kapilar, .kur-izgara { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .kapi { transition: none; } .kapi:hover { transform: none; } }
+</style>
+</head>
+<body>
+<div class="sayfa"><div class="ic">
+
+  <nav class="ust" aria-label="Site">
+    <a class="geri" href="../">← muhsinengin.com</a>
+    <button type="button" class="tema-dugme" data-tema-dugme>◐ Otomatik</button>
+  </nav>
+
+  <header class="acilis">
+    <img class="simge" src="icons/icon-512.png" width="150" height="150" alt="MEDAR simgesi">
+    <div>
+      <h1>MEDAR</h1>
+      <p class="alt">Muhsin ENGİN's Dynamic Array Rotation</p>
+      <span class="durum">Tescil sürecinde</span>
+      <p class="giris">Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. İki bölüm de tarayıcıda çalışır; kurulum, üyelik ya da kişisel bilgi istemez.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="kapilar">
+      <a class="kapi" href="oyun/">
+        <span class="etiket">Oyun</span>
+        <h2>Sınıf Sürümü</h2>
+        <p>Asıl MEDAR: taş koy, üçgeni çevir, bölgeleri ve köprüleri kazan. Akıllı tahtada, bilgisayarda ve tablette oynanır.</p>
+        <ul class="modlar">
+          <li><span><b>Yapay zekâya karşı</b>: kolay, orta, zor</span></li>
+          <li><span><b>İki kişi, aynı ekran</b>: sınıfta karşılıklı</span></li>
+          <li><span><b>Yapay zekâ – yapay zekâ</b>: izle ve stratejiyi tartış</span></li>
+        </ul>
+        <span class="basla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyunu başlat</span>
+      </a>
+
+      <a class="kapi antrenman" href="antrenman/">
+        <span class="etiket">Antrenman</span>
+        <h2>MEDAR Patlat</h2>
+        <p>Aynı dönen üçgenlerle hızlı bir patlatma oyunu. Üçgeni çevirip aynı renkten üç topu yan yana getirmek, dönmeleri kafada hesaplama alışkanlığı kazandırır.</p>
+        <ul class="modlar">
+          <li><span><b>Tek başıma</b>: tahta taşmadan seviye atla</span></li>
+          <li><span><b>Bulmaca</b>: sınırlı dönüşle tahtayı temizle, yıldız kazan</span></li>
+          <li><span><b>Bilgisayara karşı</b>: kolay, orta, zor</span></li>
+        </ul>
+        <span class="basla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Antrenmana başla</span>
+      </a>
+    </div>
+
+    <section class="bolum" id="kurulum">
+      <h3>Uygulama olarak yükle</h3>
+      <p>MEDAR'ı telefona, tablete ya da bilgisayara uygulama gibi ekleyebilirsin. Bir kez açıldıktan sonra internet olmadan da çalışır; okulda bağlantı kesilse bile oyun açılır.</p>
+      <button type="button" id="yukle" hidden>MEDAR'ı bu cihaza yükle</button>
+      <div class="kur-izgara">
+        <div class="kur"><b>Android</b>Chrome menüsü (⋮) › <i>Uygulamayı yükle</i> ya da <i>Ana ekrana ekle</i>.</div>
+        <div class="kur"><b>iPhone · iPad</b>Safari'de Paylaş düğmesi › <i>Ana Ekrana Ekle</i>.</div>
+        <div class="kur"><b>Bilgisayar · akıllı tahta</b>Chrome ya da Edge'de adres çubuğundaki yükle simgesi.</div>
+      </div>
+      <p class="not" id="kuruldu" hidden>MEDAR bu cihazda uygulama olarak açık.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© Muhsin ENGİN · MEDAR</span>
+    <span>Yayıncılar ve iş birliği için: <a href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR">bana yazın</a></span>
+  </footer>
+
+</div></div>
+
+<script>
+// E-posta adresi sayfada açık yazılmaz (spam botlarına karşı); tıklanınca birleştirilir.
+document.querySelectorAll('a[data-k]').forEach(function (a) {
+  a.addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = 'mailto:' + a.dataset.k + '@' + a.dataset.a + (a.dataset.konu ? '?subject=' + encodeURIComponent(a.dataset.konu) : '');
+  });
+});
+// Uygulama olarak yükleme düğmesi (destekleyen tarayıcılarda görünür)
+var yuklemeOlayi = null, dugme = document.getElementById('yukle');
+window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); yuklemeOlayi = e; dugme.hidden = false; });
+dugme.addEventListener('click', function () { if (!yuklemeOlayi) return; yuklemeOlayi.prompt(); yuklemeOlayi.userChoice.finally(function () { yuklemeOlayi = null; dugme.hidden = true; }); });
+if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) document.getElementById('kuruldu').hidden = false;
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () {});
+</script>
+</body>
+</html>
