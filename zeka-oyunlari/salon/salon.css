@@ -67,6 +67,20 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .lejant span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--kirmizi)}
 .lejant span.r::before{width:2px;background:var(--murekkep)}
 
+/* günün bulmacaları ve MEDAR finali */
+.gunluk{margin:0 0 22px}
+.gunluk h2{font-family:var(--f-baslik);font-weight:600;font-size:22px;margin:0 0 4px}
+.gunluk>p{margin:0 0 10px;color:var(--soluk);max-width:70ch}
+.gunluk-satir{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.gunluk-kart{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;background:var(--murekkep);color:var(--kagit);text-decoration:none;box-shadow:var(--golge);transition:transform .15s}
+.gunluk-kart:hover{transform:translateY(-2px)}
+.gunluk-kart b{font-family:var(--f-baslik);font-size:19px;font-weight:600}
+.gunluk-kart span{font-size:13px;opacity:.8}
+.final{display:flex;flex-direction:column;gap:6px;margin-top:22px;padding:20px;border-radius:18px;border:2px dashed var(--kirmizi);text-decoration:none;color:inherit;background:var(--yuzey)}
+.final b{font-family:var(--f-baslik);font-size:clamp(20px,3vw,26px);font-weight:600}
+.final span:last-child{color:var(--soluk)}
+.final:hover{border-style:solid}
+
 /* oyun sayfası */
 .oyun-ust{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
 .oyun-ust h1{font-size:clamp(30px,5vw,44px);margin:0}
@@ -105,5 +119,15 @@ details.kurallar li{margin-bottom:4px}
 .ust-bilgi{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:13.5px;color:var(--soluk)}
 .ust-bilgi b{color:var(--murekkep);font-family:var(--f-sayi)}
 
-@media (max-width:860px){.duzen{grid-template-columns:1fr}.yan{order:2}}
+.sinif-dugme{margin-left:auto}
+/* Sınıf modu (akıllı tahta): tahta büyür, yazılar ve düğmeler en az 56 px */
+body.sinif{font-size:18px}
+body.sinif .ust,body.sinif .kutu:has(.kurallar){display:none}
+body.sinif .duzen{grid-template-columns:minmax(0,1fr) 400px}
+body.sinif #tahta{max-width:min(100%,82vh)}
+body.sinif #tahta>*{max-width:100%!important;width:100%}
+body.sinif .dug,body.sinif .cip{min-height:56px;padding:12px 20px;font-size:18px}
+body.sinif #durum{font-size:22px}
+body.sinif .kutu.mat p,body.sinif .kutu.mat div,body.sinif .kutu.neden p{font-size:17px}
+@media (max-width:860px){.duzen,body.sinif .duzen{grid-template-columns:1fr}.yan{order:2}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}

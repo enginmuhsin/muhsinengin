@@ -19,13 +19,13 @@
   }
   const adaylar = (g, i) => { let m = 0x3fe; for (const k of KOMSU[i]) if (g[k]) m &= ~(1 << g[k]); return m; };
   const bitSay = (m) => { let n = 0; while (m) { m &= m - 1; n++; } return n; };
-  function coz(g, sinir, rastgele) { // çözüm sayısı (sinir'de durur); g yerinde doldurulur
+  function coz(g, sinir, rastgele) { // rastgele: false ya da rastgele sayı üreteci // çözüm sayısı (sinir'de durur); g yerinde doldurulur
     let en = -1, enM = 0, enN = 10;
     for (let i = 0; i < 81; i++) if (!g[i]) { const m = adaylar(g, i), n = bitSay(m); if (n < enN) { en = i; enM = m; enN = n; if (n <= 1) break; } }
     if (en < 0) return 1;
     if (enN === 0) return 0;
     const rakam = []; for (let d = 1; d <= 9; d++) if (enM & (1 << d)) rakam.push(d);
-    if (rastgele) rakam.sort(() => Math.random() - 0.5);
+    if (rastgele) Salon.karistir(rakam, rastgele);
     let toplam = 0;
     for (const d of rakam) {
       g[en] = d; toplam += coz(g, sinir - toplam, rastgele);
@@ -34,9 +34,9 @@
     }
     return toplam;
   }
-  function uret(ipucuHedef) {
-    const tam = new Array(81).fill(0); coz(tam, 1, true);
-    const g = tam.slice(); const sira = [...Array(81).keys()].sort(() => Math.random() - 0.5);
+  function uret(ipucuHedef, rnd = Math.random) { // aynı rnd tohumu → her tarayıcıda aynı bulmaca
+    const tam = new Array(81).fill(0); coz(tam, 1, rnd);
+    const g = tam.slice(); const sira = Salon.karistir([...Array(81).keys()], rnd);
     let dolu = 81;
     for (const i of sira) {
       if (dolu <= ipucuHedef) break;
@@ -52,7 +52,10 @@
     ozet: 'Her satır, sütun ve kutuya 1–9 bir kez. İpucu, cevabı değil nedenini söyler.',
     etiketler: ['Geri izleme', 'Graf boyama', '1 kişi'],
     dallanmaRef: 'hücreye göre 1–9',
-    secenekler: [{ id: 'seviye', ad: 'Seviye', sec: [['kolay', 'Kolay'], ['orta', 'Orta'], ['zor', 'Zor']], v: 'kolay' }],
+    secenekler: [
+      { id: 'bulmaca', ad: 'Bulmaca', sec: [['rastgele', 'Yeni'], ['gunluk', 'Günün Sudokusu']], v: 'rastgele' },
+      { id: 'seviye', ad: 'Seviye', sec: [['kolay', 'Kolay'], ['orta', 'Orta'], ['zor', 'Zor']], v: 'kolay', goster: (a) => a.bulmaca !== 'gunluk' },
+    ],
     kurallar: ['Her satıra, her sütuna ve her 3×3 kutuya 1\'den 9\'a kadar rakamlar birer kez yazılır.',
       'Hücre seç, rakama dokun. Klavyede 1–9, Sil ve ok tuşları da çalışır.',
       '"Not" modunda küçük aday rakamları yazarsın.', 'İpucu önce mantık kuralı arar; bulamazsa doğru rakamı açar.'],
@@ -62,17 +65,24 @@
       return s + '</svg>'; },
     olustur(api) {
       const { el, tr } = api;
-      let st, secili = -1, notModu = false;
+      let st, secili = -1, notModu = false, saat = null;
+      const sureYaz = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+      const kaydetGunluk = () => api.yaz('su.gunluk', { gun: st.gun, g: st.g, not: st.not, hata: st.hata, ipucu: st.ipucu, sure: st.sure, bitti: st.bitti });
       const HEDEF = { kolay: 40, orta: 32, zor: 25 };
 
       function yeni() {
         api.durum('Bulmaca hazırlanıyor…', { dusunuyor: true });
         api.tahta.innerHTML = '';
+        clearInterval(saat);
         setTimeout(() => {
-          const { soru, cozum } = uret(HEDEF[api.ayar.seviye]);
-          st = { soru, cozum, g: soru.slice(), not: new Array(81).fill(0), gecmis: [], hata: 0, ipucu: 0, bitti: false, ipucuHucre: -1 };
-          secili = soru.indexOf(0);
-          api.durum(`${soru.filter(Boolean).length} ipucu verildi. Başla!`);
+          const gunluk = api.ayar.bulmaca === 'gunluk', gun = api.gunAnahtari();
+          const { soru, cozum } = gunluk ? uret(HEDEF.orta, api.tohumlu('sudoku-' + gun)) : uret(HEDEF[api.ayar.seviye]);
+          st = { soru, cozum, g: soru.slice(), not: new Array(81).fill(0), gecmis: [], hata: 0, ipucu: 0, bitti: false, ipucuHucre: -1, gunluk, gun, sure: 0 };
+          if (gunluk) { const k = api.oku('su.gunluk', null); if (k && k.gun === gun) Object.assign(st, { g: k.g, not: k.not, hata: k.hata, ipucu: k.ipucu, sure: k.sure, bitti: k.bitti }); }
+          secili = st.g.indexOf(0);
+          api.durum(gunluk ? `Günün Sudokusu · ${api.gunAdi()} · herkes aynı bulmacayı çözüyor.` : `${soru.filter(Boolean).length} ipucu verildi. Başla!`);
+          if (st.bitti) api.bitti('Bugünün Sudokusunu çözdün. Yarın yenisi gelir.');
+          saat = setInterval(() => { if (st && !st.bitti && !document.hidden && !document.getElementById('oyunSayfa').hidden) { st.sure++; const e = document.getElementById('suSure'); if (e) e.textContent = sureYaz(st.sure); if (st.gunluk && st.sure % 5 === 0) kaydetGunluk(); } }, 1000);
           ciz();
         }, 30);
       }
@@ -87,7 +97,8 @@
           if (st.g[i]) for (const k of KOMSU[i]) st.not[k] &= ~(1 << st.g[i]);
         }
         st.ipucuHucre = -1;
-        if (st.g.every((v, j) => v === st.cozum[j])) { st.bitti = true; api.bitti(`Çözdün! ${st.ipucu} ipucu, ${st.hata} çakışma.`); api.durum('Tamamlandı.'); }
+        if (st.g.every((v, j) => v === st.cozum[j])) { st.bitti = true; api.bitti(`Çözdün! ${sureYaz(st.sure)} · ${st.ipucu} ipucu, ${st.hata} çakışma.`); api.durum('Tamamlandı.'); }
+        if (st.gunluk) kaydetGunluk();
         api.geriAlAktif(st.gecmis.length > 0);
         ciz();
       }
@@ -121,7 +132,7 @@
       function ciz() {
         const T = api.tahta; T.innerHTML = '';
         const bos = st.g.filter((v) => !v).length;
-        T.append(el('div', { class: 'ust-bilgi' }, el('span', {}, 'Boş ', el('b', {}, String(bos))), el('span', {}, 'Çakışma ', el('b', {}, String(st.hata))), el('span', {}, 'İpucu ', el('b', {}, String(st.ipucu)))));
+        T.append(el('div', { class: 'ust-bilgi' }, el('span', {}, 'Süre ', el('b', { id: 'suSure' }, sureYaz(st.sure))), el('span', {}, 'Boş ', el('b', {}, String(bos))), el('span', {}, 'Çakışma ', el('b', {}, String(st.hata))), el('span', {}, 'İpucu ', el('b', {}, String(st.ipucu)))));
         const izgara = el('div', { role: 'grid', 'aria-label': 'Sudoku tahtası', style: 'display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);width:min(100%,460px);aspect-ratio:1;border:2.5px solid var(--murekkep);border-radius:6px;overflow:hidden;background:var(--yuzey)' });
         const sd = secili >= 0 ? st.g[secili] : 0;
         for (let i = 0; i < 81; i++) {
@@ -145,6 +156,13 @@
         for (let d = 1; d <= 9; d++) {
           const kalan = 9 - st.g.filter((v) => v === d).length;
           tus.append(el('button', { type: 'button', class: 'dug', style: `padding:8px 0;font-family:var(--f-sayi);font-size:19px;${kalan ? '' : 'opacity:.35'}`, onclick: () => yerlestir(secili, d), title: `${kalan} tane kaldı` }, String(d)));
+        }
+        if (st.gunluk && st.bitti) {
+          const metin = `Günün Sudokusu · ${api.gunAdi()} · ${sureYaz(st.sure)} · ${st.ipucu} ipucu · ${st.hata} çakışma\nmuhsinengin.com/zeka-oyunlari/salon/#sudoku-gunluk`;
+          T.append(el('div', { style: 'width:min(100%,460px);display:flex;flex-direction:column;gap:8px' },
+            el('pre', { style: 'margin:0;padding:10px 12px;border-radius:10px;background:var(--yuzey2);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;white-space:pre-wrap;user-select:text' }, metin),
+            el('button', { class: 'dug ana', type: 'button', onclick: async (e) => { const ok = await api.kopyala(metin); e.target.textContent = ok ? 'Kopyalandı' : 'Metni seçip kopyala'; } }, 'Sonucu kopyala')));
+          matCiz(); return;
         }
         T.append(tus);
         T.append(el('div', { class: 'dugmeler' },
@@ -178,7 +196,7 @@
       return {
         yeni,
         geriAl() { const h = st.gecmis.pop(); if (!h) return; st.g[h.i] = h.g; st.not[h.i] = h.not; st.bitti = false; secili = h.i; api.geriAlAktif(st.gecmis.length > 0); ciz(); },
-        yokEt() { removeEventListener('keydown', tusIsle); },
+        yokEt() { removeEventListener('keydown', tusIsle); clearInterval(saat); },
       };
     },
   });

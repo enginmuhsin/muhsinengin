@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oyun Salonu · Muhsin ENGİN</title>
 <meta name="description" content="Sekiz klasik zeka oyununu tarayıcıda oyna: Mastermind, Sudoku, Hex, Mangala, Reversi, Pentago, Go ve Satranç. Bilgisayara karşı ya da iki kişi; her oyunda canlı matematik.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhsin ENGİN">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Oyun Salonu · Muhsin ENGİN">
+<meta property="og:description" content="Sekiz klasik zeka oyununu tarayıcıda oyna: Mastermind, Sudoku, Hex, Mangala, Reversi, Pentago, Go ve Satranç. Bilgisayara karşı ya da iki kişi; her oyunda canlı matematik.">
+<meta property="og:url" content="https://muhsinengin.com/zeka-oyunlari/salon/">
+<meta property="og:image" content="https://muhsinengin.com/ortak/og/oyun-salonu.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Oyun Salonu · Muhsin ENGİN: sayfanın tanıtım görseli">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f5f6f1">
 <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
 <script src="../../tema.js"></script>
 <script src="../../ortak/ana-sayfa.js" data-gecis defer></script>
 <style>
@@ -36,7 +48,20 @@
     <div class="kas">Oyna, düşün, say</div>
     <h1>Oyun <em>Salonu</em></h1>
     <p class="giris">Sekiz klasik zeka oyunu, bilgisayara karşı ya da aynı ekranda arkadaşınla. Her tahtanın yanında, sen oynarken değişen bir matematik kutusu var: kuralı okumak yerine, sayının gözünün önünde değiştiğini görürsün.</p>
+    <section class="gunluk" aria-labelledby="gunlukBaslik">
+      <h2 id="gunlukBaslik">Günün bulmacaları</h2>
+      <p>Her gün, herkese aynı bulmaca. Çöz, sonucunu sınıf grubunda paylaş; kodu söylemeden kimin kaç tahminde bulduğunu karşılaştırın.</p>
+      <div class="gunluk-satir">
+        <a class="gunluk-kart" href="#mastermind-gunluk"><b>Günün Mastermind'ı</b><span>4 renk, 10 hakkın var</span></a>
+        <a class="gunluk-kart" href="#sudoku-gunluk"><b>Günün Sudokusu</b><span>Orta zorluk, süre tutulur</span></a>
+      </div>
+    </section>
     <div class="izgara" id="kartlar"></div>
+    <a class="final" href="../../medar/oyun/">
+      <span class="kas">Final</span>
+      <b>Şimdi bunların hiçbirine benzemeyen bir oyun dene: MEDAR</b>
+      <span>Altıgen tahta, 120° dönen üçgenler. Bu salondaki oyunları sevdiysen, sıradaki adım benim tasarladığım oyun.</span>
+    </a>
 
     <section class="olcum" aria-labelledby="olcumBaslik">
       <h2 id="olcumBaslik">Senin ölçtüğün dallanma</h2>
@@ -47,7 +72,7 @@
   </main>
 
   <main id="oyunSayfa" hidden>
-    <div class="oyun-ust"><h1 id="oyunBaslik"></h1><p id="oyunAlt"></p></div>
+    <div class="oyun-ust"><h1 id="oyunBaslik"></h1><p id="oyunAlt"></p><button type="button" class="cip sinif-dugme" id="sinifModu" aria-pressed="false" title="Akıllı tahta için büyük düğmeler ve tam ekran">Sınıf modu</button></div>
     <div class="duzen">
       <div class="alan"><div id="tahta"></div></div>
       <aside class="yan">

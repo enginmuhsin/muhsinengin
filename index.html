@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Muhsin ENGİN</title>
 <meta name="description" content="Muhsin ENGİN'in projeleri: matematik ve geometri (Master Class, Geometri Atölyesi), zeka oyunları (MEDAR, popüler zeka oyunları ve matematikleri), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhsin ENGİN">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Muhsin ENGİN">
+<meta property="og:description" content="Muhsin ENGİN'in projeleri: matematik ve geometri (Master Class, Geometri Atölyesi), zeka oyunları (MEDAR, popüler zeka oyunları ve matematikleri), eğitim araçları (YKS Teşhis Defteri, Birebir Ders) ve mühendislik (Dron Hangarı, SekmeÖlçer).">
+<meta property="og:url" content="https://muhsinengin.com/">
+<meta property="og:image" content="https://muhsinengin.com/ortak/og/ana.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhsin ENGİN: sayfanın tanıtım görseli">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f5f7fa">
 <link rel="icon" href="simge.svg" type="image/svg+xml">
 <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
@@ -284,6 +295,23 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 @media (prefers-reduced-motion: no-preference) { .grup[open] .liste { animation: grupAc .28s ease; } }
 @keyframes grupAc { from { opacity: 0; transform: translateY(-6px); } }
 
+/* ---------- Hemen dene şeridi ---------- */
+.oyna-serit { margin-top: 28px; }
+.oyna-izgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.oyna-kart { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border-radius: 14px; background: var(--kagit); border: 1.5px solid var(--kare-kalin); border-top: 4px solid var(--kirmizi); color: var(--metin); text-decoration: none; transition: transform .15s, border-color .15s; }
+.oyna-kart:nth-child(2) { border-top-color: var(--turuncu); } .oyna-kart:nth-child(3) { border-top-color: var(--murekkep); }
+.oyna-kart:hover { transform: translateY(-2px); border-color: var(--murekkep); }
+.oyna-kart b { font-family: var(--baslik); font-weight: 800; font-size: 1.35rem; color: var(--murekkep); }
+.ok-ust { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--kirmizi); }
+.ok-alt { color: var(--kursun); font-size: .92rem; }
+.ok-liste { font-size: .85rem; color: var(--metin); }
+.ok-kod { display: flex; gap: 6px; align-items: center; }
+.ok-kod i { width: 22px; height: 22px; border-radius: 50%; background: var(--kare); border: 2px dashed var(--kare-kalin); }
+.ok-kod em { font-style: normal; font-family: var(--baslik); font-weight: 800; color: var(--kirmizi); margin-left: 4px; }
+.ok-cizim { width: 120px; height: 40px; fill: none; stroke: var(--murekkep); stroke-width: 2; }
+.ok-cizim .kesik { stroke: var(--turuncu); stroke-dasharray: 4 4; }
+@media (prefers-reduced-motion: reduce) { .oyna-kart { transition: none; } }
+
 /* ---------- Takvim (geri sayım) ---------- */
 .takvim-bolum { margin-top: 32px; }
 .sayac { display: grid; grid-template-columns: repeat(auto-fit, minmax(172px, 1fr)); gap: 10px; }
@@ -358,6 +386,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
         <a class="alt" href="medar/antrenman/"><b>MEDAR Patlat antrenmanı</b></a>
         <a href="zeka-oyunlari/#populer"><b>Popüler Zeka Oyunları</b><small>Satranç, Go, Mangala, Pentago ve dahası</small></a>
         <a href="zeka-oyunlari/#merdiven"><b>Sayıların merdiveni</b><small>Hangi oyun ne kadar büyük?</small></a>
+        <a href="zeka-oyunlari/salon/"><b>Oyun Salonu</b><small>8 oyunu bilgisayara karşı oyna</small></a>
         <a class="tumu" href="#g-zeka" data-grup="g-zeka">Hepsini listede gör ↓</a>
     </div>
   </div>
@@ -376,6 +405,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
         <a href="dron/"><b>Dron Hangarı</b><small>Tasarla, dengele, uç</small></a>
         <a class="alt" href="dron-lab/"><b>Tasarım Laboratuvarı</b></a>
         <a class="alt" href="pid-oyunu/"><b>PID Ayar Oyunu</b></a>
+        <a class="alt" href="dron-ucus/"><b>Uçuş Simülatörü</b></a>
         <a class="alt" href="dron/fpv.html"><b>FPV Rehberi</b></a>
         <a href="https://sekmeolcer.muhsinengin.com/"><b>SekmeÖlçer <span aria-hidden="true">↗</span></b><small>Sekme katsayısını sesle ölç</small></a>
         <a class="tumu" href="#g-muh" data-grup="g-muh">Hepsini listede gör ↓</a>
@@ -427,10 +457,34 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   </figure>
 </header>
 
+<section class="oyna-serit" aria-labelledby="oynaBaslik">
+  <h2 id="oynaBaslik">Hemen dene</h2>
+  <div class="oyna-izgara">
+    <a class="oyna-kart" href="zeka-oyunlari/salon/#mastermind-gunluk">
+      <span class="ok-ust">Günün bulmacası · <span id="bugunYazi">bugün</span></span>
+      <b>Günün Mastermind'ı</b>
+      <span class="ok-kod" aria-hidden="true"><i></i><i></i><i></i><i></i><em>?</em></span>
+      <span class="ok-alt">Herkese aynı gizli kod. 10 tahminde bulabilir misin?</span>
+    </a>
+    <a class="oyna-kart" href="dron-ucus/">
+      <span class="ok-ust">Dron Hangarı</span>
+      <b>Dronu uçur</b>
+      <svg class="ok-cizim" viewBox="0 0 120 40" aria-hidden="true"><path d="M30 20 h60 M42 14 v12 M78 14 v12"/><ellipse cx="42" cy="12" rx="14" ry="3"/><ellipse cx="78" cy="12" rx="14" ry="3"/><rect x="52" y="16" width="16" height="9" rx="2"/><path class="kesik" d="M10 36 q50 -14 100 0"/></svg>
+      <span class="ok-alt">Laboratuvarda tasarladığın dron 3B sahnede: hover, rüzgâr, batarya.</span>
+    </a>
+    <a class="oyna-kart" href="zeka-oyunlari/salon/">
+      <span class="ok-ust">Oyun Salonu</span>
+      <b>8 zeka oyunu</b>
+      <span class="ok-liste">Satranç · Go · Mangala · Hex · Reversi · Pentago · Mastermind · Sudoku</span>
+      <span class="ok-alt">Bilgisayara karşı ya da arkadaşınla; yanında canlı matematik.</span>
+    </a>
+  </div>
+</section>
+
 <section class="takvim-bolum" id="takvim" aria-labelledby="takvimBaslik">
   <h2 id="takvimBaslik">Yaklaşan tarihler</h2>
   <p class="aciklama">Öğrenci projeleri ve sınavlar için geri sayım. TÜBİTAK son tarihleri uzatabilir; “tahmini” yazanlar resmî takvim açıklanınca güncellenir.</p>
-  <div class="sayac" id="sayac"></div>
+  <div class="sayac" id="sayac"><p class="aciklama">Geri sayım yükleniyor. Görünmüyorsa tarayıcında JavaScript açık olmalı.</p></div>
 </section>
 
 <main class="icindekiler" id="projeler">
@@ -461,7 +515,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <details class="grup" id="g-zeka">
     <summary>
       <span class="grup-ikon"><svg viewBox="0 0 56 56" aria-hidden="true"><rect x="7" y="7" width="18" height="18" rx="3"/><rect x="31" y="7" width="18" height="18" rx="3"/><rect x="7" y="31" width="18" height="18" rx="3"/><rect x="31" y="31" width="18" height="18" rx="3"/><circle class="dolu" cx="16" cy="16" r="3.4"/><circle class="dolu kirmizi" cx="40" cy="40" r="3.4"/><circle cx="40" cy="16" r="3.4"/><circle class="kirmizi" cx="16" cy="40" r="3.4"/><path class="kirmizi" d="M3.5 28 A 25 25 0 0 1 28 3.5"/><path class="kirmizi" d="M24 2 l4.5 1.5 l-3 3.6"/></svg></span>
-      <span class="grup-yazi"><span class="grup-ad">Zeka Oyunları</span><span class="grup-acik">Kendi strateji oyunum ve dünyanın sevilen zeka oyunları, arkalarındaki matematikle</span><span class="grup-onizleme">MEDAR · Popüler Zeka Oyunları</span></span>
+      <span class="grup-yazi"><span class="grup-ad">Zeka Oyunları</span><span class="grup-acik">Kendi strateji oyunum ve dünyanın sevilen zeka oyunları, arkalarındaki matematikle</span><span class="grup-onizleme">MEDAR · Oyun Salonu</span></span>
       <span class="grup-sayi">2 proje</span><span class="grup-ok" aria-hidden="true"></span>
     </summary>
     <ul class="liste">
@@ -469,10 +523,10 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <img class="ikon" src="medar-ikon.webp" width="56" height="56" alt="">
       <h3>MEDAR</h3><span class="durum">Tescil sürecinde</span>
       <p><i>Muhsin ENGİN's Dynamic Array Rotation.</i> Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. <span class="dugmeler"><a class="yaz yaz-dolu" href="medar/oyun/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Oyna</a><a class="yaz" href="medar/antrenman/">Antrenman</a><a class="yaz" href="zeka-oyunlari/#medar">∑ Arkasındaki matematik</a><span class="soluk-not">Yayıncılar ve iş birliği için</span><a class="yaz" href="#" data-k="enginmuhsin" data-a="gmail.com" data-konu="MEDAR"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Bana yazın</a></span></p></div></li>
-    <li class="proje"><a href="zeka-oyunlari/#populer">
+    <li class="proje"><a href="zeka-oyunlari/salon/">
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M6 6 H50 V50 H6 Z"/><path d="M17 6 V50 M28 6 V50 M39 6 V50 M6 17 H50 M6 28 H50 M6 39 H50"/><circle class="dolu" cx="17" cy="17" r="4.4"/><circle class="dolu kirmizi" cx="28" cy="28" r="4.4"/><circle cx="39" cy="28" r="4.4"/><circle class="dolu" cx="28" cy="39" r="4.4"/><circle class="dolu kirmizi" cx="39" cy="39" r="4.4"/></svg>
-      <h3>Popüler Zeka Oyunları</h3><span class="adres">muhsinengin.com/zeka-oyunlari</span>
-      <p>Satranç, Go, Mangala, Pentago, Reversi, Hex, Mastermind ve Sudoku: kısa tarihleri, nasıl oynandıkları ve her birinin altında “Bunun arkasındaki matematik” kutusu.</p></a></li>
+      <h3>Oyun Salonu</h3><span class="adres">muhsinengin.com/zeka-oyunlari/salon</span>
+      <p>Satranç, Go, Mangala, Pentago, Reversi, Hex, Mastermind ve Sudoku artık oynanabilir: bilgisayara karşı ya da iki kişi, her tahtanın yanında canlı matematik. Her gün herkese aynı Mastermind ve Sudoku.</p></a></li>
     </ul>
   </details>
   <details class="grup" id="g-egitim">
@@ -510,7 +564,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <li class="proje"><div>
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M16 16 L40 40 M40 16 L16 40"/><rect x="22" y="22" width="12" height="12" rx="3"/><path class="kirmizi" d="M7 16 h18 M31 16 h18 M7 40 h18 M31 40 h18"/><circle class="dolu" cx="16" cy="16" r="2.4"/><circle class="dolu" cx="40" cy="16" r="2.4"/><circle class="dolu" cx="16" cy="40" r="2.4"/><circle class="dolu" cx="40" cy="40" r="2.4"/></svg>
       <h3><a class="kart-baslik" href="dron/">Dron Hangarı</a></h3><a class="adres" href="dron/">muhsinengin.com/dron</a>
-      <p>Bir dron tasarlayıp uçup uçmayacağını hesaplamak, PID kazançlarıyla sanal bir dronu dengede tutmak ve FPV dünyasını benzetmelerle tanımak için. <span class="dugmeler alt-girisler"><a class="yaz" href="dron-lab/">Tasarım Laboratuvarı</a><a class="yaz" href="pid-oyunu/">PID Ayar Oyunu</a><a class="yaz" href="dron/fpv.html">FPV Rehberi</a></span></p></div></li>
+      <p>Bir dron tasarlayıp uçup uçmayacağını hesaplamak, PID kazançlarıyla sanal bir dronu dengede tutmak ve FPV dünyasını benzetmelerle tanımak için. <span class="dugmeler alt-girisler"><a class="yaz" href="dron-ucus/">Uçuş Simülatörü</a><a class="yaz" href="dron-lab/">Tasarım Laboratuvarı</a><a class="yaz" href="pid-oyunu/">PID Ayar Oyunu</a><a class="yaz" href="dron/fpv.html">FPV Rehberi</a></span></p></div></li>
     <li class="proje"><a href="https://sekmeolcer.muhsinengin.com/">
       <svg viewBox="0 0 56 56" aria-hidden="true"><path d="M4 48 H52"/><path d="M6 12 Q11 48 16 48 Q22 22 28 48 Q32 32 36 48 Q39 40 42 48 Q44 44 46 48"/><circle class="dolu kirmizi" cx="6" cy="10" r="3.4"/></svg>
       <h3>SekmeÖlçer</h3><span class="adres">sekmeolcer.muhsinengin.com</span>
@@ -584,6 +638,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 /* Geri sayım (PİKRAM'daki sayacın sade sürümü). Tarihler Türkiye saatiyle; her ders yılı başında güncellenir.
    Kaynaklar: TÜBİTAK 2204-A/B çağrı duyuruları (Ekim 2026), MEB 2026-2027 çalışma takvimi.
    LGS ve YKS 2027 tarihlerini MEB ve ÖSYM henüz açıklamadı: geçmiş yıllara dayalı tahmin. */
+(function () { const b = document.getElementById("bugunYazi"); if (b) b.textContent = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" }); })();
 (function () {
   const kutu = document.getElementById("sayac"); if (!kutu) return;
   const T = [

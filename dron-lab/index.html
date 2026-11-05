@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dron Tasarım Laboratuvarı</title>
   <meta name="description" content="Bir quadcopter tasarla; uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesapla.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhsin ENGİN">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Dron Tasarım Laboratuvarı">
+<meta property="og:description" content="Bir quadcopter tasarla; uçup uçmayacağını, itki/ağırlık oranını, hover gazını ve uçuş süresini yaklaşık olarak hesapla.">
+<meta property="og:url" content="https://muhsinengin.com/dron-lab/">
+<meta property="og:image" content="https://muhsinengin.com/ortak/og/dron-lab.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dron Tasarım Laboratuvarı: sayfanın tanıtım görseli">
+<meta name="twitter:card" content="summary_large_image">
   <!-- Site teması (Otomatik / Açık / Koyu / Saate göre): CSS'ten önce uygulanır -->
   <link rel="icon" href="../simge.svg" type="image/svg+xml">
   <script src="../tema.js"></script>
@@ -165,7 +176,7 @@
         </section>
 
         <section class="kart">
-          <details class="varsayim">
+          <details class="varsayim" id="varsayimlar">
             <summary>Varsayımlar ve sınırlar</summary>
             <div class="icerik">
               <ul>
@@ -197,5 +208,6 @@
   <script src="hesap.js"></script>
   <script src="app.js"></script>
 <script>/* tasarımı simülatöre taşı */document.getElementById("ucusLink").addEventListener("click",function(){this.href="../dron-ucus/index.html"+location.hash;});</script>
+<script>/* #varsayimlar ile gelinince bölümü aç */if(new URLSearchParams(location.search).get("bolum")==="varsayimlar"){const d=document.getElementById("varsayimlar");if(d){d.open=true;setTimeout(()=>d.scrollIntoView(),300);}}</script>
 </body>
 </html>

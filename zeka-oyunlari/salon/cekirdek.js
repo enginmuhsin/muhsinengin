@@ -20,6 +20,19 @@ const Salon = (() => {
   const oku = (k, v) => { try { const x = localStorage.getItem('salon.' + k); return x == null ? v : JSON.parse(x); } catch (e) { return v; } };
   const yaz = (k, v) => { try { localStorage.setItem('salon.' + k, JSON.stringify(v)); } catch (e) {} };
 
+  /* ---------- günün bulmacası: herkese aynı tohum ---------- */
+  const gunAnahtari = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  const gunAdi = () => new Intl.DateTimeFormat('tr-TR', { timeZone: 'Europe/Istanbul', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+  function tohumlu(tohum) { // mulberry32: aynı tohum → her tarayıcıda aynı sayı dizisi
+    let a = typeof tohum === 'string' ? [...tohum].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 2654435761) >>> 0, 1779033703) : tohum >>> 0;
+    return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  const karistir = (dizi, rnd = Math.random) => { for (let i = dizi.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [dizi[i], dizi[j]] = [dizi[j], dizi[i]]; } return dizi; };
+  async function kopyala(metin) {
+    try { await navigator.clipboard.writeText(metin); return true; }
+    catch (e) { const t = document.createElement('textarea'); t.value = metin; document.body.append(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (_) {} t.remove(); return ok; }
+  }
+
   /* ---------- yardımcılar ---------- */
   const tr = (x, b = 0) => Number(x).toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b });
   function el(etiket, ozellik = {}, ...cocuk) {
@@ -102,7 +115,7 @@ const Salon = (() => {
   /* ---------- api: oyunun dünyayla konuştuğu tek yer ---------- */
   function apiYap() {
     return {
-      tahta: $('tahta'), el, svg, tr, oku, yaz, isciYap,
+      tahta: $('tahta'), el, svg, tr, oku, yaz, isciYap, gunAnahtari, gunAdi, tohumlu, karistir, kopyala,
       get ayar() { return aktif.ayar; },
       durum(html, opts = {}) { const d = $('durum'); d.innerHTML = html; d.classList.toggle('dusunuyor', !!opts.dusunuyor); },
       neden(html) { $('nedenKutu').hidden = !html; $('neden').innerHTML = html || ''; },
@@ -122,7 +135,7 @@ const Salon = (() => {
     aktif.oyun.yeni();
   }
 
-  function oyunAc(id) {
+  function oyunAc(id, zorla) {
     const t = oyunlar[id]; if (!t) return salonAc();
     if (aktif && aktif.oyun.yokEt) aktif.oyun.yokEt();
     aktifId = id;
@@ -133,6 +146,7 @@ const Salon = (() => {
     document.title = t.baslik + ' · Oyun Salonu';
     aktif = { tanim: t, ayar: null, oyun: null };
     aktif.ayar = ayarlariOku(t);
+    if (zorla) Object.assign(aktif.ayar, zorla);
     seceneklerCiz();
     aktif.oyun = t.olustur(apiYap());
     $('geriAl').hidden = !aktif.oyun.geriAl; $('geriAl').disabled = true;
@@ -163,7 +177,15 @@ const Salon = (() => {
     }).join('') + '<p style="font-size:12px;color:var(--soluk);margin:8px 0 0">Ölçek logaritmik: her çizgi aralığı 10 kat.</p>';
   }
 
-  function rota() { const h = location.hash.slice(1); if (oyunlar[h]) oyunAc(h); else salonAc(); }
+  // #oyun ya da #oyun-secenek (ör. #mastermind-gunluk): seçeneği doğrudan açar
+  function rota() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (oyunlar[h]) return oyunAc(h);
+    const [id, deger] = [h.slice(0, h.indexOf('-')), h.slice(h.indexOf('-') + 1)];
+    const t = oyunlar[id];
+    if (t && deger) { const g = (t.secenekler || VARSAYILAN).find((g) => g.sec.some(([v]) => v === deger)); if (g) return oyunAc(id, { [g.id]: deger }); }
+    salonAc();
+  }
 
   function basla() {
     $('kartlar').innerHTML = '';
@@ -178,10 +200,19 @@ const Salon = (() => {
     $('yeniOyun').onclick = () => { if (aktif) yeniOyun(); };
     $('geriAl').onclick = () => { if (aktif && aktif.oyun.geriAl) { isciler.forEach((w) => w.terminate()); isciler = []; $('afis').hidden = true; aktif.oyun.geriAl(); } };
     $('salonaDon').onclick = () => { location.hash = ''; };
+    // Sınıf modu: akıllı tahtada büyük dokunma hedefleri, büyük yazı, tam ekran
+    const sm = $('sinifModu');
+    if (sm) sm.onclick = () => {
+      const acik = !document.body.classList.contains('sinif');
+      document.body.classList.toggle('sinif', acik); sm.setAttribute('aria-pressed', String(acik));
+      try { if (acik && !document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {}); else if (!acik && document.fullscreenElement) document.exitFullscreen?.(); } catch (e) {}
+    };
+    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && document.body.classList.contains('sinif')) { document.body.classList.remove('sinif'); sm && sm.setAttribute('aria-pressed', 'false'); } });
+    if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
     addEventListener('hashchange', rota);
     rota();
   }
 
   function kaydet(id, tanim) { oyunlar[id] = tanim; sira.push(id); }
-  return { kaydet, basla, el, svg, tr };
+  return { kaydet, basla, el, svg, tr, gunAnahtari, tohumlu, karistir };
 })();

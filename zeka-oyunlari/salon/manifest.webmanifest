@@ -1,0 +1,12 @@
+{
+  "name": "Oyun Salonu · Muhsin ENGİN",
+  "short_name": "Oyun Salonu",
+  "description": "8 zeka oyunu: bilgisayara karşı ya da iki kişi, canlı matematikle.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f1",
+  "theme_color": "#c8402f",
+  "icons": [{ "src": "../../simge.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

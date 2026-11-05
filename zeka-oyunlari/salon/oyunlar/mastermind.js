@@ -30,7 +30,7 @@
     ozet: 'Gizli renk kodunu ipuçlarıyla bul. Her tahminde olasılıkların nasıl eridiğini gör.',
     etiketler: ['Knuth minimax', 'Bilgi kuramı', '1 kişi'],
     dallanmaRef: '1296', dallanmaSayi: 1296,
-    secenekler: [{ id: 'mod', ad: 'Mod', sec: [['sen', 'Sen çöz'], ['bilgisayar', 'Bilgisayar çözsün']], v: 'sen' }],
+    secenekler: [{ id: 'mod', ad: 'Mod', sec: [['gunluk', 'Günün kodu'], ['sen', 'Sen çöz'], ['bilgisayar', 'Bilgisayar çözsün']], v: 'sen' }],
     kurallar: ['Gizli kod 4 yuvadan oluşur; her yuva 6 renkten biridir, renkler tekrar edebilir.',
       'Her tahminden sonra <b>siyah</b> çivi: doğru renk doğru yerde; <b>beyaz</b> çivi: doğru renk yanlış yerde.',
       'En fazla 10 tahminde kodu bulmaya çalış.', 'Donald Knuth 1977\'de her kodun en fazla 5 tahminde bulunabileceğini gösterdi.'],
@@ -42,21 +42,29 @@
 
       function yeni() {
         clearTimeout(zaman);
-        st = { mod: api.ayar.mod, gizli: null, satir: [], taslak: [null, null, null, null], S: KODLAR.map((_, i) => i), bitti: false, onayli: api.ayar.mod === 'sen' };
+        st = { mod: api.ayar.mod, gizli: null, satir: [], taslak: [null, null, null, null], S: KODLAR.map((_, i) => i), bitti: false, onayli: api.ayar.mod !== 'bilgisayar' };
         if (st.mod === 'sen') st.gizli = KODLAR[Math.floor(Math.random() * 1296)];
+        if (st.mod === 'gunluk') {
+          // herkese aynı kod: tohum = Türkiye saatine göre bugünün tarihi
+          st.gun = api.gunAnahtari();
+          st.gizli = KODLAR[Math.floor(api.tohumlu('mastermind-' + st.gun)() * 1296)];
+          const kayit = api.oku('mm.gunluk', null);
+          if (kayit && kayit.gun === st.gun) for (const k of kayit.tahminler) { tahminEt(k, true); }
+        }
         ciz(); matCiz(null);
-        api.durum(st.mod === 'sen' ? 'Renklere dokunarak ilk tahminini kur.' : 'Gizli kodunu seç; bilgisayar görmeden çözecek.');
+        api.durum(st.mod === 'gunluk' ? (st.bitti ? 'Bugünün kodunu çözdün; yarın yeni kod.' : `Günün kodu · ${api.gunAdi()} · herkes aynı kodu çözüyor.`) : st.mod === 'sen' ? 'Renklere dokunarak ilk tahminini kur.' : 'Gizli kodunu seç; bilgisayar görmeden çözecek.');
       }
-      function tahminEt(k) {
+      function tahminEt(k, sessiz) {
         const onceki = st.S.length;
         const f = geri(k, st.gizli);
         st.satir.push({ k, f });
         api.dallanma(1296);
         st.S = st.S.filter((s) => geri(k, KODLAR[s]) === f);
         matCiz({ onceki, sonra: st.S.length });
-        if (f === 40) { st.bitti = true; api.bitti(st.mod === 'sen' ? `Buldun! ${st.satir.length} tahmin.` : `Bilgisayar ${st.satir.length} tahminde buldu.`); }
+        if (f === 40) { st.bitti = true; api.bitti(st.mod === 'bilgisayar' ? `Bilgisayar ${st.satir.length} tahminde buldu.` : `Buldun! ${st.satir.length} tahmin.`); }
         else if (st.satir.length >= 10) { st.bitti = true; api.bitti('10 tahmin bitti. Kod: ' + st.gizli.map((c) => AD[c]).join(', '), true); }
-        ciz();
+        if (st.mod === 'gunluk') api.yaz('mm.gunluk', { gun: st.gun, tahminler: st.satir.map((x) => x.k) });
+        if (!sessiz) ciz();
       }
       function bilgisayarAdim() {
         if (st.bitti) return;
@@ -90,7 +98,7 @@
         T.append(el('div', { class: 'ust-bilgi' }, el('span', {}, 'Tahmin ', el('b', {}, `${st.satir.length}/10`)), el('span', {}, 'Mümkün kod ', el('b', {}, String(st.S.length)))));
         const tablo = el('div', { style: 'display:flex;flex-direction:column;gap:6px;background:var(--yuzey2);padding:12px;border-radius:14px' });
         for (let r = 0; r < 10; r++) {
-          const s = st.satir[r]; const aktifSatir = !s && r === st.satir.length && !st.bitti && st.onayli && st.mod === 'sen';
+          const s = st.satir[r]; const aktifSatir = !s && r === st.satir.length && !st.bitti && st.onayli && st.mod !== 'bilgisayar';
           const satir = el('div', { style: `display:flex;align-items:center;gap:8px;padding:3px 6px;border-radius:8px;${aktifSatir ? 'background:var(--yuzey);outline:2px solid var(--kirmizi)' : ''}` },
             el('span', { class: 'num', style: 'width:18px;font-size:12px;color:var(--soluk)' }, String(r + 1)));
           const kod = s ? s.k : aktifSatir ? st.taslak : [null, null, null, null];
@@ -102,11 +110,20 @@
           tablo.append(satir);
         }
         T.append(tablo);
-        if (st.mod === 'sen' && !st.bitti) {
+        if (st.mod === 'gunluk' && st.bitti) {
+          const sonuc = st.satir.at(-1).f === 40 ? `${st.satir.length}/10` : 'X/10';
+          const metin = `Günün Mastermind'ı · ${api.gunAdi()} · ${sonuc}\n` + st.satir.map((x) => { const s = Math.floor(x.f / 10), w = x.f % 10; return '●'.repeat(s) + '○'.repeat(w) + '·'.repeat(4 - s - w); }).join('\n') + '\nmuhsinengin.com/zeka-oyunlari/salon/#mastermind-gunluk';
+          const kutu = el('div', { style: 'width:min(100%,360px);display:flex;flex-direction:column;gap:8px' },
+            el('pre', { style: 'margin:0;padding:10px 12px;border-radius:10px;background:var(--yuzey2);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;white-space:pre-wrap;user-select:text' }, metin),
+            el('button', { class: 'dug ana', type: 'button', onclick: async (e) => { const ok = await api.kopyala(metin); e.target.textContent = ok ? 'Kopyalandı' : 'Metni seçip kopyala'; } }, 'Sonucu kopyala'),
+            el('small', { style: 'color:var(--soluk)' }, 'Renkleri değil yalnızca ipuçlarını paylaşır; kodu kimseye söylemez.'));
+          T.append(kutu);
+        }
+        if (st.mod !== 'bilgisayar' && !st.bitti) {
           T.append(cizRenkSec());
           T.append(el('div', { class: 'dugmeler' },
             el('button', { class: 'dug ana', type: 'button', disabled: st.taslak.includes(null), onclick: () => { const k = st.taslak.slice(); st.taslak = [null, null, null, null]; tahminEt(k); api.durum(st.bitti ? 'Oyun bitti.' : 'Sıradaki tahmin.'); } }, 'Tahmin et'),
-            el('button', { class: 'dug', type: 'button', onclick: () => { const { g, enKotu } = knuth(st.S); st.taslak = KODLAR[g].slice(); ciz(); api.neden(`Knuth'un önerisi: en kötü cevapta bile en fazla <b>${enKotu}</b> kod bırakır.`); } }, 'Knuth ne derdi?')));
+            st.mod === 'gunluk' ? null : el('button', { class: 'dug', type: 'button', onclick: () => { const { g, enKotu } = knuth(st.S); st.taslak = KODLAR[g].slice(); ciz(); api.neden(`Knuth'un önerisi: en kötü cevapta bile en fazla <b>${enKotu}</b> kod bırakır.`); } }, 'Knuth ne derdi?')));
         }
         if (st.mod === 'bilgisayar' && !st.onayli) {
           T.append(el('div', { style: 'display:flex;gap:8px' }, st.taslak.map((c) => cubuk(c, 40))));

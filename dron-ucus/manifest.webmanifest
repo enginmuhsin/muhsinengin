@@ -1,0 +1,13 @@
+{
+  "name": "Dron Uçuş Simülatörü · Muhsin ENGİN",
+  "short_name": "Dron Uçuş",
+  "description": "Laboratuvarda tasarladığın dronu 3B sahnede uçur.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "icons": [{ "src": "../simge.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
