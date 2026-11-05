@@ -1,7 +1,12 @@
 /* =====================================================================
    SİTE MÜZİĞİ — muzik/muzik.js
-   Tarayıcıda anlık üretilen müzik. Ses dosyası yoktur: her nota Web Audio ile o an sentezlenir,
-   bu yüzden sayfaya hiç ağırlık eklemez.
+   Her temanın kayıtlı bir müzik döngüsü vardır (muzik/<tema>.mp3, ~45 sn, ölçü çizgisinden kesilip başı sonuna
+   karıştırılmış: döngü dikişsiz). Dosya yalnız ziyaretçi müziği açınca indirilir. İnemezse (bağlantı yok, başka
+   alan adından yüklenmiş sayfa vb.) eski yol devreye girer: her nota Web Audio ile o an sentezlenir.
+   Müzikler (Pixabay, Pixabay İçerik Lisansı):
+     uzay        "Piano Background" — atlasaudio
+     muhendislik "Technology" — nastelbom
+     odak        "Study Lofi Music" — Alex Morgan
 
    Kullanım (sayfanın <head> kısmına):
      <script src="/muzik/muzik.js" data-tema="uzay" defer></script>
@@ -28,6 +33,42 @@
   var KEY = TEMA === 'odak' ? 'site-muzik-odak' : 'site-muzik';
 
   var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, nbuf = null;
+  /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
+  var DOSYA_SEVIYE = { uzay: 0.42, muhendislik: 0.36, odak: 0.4 };
+  var dosyaUrl = null; try { dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
+  var dosyaTampon = null, dosyaKaynak = null, dosyaKazanc = null, dosyaDurum = 'yok';   // yok | iniyor | hazir | hata
+  var mod = null;                                                    // 'dosya' | 'sentez'
+  function dosyaYukle() {
+    if (dosyaDurum !== 'yok' || !dosyaUrl || !window.fetch) return Promise.resolve(dosyaTampon);
+    dosyaDurum = 'iniyor';
+    var bitti = false;
+    return new Promise(function (coz) {
+      var zaman = setTimeout(function () { if (!bitti) { bitti = true; dosyaDurum = 'hata'; coz(null); } }, 10000);
+      fetch(dosyaUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then(function (b) { return new Promise(function (ok, no) { ac.decodeAudioData(b, ok, no); }); })
+        .then(function (t) { if (bitti) return; bitti = true; clearTimeout(zaman); dosyaTampon = t; dosyaDurum = 'hazir'; coz(t); })
+        .catch(function () { if (bitti) return; bitti = true; clearTimeout(zaman); dosyaDurum = 'hata'; coz(null); });
+    });
+  }
+  // MP3 kodlayıcısının baştaki/sondaki sessiz dolgusunu döngüden çıkar (yoksa her turda küçük bir boşluk duyulur)
+  function donguSiniri(t) {
+    var d = t.getChannelData(0), n = d.length, max = Math.min(n, Math.floor(t.sampleRate * 0.15)), bas = 0, son = n - 1;
+    while (bas < max && Math.abs(d[bas]) < 1e-4) bas++;
+    while (son > n - max && Math.abs(d[son]) < 1e-4) son--;
+    return [bas / t.sampleRate, (son + 1) / t.sampleRate];
+  }
+  function dosyaCal() {
+    var t = ac.currentTime + 0.05, s = ac.createBufferSource(), sinir = donguSiniri(dosyaTampon);
+    s.buffer = dosyaTampon; s.loop = true; s.loopStart = sinir[0]; s.loopEnd = sinir[1];
+    dosyaKazanc = ac.createGain(); dosyaKazanc.gain.setValueAtTime(0, t); dosyaKazanc.gain.linearRampToValueAtTime(DOSYA_SEVIYE[TEMA] || 0.4, t + 3);
+    s.connect(dosyaKazanc); dosyaKazanc.connect(ac.destination); s.start(t, sinir[0]); dosyaKaynak = s;
+  }
+  function dosyaDurdur() {
+    if (!dosyaKaynak) return;
+    var t = ac.currentTime, s = dosyaKaynak, g = dosyaKazanc; dosyaKaynak = null;
+    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0, t + 1.5);
+    setTimeout(function () { try { s.stop(); } catch (e) { /* zaten durdu */ } }, 1600);
+  }
   var S = {};                                                   // temanın zaman sayaçları
 
   function acik() { try { var v = localStorage.getItem(KEY); return v === null ? VARSAYILAN_ACIK : v !== '0'; } catch (e) { return VARSAYILAN_ACIK; } }
@@ -219,20 +260,30 @@
     try { var b = ac.createBuffer(1, 1, 22050), s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0); } catch (e) { /* sessizce geç */ }
     if (ac.state !== 'running' && ac.resume) ac.resume().catch(function () {});
   }
+  function sentezBaslat() {
+    mod = 'sentez';
+    var t = ac.currentTime + 0.1;
+    T.basla(t);
+    out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(T.seviye, t + 5);
+    T.planla(t + 1.5); timer = setInterval(tik, 250);
+  }
   function baslat() {
     if (running) { if (ac && ac.state !== 'running') kilidiAc(); return; }
     if (!kur()) return;
     kilidiAc();
     running = true;
-    var t = ac.currentTime + 0.1;
-    T.basla(t);
-    out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(T.seviye, t + 5);
-    T.planla(t + 1.5); timer = setInterval(tik, 250);
     davetiGizle(); arayuz();
+    if (dosyaTampon) { mod = 'dosya'; dosyaCal(); return; }
+    dosyaYukle().then(function (t) {
+      if (!running || mod) return;                    // bu arada kapatıldıysa ya da zaten başladıysa
+      if (t) { mod = 'dosya'; dosyaCal(); } else sentezBaslat();
+    });
   }
   function durdur() {
     if (!running) return;
     running = false; clearInterval(timer); timer = null;
+    if (mod === 'dosya') dosyaDurdur();
+    mod = null;
     var t = ac.currentTime; out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(0, t + 1.5);
     setTimeout(function () { if (!running && ac && ac.suspend) ac.suspend(); }, 1700);
     arayuz();
@@ -300,7 +351,7 @@
     document.addEventListener('visibilitychange', function () {
       if (!ac || !running) return;
       if (document.hidden) { if (ac.suspend) ac.suspend(); }
-      else { if (ac.resume) ac.resume(); T.planla(ac.currentTime + 1.5); }
+      else { if (ac.resume) ac.resume(); if (mod === 'sentez') T.planla(ac.currentTime + 1.5); }
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bagla); else bagla();
@@ -308,6 +359,7 @@
   window.SiteMuzik = {
     tema: TEMA, baslat: baslat, durdur: durdur,
     durum: function () { return ac ? ac.state : 'yok'; },
+    kaynak: function () { return mod || 'yok'; },                 // 'dosya' (kayıtlı müzik) | 'sentez' (yedek)
     // test ve dinleme için: müziği çevrimdışı bir ses bağlamında sn saniye boyunca üretir
     _bake: function (c, sn) { kur(c); out.gain.value = T.seviye; T.basla(0.05); T.planla(sn); }
   };
