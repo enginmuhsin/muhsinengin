@@ -200,6 +200,10 @@ const Salon = (() => {
     $('yeniOyun').onclick = () => { if (aktif) yeniOyun(); };
     $('geriAl').onclick = () => { if (aktif && aktif.oyun.geriAl) { isciler.forEach((w) => w.terminate()); isciler = []; $('afis').hidden = true; aktif.oyun.geriAl(); } };
     $('salonaDon').onclick = () => { location.hash = ''; };
+    // "İçeriğe atla": adres çubuğundaki oyun yolunu bozmadan odağı içeriğe taşı
+    document.querySelectorAll('[data-atla]').forEach((x) => x.addEventListener('click', (e) => {
+      e.preventDefault(); const m = $('salon').hidden ? $('tahta') : $('kartlar'); m.setAttribute('tabindex', '-1'); m.focus();
+    }));
     // Sınıf modu: akıllı tahtada büyük dokunma hedefleri, büyük yazı, tam ekran
     const sm = $('sinifModu');
     if (sm) sm.onclick = () => {

@@ -16,12 +16,14 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Zeka Oyunları · Muhsin ENGİN: sayfanın tanıtım görseli">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f5f7fa">
+<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../simge.svg" type="image/svg+xml">
 <script src="../tema.js"></script>
 <script src="../ortak/ana-sayfa.js" data-gecis defer></script>
 <script src="../muzik/muzik.js" data-tema="odak" defer></script>
 <link rel="stylesheet" href="../ortak/matematik.css">
+<link rel="stylesheet" href="../ortak/tokenlar.css">
 <style>
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -44,8 +46,8 @@
   --yazi: "Onest", "Segoe UI", system-ui, sans-serif; --baslik: "Bricolage", "Arial Black", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --turuncu: #ffb04a; --kart: #151c29; color-scheme: dark; } }
-:root[data-theme="dark"] { --kagit: #10151f; --kare: #1b2331; --kare-kalin: #243044; --murekkep: #9bb3ff; --metin: #e6ebf3; --kursun: #9aa6b8; --kirmizi: #ff6f76; --turuncu: #ffb04a; --kart: #151c29; color-scheme: dark; }
+  --kagit: #111b1c; --kare: #1b2a2b; --kare-kalin: #253839; --murekkep: #a9c4ff; --metin: #e9efe8; --kursun: #a1b0aa; --kirmizi: #ff7a72; --turuncu: #ffb04a; --kart: #172324; color-scheme: dark; } }
+:root[data-theme="dark"] { --kagit: #111b1c; --kare: #1b2a2b; --kare-kalin: #253839; --murekkep: #a9c4ff; --metin: #e9efe8; --kursun: #a1b0aa; --kirmizi: #ff7a72; --turuncu: #ffb04a; --kart: #172324; color-scheme: dark; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -233,6 +235,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
 </style>
 </head>
 <body>
+<a class="me-atla" href="#icerik">İçeriğe atla</a>
 <div class="sayfa"><div class="ic">
 
 <nav class="ust" aria-label="Site">
@@ -250,7 +253,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <button type="button" class="ust-dugme" data-tema-dugme aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
 </nav>
 
-<header class="acilis">
+<header class="acilis" id="icerik" tabindex="-1">
   <span class="ust-etiket">Oyna, düşün, say</span>
   <h1>Zeka <span>Oyunları</span></h1>
   <p class="giris">İyi bir zeka oyununun kuralları bir dakikada öğrenilir, ustalığı bir ömür sürer. Burada kendi tasarladığım MEDAR'ı ve dünyanın en sevilen zeka oyunlarını bulacaksın. Her oyunun altındaki <b>“Bunun arkasındaki matematik”</b> kutusu, o oyunu matematikçilerin neden bu kadar sevdiğini kısaca anlatıyor.</p>
@@ -267,7 +270,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <div class="medar-kart">
     <img src="../medar/icons/icon-512.png" width="170" height="170" alt="MEDAR simgesi: altıgen tahta ve dönen üçgenler">
     <div>
-      <h3>MEDAR <span class="rozet">Tescil sürecinde</span></h3>
+      <h3>MEDAR <span class="rozet me-rozet">Tescil sürecinde</span></h3>
       <p class="alt">Muhsin ENGİN's Dynamic Array Rotation</p>
       <p>Altıgen bir tahtada, 120° dönen üçgenlerle oynanan iki kişilik özgün bir strateji oyunu. Taşını koyarsın, sonra bir üçgeni çevirirsin; tek bir dönüş tahtadaki bütün dengeyi değiştirebilir. Sınıf Sürümü'nde yapay zekâya ya da arkadaşına karşı oynarsın, <b>MEDAR Patlat</b> antrenmanında dönmeleri kafada hesaplamayı çalışırsın.</p>
       <div class="dugmeler">

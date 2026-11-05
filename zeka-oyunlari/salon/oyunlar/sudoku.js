@@ -133,7 +133,7 @@
         const T = api.tahta; T.innerHTML = '';
         const bos = st.g.filter((v) => !v).length;
         T.append(el('div', { class: 'ust-bilgi' }, el('span', {}, 'Süre ', el('b', { id: 'suSure' }, sureYaz(st.sure))), el('span', {}, 'Boş ', el('b', {}, String(bos))), el('span', {}, 'Çakışma ', el('b', {}, String(st.hata))), el('span', {}, 'İpucu ', el('b', {}, String(st.ipucu)))));
-        const izgara = el('div', { role: 'grid', 'aria-label': 'Sudoku tahtası', style: 'display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);width:min(100%,460px);aspect-ratio:1;border:2.5px solid var(--murekkep);border-radius:6px;overflow:hidden;background:var(--yuzey)' });
+        const izgara = el('div', { role: 'grid', 'aria-label': 'Sudoku tahtası', style: 'display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);width:min(100%,460px);aspect-ratio:1;border:2.5px solid var(--metin);border-radius:6px;overflow:hidden;background:var(--yuzey)' });
         const sd = secili >= 0 ? st.g[secili] : 0;
         for (let i = 0; i < 81; i++) {
           const r = Math.floor(i / 9), c = i % 9, v = st.g[i];
@@ -145,7 +145,7 @@
           if (i === secili) bg = 'color-mix(in srgb,var(--mavi) 34%,transparent)';
           if (i === st.ipucuHucre) bg = 'color-mix(in srgb,var(--sari) 45%,transparent)';
           const b = el('button', { type: 'button', role: 'gridcell', class: 'hucre-btn', 'aria-label': `${hucreAd(i)}: ${v || 'boş'}`,
-            style: `position:relative;background:${bg};border-right:${c % 3 === 2 && c < 8 ? '2px solid var(--murekkep)' : '1px solid var(--cizgi)'};border-bottom:${r % 3 === 2 && r < 8 ? '2px solid var(--murekkep)' : '1px solid var(--cizgi)'};font-family:var(--f-sayi);font-size:clamp(16px,4.4vw,26px);color:${cakisma ? 'var(--kirmizi)' : st.soru[i] ? 'var(--murekkep)' : 'var(--mavi)'};font-weight:${st.soru[i] ? 700 : 500};display:grid;place-items:center;min-width:0`,
+            style: `position:relative;background:${bg};border-right:${c % 3 === 2 && c < 8 ? '2px solid var(--metin)' : '1px solid var(--cizgi)'};border-bottom:${r % 3 === 2 && r < 8 ? '2px solid var(--metin)' : '1px solid var(--cizgi)'};font-family:var(--f-sayi);font-size:clamp(16px,4.4vw,26px);color:${cakisma ? 'var(--kirmizi)' : st.soru[i] ? 'var(--metin)' : 'var(--mavi)'};font-weight:${st.soru[i] ? 700 : 500};display:grid;place-items:center;min-width:0`,
             onclick: () => { secili = i; ciz(); } });
           if (v) b.textContent = v;
           else if (st.not[i]) { const n = el('span', { style: 'display:grid;grid-template-columns:repeat(3,1fr);width:100%;height:100%;font-size:clamp(7px,1.6vw,10px);color:var(--soluk);font-family:var(--f-govde)' }); for (let d = 1; d <= 9; d++) n.append(el('span', { style: 'display:grid;place-items:center' }, st.not[i] & (1 << d) ? String(d) : '')); b.append(n); }

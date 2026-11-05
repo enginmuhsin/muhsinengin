@@ -113,7 +113,7 @@
           kap.append(kutu);
           if (oynar && st.bekleyen >= 0) {
             const ok = (yon, yer) => el('button', { type: 'button', 'aria-label': `${['Sol üst', 'Sağ üst', 'Sol alt', 'Sağ alt'][q]} çeyreği ${yon === 1 ? 'saat yönünde' : 'saat yönünün tersine'} döndür`,
-              style: `position:absolute;${yer};width:36px;height:36px;border-radius:50%;border:2px solid var(--yuzey);background:var(--murekkep);color:var(--kagit);font-size:18px;z-index:2;box-shadow:var(--golge)`,
+              style: `position:absolute;${yer};width:36px;height:36px;border-radius:50%;border:2px solid var(--yuzey);background:var(--metin);color:var(--kagit);font-size:18px;z-index:2;box-shadow:var(--golge)`,
               onclick: () => tamamla([st.bekleyen, q, yon], st.sira) }, yon === 1 ? '↻' : '↺');
             const dikey = q >> 1 ? 'bottom:-14px' : 'top:-14px', sol = q & 1 ? 'right:-14px' : 'left:-14px';
             kap.append(ok(1, `${dikey};${q & 1 ? 'left:calc(50% - 18px)' : 'left:calc(50% - 18px)'}`), ok(-1, `${sol};top:calc(50% - 18px)`));

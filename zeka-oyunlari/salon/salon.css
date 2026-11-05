@@ -1,30 +1,18 @@
+@import url("../../ortak/tokenlar.css");
 /* Düzen: kareli defter zemini üstünde salon ızgarası; oyun sayfasında solda tahta, sağda "öğretmen paneli". */
+/* Renkler ve yazı tipleri ortak/tokenlar.css'ten gelir (defter / kara tahta).
+   Burada yalnızca salona özgü yüzeyler, taş ve ahşap renkleri tanımlı. */
 :root{
-  --kagit:#f5f6f1; --kare:rgba(47,98,170,.085); --yuzey:#ffffff; --yuzey2:#eef0ea;
-  --murekkep:#1b2130; --soluk:#5b6577; --cizgi:#d8dce3;
-  --kirmizi:#c8402f; --mavi:#2f6fd0; --yesil:#1d9566; --sari:#d99a17;
+  --yuzey:#ffffff; --yuzey2:#eef2f7; --cizgi:var(--kare-kalin); --soluk:var(--kursun); --sari:var(--turuncu);
   --tas-koyu:#20242c; --tas-acik:#fbfaf6; --ahsap:#c99a63; --ahsap2:#a8773f;
-  --golge:0 1px 2px rgba(20,30,50,.08),0 6px 18px rgba(20,30,50,.07);
-  --f-baslik:"Fraunces",Georgia,"Times New Roman",serif;
-  --f-govde:"Onest","Segoe UI",system-ui,sans-serif;
-  --f-sayi:"Bricolage","Bricolage Grotesque","Onest",system-ui,sans-serif;
+  --f-baslik:var(--serif); --f-govde:var(--yazi); --f-sayi:"Bricolage","Bricolage Grotesque",var(--yazi);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --kagit:#16201c; --kare:rgba(255,255,255,.045); --yuzey:#1e2b26; --yuzey2:#24342e;
-  --murekkep:#edf2ea; --soluk:#a6b4ab; --cizgi:#34463f;
-  --kirmizi:#ff7d68; --mavi:#7cb0ff; --yesil:#4fd59e; --sari:#f2c14e;
-  --tas-koyu:#0f1311; --tas-acik:#f4f2ea; --ahsap:#9c7446; --ahsap2:#7a5730;
-  --golge:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --kagit:#16201c; --kare:rgba(255,255,255,.045); --yuzey:#1e2b26; --yuzey2:#24342e;
-  --murekkep:#edf2ea; --soluk:#a6b4ab; --cizgi:#34463f;
-  --kirmizi:#ff7d68; --mavi:#7cb0ff; --yesil:#4fd59e; --sari:#f2c14e;
-  --tas-koyu:#0f1311; --tas-acik:#f4f2ea; --ahsap:#9c7446; --ahsap2:#7a5730;
-  --golge:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--yuzey:#172324; --yuzey2:#1e2e30; --tas-koyu:#0f1311; --tas-acik:#f4f2ea; --ahsap:#9c7446; --ahsap2:#7a5730}}
+:root[data-theme="dark"]{--yuzey:#172324; --yuzey2:#1e2e30; --tas-koyu:#0f1311; --tas-acik:#f4f2ea; --ahsap:#9c7446; --ahsap2:#7a5730}
 
 html{background:var(--kagit)}
-body{background:var(--kagit);color:var(--murekkep);font-family:var(--f-govde);font-size:15px;line-height:1.5;
-  background-image:linear-gradient(var(--kare) 1px,transparent 1px),linear-gradient(90deg,var(--kare) 1px,transparent 1px);background-size:24px 24px;
+body{background:var(--kagit);color:var(--metin);font-family:var(--f-govde);font-size:15px;line-height:1.5;
+  background-image:linear-gradient(var(--kare-kalin) 1px,transparent 1px),linear-gradient(90deg,var(--kare-kalin) 1px,transparent 1px),linear-gradient(var(--kare) 1px,transparent 1px),linear-gradient(90deg,var(--kare) 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;min-height:100vh;box-sizing:border-box}
 [hidden]{display:none!important}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -38,12 +26,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .marka i{width:22px;height:22px;display:inline-block;background:conic-gradient(from 30deg,var(--kirmizi) 0 120deg,var(--mavi) 0 240deg,var(--sari) 0);clip-path:polygon(50% 0,100% 100%,0 100%)}
 .ust nav{display:flex;gap:4px}
 .ust nav button{background:none;border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:13px;color:var(--soluk)}
-.ust nav button:hover{border-color:var(--cizgi);color:var(--murekkep)}
+.ust nav button:hover{border-color:var(--cizgi);color:var(--metin)}
 
 /* salon */
 .kas{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--kirmizi);font-weight:700}
 h1{font-family:var(--f-baslik);font-weight:600;font-size:clamp(34px,6vw,58px);line-height:1;margin:8px 0 12px;letter-spacing:-.01em;text-wrap:balance}
 h1 em{font-style:italic;color:var(--kirmizi)}
+.oyun-ust h1,.kart h3{color:var(--murekkep)}
 .giris{max-width:62ch;color:var(--soluk);font-size:16px;margin:0 0 26px}
 .izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .kart{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left;box-shadow:var(--golge);transition:transform .15s,border-color .15s}
@@ -60,12 +49,12 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .olcum>p{color:var(--soluk);margin:0 0 14px;max-width:70ch}
 .dal-satir{display:grid;grid-template-columns:110px 1fr 110px;gap:10px;align-items:center;font-size:13px;padding:4px 0}
 .dal-yol{position:relative;height:14px;background:var(--yuzey2);border-radius:7px}
-.dal-yol .ref{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--murekkep);opacity:.55}
+.dal-yol .ref{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--metin);opacity:.55}
 .dal-yol .sen{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--kirmizi)}
 .dal-satir b{font-family:var(--f-sayi)}
 .lejant{display:flex;gap:16px;font-size:12px;color:var(--soluk);margin-top:10px;flex-wrap:wrap}
 .lejant span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--kirmizi)}
-.lejant span.r::before{width:2px;background:var(--murekkep)}
+.lejant span.r::before{width:2px;background:var(--metin)}
 
 /* günün bulmacaları ve MEDAR finali */
 .gunluk{margin:0 0 22px}
@@ -96,7 +85,7 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .secim{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
 .secim>span{width:62px;font-size:12.5px;color:var(--soluk)}
 .cip{border:1px solid var(--cizgi);background:transparent;border-radius:999px;padding:5px 11px;font-size:13px}
-.cip[aria-pressed="true"]{background:var(--murekkep);border-color:var(--murekkep);color:var(--kagit);font-weight:600}
+.cip[aria-pressed="true"]{background:var(--metin);border-color:var(--metin);color:var(--kagit);font-weight:600}
 .dugmeler{display:flex;gap:8px;flex-wrap:wrap}
 .dug{border:1px solid var(--cizgi);background:var(--yuzey2);border-radius:10px;padding:8px 13px;font-weight:600;font-size:13.5px}
 .dug.ana{background:var(--kirmizi);border-color:var(--kirmizi);color:#fff}
@@ -112,12 +101,12 @@ details.kurallar ul{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:var(
 details.kurallar li{margin-bottom:4px}
 .afis{border-radius:12px;padding:10px 14px;background:color-mix(in srgb,var(--yesil) 16%,var(--yuzey));border:1px solid var(--yesil);font-weight:600}
 .afis.kayip{background:color-mix(in srgb,var(--kirmizi) 14%,var(--yuzey));border-color:var(--kirmizi)}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--murekkep);color:var(--kagit);padding:9px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:50;box-shadow:var(--golge);max-width:calc(100vw - 32px)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--metin);color:var(--kagit);padding:9px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:50;box-shadow:var(--golge);max-width:calc(100vw - 32px)}
 
 /* ortak tahta parçaları */
 .hucre-btn{border:0;padding:0;background:none}
 .ust-bilgi{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:13.5px;color:var(--soluk)}
-.ust-bilgi b{color:var(--murekkep);font-family:var(--f-sayi)}
+.ust-bilgi b{color:var(--metin);font-family:var(--f-sayi)}
 
 .sinif-dugme{margin-left:auto}
 /* Sınıf modu (akıllı tahta): tahta büyür, yazılar ve düğmeler en az 56 px */

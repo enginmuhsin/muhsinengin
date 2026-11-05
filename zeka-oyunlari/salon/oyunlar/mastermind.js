@@ -90,7 +90,7 @@
       }
       function geriCiz(f) {
         const s = Math.floor(f / 10), w = f % 10; const p = [];
-        for (let i = 0; i < 4; i++) p.push(el('i', { style: `width:9px;height:9px;border-radius:50%;display:block;${i < s ? 'background:var(--murekkep)' : i < s + w ? 'background:var(--yuzey);border:1.5px solid var(--murekkep)' : 'background:var(--cizgi)'}` }));
+        for (let i = 0; i < 4; i++) p.push(el('i', { style: `width:9px;height:9px;border-radius:50%;display:block;${i < s ? 'background:var(--metin)' : i < s + w ? 'background:var(--yuzey);border:1.5px solid var(--metin)' : 'background:var(--cizgi)'}` }));
         return el('span', { style: 'display:grid;grid-template-columns:9px 9px;gap:3px', title: `${s} siyah, ${w} beyaz` }, p);
       }
       function ciz() {

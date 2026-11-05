@@ -1,3 +1,4 @@
+@import url("../ortak/tokenlar.css");
 /* =====================================================================
    ORTAK SİTE TEMASI — style.css
    Bu dosya iki araçta da AYNIDIR (dron-lab/ ve pid-oyunu/ klasörlerinde
@@ -8,69 +9,53 @@
    yeniden tanımlar; böylece tüm sayfa tek yerden renk değiştirir.
    ===================================================================== */
 
-/* ---------- 1) AÇIK TEMA (varsayılan) ---------- */
+/* ---------- 1) RENKLER: muhsinengin.com ortak tasarım dilinden (ortak/tokenlar.css) ----------
+   Bu dosyanın eski adları (--bg, --accent…) korunur; değerleri artık ortak tokenlardan gelir.
+   Böylece dron sayfaları ana siteyle aynı kâğıdı, mürekkebi ve yazı tiplerini kullanır.
+   Koyu tema ("kara tahta") tokenlar.css içinde tanımlı; burada yalnızca yüzeyler ayarlanır. */
 :root {
-  --bg: #f5f7fa;          /* sayfa arka planı */
-  --panel: #ffffff;       /* kart arka planı */
-  --panel-2: #eef1f5;     /* ikincil yüzey (kutular) */
-  --text: #12161c;        /* ana yazı */
-  --muted: #47505d;       /* soluk yazı (yine de yüksek kontrastlı) */
-  --border: #cfd5dd;      /* çizgiler */
-  --accent: #0a5cc7;      /* vurgu rengi (düğmeler, bağlantılar) */
-  --accent-ink: #ffffff;  /* vurgu üstündeki yazı */
-  --ok: #12703a;          /* iyi / başarılı */
-  --warn: #8f5200;        /* dikkat */
-  --bad: #b3261e;         /* tehlike / başarısız */
-  --grid: #e1e5eb;        /* grafik ızgarası */
-  --c1: #0a5cc7;          /* grafik rengi 1 (mavi)   */
-  --c2: #d1450b;          /* grafik rengi 2 (turuncu) */
-  --c3: #23843a;          /* grafik rengi 3 (yeşil)  */
-  --c4: #6c45e0;          /* grafik rengi 4 (mor)    */
-  --golge: 0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.05);
-  --yaricap: 12px;
-  color-scheme: light;
+  --bg: var(--kagit);
+  --panel: #ffffff;
+  --panel-2: #eef2f7;
+  --text: var(--metin);
+  --muted: var(--kursun);
+  --border: var(--kare-kalin);
+  --accent: var(--murekkep);
+  --accent-ink: #ffffff;
+  --ok: var(--yesil);
+  --warn: #8f5200;
+  --bad: var(--kirmizi);
+  --grid: var(--kare);
+  --c1: var(--agirlik);   /* grafik rengi 1: mavi = ağırlık  */
+  --c2: var(--itki);      /* grafik rengi 2: turuncu = itki  */
+  --c3: var(--dogru);     /* grafik rengi 3: yeşil = doğru   */
+  --c4: #6c45e0;          /* grafik rengi 4 (mor)            */
 }
-
-/* ---------- 2) KOYU TEMA ----------
-   a) Kullanıcı tema düğmesiyle "koyu" seçtiyse: data-theme="dark"
-   b) Seçim yapmadıysa ve işletim sistemi koyu temadaysa             */
-:root[data-theme="dark"] {
-  --bg: #0e1116; --panel: #161a21; --panel-2: #1e242d; --text: #e8ecf1;
-  --muted: #a9b2bf; --border: #2d3540; --accent: #5ea3ff; --accent-ink: #061322;
-  --ok: #4fcb7c; --warn: #f2a43c; --bad: #ff6f64; --grid: #262d37;
-  --c1: #5ea3ff; --c2: #ff8c4f; --c3: #5ed584; --c4: #b39cff;
-  --golge: 0 1px 3px rgba(0,0,0,.5);
-  color-scheme: dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0e1116; --panel: #161a21; --panel-2: #1e242d; --text: #e8ecf1;
-    --muted: #a9b2bf; --border: #2d3540; --accent: #5ea3ff; --accent-ink: #061322;
-    --ok: #4fcb7c; --warn: #f2a43c; --bad: #ff6f64; --grid: #262d37;
-    --c1: #5ea3ff; --c2: #ff8c4f; --c3: #5ed584; --c4: #b39cff;
-    --golge: 0 1px 3px rgba(0,0,0,.5);
-    color-scheme: dark;
-  }
-}
+:root[data-theme="dark"] { --panel: #172324; --panel-2: #1e2e30; --accent-ink: #0c1415; --warn: #f2a43c; --c4: #b79cff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --panel: #172324; --panel-2: #1e2e30; --accent-ink: #0c1415; --warn: #f2a43c; --c4: #b79cff; } }
 
 /* ---------- 3) TEMEL ---------- */
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* ana siteyle aynı kareli defter zemini */
+  background-image: linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
+    linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
+  font-family: var(--yazi);
   font-size: 16px;
   line-height: 1.5;
 }
 a { color: var(--accent); }
-h1, h2, h3 { line-height: 1.25; margin: 0 0 .5rem; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5rem; font-family: var(--baslik); font-weight: 800; letter-spacing: -.005em; }
 h1 { font-size: 1.6rem; }
 h2 { font-size: 1.2rem; }
 h3 { font-size: 1.02rem; }
 p { margin: .4rem 0; }
-code, .formul { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .92em; }
+code, .formul { font-family: var(--mono); font-size: .92em; }
 
 /* Klavye ile gezinirken odak halkası her zaman görünsün (erişilebilirlik) */
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }

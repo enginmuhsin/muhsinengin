@@ -16,9 +16,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Dron Uçuş Simülatörü · Muhsin ENGİN: sayfanın tanıtım görseli">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#0b1220">
+<meta name="theme-color" content="#0c1415">
 <link rel="icon" href="../simge.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="../ortak/tokenlar.css">
 <style>
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -36,21 +37,21 @@
 <style>
 /* Düzen: tam ekran 3D sahne + üstünde cam paneller (HUD). Tek, bilinçli koyu "kokpit" görünümü. */
 :root{
-  --gece:#0b1220;            /* panel zemini */
-  --cam:rgba(11,18,32,.74);  /* yarı saydam panel */
+  --gece:#0c1415;            /* panel zemini */
+  --cam:rgba(12,20,21,.76);  /* yarı saydam panel */
   --cizgi:rgba(214,226,245,.16);
   --yazi:#eef3fa;
   --soluk:#a9b7cc;
-  --itki:#ff8a3d;            /* turuncu = itki / enerji */
-  --agirlik:#5aa7ff;         /* mavi = ağırlık / yerçekimi */
-  --iyi:#3ddc97;             /* yeşil = doğru / güvenli */
-  --kotu:#ff5d6c;            /* kırmızı = tehlike */
+  --itki:#ffb04a;            /* turuncu = itki / enerji */
+  --agirlik:#8fb3ff;         /* mavi = ağırlık / yerçekimi */
+  --iyi:#5fd39d;             /* yeşil = doğru / güvenli */
+  --kotu:#ff7a72;            /* kırmızı = tehlike */
   --dikkat:#ffd166;
   --f-baslik:"Bricolage","Bricolage Grotesque","Arial Black",system-ui,sans-serif;
   --f-govde:"Onest","Segoe UI",system-ui,sans-serif;
   color-scheme:dark;
 }
-html,body{height:100%;margin:0;background:#0b1220;color:var(--yazi);font-family:var(--f-govde);overflow:hidden;-webkit-user-select:none;user-select:none}
+html,body{height:100%;margin:0;background:#0c1415;color:var(--yazi);font-family:var(--f-govde);overflow:hidden;-webkit-user-select:none;user-select:none}
 #sahne{position:fixed;inset:0;display:block;width:100%;height:100%;touch-action:none}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,label:focus-within{outline:2px solid var(--itki);outline-offset:2px}
@@ -58,7 +59,7 @@ button:focus-visible,input:focus-visible,label:focus-within{outline:2px solid va
 
 /* ---------- MENÜ ---------- */
 #menu{position:fixed;inset:0;display:flex;align-items:stretch;justify-content:flex-start;z-index:20;
-  background:linear-gradient(90deg,rgba(8,13,24,.92) 0%,rgba(8,13,24,.80) 46%,rgba(8,13,24,.15) 75%,rgba(8,13,24,0) 100%)}
+  background:linear-gradient(90deg,rgba(10,17,18,.92) 0%,rgba(10,17,18,.80) 46%,rgba(10,17,18,.15) 75%,rgba(10,17,18,0) 100%)}
 #menu .ic{width:min(560px,100%);overflow-y:auto;box-sizing:border-box;
   padding-block:max(22px,env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-bottom,0px));
   padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:20px;display:flex;flex-direction:column;gap:18px}
@@ -83,7 +84,7 @@ h2 span{color:var(--itki);font-variant-numeric:tabular-nums}
 .gorevler{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .gorev-k{text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--cizgi);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:3px}
 .gorev-k b{font-size:14px}.gorev-k small{color:var(--soluk);font-size:12px;line-height:1.35}
-.gorev-k[aria-pressed="true"]{border-color:var(--itki);background:rgba(255,138,61,.12)}
+.gorev-k[aria-pressed="true"]{border-color:var(--itki);background:rgba(255,176,74,.12)}
 .gorev-k .rek{color:var(--iyi);font-size:11.5px}
 .ayarlar{display:flex;flex-direction:column;gap:10px}
 .secim{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -169,7 +170,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 .kart .satir button.ana{background:var(--itki);border-color:var(--itki);color:#1a0d02}
 
 @media (max-width:620px){
-  #menu{background:rgba(8,13,24,.9)}
+  #menu{background:rgba(10,17,18,.9)}
   .ozellik{grid-template-columns:repeat(3,1fr)}
   .gorevler{grid-template-columns:1fr}
   #telem{min-width:0}
@@ -258,7 +259,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   <div id="fizikP" class="panel">
     <h3>Şu anki fizik</h3>
     <div class="cubuk"><span style="color:var(--itki)">İtki T</span><div class="yol"><i id="cT" style="background:var(--itki)"></i></div><b id="vT" class="num"></b></div>
-    <div class="cubuk"><span style="color:var(--itki)">Dikey T·cosθ</span><div class="yol"><i id="cTd" style="background:rgba(255,138,61,.55)"></i></div><b id="vTd" class="num"></b></div>
+    <div class="cubuk"><span style="color:var(--itki)">Dikey T·cosθ</span><div class="yol"><i id="cTd" style="background:rgba(255,176,74,.55)"></i></div><b id="vTd" class="num"></b></div>
     <div class="cubuk"><span style="color:var(--agirlik)">Ağırlık W</span><div class="yol"><i id="cW" style="background:var(--agirlik)"></i></div><b id="vW" class="num"></b></div>
     <p id="fizikYorum"></p>
   </div>
@@ -446,7 +447,7 @@ const tulum = new THREE.Group();
 {
   const direk = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 4, 8), new THREE.MeshStandardMaterial({ color: '#ccc' }));
   direk.position.y = 2; direk.castShadow = true; tulum.add(direk);
-  const kon = new THREE.Mesh(new THREE.ConeGeometry(0.28, 1.4, 12, 1, true), new THREE.MeshStandardMaterial({ color: '#ff6a2a', side: THREE.DoubleSide }));
+  const kon = new THREE.Mesh(new THREE.ConeGeometry(0.28, 1.4, 12, 1, true), new THREE.MeshStandardMaterial({ color: '#ffb04a', side: THREE.DoubleSide }));
   kon.rotation.z = Math.PI / 2; kon.position.x = 0.7; const kol = new THREE.Group(); kol.add(kon); kol.position.y = 3.85; tulum.add(kol); tulum.userData.kol = kol;
   tulum.position.set(-6, 0, -2); sahne.add(tulum);
 }
@@ -483,12 +484,12 @@ function dronYap(f) {
     const motor = new THREE.Mesh(new THREE.CylinderGeometry(L * 0.07, L * 0.07, L * 0.12, 12), motorM);
     motor.position.set(x, L * 0.09, z); dron.add(motor); parcalar.push(motor);
     const p = new THREE.Group(); p.position.set(x, L * 0.17, z);
-    const kanatM = new THREE.MeshStandardMaterial({ color: on ? '#ff8a3d' : '#e9edf2', roughness: 0.5 });
+    const kanatM = new THREE.MeshStandardMaterial({ color: on ? '#ffb04a' : '#e9edf2', roughness: 0.5 });
     for (let b = 0; b < t.kanat; b++) {
       const k = new THREE.Mesh(new THREE.BoxGeometry(r * 0.95, L * 0.01, r * 0.16), kanatM);
       k.position.x = r * 0.47; const kg = new THREE.Group(); kg.rotation.y = b / t.kanat * Math.PI * 2; kg.add(k); p.add(kg);
     }
-    const disk = new THREE.Mesh(new THREE.CircleGeometry(r, 28), new THREE.MeshBasicMaterial({ color: on ? '#ff8a3d' : '#e9edf2', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
+    const disk = new THREE.Mesh(new THREE.CircleGeometry(r, 28), new THREE.MeshBasicMaterial({ color: on ? '#ffb04a' : '#e9edf2', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
     disk.rotation.x = -Math.PI / 2; p.add(disk); p.userData = { disk, yon: i % 2 ? 1 : -1 };
     dron.add(p); pervaneler.push(p); parcalar.push(p);
     const led = new THREE.Mesh(new THREE.SphereGeometry(L * 0.03, 8, 6), new THREE.MeshBasicMaterial({ color: on ? '#3ddc97' : '#ff4d5e' }));
@@ -597,9 +598,9 @@ function gorevKur() {
   const g = { tip: ayar.gorev, sure: 0, bitti: false, ruzgarHiz: 0, ruzgarYon: new THREE.Vector3(-1, 0, 0.15).normalize(), halkalar: [], sira: 0, adim: 0, asili: 0, hoverToplam: 0, hoverSay: 0, hedef: null };
   let t = { ...ayar.tasarim };
   if (g.tip === 'ilk') {
-    const zon = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 1.5, 40, 1, true), new THREE.MeshBasicMaterial({ color: '#ff8a3d', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }));
+    const zon = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 1.5, 40, 1, true), new THREE.MeshBasicMaterial({ color: '#ffb04a', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }));
     zon.position.set(0, 3, 0); gorevGrubu.add(zon); g.zon = zon;
-    const kenar = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.03, 8, 64), new THREE.MeshBasicMaterial({ color: '#ff8a3d' }));
+    const kenar = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.03, 8, 64), new THREE.MeshBasicMaterial({ color: '#ffb04a' }));
     kenar.rotation.x = Math.PI / 2; kenar.position.set(0, 3, 0); gorevGrubu.add(kenar);
     g.hedef = new THREE.Vector3(0, 3, 0);
   }
@@ -783,7 +784,7 @@ function gorevAdim(dt) {
           if (g.sira === g.halkalar.length) bitir(true);
         }
       }
-      g.halkalar.forEach((x, i) => { if (i === g.sira) { const p = 0.5 + 0.5 * Math.sin(u.zaman * 6); x.mesh.material.color.set('#ff8a3d'); x.mesh.material.emissive.setRGB(0.5 * p, 0.2 * p, 0); } });
+      g.halkalar.forEach((x, i) => { if (i === g.sira) { const p = 0.5 + 0.5 * Math.sin(u.zaman * 6); x.mesh.material.color.set('#ffb04a'); x.mesh.material.emissive.setRGB(0.5 * p, 0.2 * p, 0); } });
       g.hedef = g.halkalar[g.sira] ? g.halkalar[g.sira].c : null;
     }
   }

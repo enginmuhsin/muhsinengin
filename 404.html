@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sayfa bulunamadı · Muhsin ENGİN</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/simge.svg" type="image/svg+xml">
+<!-- GitHub Pages bu dosyayı, bulunamayan HER adreste gösterir; bu yüzden bütün yollar köke göre (/...) yazıldı. -->
+<script src="/tema.js"></script>
+<script src="/ortak/ana-sayfa.js" data-gecis defer></script>
+<link rel="stylesheet" href="/ortak/tokenlar.css">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; color: var(--metin); font: 18px/1.6 var(--yazi);
+  padding: 32px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+.ic { max-width: 760px; margin: 0 auto; position: relative; }
+/* defterin kırmızı marjı */
+.ic::before { content: ""; position: absolute; left: -22px; top: 0; bottom: 0; width: 2px; background: var(--kirmizi); opacity: .55; }
+.ust { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 36px; }
+.ust a { color: var(--murekkep); font-weight: 700; text-decoration: none; }
+.kod { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+h1 { font: 800 clamp(84px, 18vw, 150px)/0.9 var(--baslik); color: var(--murekkep); margin: 0; letter-spacing: -.02em; }
+.motif { width: clamp(90px, 18vw, 130px); height: auto; }
+.motif .ucgen { transform-origin: 60px 64px; animation: don 6s steps(3, end) infinite; }
+@keyframes don { to { transform: rotate(360deg); } }
+h2 { font: 800 clamp(24px, 4vw, 32px)/1.2 var(--baslik); margin: 18px 0 8px; color: var(--metin); }
+p { margin: 0 0 12px; max-width: 60ch; }
+.not { color: var(--kursun); font-size: 16px; }
+.not b { color: var(--metin); font-family: var(--mono); }
+.yollar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
+.yollar a { display: block; padding: 14px 16px; border: 1.5px solid var(--kare-kalin); border-left: 4px solid var(--murekkep); border-radius: 12px;
+  background: var(--kagit); color: var(--metin); text-decoration: none; }
+.yollar a:hover { border-color: var(--murekkep); }
+.yollar b { display: block; font-family: var(--baslik); font-weight: 800; color: var(--murekkep); }
+.yollar small { color: var(--kursun); font-size: 14px; }
+.yollar a:nth-child(2) { border-left-color: var(--kirmizi); } .yollar a:nth-child(3) { border-left-color: var(--turuncu); } .yollar a:nth-child(4) { border-left-color: var(--yesil); }
+@media (max-width: 520px) { .yollar { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body class="me-defter">
+<a class="me-atla" href="#icerik">İçeriğe atla</a>
+<div class="ic">
+  <div class="ust"><a href="/">← muhsinengin.com</a></div>
+  <main id="icerik" tabindex="-1">
+    <div class="kod">
+      <h1>404</h1>
+      <!-- İmza motifi: MEDAR'ın 120° dönen üçgeni. Üç adımda bir tur atar, yine başa döner. -->
+      <svg class="motif" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="64" r="50" fill="none" stroke="var(--kare-kalin)" stroke-width="2"/>
+        <g class="ucgen">
+          <path d="M60 18 L100 87 L20 87 Z" fill="none" stroke="var(--murekkep)" stroke-width="4" stroke-linejoin="round"/>
+          <circle cx="60" cy="18" r="8" fill="var(--kirmizi)"/><circle cx="100" cy="87" r="8" fill="var(--murekkep)"/><circle cx="20" cy="87" r="8" fill="var(--turuncu)"/>
+        </g>
+      </svg>
+    </div>
+    <h2>Bu sayfa defterde yok.</h2>
+    <p>Aradığın adres taşınmış ya da hiç var olmamış olabilir. Üçgen gibi düşün: üç adım dön, yine başa gelirsin. Aşağıdan yeniden başlayabilirsin.</p>
+    <p class="not">Teselli için küçük bir gerçek: <b>404 = 2² × 101</b>. 101 bir asal sayı; yani 404'ün yalnızca 6 böleni var.</p>
+    <nav class="yollar" aria-label="Bölümler">
+      <a href="/"><b>Ana sayfa</b><small>Bütün projeler ve takvim</small></a>
+      <a href="/zeka-oyunlari/salon/"><b>Oyun Salonu</b><small>8 zeka oyunu, günün bulmacası</small></a>
+      <a href="/dron/"><b>Dron Hangarı</b><small>Tasarla, dengele, uçur</small></a>
+      <a href="https://masterclass.muhsinengin.com/"><b>Master Class</b><small>Sayılar ve DNA'ları</small></a>
+    </nav>
+  </main>
+</div>
+</body>
+</html>
