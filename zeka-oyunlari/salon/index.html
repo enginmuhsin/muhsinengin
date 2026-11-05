@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oyun Salonu · Muhsin ENGİN</title>
+<meta name="description" content="Sekiz klasik zeka oyununu tarayıcıda oyna: Mastermind, Sudoku, Hex, Mangala, Reversi, Pentago, Go ve Satranç. Bilgisayara karşı ya da iki kişi; her oyunda canlı matematik.">
+<meta name="theme-color" content="#f5f6f1">
+<link rel="icon" href="../../simge.svg" type="image/svg+xml">
+<script src="../../tema.js"></script>
+<script src="../../ortak/ana-sayfa.js" data-gecis defer></script>
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-ext-800-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url(../../fonts/fraunces-latin-ext-500-italic.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url(../../fonts/fraunces-latin-500-italic.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Fraunces"; font-weight: 600; font-style: normal; font-display: swap; src: url(../../fonts/fraunces-latin-ext-600-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Fraunces"; font-weight: 600; font-style: normal; font-display: swap; src: url(../../fonts/fraunces-latin-600-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../../fonts/onest-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../../fonts/onest-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../../fonts/onest-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../../fonts/onest-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+</style>
+<link rel="stylesheet" href="salon.css">
+</head>
+<body>
+<div class="sar">
+  <header class="ust">
+    <a class="marka" href="../"><i></i>Muhsin ENGİN · Zeka Oyunları</a>
+    <nav><button type="button" id="salonaDon" hidden>← Salona dön</button></nav>
+  </header>
+
+  <main id="salon">
+    <div class="kas">Oyna, düşün, say</div>
+    <h1>Oyun <em>Salonu</em></h1>
+    <p class="giris">Sekiz klasik zeka oyunu, bilgisayara karşı ya da aynı ekranda arkadaşınla. Her tahtanın yanında, sen oynarken değişen bir matematik kutusu var: kuralı okumak yerine, sayının gözünün önünde değiştiğini görürsün.</p>
+    <div class="izgara" id="kartlar"></div>
+
+    <section class="olcum" aria-labelledby="olcumBaslik">
+      <h2 id="olcumBaslik">Senin ölçtüğün dallanma</h2>
+      <p>Her hamlede kaç yasal seçeneğin olduğunu oyunlar sırasında sayıyoruz. Ortalaması oyunun <b>dallanma faktörü</b>: bir ağacın her dalında kaç yeni dal çıktığı gibi. Kitaplardaki değerle karşılaştır; birkaç oyun oynadıkça senin çubuğun ona yaklaşır.</p>
+      <div id="dallanmaTablo"></div>
+      <div class="lejant"><span>Senin oyunlarından ölçülen</span><span class="r">Kaynaklardaki tipik değer</span></div>
+    </section>
+  </main>
+
+  <main id="oyunSayfa" hidden>
+    <div class="oyun-ust"><h1 id="oyunBaslik"></h1><p id="oyunAlt"></p></div>
+    <div class="duzen">
+      <div class="alan"><div id="tahta"></div></div>
+      <aside class="yan">
+        <div class="kutu" id="secenekler"></div>
+        <div class="kutu">
+          <div id="durum" aria-live="polite"></div>
+          <div id="afis" hidden style="margin-top:10px"></div>
+          <div class="dugmeler" style="margin-top:10px">
+            <button class="dug ana" id="yeniOyun" type="button">Yeni oyun</button>
+            <button class="dug" id="geriAl" type="button">Geri al</button>
+          </div>
+        </div>
+        <div class="kutu neden" id="nedenKutu" hidden><h4>Bilgisayar neden böyle oynadı?</h4><p id="neden"></p></div>
+        <div class="kutu mat"><h4>∑ Canlı matematik</h4><div id="mat"></div></div>
+        <div class="kutu"><h4>Dallanma ölçer</h4><div id="dallanma" style="font-size:13.5px"></div></div>
+        <div class="kutu"><details class="kurallar"><summary>Kurallar</summary><ul id="kurallar"></ul></details></div>
+      </aside>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="cekirdek.js"></script>
+<script src="oyunlar/mastermind.js"></script>
+<script src="oyunlar/sudoku.js"></script>
+<script src="oyunlar/hex.js"></script>
+<script src="oyunlar/mangala.js"></script>
+<script src="oyunlar/reversi.js"></script>
+<script src="oyunlar/pentago.js"></script>
+<script src="oyunlar/go.js"></script>
+<script src="oyunlar/satranc.js"></script>
+<script>Salon.basla();</script>
+
+</body>
+</html>

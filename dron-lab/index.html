@@ -27,6 +27,7 @@
         <a class="nav-link" href="../dron/fpv.html">FPV Rehberi</a>
         <a class="nav-link" href="index.html" aria-current="page">Tasarım Laboratuvarı</a>
         <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
+        <a class="nav-link" href="../dron-ucus/index.html" id="ucusLink">Uçuş Simülatörü</a>
       </div>
       <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
       <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
@@ -195,5 +196,6 @@
   <script src="dron3d.js"></script>
   <script src="hesap.js"></script>
   <script src="app.js"></script>
+<script>/* tasarımı simülatöre taşı */document.getElementById("ucusLink").addEventListener("click",function(){this.href="../dron-ucus/index.html"+location.hash;});</script>
 </body>
 </html>
