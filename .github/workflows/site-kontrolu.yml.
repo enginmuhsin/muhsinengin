@@ -1,0 +1,58 @@
+# Site kontrolü: her yüklemede sitedeki iç bağlantıları ve JavaScript dosyalarını denetler.
+# Kırmızı çarpı çıkarsa Actions sekmesinde bu iş akışına tıkla; hangi dosyada neyin kırık olduğu yazar.
+# Not: Bu kontrol yayını durdurmaz. GitHub Pages yayını ayrı çalışır ("pages build and deployment").
+name: Site kontrolü
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"   # her pazartesi 09:17 (Türkiye): dış bağlantılar da taranır
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ic-baglantilar:
+    name: İç bağlantılar ve betikler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kırık iç bağlantı var mı?
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # --offline: yalnızca site içindeki dosya bağlantılarına bakar (internete çıkmaz)
+          args: >-
+            --offline --no-progress
+            --root-dir ${{ github.workspace }}
+            --exclude-path fonts
+            './**/*.html'
+          fail: true
+
+      - name: JavaScript sözdizimi
+        run: |
+          hata=0
+          for f in $(git ls-files '*.js' | grep -v '\.min\.js$'); do
+            node --check "$f" || { echo "::error file=$f::Sözdizimi hatası"; hata=1; }
+          done
+          exit $hata
+
+  dis-baglantilar:
+    name: Dış bağlantılar (haftalık)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dış bağlantılar hâlâ açılıyor mu?
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --max-concurrency 4 --timeout 20
+            --accept 200,204,206,301,302,403,429
+            --exclude-path fonts
+            'index.html' 'zeka-oyunlari/index.html'
+          fail: false
