@@ -137,3 +137,11 @@ body.sinif #durum{font-size:22px}
 body.sinif .kutu.mat p,body.sinif .kutu.mat div,body.sinif .kutu.neden p{font-size:17px}
 @media (max-width:860px){.duzen,body.sinif .duzen{grid-template-columns:1fr}.yan{order:2}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Paket 6: ortak ikonlar, oyun sayfası bağlantısı, kart → tahta geçişi */
+.kart h3{display:flex;align-items:center;gap:8px}
+.ikon{width:24px;height:24px;flex:none;color:var(--murekkep)}
+.kurallar .sayfa-bag{list-style:none;margin-top:8px;font-weight:600}
+.kurallar .sayfa-bag a{color:var(--murekkep)}
+::view-transition-group(oyun-tahta){animation-duration:.42s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.25s}

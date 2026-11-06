@@ -35,6 +35,13 @@ const Salon = (() => {
 
   /* ---------- yardımcılar ---------- */
   const tr = (x, b = 0) => Number(x).toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b });
+  // Ortak oyun ikonları (ortak/oyun-ikonlari.svg); kendi sayfası olan oyunlar
+  const SAYFALI = new Set(['satranc', 'go', 'mangala', 'pentago', 'reversi', 'hex', 'mastermind', 'sudoku']);
+  function ikon(id) {
+    if (!SAYFALI.has(id)) return null;
+    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('class', 'ikon'); s.setAttribute('aria-hidden', 'true');
+    const u = document.createElementNS('http://www.w3.org/2000/svg', 'use'); u.setAttribute('href', '../../ortak/oyun-ikonlari.svg#ik-' + id); s.append(u); return s;
+  }
   function el(etiket, ozellik = {}, ...cocuk) {
     const e = document.createElement(etiket);
     for (const [k, v] of Object.entries(ozellik)) {
@@ -145,7 +152,7 @@ const Salon = (() => {
     aktifId = id;
     $('salon').hidden = true; $('oyunSayfa').hidden = false; $('salonaDon').hidden = false;
     $('oyunBaslik').textContent = t.baslik; $('oyunAlt').textContent = t.alt;
-    $('kurallar').innerHTML = t.kurallar.map((k) => `<li>${k}</li>`).join('');
+    $('kurallar').innerHTML = t.kurallar.map((k) => `<li>${k}</li>`).join('') + (SAYFALI.has(id) ? `<li class="sayfa-bag"><a href="../${id}/">${t.baslik}: tarihi ve arkasındaki matematik →</a></li>` : '');
     $('tahta').innerHTML = ''; $('mat').innerHTML = '';
     document.title = t.baslik + ' · Oyun Salonu';
     aktif = { tanim: t, ayar: null, oyun: null };
@@ -218,12 +225,31 @@ const Salon = (() => {
     salonAc();
   }
 
+  /* Kart → tahta geçişi (View Transitions): kartın önizlemesi büyüyüp tahtaya dönüşür,
+     salona dönerken tahta kartına küçülür. Desteklemeyen tarayıcıda ya da azaltılmış
+     hareket tercihinde doğrudan geçer. */
+  function gecisliRota() {
+    const h = decodeURIComponent(location.hash.slice(1)), hedef = h.split(/[-~]/)[0];
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return rota();
+    const kartOnizle = (id) => document.querySelector(`#kartlar .kart[href="#${CSS.escape(id)}"] .onizle`);
+    const ad = (e, v) => { if (e) e.style.viewTransitionName = v || ''; };
+    if (oyunlar[hedef] && !aktifId) {                 // salon → oyun
+      const k = kartOnizle(hedef); ad(k, 'oyun-tahta');
+      const g = document.startViewTransition(() => { ad(k); rota(); ad($('tahta'), 'oyun-tahta'); });
+      g.finished.finally(() => ad($('tahta')));
+    } else if (!oyunlar[hedef] && aktifId) {          // oyun → salon
+      const onceki = aktifId; ad($('tahta'), 'oyun-tahta');
+      const g = document.startViewTransition(() => { ad($('tahta')); rota(); ad(kartOnizle(onceki), 'oyun-tahta'); });
+      g.finished.finally(() => ad(kartOnizle(onceki)));
+    } else rota();
+  }
+
   function basla() {
     $('kartlar').innerHTML = '';
     for (const id of sira) {
       const t = oyunlar[id];
       const kart = el('a', { class: 'kart' + (t.arac ? ' arac' : ''), href: '#' + id, style: 'text-decoration:none;color:inherit' },
-        el('div', { class: 'onizle' }), el('h3', {}, t.baslik), el('p', {}, t.ozet),
+        el('div', { class: 'onizle' }), el('h3', {}, ikon(id), t.baslik), el('p', {}, t.ozet),
         el('div', { class: 'etiketler' }, t.etiketler.map((e, i) => el('span', { class: 'etiket' + (i === 0 ? ' ai' : '') }, e))));
       kart.querySelector('.onizle').innerHTML = t.onizleme();
       $('kartlar').append(kart);
@@ -266,7 +292,7 @@ const Salon = (() => {
     };
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && document.body.classList.contains('sinif')) { document.body.classList.remove('sinif'); sm && sm.setAttribute('aria-pressed', 'false'); } });
     if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
-    addEventListener('hashchange', rota);
+    addEventListener('hashchange', gecisliRota);
     rota();
   }
 
