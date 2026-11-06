@@ -168,6 +168,18 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 .kart .satir{display:flex;gap:8px}
 .kart .satir button{flex:1;border-radius:12px;padding:12px;border:1px solid var(--cizgi);background:rgba(255,255,255,.06);font-weight:700}
 .kart .satir button.ana{background:var(--itki);border-color:var(--itki);color:#1a0d02}
+.pid-bilgi{margin:0;font-size:12.5px;color:var(--soluk);line-height:1.5;padding-left:102px}
+.pid-bilgi a{color:var(--yazi)}
+.cip:disabled{opacity:.45;cursor:not-allowed}
+#tahminP{pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100% - 32px));padding:18px;display:flex;flex-direction:column;gap:10px;z-index:12;box-sizing:border-box}
+#tahminP h3{margin:0;font-size:19px}
+#tahminP p{margin:0;font-size:14px;line-height:1.55;color:var(--soluk)}
+#tahminP p b{color:var(--yazi)}
+.tahmin-satir{display:flex;gap:12px;align-items:center}
+.tahmin-satir input{flex:1;accent-color:var(--itki)}
+.tahmin-satir output{font-size:22px;font-weight:800;min-width:52px;text-align:right}
+#tahminP button{border-radius:12px;padding:11px;border:1px solid var(--itki);background:var(--itki);color:#1a0d02;font-weight:700}
+@media (max-width:620px){.pid-bilgi{padding-left:0}}
 
 @media (max-width:620px){
   #menu{background:rgba(10,17,18,.9)}
@@ -216,6 +228,15 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
         <button class="cip" data-bat="1" aria-pressed="true">Gerçek süre</button>
         <button class="cip" data-bat="10" aria-pressed="false">×10 hızlı tükenir</button>
       </div>
+      <div class="secim" role="group" aria-label="Kumanda"><span>Kumanda</span>
+        <button class="cip" data-kum="aci" aria-pressed="true">Açı · bırakınca düzelir</button>
+        <button class="cip" data-kum="akro" aria-pressed="false">Akro · eğim kalır</button>
+      </div>
+      <div class="secim" role="group" aria-label="Dengeleyici"><span>Dengeleyici</span>
+        <button class="cip" data-denge="oto" aria-pressed="true">Otomatik</button>
+        <button class="cip" data-denge="pid" aria-pressed="false">PID oyunundaki ayarım</button>
+      </div>
+      <p class="pid-bilgi" id="pidBilgi"></p>
     </div>
 
     <button class="basla" id="basla" type="button">Uçuşa başla <kbd>Enter</kbd></button>
@@ -227,7 +248,9 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
         <kbd>W / S</kbd><span>Kolay modda yüksel / alçal. Normal modda gazı artır / azalt.</span>
         <kbd>A / D</kbd><span>Sola / sağa dön (yaw)</span>
         <kbd>↑ ↓ ← →</kbd><span>İleri, geri, yana eğil (pitch, roll). I J K L de olur.</span>
+        <kbd>Akro</kbd><span>Ok tuşları eğim açısını değil eğilme hızını verir; tuşu bırakınca dron o açıda kalır. Düzeltmek için ters yöne bas.</span>
         <kbd>C</kbd><span>Kamera: takip, FPV, pilot gözü</span>
+        <kbd>F</kbd><span>Tam ekran (akıllı tahta için)</span>
         <kbd>R</kbd><span>Görevi baştan başlat</span>
         <kbd>Esc</kbd><span>Menüye dön</span>
         <kbd>Gamepad</kbd><span>Mode 2: sol kol gaz + dönüş, sağ kol eğim</span>
@@ -248,6 +271,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
     <button id="bKamera" type="button">Kamera: Takip</button>
     <button id="bFizik" type="button" hidden>Fizik</button>
     <button id="bSes" type="button">Ses: açık</button>
+    <button id="bTam" type="button" hidden>Tam ekran</button>
     <button id="bMenu" type="button">Menü</button>
   </div>
   <div id="gazG" class="panel" aria-hidden="true">
@@ -274,6 +298,12 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   </div>
   <div id="bildirim" aria-live="polite"></div>
   <div id="uyari" hidden></div>
+  <div id="tahminP" class="panel" hidden role="dialog" aria-labelledby="tahminBaslik">
+    <h3 id="tahminBaslik">Önce tahmin et</h3>
+    <p id="tahminMetin"></p>
+    <label class="tahmin-satir"><input id="tahminAci" type="range" min="0" max="45" step="1" value="10"><output id="tahminDeger" class="num">10°</output></label>
+    <button id="tahminTamam" class="ana" type="button">Tahminimi kaydet, uçuşa geç</button>
+  </div>
   <div class="kol" id="kolSol" hidden><i></i><small>gaz · dönüş</small></div>
   <div class="kol" id="kolSag" hidden><i></i><small>eğim</small></div>
 </div>
@@ -307,7 +337,7 @@ const $ = (id) => document.getElementById(id);
 const rad = (d) => d * Math.PI / 180, der = (r) => r * 180 / Math.PI;
 
 /* ---------- durum ---------- */
-const ayar = { sablon: 'yaris5', tasarim: { ...SABLONLAR.yaris5 }, gorev: 'ilk', mod: 'kolay', batCarpan: 1 };
+const ayar = { sablon: 'yaris5', tasarim: { ...SABLONLAR.yaris5 }, gorev: 'ilk', mod: 'kolay', batCarpan: 1, kumanda: 'aci', denge: 'oto' };
 let fz = null;          // seçili dronun hesapla() çıktısı + türetilmiş sabitler
 let uc = null;          // uçuş durumu
 let gorevD = null;      // görev durumu
@@ -319,12 +349,25 @@ const GOREVLER = {
   ilk:      { ad: 'İlk kalkış', kisa: '3 m\'de 5 saniye asılı kal, sonra pede yumuşak in.', ders: 'Hover gazı' },
   halka:    { ad: 'Halka parkuru', kisa: '7 halkadan sırayla geç. Süreye karşı.', ders: 'Eğim → yatay ivme' },
   teslimat: { ad: 'Rüzgârlı teslimat', kisa: 'Kargoyu yükle, yan rüzgârda 60 m öteye götür, in.', ders: 'Yük ve TWR' },
+  pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
+  tunel:    { ad: 'Rüzgâr tüneli', kisa: 'Önce eğimi tahmin et, sonra sabit rüzgârda yerinde dur.', ders: 'Kuvvet dengesi: tan θ = F/W' },
   serbest:  { ad: 'Serbest uçuş', kisa: 'Kural yok. V ile rüzgârı aç/kapat.', ders: 'Keşif' },
 };
 
 /* ---------- güvenli localStorage ---------- */
 function oku(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
 function yaz(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+/* ---------- PID oyunundan gelen kazançlar ----------
+   Sabitler pid-oyunu/fizik.js'teki test tezgâhıyla aynı: oyunda ayarladığın
+   Kp, Ki, Kd burada da aynı eylemsizliği, sönümü ve motor gecikmesini görür. */
+const PID = { J: 0.01, B: 0.02, TAU_MAKS: 0.5, MOTOR_ZS: 0.03, I_MAKS: 0.25 };
+function pidKazanc() {
+  const k = oku('pid-oyunu-v1'); if (!k || !k.kazanc) return null;
+  const n = (v, m) => Math.min(m, Math.max(0, Number(v) || 0));
+  const z = { kp: n(k.kazanc.kp, 3), ki: n(k.kazanc.ki, 3), kd: n(k.kazanc.kd, 0.4) };
+  return z.kp > 0 ? z : null;
+}
 
 /* =====================================================================
    FİZİK HAZIRLIĞI
@@ -634,6 +677,7 @@ addEventListener('keydown', (e) => {
   if (durum === 'menu' && e.code === 'Enter') { e.preventDefault(); baslat(); }
   if (durum === 'ucus') {
     if (e.code === 'KeyC') kameraDegis();
+    if (e.code === 'KeyF') tamEkran();
     if (e.code === 'KeyR') baslat();
     if (e.code === 'Escape') menuyeDon();
     if (e.code === 'KeyV' && ayar.gorev === 'serbest') { gorevD.ruzgarHiz = gorevD.ruzgarHiz ? 0 : 5; bildir(gorevD.ruzgarHiz ? 'Rüzgâr: 5 m/s' : 'Rüzgâr kapalı'); }
@@ -709,6 +753,7 @@ function girdiOku(dt) {
     }
     if (R.aktif || R.x || R.y) { girdi.roll = R.x; girdi.pitch = R.y; }
   }
+  if (gorevD && gorevD.bekle) { girdi.roll = girdi.pitch = girdi.yaw = girdi.tirman = 0; if (ayar.mod === 'normal') girdi.gaz = 0; }
 }
 
 /* =====================================================================
@@ -718,7 +763,7 @@ function gorevKur() {
   // eski görev nesnelerini temizle
   while (gorevGrubu.children.length) gorevGrubu.remove(gorevGrubu.children[0]);
   pedB.visible = false;
-  const g = { tip: ayar.gorev, sure: 0, bitti: false, ruzgarHiz: 0, ruzgarYon: new THREE.Vector3(-1, 0, 0.15).normalize(), halkalar: [], sira: 0, adim: 0, asili: 0, hoverToplam: 0, hoverSay: 0, hedef: null };
+  const g = { tip: ayar.gorev, sure: 0, bitti: false, ruzgarHiz: 0, ruzgarYon: new THREE.Vector3(-1, 0, 0.15).normalize(), halkalar: [], kapilar: [], sira: 0, adim: 0, asili: 0, hoverToplam: 0, hoverSay: 0, hedef: null };
   let t = { ...ayar.tasarim };
   if (g.tip === 'ilk') {
     const zon = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 1.5, 40, 1, true), new THREE.MeshBasicMaterial({ color: '#ffb04a', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }));
@@ -751,10 +796,65 @@ function gorevKur() {
     const kutu = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#c79a5b' }));
     kutu.castShadow = true; g.kutu = kutu;
   }
+  if (g.tip === 'pist') {
+    // kapalı devre: kapı 0 başlangıç/bitiş. Ağaçsız parkur alanının içinde.
+    const P = [[0, 2, -12], [14, 3, -30], [34, 2.5, -42], [48, 4, -25], [40, 2, -5], [22, 5, 8], [6, 2.2, 10]];
+    const c = P.map((p) => new THREE.Vector3(...p));
+    const W = 1.0, H = 1.0, k = 0.12;   // yarı genişlik, yarı yükseklik, çubuk kalınlığı
+    c.forEach((m, i) => {
+      const n = c[(i + 1) % c.length].clone().sub(c[(i + c.length - 1) % c.length]).setY(0).normalize();
+      const yan = new THREE.Vector3(-n.z, 0, n.x);
+      const mat = new THREE.MeshStandardMaterial({ color: i === 0 ? '#f2f2f2' : '#ffffff', emissive: '#000000', roughness: 0.5 });
+      const grup = new THREE.Group(); grup.position.copy(m); grup.lookAt(m.clone().add(n));
+      const cubuk = (w, h, x, y) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, k), mat); b.position.set(x, y, 0); b.castShadow = true; grup.add(b); };
+      cubuk(2 * W + 2 * k, k, 0, H + k / 2); cubuk(2 * W + 2 * k, k, 0, -H - k / 2);
+      cubuk(k, m.y + H + k, -W - k / 2, (H + k - m.y) / 2); cubuk(k, m.y + H + k, W + k / 2, (H + k - m.y) / 2);
+      if (i === 0) { const bayrak = new THREE.Mesh(new THREE.PlaneGeometry(2 * W, 0.35), new THREE.MeshBasicMaterial({ map: damaDoku(), side: THREE.DoubleSide })); bayrak.position.set(0, H + k + 0.22, 0); grup.add(bayrak); }
+      gorevGrubu.add(grup);
+      // çarpışma için 4 çubuk (doğru parçası)
+      const nk = (x, y) => m.clone().addScaledVector(yan, x).add(new THREE.Vector3(0, y, 0));
+      const cub = [[nk(-W - k / 2, -m.y), nk(-W - k / 2, H + k)], [nk(W + k / 2, -m.y), nk(W + k / 2, H + k)], [nk(-W, H + k / 2), nk(W, H + k / 2)], [nk(-W, -H - k / 2), nk(W, -H - k / 2)]];
+      g.kapilar.push({ c: m, n, yan, W, H, mat, cub });
+    });
+    g.tur = 0; g.turSure = 0; g.turlar = []; g.basladi = false; g.iz = []; g.izT = 0; g.maksEgim = 0; g.hizToplam = 0; g.hizSay = 0;
+    g.rekor = oku('dronSim.pist.' + ayar.sablon);
+    g.hedef = c[0];
+  }
+  if (g.tip === 'tunel') {
+    g.ruzgarHiz = 6; g.sabit = true; g.adim = -1; g.bekle = true;
+    const zon = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 1.5, 40, 1, true), new THREE.MeshBasicMaterial({ color: '#8fb3ff', transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false }));
+    zon.position.set(0, 3, 0); gorevGrubu.add(zon); g.zon = zon;
+    const kenar = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.03, 8, 64), new THREE.MeshBasicMaterial({ color: '#8fb3ff' }));
+    kenar.rotation.x = Math.PI / 2; kenar.position.set(0, 3, 0); gorevGrubu.add(kenar);
+    // rüzgâr çizgileri: rüzgârla birlikte akan ince şeritler
+    g.cizgiler = [];
+    const cm = new THREE.MeshBasicMaterial({ color: '#dfe9ff', transparent: true, opacity: 0.35, depthWrite: false });
+    for (let i = 0; i < 70; i++) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.012, 0.012), cm);
+      m.position.set((Math.random() - 0.5) * 30, 0.5 + Math.random() * 6, (Math.random() - 0.5) * 16);
+      m.lookAt(m.position.clone().add(g.ruzgarYon)); m.rotateY(Math.PI / 2);
+      gorevGrubu.add(m); g.cizgiler.push(m);
+    }
+    g.asili = 0; g.egimToplam = 0; g.ruzToplam = 0; g.olcSay = 0;
+    g.hedef = new THREE.Vector3(0, 3, 0);
+  }
   if (g.tip === 'serbest') { g.ruzgarHiz = 0; }
   return { g, t };
 }
 let _fz0 = null; const fz0 = () => _fz0;
+let _dama = null;
+function damaDoku() {
+  if (_dama) return _dama;
+  const c = document.createElement('canvas'); c.width = 128; c.height = 24; const x = c.getContext('2d');
+  for (let i = 0; i < 16; i++) for (let j = 0; j < 3; j++) { x.fillStyle = (i + j) % 2 ? '#111' : '#f4f4f4'; x.fillRect(i * 8, j * 8, 8, 8); }
+  _dama = new THREE.CanvasTexture(c); _dama.magFilter = THREE.NearestFilter; return _dama;
+}
+// en iyi turun hayaleti: dronun yarı saydam kopyası
+function hayaletYap() {
+  const h = dron.clone(true);
+  h.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = 0.32; o.material.depthWrite = false; o.castShadow = false; } });
+  h.visible = false; gorevGrubu.add(h); return h;
+}
 
 function baslat() {
   _fz0 = fizikHazirla(ayar.tasarim);
@@ -770,22 +870,40 @@ function baslat() {
     roll: 0, pitch: 0, yaw: 0, rRoll: 0, rPitch: 0,
     gazK: 0, gaz: 0, soc: 1, Vh: Voc(1), I: 0, T: 0, ruzgar: new THREE.Vector3(),
     yerde: true, integ: 0, zaman: 0, dustu: false, pervaneAci: 0, enkaz: null, inisHizi: 0, maksIrt: 0,
+    hRoll: 0, hPitch: 0, iRoll: 0, iPitch: 0, tauRoll: 0, tauPitch: 0,
   };
+  uc.pid = ayar.denge === 'pid' ? pidKazanc() : null;
+  if (g.tip === 'pist' && g.rekor && g.rekor.iz) g.hayalet = hayaletYap();
   girdi.gaz = 0; for (const k in yumusak) yumusak[k] = 0;
   kollar.kolSol.sifirla(); kollar.kolSag.sifirla();
   durum = 'ucus';
   $('menu').hidden = true; $('sonuc').hidden = true; $('hud').hidden = false; $('uyari').hidden = true;
-  $('gAd').textContent = GOREVLER[g.tip].ad;
+  $('gAd').textContent = [GOREVLER[g.tip].ad, ayar.kumanda === 'akro' ? 'Akro' : '', uc.pid ? 'PID' : ''].filter(Boolean).join(' · ');
+  $('tahminP').hidden = true;
+  if (g.tip === 'tunel') tahminSor();
+  kaliteSifirla();
   hoverIzKonum();
   sesBaslat();
   kameraAni = true;
-  bildir(ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç', 1600);
+  if (g.tip !== 'tunel') bildir(ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç', 1600);
+}
+function tahminSor() {
+  const g = gorevD;
+  $('tahminMetin').innerHTML = `Sağdan sabit <b>${tr(g.ruzgarHiz, 0)} m/s</b> rüzgâr esiyor (yerde biraz daha yavaş). Dronun yerinde, kıpırdamadan durabilmesi için rüzgâra doğru <b>kaç derece</b> eğilmesi gerekir? Tahminini seç; uçuştan sonra ölçümle karşılaştıracağız.`;
+  $('tahminP').hidden = false; $('tahminAci').focus();
+}
+function tahminTamam() {
+  const g = gorevD; if (!g || g.tip !== 'tunel' || !g.bekle) return;
+  g.tahmin = +$('tahminAci').value; g.bekle = false; g.adim = 0;
+  $('tahminP').hidden = true;
+  bildir(ayar.mod === 'kolay' ? 'W ile yüksel, mavi silindire gir' : 'W ile gazı aç, mavi silindire gir', 2000);
 }
 
 function menuyeDon() {
-  durum = 'menu'; $('hud').hidden = true; $('sonuc').hidden = true; $('menu').hidden = false;
-  sesSus(); menuOnizle();
+  durum = 'menu'; $('hud').hidden = true; $('sonuc').hidden = true; $('menu').hidden = false; $('tahminP').hidden = true;
+  sesSus(); menuOnizle(); pidBilgiYaz();
 }
+addEventListener('focus', () => { if (durum === 'menu') pidBilgiYaz(); });
 
 /* =====================================================================
    FİZİK ADIMI
@@ -796,7 +914,7 @@ function fizikAdim(dt) {
   u.zaman += dt;
 
   // --- rüzgâr: taban + iki sinüsten oluşan esinti ---
-  const esinti = g.ruzgarHiz ? g.ruzgarHiz * (0.35 * Math.sin(u.zaman * 0.7) + 0.25 * Math.sin(u.zaman * 1.9 + 1.3)) : 0;
+  const esinti = g.ruzgarHiz && !g.sabit ? g.ruzgarHiz * (0.35 * Math.sin(u.zaman * 0.7) + 0.25 * Math.sin(u.zaman * 1.9 + 1.3)) : 0;
   u.ruzgar.copy(g.ruzgarYon).multiplyScalar(g.ruzgarHiz + esinti);
   // yerde rüzgâr gradyanı: yere yakın daha az (sınır tabaka)
   u.ruzgar.multiplyScalar(Math.min(1, 0.45 + u.poz.y / 8));
@@ -807,16 +925,43 @@ function fizikAdim(dt) {
   const Tmaks = f.Ttoplam * olcek;
   const W = f.m * G;
 
-  // --- açı modu: kol → hedef eğim ---
+  // --- hedef eğim ---
+  //   Açı modu: kol → hedef eğim (kolu bırakınca dron düzelir).
+  //   Akro modu: kol → eğilme HIZI; hedef açı kolun sürüsüyle birikir, kendiliğinden düzelmez.
   const maksEgim = rad(ayar.mod === 'kolay' ? 28 : 40);
-  const hedefRoll = (u.dustu ? 0 : girdi.roll) * maksEgim, hedefPitch = (u.dustu ? 0 : girdi.pitch) * maksEgim;
-  const kP = 7 + 0.08 * f.ceviklik;
-  for (const ek of ['Roll', 'Pitch']) {
-    const ac = ek === 'Roll' ? 'roll' : 'pitch', hiz = 'r' + ek;
-    const hedef = ek === 'Roll' ? hedefRoll : hedefPitch;
-    const istenen = sinirla(kP * (hedef - u[ac]), -f.maksDonus, f.maksDonus);
-    u[hiz] += (istenen - u[hiz]) * Math.min(1, dt / f.tauAci);
-    u[ac] += u[hiz] * dt;
+  const kRoll = u.dustu ? 0 : girdi.roll, kPitch = u.dustu ? 0 : girdi.pitch;
+  if (ayar.kumanda === 'akro') {
+    const hizMaks = f.maksDonus * 0.55, sinirAci = rad(75);   // simülasyonda takla kapalı
+    u.hRoll = sinirla(u.hRoll + kRoll * hizMaks * dt, -sinirAci, sinirAci);
+    u.hPitch = sinirla(u.hPitch + kPitch * hizMaks * dt, -sinirAci, sinirAci);
+    if (u.yerde && u.gaz < 0.05) { u.hRoll = 0; u.hPitch = 0; }
+  } else { u.hRoll = kRoll * maksEgim; u.hPitch = kPitch * maksEgim; }
+  if (u.pid) {
+    // PID oyunundaki eksen modeli, her eksene ayrı:  u = Kp·e + Ki·∫e − Kd·ω
+    //   τ += (u − τ)·dt/T_motor ;  J·θ'' = τ + τ_bozucu − B·θ'
+    const k = u.pid, r = u.ruzgar.length();
+    for (const ek of ['Roll', 'Pitch']) {
+      const ac = ek === 'Roll' ? 'roll' : 'pitch', hiz = 'r' + ek, I = 'i' + ek, tau = 'tau' + ek;
+      const e = u['h' + ek] - u[ac];
+      const yerdeBos = u.yerde && u.gaz < 0.05;
+      u[I] = yerdeBos ? 0 : u[I] + e * dt;
+      const iSinir = k.ki > 1e-6 ? PID.I_MAKS / k.ki : 2; u[I] = sinirla(u[I], -iSinir, iSinir);
+      const komut = sinirla(k.kp * e + k.ki * u[I] - k.kd * u[hiz], -PID.TAU_MAKS, PID.TAU_MAKS);
+      u[tau] += (komut - u[tau]) * dt / PID.MOTOR_ZS;
+      // rüzgâr türbülansı küçük bir bozucu tork yaratır
+      const boz = r > 0.2 ? 0.004 * r * (Math.sin(u.zaman * 1.7 + (ek === 'Roll' ? 0 : 2)) + 0.5 * Math.sin(u.zaman * 4.3 + (ek === 'Roll' ? 1 : 0))) : 0;
+      u[hiz] += (u[tau] + boz - PID.B * u[hiz]) / PID.J * dt;
+      if (yerdeBos) { u[hiz] = 0; u[ac] += (0 - u[ac]) * Math.min(1, dt * 20); } else u[ac] += u[hiz] * dt;
+    }
+    if (!u.dustu && (Math.abs(u.roll) > rad(80) || Math.abs(u.pitch) > rad(80))) return dus('kararsiz', {});
+  } else {
+    const kP = 7 + 0.08 * f.ceviklik;
+    for (const ek of ['Roll', 'Pitch']) {
+      const ac = ek === 'Roll' ? 'roll' : 'pitch', hiz = 'r' + ek;
+      const istenen = sinirla(kP * (u['h' + ek] - u[ac]), -f.maksDonus, f.maksDonus);
+      u[hiz] += (istenen - u[hiz]) * Math.min(1, dt / f.tauAci);
+      u[ac] += u[hiz] * dt;
+    }
   }
   u.yaw -= girdi.yaw * rad(140) * dt * (u.yerde && u.gaz < 0.05 ? 0 : 1);
   const egim = Math.acos(Math.cos(u.roll) * Math.cos(u.pitch));
@@ -958,6 +1103,17 @@ function engelKontrol() {
     if (pay > 0) { _n.multiplyScalar(1 / d); temas(_n.clone(), pay, 'halka'); }
   }
 
+  // yarış kapıları: dört çubuk (iki ayak, üst ve alt kiriş)
+  if (gorevD && gorevD.kapilar.length) for (const kp of gorevD.kapilar) {
+    if (Math.abs(p.x - kp.c.x) > 3 || Math.abs(p.z - kp.c.z) > 3) continue;
+    for (const [a, b] of kp.cub) {
+      _d.subVectors(b, a); const t = sinirla(_r.subVectors(p, a).dot(_d) / _d.lengthSq(), 0, 1);
+      _n.copy(a).addScaledVector(_d, t); _n.subVectors(p, _n);
+      const d = _n.length() || 1e-6, pay = 0.06 + rD - d;
+      if (pay > 0) { _n.multiplyScalar(1 / d); temas(_n.clone(), pay, 'kapi'); }
+    }
+  }
+
   // yakınlık uyarısı: bir pervane çapından yakınsa
   if (!carp && enYakin < 2 * f.t.pervaneCap * 0.0254 / 2 && u.zaman > (u.engelUyari || 0)) {
     bildir('Engele çok yakınsın: yavaşla', 900); u.engelUyari = u.zaman + 2.5;
@@ -968,7 +1124,7 @@ function engelKontrol() {
 /* ---------- görev mantığı ---------- */
 function gorevAdim(dt) {
   const u = uc, g = gorevD;
-  if (g.bitti) return;
+  if (g.bitti || g.bekle) return;
   if (!u.yerde || u.zaman > 0.3) g.sure += dt;
   if (g.tip === 'ilk') {
     const yatay = Math.hypot(u.poz.x, u.poz.z);
@@ -998,11 +1154,88 @@ function gorevAdim(dt) {
       g.hedef = g.halkalar[g.sira] ? g.halkalar[g.sira].c : null;
     }
   }
+  if (g.tip === 'pist') pistAdim(dt);
+  if (g.tip === 'tunel' && g.adim === 0) {
+    const yatay = Math.hypot(u.poz.x, u.poz.z), vYatay = Math.hypot(u.hiz.x, u.hiz.z);
+    const icinde = Math.abs(u.poz.y - 3) < 0.75 && yatay < 1.5;
+    const sakin = icinde && vYatay < 0.8;
+    if (sakin) {
+      g.asili += dt; g.olcSay += dt;
+      g.egimToplam += Math.acos(Math.cos(u.roll) * Math.cos(u.pitch)) * dt;
+      g.ruzToplam += u.ruzgar.length() * dt;
+    } else if (!icinde) g.asili = Math.max(0, g.asili - dt * 0.5);
+    g.zon.material.opacity = sakin ? 0.34 : icinde ? 0.24 : 0.14;
+    if (g.asili >= 8) bitir(true);
+  }
   if (g.tip === 'teslimat') {
     const d = Math.hypot(u.poz.x - 20, u.poz.z + 55);
     if (u.yerde && u.gaz < 0.12 && d < 1.6 && u.zaman > 2) bitir(true);
   }
   if (u.bataryaBitti && !u.dustu) { /* itki zaten sıfır; yere çarpınca dus('batarya') */ }
+}
+
+function pistAdim(dt) {
+  const u = uc, g = gorevD, K = g.kapilar, i = g.sira % K.length, kp = K[i];
+  if (g.basladi) {
+    g.turSure += dt;
+    g.izT += dt;
+    if (g.izT >= 1 / 30) { g.izT -= 1 / 30; const r = (v, n) => Math.round(v * n) / n; g.iz.push(r(u.poz.x, 100), r(u.poz.y, 100), r(u.poz.z, 100), r(u.yaw, 1000), r(u.roll, 1000), r(u.pitch, 1000)); }
+    g.maksEgim = Math.max(g.maksEgim, Math.acos(Math.cos(u.roll) * Math.cos(u.pitch)));
+    g.hizToplam += Math.hypot(u.hiz.x, u.hiz.z) * dt; g.hizSay += dt;
+  }
+  // sıradaki kapının düzleminden geçiş
+  const d0 = _v.copy(u.onceki).sub(kp.c).dot(kp.n), d1 = _d.copy(u.poz).sub(kp.c).dot(kp.n);
+  if (d0 < 0 && d1 >= 0) {
+    const p = u.onceki.clone().lerp(u.poz, d0 / (d0 - d1)).sub(kp.c);
+    if (Math.abs(p.dot(kp.yan)) < kp.W && Math.abs(p.y) < kp.H) {
+      if (i === 0 && g.basladi) turBitti();
+      else if (i === 0) { g.basladi = true; g.turSure = 0; g.iz = []; g.izT = 0; bildir('Tur 1 başladı', 800); if (g.hayalet) { g.hayalet.visible = true; g.hayaletT = 0; } }
+      else bildir(`Kapı ${i}/${K.length - 1}`, 500);
+      g.sira = (i + 1) % K.length;
+      if (g.bitti) return;
+    }
+  }
+  const j = g.sira % K.length;
+  K.forEach((x, n) => {
+    if (n === j) { const pz = 0.5 + 0.5 * Math.sin(u.zaman * 6); x.mat.color.set('#ffb04a'); x.mat.emissive.setRGB(0.5 * pz, 0.2 * pz, 0); }
+    else { x.mat.color.set(n === 0 ? '#f2f2f2' : '#ffffff'); x.mat.emissive.setRGB(0, 0, 0); }
+  });
+  g.hedef = K[j].c;
+}
+function turBitti() {
+  const g = gorevD, sure = g.turSure;
+  g.turlar.push(sure);
+  const anahtar = 'dronSim.pist.' + ayar.sablon;
+  const rekor = oku(anahtar);
+  if (!rekor || sure < rekor.t) { yaz(anahtar, { t: Math.round(sure * 100) / 100, iz: g.iz }); g.yeniRekor = true; bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s · yeni en iyi tur!`, 1600); }
+  else bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s`, 1300);
+  if (g.turlar.length >= 3) { if (g.hayalet) g.hayalet.visible = false; bitir(true); return; }
+  // yeni tur: hayalet en iyi turdan baştan başlar
+  const yeni = oku(anahtar);
+  if (yeni && yeni.iz && !g.hayalet) g.hayalet = hayaletYap();
+  if (g.hayalet) { g.hayaletIz = yeni.iz; g.hayalet.visible = true; g.hayaletT = 0; }
+  g.turSure = 0; g.iz = []; g.izT = 0;
+}
+// hayalet ve rüzgâr çizgileri: yalnızca görsel, her karede bir kez
+function gorevGorsel(dt) {
+  const g = gorevD; if (!g) return;
+  if (g.hayalet && g.hayalet.visible) {
+    const iz = g.hayaletIz || (g.rekor && g.rekor.iz); if (!iz) return;
+    g.hayaletT += dt;
+    const n = iz.length / 6, f = g.hayaletT * 30, a = Math.floor(f);
+    if (a >= n - 1) { g.hayalet.visible = false; return; }
+    const t = f - a, A = a * 6, B = A + 6, L = (k) => iz[A + k] + (iz[B + k] - iz[A + k]) * t;
+    g.hayalet.position.set(L(0), L(1) - fz.ayak * 0.2, L(2));
+    _e.set(-L(5), L(3), -L(4), 'YXZ'); g.hayalet.quaternion.setFromEuler(_e);
+    g.hayalet.traverse((o) => { if (o.userData && o.userData.yon) o.rotation.y += o.userData.yon * 50 * dt; });
+  }
+  if (g.cizgiler) {
+    for (const m of g.cizgiler) {
+      const k = Math.min(1, 0.45 + m.position.y / 8);
+      m.position.addScaledVector(g.ruzgarYon, g.ruzgarHiz * k * dt);
+      if (m.position.x < -15) { m.position.x += 30; m.position.z = (Math.random() - 0.5) * 16; m.position.y = 0.5 + Math.random() * 6; }
+    }
+  }
 }
 
 /* =====================================================================
@@ -1024,11 +1257,16 @@ function dus(neden, v) {
     metin = `Yere <b>${tr(der(v.egim), 0)}°</b> eğik değdin. İnişten önce dronu düzle (sağ kolu bırak). Eğik dronda itkinin yalnızca T·cosθ kadarı yukarı çeker, gerisi dronu yana iter.`;
     formul = `cos ${tr(der(v.egim), 0)}° = ${tr(Math.cos(v.egim), 2)} → itkinin %${tr(100 * (1 - Math.cos(v.egim)), 0)}'i yana gidiyor`;
   } else if (neden === 'engel') {
-    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'] }[v.ne] || ['Engele çarptın', 'engele'];
+    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'], kapi: ['Kapıya çarptın', 'yarış kapısının çerçevesine'] }[v.ne] || ['Engele çarptın', 'engele'];
     const cap = f.t.pervaneCap * 2.54;
     baslik = ad[0];
     metin = `Dron ${ad[1]} <b>${tr(v.v, 1)} m/s</b> hızla değdi. Dakikada binlerce devirle dönen pervane bir dala ya da duvara değince kırılır; o köşenin itkisi bir anda kaybolur ve dron takla atar. Engelin yanından geçerken en az bir pervane çapı (<b>${tr(cap, 0)} cm</b>) boşluk bırak ve yavaşla. Hızı yarıya indirmek darbe enerjisini dörtte bire düşürür.`;
     formul = `E = ½·m·v² = ½ · ${tr(f.m, 3)} kg · (${tr(v.v, 1)} m/s)² ≈ ${tr(E, 2)} J`;
+  } else if (neden === 'kararsiz') {
+    const k = u.pid || { kp: 0, ki: 0, kd: 0 };
+    baslik = 'Dengeleyici dronu tutamadı';
+    metin = `PID oyunundaki ayarların (Kp <b>${tr(k.kp, 2)}</b>, Ki <b>${tr(k.ki, 2)}</b>, Kd <b>${tr(k.kd, 2)}</b>) dronu 80°'nin ötesine devirdi. Salınım büyüyerek sürdüyse sönüm azdır: <b>Kd'yi artır</b> ya da Kp'yi azalt. Hedefe hiç oturmadan uzun dalgalar çizdiyse Ki fazladır. Ayarı <a href="../pid-oyunu/index.html">PID oyununda</a> düzelt, kaydet, buraya geri gel; dron aynı ayarla uçar.`;
+    formul = 'u = Kp·e + Ki·∫e dt − Kd·ω   ·   J·θ″ = τ − B·θ′';
   } else {
     baslik = 'Batarya bitti';
     metin = `Bataryanın güvenle kullanılabilir kısmı (%80) tükendi. Gerilim düşünce motor devri düşer; itki devrin karesiyle orantılı olduğu için havada kalmak imkânsızlaşır. Gerçek uçuşta bu noktadan önce inmen gerekir. Laboratuvarın tahmini hover uçuş süresi <b>${tr(f.ucusDk, 1)} dk</b>.`;
@@ -1058,6 +1296,25 @@ function bitir(basarili) {
   if (g.tip === 'teslimat') {
     metin = `<b>${g.kargo} g</b> kargoyu rüzgârda teslim ettin. Kargo, dronun itki/ağırlık oranını <b>${tr(g.twrOnce, 1)}</b>'dan <b>${tr(g.twrSonra, 1)}</b>'a düşürdü: aynı motorlar daha ağır bir yükü taşıdı, bu yüzden dron daha hantal ve rüzgâra daha açıktı.`;
     formul = `TWR = T_maks / (m·g)   ·   hover gazı %${tr(fz0().hoverGaz * 100, 0)} → %${tr(f.hoverGaz * 100, 0)}`;
+  }
+  if (g.tip === 'pist') {
+    const enIyi = Math.min(...g.turlar), rekor = oku('dronSim.pist.' + ayar.sablon);
+    const v = g.hizSay ? g.hizToplam / g.hizSay : 0, th = Math.max(g.maksEgim, rad(5));
+    const r = v * v / (G * Math.tan(th));
+    baslik = g.yeniRekor ? 'Yeni en iyi tur!' : '3 tur tamam';
+    metin = `En iyi turun <b>${tr(enIyi, 2)} s</b>${rekor ? `, bu dronla tüm zamanların en iyisi <b>${tr(rekor.t, 2)} s</b>` : ''}. Ortalama hızın <b>${tr(v, 1)} m/s</b>, en büyük eğimin <b>${tr(der(th), 0)}°</b> idi. Virajda dronu döndüren kuvvet, eğik itkinin yatay payıdır: T·sinθ. Bu hızla dönebileceğin en dar viraj yarıçapı yaklaşık <b>${tr(r, 1)} m</b>. Hızı ikiye katlarsan yarıçap dörde katlanır; bu yüzden pilotlar virajdan önce yavaşlar ya da daha çok eğilir.`;
+    formul = `r = v² / (g·tan θ) = (${tr(v, 1)} m/s)² / (9,81 · tan ${tr(der(th), 0)}°) ≈ ${tr(r, 1)} m`;
+    olcum.splice(1, 1);
+    g.turlar.forEach((t, i) => olcum.push([`Tur ${i + 1}`, tr(t, 2) + ' s']));
+  }
+  if (g.tip === 'tunel') {
+    const th = g.olcSay ? g.egimToplam / g.olcSay : 0, v = g.olcSay ? g.ruzToplam / g.olcSay : 0;
+    const Fs = 0.5 * f.rho * f.CdA * v * v + f.kLin * f.m * v, W = f.m * G, thF = Math.atan(Fs / W);
+    const fark = Math.abs(g.tahmin - der(thF));
+    baslik = fark <= 2 ? 'Tahminin isabetli!' : fark <= 6 ? 'Tahminin yakın' : 'Ölçüm tahmini düzeltti';
+    metin = `Yerinde durmak için dron rüzgâra doğru eğildi: itkinin yatay payı (T·sinθ) rüzgârın sürükleme kuvvetini, dikey payı (T·cosθ) ağırlığı dengeledi. Tahminin <b>${g.tahmin}°</b>, ölçülen ortalama eğim <b>${tr(der(th), 1)}°</b>, formülün söylediği <b>${tr(der(thF), 1)}°</b>. 3 m yükseklikte rüzgâr <b>${tr(v, 1)} m/s</b> (yere yakın hava yavaşlar). Başka bir dronla dene: hafif ve iri dron daha çok eğilir, çünkü sürükleme büyür ama ağırlık küçüktür.`;
+    formul = `tan θ = F/W = (½·ρ·CdA·v² + k·m·v) / (m·g) = ${tr(Fs, 3)} N / ${tr(W, 2)} N  →  θ ≈ ${tr(der(thF), 1)}°`;
+    olcum.splice(0, olcum.length, ['Tahminin', g.tahmin + '°'], ['Ölçülen eğim', tr(der(th), 1) + '°'], ['Formül', tr(der(thF), 1) + '°'], ['Rüzgâr (3 m)', tr(v, 1) + ' m/s'], ['Sürükleme F', tr(Fs, 3) + ' N']);
   }
   if (g.tip === 'serbest') return;
   sesSus();
@@ -1188,6 +1445,15 @@ function hudGuncelle(dt) {
   if (g.tip === 'ilk') { hedef = g.adim === 0 ? '3 m yüksekliğe çık ve turuncu silindirin içinde 5 saniye kal.' : 'Turuncu H pedine yumuşak in.'; ek = g.adim === 0 ? `Asılı <b>${tr(Math.min(5, g.asili), 1)}/5 s</b>` : ''; }
   if (g.tip === 'halka') { hedef = 'Turuncu halkadan geç, sıradakine yönel.'; ek = `Halka <b>${g.sira}/${g.halkalar.length}</b>` + (g.rekor ? ` · Rekor <b>${tr(g.rekor, 1)} s</b>` : ''); }
   if (g.tip === 'teslimat') { hedef = `${g.kargo} g kargo yüklü. Rüzgâr soldan esiyor; mavi B pedine in.`; ek = `TWR <b>${tr(g.twrOnce, 1)} → ${tr(g.twrSonra, 1)}</b>`; }
+  if (g.tip === 'pist') {
+    hedef = g.basladi ? 'Turuncu kapıdan geç. 3 tur, en iyi tur sayılır.' : 'Beyaz-damalı başlangıç kapısından geç: süre orada başlar.';
+    ek = `Tur <b>${Math.min(3, g.turlar.length + 1)}/3</b>` + (g.rekor ? ` · En iyi <b>${tr(g.rekor.t, 2)} s</b>` : '');
+    $('gSure').textContent = tr(g.basladi ? g.turSure : 0, 1) + ' s';
+  }
+  if (g.tip === 'tunel') {
+    hedef = g.bekle ? 'Önce eğimi tahmin et.' : 'Mavi silindirin içinde kıpırdamadan dur. Rüzgâr seni sola itiyor.';
+    ek = g.bekle ? '' : `Sabit <b>${tr(Math.min(8, g.asili), 1)}/8 s</b> · Tahminin <b>${g.tahmin}°</b>`;
+  }
   if (g.tip === 'serbest') { hedef = 'Serbest uçuş. V: rüzgâr, C: kamera.'; ek = ''; }
   $('gHedef').textContent = hedef; $('gEk').innerHTML = ek;
   // uyarılar
@@ -1231,6 +1497,7 @@ function dongu(simdi) {
       const yerY = -uc.poz.y + zeminY(uc.poz.x, uc.poz.z) + 0.02; if (e.p.position.y < yerY) { e.p.position.y = yerY; e.v.multiplyScalar(0.4); e.v.y = Math.abs(e.v.y) * 0.3; e.w.multiplyScalar(0.6); }
     }
     dronCiz(dt);
+    gorevGorsel(dt);
     kameraGuncelle(dt);
     if (durum === 'ucus') { hudGuncelle(dt); sesGuncelle(); }
   } else if (durum === 'menu') {
@@ -1256,7 +1523,45 @@ function dongu(simdi) {
     if (t.t > 0.6) { sahne.remove(t.m); tozlar.splice(i, 1); }
   }
   renderer.render(sahne, kamera);
+  kaliteOlc(dt);
 }
+
+/* ---------- otomatik kalite: kare hızı düşerse önce çözünürlük, sonra gölge ----------
+   Eski akıllı tahtalarda ve okul bilgisayarlarında akıcılık, keskinlikten önemlidir. */
+const KALITE = [
+  { ad: 'tam', pr: Math.min(devicePixelRatio || 1, 2), golge: true },
+  { ad: 'orta', pr: 1, golge: true },
+  { ad: 'düşük', pr: 1, golge: false },
+  { ad: 'en düşük', pr: 0.75, golge: false },
+];
+let kalite = 0, kOlcT = 0, kOlcN = 0, kBekle = 3;
+function kaliteUygula(k, sessiz) {
+  kalite = k; const q = KALITE[k];
+  renderer.setPixelRatio(q.pr); boyutla();
+  if (renderer.shadowMap.enabled !== q.golge) { renderer.shadowMap.enabled = q.golge; gunes.castShadow = q.golge; sahne.traverse((o) => { if (o.material) [].concat(o.material).forEach((m) => { m.needsUpdate = true; }); }); }
+  if (!sessiz) bildir(`Akıcılık için görüntü kalitesi: ${q.ad}`, 1800);
+}
+function kaliteSifirla() { kOlcT = 0; kOlcN = 0; kBekle = 3; }
+function kaliteOlc(dt) {
+  if (document.hidden || durum === 'sonuc') return;
+  if (kBekle > 0) { kBekle -= dt; return; }   // gölgelendirici derlemesi ilk saniyelerde takılır
+  kOlcT += dt; kOlcN++;
+  if (kOlcT < 2) return;
+  const fps = kOlcN / kOlcT; kOlcT = 0; kOlcN = 0;
+  if (fps < 40 && kalite < KALITE.length - 1) {
+    let k = kalite + 1; if (k === 1 && KALITE[0].pr <= 1) k = 2;   // zaten 1× ise doğrudan gölgeyi kapat
+    kaliteUygula(k); kBekle = 1.5;
+  }
+}
+{ const q = new URLSearchParams(location.search).get('kalite'); if (q !== null && KALITE[+q]) kaliteUygula(+q, true); }
+
+/* ---------- tam ekran (sınıf modu) ---------- */
+function tamEkran() {
+  const d = document;
+  if (!d.fullscreenElement) (d.documentElement.requestFullscreen || d.documentElement.webkitRequestFullscreen || (() => {})).call(d.documentElement);
+  else (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+}
+document.addEventListener('fullscreenchange', () => { $('bTam').textContent = document.fullscreenElement ? 'Tam ekrandan çık' : 'Tam ekran'; boyutla(); });
 function dronCiz(dt) {
   const u = uc;
   dron.position.copy(u.poz);
@@ -1301,7 +1606,7 @@ function menuOnizle() {
   $('baslaHata').textContent = f.ucabilir ? '' : 'Bu tasarım havalanamaz: hover gazı %100\'ü aşıyor. Laboratuvarda tasarımı değiştir.';
   const q = Object.keys(SABLONLAR.yaris5).filter((k) => k !== 'ad').map((k) => `${k}=${t[k]}`).join('&');
   $('labaGit').href = '../dron-lab/index.html#' + q;
-  document.querySelectorAll('#gorevler .rek').forEach((el) => { const r = oku('dronSim.halka.' + ayar.sablon); el.textContent = r ? 'En iyi: ' + tr(r, 1) + ' s' : ''; });
+  document.querySelectorAll('#gorevler .rek').forEach((el) => { const r = oku(`dronSim.${el.dataset.rek}.` + ayar.sablon), t = r && (r.t || r); el.textContent = t ? (el.dataset.rek === 'pist' ? 'En iyi tur: ' : 'En iyi: ') + tr(t, el.dataset.rek === 'pist' ? 2 : 1) + ' s' : ''; });
 }
 function menuKur() {
   $('sablonlar').innerHTML = Object.entries(SABLONLAR).map(([k, v]) => `<button class="cip" data-sablon="${k}" aria-pressed="${k === ayar.sablon}">${v.ad}</button>`).join('');
@@ -1310,12 +1615,19 @@ function menuKur() {
     ayar.sablon = b.dataset.sablon; ayar.tasarim = { ...SABLONLAR[ayar.sablon] };
     $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', c === b)); $('labHata').textContent = ''; menuOnizle();
   });
-  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' ? '<small class="rek"></small>' : ''}</button>`).join('');
+  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' || k === 'pist' ? `<small class="rek" data-rek="${k}"></small>` : ''}</button>`).join('');
   $('gorevler').addEventListener('click', (e) => {
     const b = e.target.closest('[data-gorev]'); if (!b) return; ayar.gorev = b.dataset.gorev;
     $('gorevler').querySelectorAll('.gorev-k').forEach((c) => c.setAttribute('aria-pressed', c === b));
   });
   document.querySelectorAll('[data-mod]').forEach((b) => b.addEventListener('click', () => { ayar.mod = b.dataset.mod; document.querySelectorAll('[data-mod]').forEach((c) => c.setAttribute('aria-pressed', c === b)); }));
+  document.querySelectorAll('[data-kum]').forEach((b) => b.addEventListener('click', () => { ayar.kumanda = b.dataset.kum; document.querySelectorAll('[data-kum]').forEach((c) => c.setAttribute('aria-pressed', c === b)); }));
+  document.querySelectorAll('[data-denge]').forEach((b) => b.addEventListener('click', () => { if (b.disabled) return; ayar.denge = b.dataset.denge; document.querySelectorAll('[data-denge]').forEach((c) => c.setAttribute('aria-pressed', c === b)); pidBilgiYaz(); }));
+  $('tahminAci').addEventListener('input', (e) => { $('tahminDeger').textContent = e.target.value + '°'; });
+  $('tahminAci').addEventListener('keydown', (e) => { if (e.key === 'Enter') tahminTamam(); });
+  $('tahminTamam').addEventListener('click', tahminTamam);
+  if (document.fullscreenEnabled || document.webkitFullscreenEnabled) { $('bTam').hidden = false; $('bTam').addEventListener('click', tamEkran); }
+  pidBilgiYaz();
   document.querySelectorAll('[data-bat]').forEach((b) => b.addEventListener('click', () => { ayar.batCarpan = +b.dataset.bat; document.querySelectorAll('[data-bat]').forEach((c) => c.setAttribute('aria-pressed', c === b)); }));
   $('labYukle').addEventListener('click', labYukle);
   $('labLink').addEventListener('keydown', (e) => { if (e.key === 'Enter') labYukle(); });
@@ -1324,6 +1636,14 @@ function menuKur() {
   $('bMenu').addEventListener('click', menuyeDon); $('bKamera').addEventListener('click', kameraDegis);
   $('bFizik').addEventListener('click', () => document.body.classList.toggle('fizikAcik'));
   $('bSes').addEventListener('click', () => { sesAcik = !sesAcik; $('bSes').textContent = 'Ses: ' + (sesAcik ? 'açık' : 'kapalı'); if (sesAcik) sesBaslat(); else sesSus(); });
+}
+function pidBilgiYaz() {
+  const k = pidKazanc(), b = document.querySelector('[data-denge="pid"]');
+  b.disabled = !k;
+  if (!k && ayar.denge === 'pid') { ayar.denge = 'oto'; document.querySelectorAll('[data-denge]').forEach((c) => c.setAttribute('aria-pressed', c.dataset.denge === 'oto')); }
+  $('pidBilgi').innerHTML = !k ? 'PID ayarı bulunamadı. Önce <a href="../pid-oyunu/index.html">PID oyununda</a> bir dengeleyici ayarla; bu tarayıcıya kaydedilir, burada kullanılabilir.'
+    : ayar.denge === 'pid' ? `Senin dengeleyicin uçuracak: Kp <b>${tr(k.kp, 2)}</b> · Ki <b>${tr(k.ki, 2)}</b> · Kd <b>${tr(k.kd, 2)}</b>. Sönüm azsa dron sallanır, çok azsa devrilir.`
+    : `PID oyunundaki ayarın hazır (Kp ${tr(k.kp, 2)} · Ki ${tr(k.ki, 2)} · Kd ${tr(k.kd, 2)}). Seçersen dronu o uçurur.`;
 }
 function labYukle() {
   const metin = $('labLink').value.trim();
