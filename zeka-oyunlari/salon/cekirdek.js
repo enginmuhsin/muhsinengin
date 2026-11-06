@@ -124,6 +124,10 @@ const Salon = (() => {
       bitti(metin, kayip = false) { const a = $('afis'); a.hidden = false; a.className = 'afis' + (kayip ? ' kayip' : ''); a.textContent = metin; },
       bildir(m, ms = 1600) { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(t._z); t._z = setTimeout(() => (t.hidden = true), ms); },
       geriAlAktif(v) { $('geriAl').disabled = !v; },
+      // ekran okuyucuya hamleyi söyle ("Beyaz e2–e4")
+      duyur(m) { const d = $('duyuru'); if (d) { d.textContent = ''; setTimeout(() => (d.textContent = m), 30); } },
+      // paylaşılabilir konum kodu: oyun her hamlede bildirir
+      konum(kod) { if (aktif) { aktif.kod = kod || ''; const p = $('paylas'); if (p) p.disabled = !kod; } },
     };
   }
 
@@ -135,7 +139,7 @@ const Salon = (() => {
     aktif.oyun.yeni();
   }
 
-  function oyunAc(id, zorla) {
+  function oyunAc(id, zorla, kod) {
     const t = oyunlar[id]; if (!t) return salonAc();
     if (aktif && aktif.oyun.yokEt) aktif.oyun.yokEt();
     aktifId = id;
@@ -150,8 +154,34 @@ const Salon = (() => {
     seceneklerCiz();
     aktif.oyun = t.olustur(apiYap());
     $('geriAl').hidden = !aktif.oyun.geriAl; $('geriAl').disabled = true;
+    $('paylas').hidden = !aktif.oyun.yukle; $('paylas').disabled = true;
+    $('dallanma').closest('.kutu').hidden = !!t.arac;
     yeniOyun();
+    if (kod && aktif.oyun.yukle) { try { aktif.oyun.yukle(kod); apiYap().bildir('Paylaşılan konum açıldı.'); } catch (e) { apiYap().bildir('Bu bağlantıdaki konum okunamadı; yeni oyun başladı.'); } }
+    turGoster(false);
     scrollTo(0, 0);
+  }
+
+  /* ---------- öğretici tur: ilk açılışta 3 adım; "Nasıl oynanır?" ile tekrar ---------- */
+  function turGoster(zorla) {
+    const t = aktif && aktif.tanim; const eski = document.getElementById('turKart'); if (eski) eski.remove();
+    if (!t || !t.tur) return;
+    if (!zorla && oku('tur.' + aktifId, false)) return;
+    let i = 0;
+    const kart = el('div', { id: 'turKart', class: 'tur-kart', role: 'dialog', 'aria-label': t.baslik + ': nasıl oynanır' });
+    const ciz = () => {
+      const a = t.tur[i]; kart.innerHTML = '';
+      kart.append(el('div', { class: 'tur-ust' }, el('span', { class: 'kas' }, `Nasıl oynanır · ${i + 1}/${t.tur.length}`), el('button', { type: 'button', class: 'tur-kapat', 'aria-label': 'Turu kapat', onclick: kapat }, '×')),
+        el('b', {}, a.baslik), el('p', {}, a.metin),
+        el('div', { class: 'dugmeler' },
+          i > 0 ? el('button', { type: 'button', class: 'dug', onclick: () => { i--; ciz(); } }, 'Geri') : null,
+          el('button', { type: 'button', class: 'dug ana', onclick: () => { if (i < t.tur.length - 1) { i++; ciz(); } else kapat(); } }, i < t.tur.length - 1 ? 'İleri' : 'Oynamaya başla')));
+      document.querySelectorAll('.tur-vurgu').forEach((x) => x.classList.remove('tur-vurgu'));
+      if (a.vurgu) document.querySelectorAll(a.vurgu).forEach((x) => x.classList.add('tur-vurgu'));
+      kart.querySelector('.dug.ana').focus();
+    };
+    function kapat() { yaz('tur.' + aktifId, true); kart.remove(); document.querySelectorAll('.tur-vurgu').forEach((x) => x.classList.remove('tur-vurgu')); }
+    document.querySelector('.alan').append(kart); ciz();
   }
 
   function salonAc() {
@@ -165,7 +195,7 @@ const Salon = (() => {
 
   function dallanmaTablosu() {
     const k = oku('dallanma', {});
-    const satirlar = sira.map((id) => ({ id, t: oyunlar[id], x: k[id] }));
+    const satirlar = sira.filter((id) => !oyunlar[id].arac).map((id) => ({ id, t: oyunlar[id], x: k[id] }));
     const maks = Math.log10(400);
     const olc = (b) => Math.max(2, Math.log10(Math.max(1, b)) / maks * 100);
     $('dallanmaTablo').innerHTML = satirlar.map(({ id, t, x }) => {
@@ -181,6 +211,7 @@ const Salon = (() => {
   function rota() {
     const h = decodeURIComponent(location.hash.slice(1));
     if (oyunlar[h]) return oyunAc(h);
+    if (h.includes('~')) { const [id, kod] = [h.slice(0, h.indexOf('~')), h.slice(h.indexOf('~') + 1)]; if (oyunlar[id]) return oyunAc(id, null, kod); }
     const [id, deger] = [h.slice(0, h.indexOf('-')), h.slice(h.indexOf('-') + 1)];
     const t = oyunlar[id];
     if (t && deger) { const g = (t.secenekler || VARSAYILAN).find((g) => g.sec.some(([v]) => v === deger)); if (g) return oyunAc(id, { [g.id]: deger }); }
@@ -191,7 +222,7 @@ const Salon = (() => {
     $('kartlar').innerHTML = '';
     for (const id of sira) {
       const t = oyunlar[id];
-      const kart = el('a', { class: 'kart', href: '#' + id, style: 'text-decoration:none;color:inherit' },
+      const kart = el('a', { class: 'kart' + (t.arac ? ' arac' : ''), href: '#' + id, style: 'text-decoration:none;color:inherit' },
         el('div', { class: 'onizle' }), el('h3', {}, t.baslik), el('p', {}, t.ozet),
         el('div', { class: 'etiketler' }, t.etiketler.map((e, i) => el('span', { class: 'etiket' + (i === 0 ? ' ai' : '') }, e))));
       kart.querySelector('.onizle').innerHTML = t.onizleme();
@@ -200,6 +231,28 @@ const Salon = (() => {
     $('yeniOyun').onclick = () => { if (aktif) yeniOyun(); };
     $('geriAl').onclick = () => { if (aktif && aktif.oyun.geriAl) { isciler.forEach((w) => w.terminate()); isciler = []; $('afis').hidden = true; aktif.oyun.geriAl(); } };
     $('salonaDon').onclick = () => { location.hash = ''; };
+    $('turAc').onclick = () => turGoster(true);
+    $('paylas').onclick = async () => {
+      if (!aktif || !aktif.kod) return;
+      const url = location.href.split('#')[0] + '#' + aktifId + '~' + aktif.kod;
+      const ok = await kopyala(url); apiYap().bildir(ok ? 'Konum bağlantısı kopyalandı. Açan kişi tahtayı bu hâliyle görür.' : url, ok ? 1800 : 6000);
+    };
+    // Ok tuşlarıyla tahtada gezinme: hücreler data-r / data-c taşır; Enter ya da boşluk "tıklar".
+    const tahta = $('tahta'); let odak = { r: 0, c: 0 };
+    const hucreler = () => [...tahta.querySelectorAll('[data-r][data-c]')];
+    const sirala = () => { const h = hucreler(); if (!h.length) return; let bulundu = false;
+      h.forEach((x) => { const ben = +x.dataset.r === odak.r && +x.dataset.c === odak.c; x.setAttribute('tabindex', ben ? '0' : '-1'); if (ben) bulundu = true; });
+      if (!bulundu) h[0].setAttribute('tabindex', '0'); };
+    new MutationObserver(sirala).observe(tahta, { childList: true, subtree: true });
+    tahta.addEventListener('keydown', (e) => {
+      const x = e.target.closest && e.target.closest('[data-r][data-c]'); if (!x) return;
+      const yon = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
+      if (yon) {
+        e.preventDefault(); const r = +x.dataset.r + yon[0], c = +x.dataset.c + yon[1];
+        const y = tahta.querySelector(`[data-r="${r}"][data-c="${c}"]`); if (y) { odak = { r, c }; sirala(); y.focus(); }
+      } else if ((e.key === 'Enter' || e.key === ' ') && x.tagName !== 'BUTTON') { e.preventDefault(); x.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+    });
+    tahta.addEventListener('focusin', (e) => { const x = e.target.closest && e.target.closest('[data-r][data-c]'); if (x) odak = { r: +x.dataset.r, c: +x.dataset.c }; });
     // "İçeriğe atla": adres çubuğundaki oyun yolunu bozmadan odağı içeriğe taşı
     document.querySelectorAll('[data-atla]').forEach((x) => x.addEventListener('click', (e) => {
       e.preventDefault(); const m = $('salon').hidden ? $('tahta') : $('kartlar'); m.setAttribute('tabindex', '-1'); m.focus();

@@ -111,6 +111,14 @@
   const kareAd = (i) => 'abcdefgh'[i & 7] + (8 - (i >> 3));
   const GLIF = { K: '♚', Q: '♛', R: '♜', B: '♝', N: '♞', P: '♟' };
   const TASAD = { K: 'Şah', Q: 'Vezir', R: 'Kale', B: 'Fil', N: 'At', P: 'Piyon' };
+  // Günün problemi: bilgisayarla üretilip doğrulanmış konumlar [FEN, kaç hamlede mat, tek anahtar hamle].
+  // Her biri için çözücü, matın tek bir ilk hamleyle zorlandığını kontrol etti (salon/arac: sat/uret.js).
+  const PROBLEMLER = [["3QK3/8/8/8/4R2P/4p3/k5P1/8 w - -", 2, "e4b4"], ["8/8/5p2/8/1Rp5/k7/3K4/7R w - -", 2, "d2c3"], ["8/N4P2/4Q3/8/3K4/k7/7p/8 w - -", 2, "d4c3"], ["8/8/8/8/8/2Q5/k7/6RK w - -", 1, "g1a1"], ["6k1/1R6/2K5/P6B/4N3/8/1p6/8 w - -", 2, "e4f6"], ["8/8/8/8/8/3Q4/5R2/k3K3 w - -", 1, "d3d1"], ["1k6/3K4/1N6/8/8/8/8/7Q w - -", 1, "h1a8"], ["k7/8/K7/8/8/7p/7R/3Q4 w - -", 1, "d1d8"], ["5k2/7p/3N1K2/8/2p5/7Q/8/8 w - -", 1, "h3c8"], ["8/1k6/8/3R4/2Q4p/7K/8/8 w - -", 2, "d5b5"], ["8/8/8/1N2B2P/k1K5/2R5/8/8 w - -", 1, "c3a3"], ["6k1/1p4pp/8/7Q/3K4/8/6B1/8 w - -", 1, "h5e8"], ["8/8/8/4R3/8/8/7R/1k5K w - -", 1, "e5e1"], ["3k4/6Q1/p7/p4B2/8/8/2K5/8 w - -", 1, "g7d7"], ["k7/5p2/1p6/8/3Q4/4K1B1/8/8 w - -", 2, "d4b6"], ["3R4/k7/4R3/8/8/8/8/2K5 w - -", 2, "d8d7"], ["2R5/3k4/1K6/1p6/8/8/7p/4R3 w - -", 2, "e1e8"], ["5k2/3Q1N2/8/8/3p2p1/8/3K4/8 w - -", 2, "f7h6"], ["1k6/7p/8/8/6P1/K1Q5/6B1/8 w - -", 2, "c3c6"], ["8/8/K5p1/8/pN2Q3/8/6P1/2k5 w - -", 1, "e4c2"], ["5k2/8/1p3K2/6P1/6Q1/8/8/8 w - -", 1, "g4c8"], ["B7/4P3/8/8/8/1P6/1PQ5/3K2k1 w - -", 1, "c2g2"], ["1N5K/5P2/P5R1/8/7k/B7/P7/8 w - -", 2, "f7f8"], ["2R4K/7R/8/8/8/3p4/1k6/8 w - -", 2, "h7b7"], ["8/2Q4p/1K6/4p3/8/8/k7/5R2 w - -", 2, "c7c3"], ["8/2p3R1/7k/3P4/8/6K1/R7/8 w - -", 2, "g7g4"], ["3K4/2p5/8/8/k7/4R3/7Q/8 w - -", 2, "h2b2"], ["8/5Q2/2K1p3/4R3/4p2k/8/8/8 w - -", 2, "f7g6"], ["8/7p/8/8/4K2k/8/4N3/2Q5 w - -", 2, "e4f5"], ["8/8/8/1p6/7Q/2K5/8/1k6 w - -", 2, "c3b3"], ["k7/8/3K1p2/8/8/8/2Q5/8 w - -", 2, "d6c7"], ["3k4/4p2N/1K6/1Q5p/8/2p5/8/8 w - -", 2, "h7f8"], ["2k4K/6R1/8/1B2N3/8/6p1/3p4/8 w - -", 2, "e5c6"], ["3K4/1Q6/1p3p2/k3p3/8/8/2R5/8 w - -", 2, "c2b2"], ["8/2K5/p2Q4/5PP1/6R1/8/8/5k2 w - -", 2, "d6h2"], ["8/8/8/8/8/8/3KQ3/1k6 w - -", 2, "d2c3"], ["4k3/4p3/6PQ/8/8/1R6/5K2/8 w - -", 2, "b3b7"], ["7B/4k1P1/7P/4K3/8/3p4/Q7/8 w - -", 2, "a2a7"], ["8/2P3p1/kN6/8/8/2Q5/8/7K w - -", 2, "c7c8"], ["4k3/8/8/2R4p/2K5/5Q2/8/8 w - -", 2, "f3b7"], ["5k2/P1N5/R7/8/2B3K1/8/8/8 w - -", 2, "a7a8"], ["8/4Q2p/8/P7/p4K2/8/8/7k w - -", 2, "f4g3"], ["1k6/3p4/1p6/8/p7/5RK1/3Q4/8 w - -", 2, "d2d7"], ["7k/p7/8/1pKN4/2B2pR1/8/8/8 w - -", 2, "d5f6"], ["1Q6/8/7p/8/8/8/K1p5/3N2k1 w - -", 2, "b8g3"], ["8/8/8/k4p2/3K4/6N1/8/1Q6 w - -", 2, "d4c5"], ["5Q2/8/3p4/8/3P4/8/3K2p1/k7 w - -", 2, "d2c2"], ["8/8/2N5/2K4p/R7/1PB5/5p2/2k5 w - -", 2, "c6d4"]];
+  function fenOku(fen) {
+    const [p, s] = fen.split(' '); const b = [];
+    for (const ch of p.replace(/\//g, '')) { if (/\d/.test(ch)) for (let i = 0; i < +ch; i++) b.push(''); else b.push(ch); }
+    return { b, s, rok: { K: false, Q: false, k: false, q: false }, ep: -1, yarim: 0 };
+  }
   const BASLANGIC = 'rnbqkbnrpppppppp' + ''.padEnd(32, '.') + 'PPPPPPPPRNBQKBNR';
 
   Salon.kaydet('satranc', {
@@ -118,6 +126,16 @@
     ozet: 'Bilgisayara karşı ya da iki kişi. Atın renk paritesini ve bir hamlede kaç seçeneğin olduğunu canlı izle.',
     etiketler: ['Alfa-beta + sessizlik', 'Parite', '2 kişi'],
     dallanmaRef: '≈ 35', dallanmaSayi: 35, oyunUzunlugu: 80,
+    secenekler: [
+      { id: 'mod', ad: 'Mod', sec: [['oyun', 'Oyun'], ['gunluk', 'Günün problemi']], v: 'oyun' },
+      { id: 'rakip', ad: 'Rakip', sec: [['bilgisayar', 'Bilgisayar'], ['insan', 'İki kişi']], v: 'bilgisayar', goster: (a) => a.mod !== 'gunluk' },
+      { id: 'seviye', ad: 'Seviye', sec: [['kolay', 'Kolay'], ['orta', 'Orta'], ['zor', 'Zor']], v: 'orta', goster: (a) => a.mod !== 'gunluk' && a.rakip !== 'insan' },
+    ],
+    tur: [
+      { baslik: 'Taşa dokun, sonra kareye', metin: 'Bir taşına dokun: gidebileceği kareler yeşil noktayla işaretlenir. Gitmek istediğin kareye dokun. Klavyede ok tuşları ve Enter da çalışır.' },
+      { baslik: 'Bir ata dokun', metin: 'At seçiliyken her karede, atın oraya en az kaç hamlede gidebileceği yazar. Tek sayılar hep öbür renkte: at her hamlede kare rengini değiştirir.', vurgu: '#tahta [aria-label$="beyaz at"]' },
+      { baslik: 'Günün problemi', metin: 'Mod olarak "Günün problemi"ni seçersen herkes aynı mat problemini çözer. Çözdüğünde sonucunu sınıf grubunda paylaşabilirsin.' },
+    ],
     kurallar: ['Taşa dokun, gidebileceği kareler işaretlenir; kareye dokunarak oyna.', 'Rok, geçerken alma ve terfi desteklenir. Son sıraya ulaşan piyon otomatik olarak vezir olur.',
       'Şahı tehdit altında bırakan hamle yapılamaz. Şah çekilen ve kaçacak hamlesi olmayan oyuncu mat olur.', 'Pat, 50 hamle kuralı, üç kez tekrar ve yetersiz malzeme beraberliktir.', 'Bilgisayara karşı sen beyazsın.'],
     onizleme: () => { let s = '<svg viewBox="0 0 80 80">'; for (let i = 0; i < 64; i++) s += `<rect x="${(i & 7) * 10}" y="${(i >> 3) * 10}" width="10" height="10" fill="${(i + (i >> 3)) % 2 ? '#b58863' : '#f0d9b5'}"/>`; [['♜', 0, 0], ['♚', 4, 0], ['♟', 3, 1], ['♞', 5, 2], ['♟', 4, 4], ['♙', 4, 5], ['♘', 2, 5], ['♖', 0, 7], ['♔', 6, 7]].forEach(([g, c, r]) => { s += `<text x="${c * 10 + 5}" y="${r * 10 + 8.5}" font-size="9" text-anchor="middle" fill="#111">${g}</text>`; }); return s + '</svg>'; },
@@ -125,16 +143,45 @@
       const { el, tr } = api;
       const isci = api.isciYap(kaynak);
       const AYAR = { kolay: { sure: 400, maksDerin: 1, gurultu: 90 }, orta: { sure: 900, maksDerin: 3, gurultu: 0 }, zor: { sure: 2600, maksDerin: 7, gurultu: 0 } };
-      let st, secili = -1, atHaritasi = true;
+      let st, secili = -1, atHaritasi = true, bugdayZaman = null;
       function yeni() {
-        st = { d: { b: BASLANGIC.split('').map((x) => (x === '.' ? '' : x)), s: 'w', rok: { K: true, Q: true, k: true, q: true }, ep: -1, yarim: 0 }, gecmis: [], konumlar: {}, bitti: false, son: null, gen: (st?.gen || 0) + 1, bekle: false, alinan: { w: [], b: [] } };
-        secili = -1; konumSay(); api.geriAlAktif(false); ciz(); durumYaz();
+        st = { d: { b: BASLANGIC.split('').map((x) => (x === '.' ? '' : x)), s: 'w', rok: { K: true, Q: true, k: true, q: true }, ep: -1, yarim: 0 }, gecmis: [], hamleler: [], konumlar: {}, bitti: false, son: null, gen: (st?.gen || 0) + 1, bekle: false, alinan: { w: [], b: [] }, yukleniyor: false, problem: null };
+        if (api.ayar.mod === 'gunluk') {
+          const gun = api.gunAnahtari(), [fen, n, anahtarH] = PROBLEMLER[Math.floor(api.tohumlu('satranc-' + gun)() * PROBLEMLER.length)];
+          st.d = fenOku(fen); st.problem = { gun, n, anahtar: anahtarH, kalan: n, yanlis: 0, cozuldu: false };
+          const k = api.oku('sat.gunluk', null); if (k && k.gun === gun) Object.assign(st.problem, { yanlis: k.yanlis, cozuldu: k.cozuldu });
+          api.neden('');
+        }
+        secili = -1; konumSay(); api.konum(''); api.geriAlAktif(false); ciz(); durumYaz();
+        if (st.problem && st.problem.cozuldu) api.bitti(`Bugünün problemini çözdün${st.problem.yanlis ? ` (${st.problem.yanlis} yanlış denemeyle)` : ''}. Yarın yenisi gelir.`);
+      }
+      // problem modu: beyaz n hamlede mat etmeli; siyah en uzun direnen savunmayı oynar
+      function problemHamlesi(m) {
+        const p = st.problem, y = K.uygula(st.d, m);
+        const mat = (d) => K.yasal(d).length === 0 && K.sahta(d, d.s);
+        const matBir = (d) => K.yasal(d).some((x) => mat(K.uygula(d, x)));
+        const dogru = mat(y) || (p.kalan === 2 && K.yasal(y).length > 0 && K.yasal(y).every((c) => matBir(K.uygula(y, c))));
+        if (!dogru) {
+          p.yanlis++; api.yaz('sat.gunluk', { gun: p.gun, yanlis: p.yanlis, cozuldu: false });
+          api.bildir(p.kalan === 2 ? 'Bu hamleden sonra siyah kurtuluyor. Başka bir hamle dene.' : 'Bu hamle mat değil. Yeniden dene.', 2200);
+          api.neden(`Yanlış deneme: <b>${TASAD[st.d.b[m.f].toUpperCase()]} ${kareAd(m.f)}–${kareAd(m.t)}</b>. İpucu: önce siyah şahın kaçabileceği kareleri say; sonra o kareleri aynı anda kapatan hamleyi ara.`);
+          secili = -1; ciz(); return;
+        }
+        oyna(m);
+        if (st.bitti) { p.cozuldu = true; api.yaz('sat.gunluk', { gun: p.gun, yanlis: p.yanlis, cozuldu: true }); ciz(); return; }
+        p.kalan--;
+        // siyahın savunması: matı en çok zorlaştıran (beyazın en az mat seçeneği bıraktığı) hamle
+        const sav = K.yasal(st.d).map((c) => ({ c, n: K.yasal(K.uygula(st.d, c)).filter((x) => mat(K.uygula(K.uygula(st.d, c), x))).length })).sort((a, b) => a.n - b.n)[0].c;
+        st.bekle = true; durumYaz();
+        setTimeout(() => { st.bekle = false; api.neden(`Doğru! Siyah en dirençli savunmayı seçti: <b>${TASAD[st.d.b[sav.f].toUpperCase()]} ${kareAd(sav.f)}–${kareAd(sav.t)}</b>. Şimdi tek hamlede mat et.`); oyna(sav); }, 500);
       }
       const anahtar = (d) => d.b.map((x) => x || '.').join('') + d.s + Object.values(d.rok).map(Number).join('') + d.ep;
       function konumSay() { const k = anahtar(st.d); st.konumlar[k] = (st.konumlar[k] || 0) + 1; return st.konumlar[k]; }
       const insanMi = (s) => api.ayar.rakip === 'insan' || s === 'w';
       function oyna(m) {
-        const l = K.yasal(st.d); api.dallanma(l.length);
+        const l = K.yasal(st.d); if (!st.yukleniyor) api.dallanma(l.length);
+        const renk = st.d.s === 'w' ? 'Beyaz' : 'Siyah', tasAdi = TASAD[st.d.b[m.f].toUpperCase()];
+        st.hamleler.push(kareAd(m.f) + kareAd(m.t)); if (!st.problem) api.konum(st.hamleler.join('.'));
         st.gecmis.push({ d: st.d, konumlar: { ...st.konumlar }, alinan: { w: st.alinan.w.slice(), b: st.alinan.b.slice() } });
         if (m.x) st.alinan[st.d.s].push(m.x);
         st.d = K.uygula(st.d, m); st.son = m; secili = -1;
@@ -148,9 +195,11 @@
         } else if (st.d.yarim >= 100) { st.bitti = true; api.bitti('50 hamle boyunca alma ya da piyon hamlesi olmadı: berabere.'); }
         else if (tekrar >= 3) { st.bitti = true; api.bitti('Aynı konum üç kez tekrarlandı: berabere.'); }
         else if (st.d.b.every((x) => !x || x.toUpperCase() === 'K')) { st.bitti = true; api.bitti('Yalnızca şahlar kaldı: berabere.'); }
-        else if (sah) api.bildir(`${kim} şahı tehdit altında!`);
+        else if (sah && !st.yukleniyor) api.bildir(`${kim} şahı tehdit altında!`);
+        api.duyur(`${renk} ${tasAdi} ${kareAd(m.f)}–${kareAd(m.t)}${m.x ? ', alır' : ''}${st.bitti && sah ? '. Mat!' : sah ? '. Şah!' : ''}`);
+        if (st.yukleniyor) return;
         api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
-        if (!st.bitti && !insanMi(st.d.s)) bilgisayar();
+        if (!st.bitti && !st.problem && !insanMi(st.d.s)) bilgisayar();
       }
       function bilgisayar() {
         st.bekle = true; durumYaz(); const gen = st.gen, a = AYAR[api.ayar.seviye], bas = Date.now();
@@ -188,16 +237,16 @@
           if (st.son && (i === st.son.f || i === st.son.t)) bg = acik ? '#f6eb72' : '#dcc34b';
           if (i === secili) bg = '#8fbf5a';
           if (i === sahK) bg = 'radial-gradient(circle,#ff4d4d 30%,' + bg + ' 80%)';
-          const h = el('button', { type: 'button', role: 'gridcell', class: 'hucre-btn', 'aria-label': `${kareAd(i)} ${x ? (K.renk(x) === 'w' ? 'beyaz ' : 'siyah ') + TASAD[x.toUpperCase()].toLowerCase() : 'boş'}`,
+          const h = el('button', { type: 'button', role: 'gridcell', class: 'hucre-btn', 'data-r': i >> 3, 'data-c': i & 7, 'aria-label': `${kareAd(i)} ${x ? (K.renk(x) === 'w' ? 'beyaz ' : 'siyah ') + TASAD[x.toUpperCase()].toLowerCase() : 'boş'}`,
             style: `position:relative;background:${bg};display:grid;place-items:center;min-width:0;font-size:clamp(22px,6.4vw,46px);line-height:1;cursor:${oynar ? 'pointer' : 'default'}` });
-          if (x) h.append(el('span', { style: `color:${K.renk(x) === 'w' ? '#fff' : '#161616'};text-shadow:${K.renk(x) === 'w' ? '0 0 2px #000,0 0 1px #000,0 1px 1px #000' : '0 1px 0 rgba(255,255,255,.25)'};pointer-events:none` }, GLIF[x.toUpperCase()]));
+          if (x) h.append(el('span', { class: st.son && i === st.son.t ? 'otur' : '', style: `color:${K.renk(x) === 'w' ? '#fff' : '#161616'};text-shadow:${K.renk(x) === 'w' ? '0 0 2px #000,0 0 1px #000,0 1px 1px #000' : '0 1px 0 rgba(255,255,255,.25)'};pointer-events:none` }, GLIF[x.toUpperCase()]));
           if (hedef.has(i)) h.append(el('i', { style: `position:absolute;${x ? 'inset:4%;border:4px solid rgba(20,60,20,.45);border-radius:50%' : 'width:28%;height:28%;border-radius:50%;background:rgba(20,60,20,.38)'};pointer-events:none` }));
           if (D && D[i] > 0) h.append(el('span', { style: `position:absolute;top:2px;left:4px;font-size:11px;font-weight:700;font-family:var(--f-sayi);color:${D[i] % 2 ? '#c8402f' : '#2f6fd0'}` }, String(D[i])));
           if ((i & 7) === 0) h.append(el('span', { style: `position:absolute;top:1px;right:3px;font-size:10px;color:${acik ? '#b58863' : '#f0d9b5'}` }, String(8 - (i >> 3))));
           if (i >> 3 === 7) h.append(el('span', { style: `position:absolute;bottom:1px;right:3px;font-size:10px;color:${acik ? '#b58863' : '#f0d9b5'}` }, 'abcdefgh'[i & 7]));
           h.onclick = () => {
             if (!oynar) return;
-            if (hedef.has(i)) return oyna(hedef.get(i));
+            if (hedef.has(i)) return st.problem ? problemHamlesi(hedef.get(i)) : oyna(hedef.get(i));
             secili = x && K.renk(x) === st.d.s && secili !== i ? i : -1; ciz();
           };
           tahta.append(h);
@@ -213,9 +262,28 @@
         if (atSecili) m += `<p style="margin-top:6px"><b>At paritesi:</b> karelerdeki sayılar, atın oraya en az kaç hamlede gidebileceği. <span style="color:#c8402f">Tek</span> sayılar hep atın şu anki renginin tersindeki karelerde, <span style="color:#2f6fd0">çift</span> sayılar aynı renkte: at her hamlede kare rengini değiştirir.</p>
           <label style="display:flex;gap:6px;align-items:center;margin-top:6px;font-size:13px"><input type="checkbox" id="atHar" ${atHaritasi ? 'checked' : ''}> Mesafe haritasını göster</label>`;
         else m += '<p style="margin-top:6px;color:var(--soluk)">İpucu: bir ata dokun, mesafe haritasını gör.</p>';
+        if (st.problem) {
+          const p = st.problem;
+          m = `<p><b>Günün problemi · ${api.gunAdi()}</b>: Beyaz oynar, <b>${p.n} hamlede mat</b> eder. Herkes bugün aynı konumu çözüyor.</p>` +
+            (p.cozuldu ? (() => { const metin = `Günün satranç problemi · ${api.gunAdi()} · ${p.n} hamlede mat · ${p.yanlis ? p.yanlis + ' yanlış deneme' : 'ilk denemede'} ✓\nmuhsinengin.com/zeka-oyunlari/salon/#satranc-gunluk`; return `<pre style="margin:8px 0 0;padding:10px;border-radius:8px;background:var(--yuzey2);white-space:pre-wrap;font-size:12.5px">${metin}</pre><button type="button" class="dug ana" id="satKopya" style="margin-top:8px">Sonucu kopyala</button>`; })() : `<p style="margin-top:6px;color:var(--soluk)">Yanlış deneme: ${p.yanlis}. Çözümü kimseye söyleme; sonucu paylaşırken yalnız deneme sayın görünür.</p>`);
+        }
+        m += `<div style="margin-top:8px"><button type="button" class="dug" id="bugday">Buğdayı say</button> <span id="bugdayYazi" class="num" style="font-size:13px"></span></div><div id="bugdayIzgara" style="display:grid;grid-template-columns:repeat(8,1fr);gap:2px;width:160px;margin-top:6px"></div>`;
         m += '<code class="formul">buğday efsanesi: 1 + 2 + 4 + … + 2⁶³ = 2⁶⁴ − 1 ≈ 1,8 × 10¹⁹ tane</code>';
         api.mat(m);
         const k = document.getElementById('atHar'); if (k) k.onchange = () => { atHaritasi = k.checked; ciz(); };
+        const kp = document.getElementById('satKopya'); if (kp) kp.onclick = async () => { const t = kp.previousElementSibling.textContent; kp.textContent = (await api.kopyala(t)) ? 'Kopyalandı' : 'Metni seçip kopyala'; };
+        // Buğday efsanesi animasyonu: her kare bir öncekinin iki katı; renk koyuluğu sayının basamak sayısı
+        const bd = document.getElementById('bugday');
+        if (bd) bd.onclick = () => {
+          const iz = document.getElementById('bugdayIzgara'), yazi = document.getElementById('bugdayYazi'); iz.innerHTML = ''; clearInterval(bugdayZaman);
+          let n = 0; const tr2 = (b) => b.toLocaleString('tr-TR');
+          bugdayZaman = setInterval(() => {
+            const k2 = el('i', { style: `aspect-ratio:1;border-radius:2px;background:color-mix(in srgb,var(--turuncu) ${Math.round(8 + 92 * n / 63)}%,var(--yuzey2))` }); iz.append(k2);
+            const kare = 2n ** BigInt(n), toplam = 2n ** BigInt(n + 1) - 1n;
+            yazi.innerHTML = `${n + 1}. kare: <b>${tr2(kare)}</b> tane · toplam ${String(toplam).length} basamaklı`;
+            if (++n >= 64) { clearInterval(bugdayZaman); yazi.innerHTML = `64 karede toplam <b>${tr2(2n ** 64n - 1n)}</b> tane: dünyanın yüzyıllarca ürettiği buğdaydan fazla.`; }
+          }, document.body.classList.contains('sinif') ? 120 : 70);
+        };
       }
       return {
         yeni,
@@ -223,9 +291,20 @@
           if (!st.gecmis.length) return; st.gen++; st.bekle = false;
           let h = st.gecmis.pop(); if (api.ayar.rakip !== 'insan') while (h.d.s !== 'w' && st.gecmis.length) h = st.gecmis.pop();
           st.d = h.d; st.konumlar = h.konumlar; st.alinan = h.alinan; st.bitti = false; st.son = null; secili = -1;
+          st.hamleler = st.hamleler.slice(0, st.gecmis.length); if (!st.problem) api.konum(st.hamleler.join('.'));
+          if (st.problem) st.problem.kalan = st.problem.n - Math.floor(st.gecmis.length / 2);
           api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
         },
-        yokEt() { isci.iptal(); },
+        yukle(kod) { // "e2e4.e7e5" gibi
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) {
+            const ka = (q) => 'abcdefgh'.indexOf(q[0]) + (8 - +q[1]) * 8, f = ka(x.slice(0, 2)), t = ka(x.slice(2, 4));
+            const m = K.yasal(st.d).find((y) => y.f === f && y.t === t); if (!m || st.bitti) throw new Error('yasa dışı'); oyna(m);
+          }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.bitti && !insanMi(st.d.s)) bilgisayar();
+        },
+        yokEt() { isci.iptal(); clearInterval(bugdayZaman); },
       };
     },
   });

@@ -146,6 +146,11 @@ h2 { font-family: var(--baslik); font-weight: 800; font-size: clamp(1.6rem, 3.6v
 .basamak.medar .sayi { color: var(--turuncu); }
 .lejant .l-medar::before { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
 .basamak.kiyas .cubuk i { background: repeating-linear-gradient(135deg, var(--kursun) 0 6px, color-mix(in srgb, var(--kursun) 55%, transparent) 6px 12px); }
+.basamak.sen .cubuk i { background: repeating-linear-gradient(90deg, var(--kirmizi) 0 10px, color-mix(in srgb, var(--kirmizi) 55%, transparent) 10px 14px); }
+.basamak.sen .ad, .basamak.sen .sayi { color: var(--kirmizi); }
+.basamak.sen-ipucu { grid-template-columns: 1fr; color: var(--kursun); font-size: .95rem; }
+.basamak.sen-ipucu a { color: var(--kirmizi); font-weight: 700; }
+.lejant .l-sen::before { background: var(--kirmizi); }
 .basamak .sayi { font: italic 600 1.05rem/1.2 "Fraunces", Georgia, serif; color: var(--murekkep); text-align: right; white-space: nowrap; }
 .basamak .sayi sup { font-size: .7em; }
 @media (prefers-reduced-motion: no-preference) { .merdiven.gorundu .cubuk i { animation: cubukDol 1.2s cubic-bezier(.3, .7, .2, 1) both; } }
@@ -458,7 +463,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
     <li class="basamak acik" style="--g: 70.4%"><span class="ad">Satranç<small>olası oyun (Shannon tahmini)</small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>120</sup></span></li>
     <li class="basamak acik" style="--g: 100%"><span class="ad">Go (19 × 19)<small>kurala uygun konum</small></span><span class="cubuk"><i></i></span><span class="sayi">2,1 × 10<sup>170</sup></span></li>
   </ol>
-  <p class="lejant"><span class="l-medar">MEDAR</span><span>Çözüldü ya da sayıldı</span><span class="l-acik">Çözülmedi</span><span class="l-kiyas">Kıyas</span></p>
+  <p class="lejant"><span class="l-sen">Senin ölçümün</span><span class="l-medar">MEDAR</span><span>Çözüldü ya da sayıldı</span><span class="l-acik">Çözülmedi</span><span class="l-kiyas">Kıyas</span></p>
   <details class="mat-kutu">
     <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">Neden normal bir grafik çizilemez?</span></summary>
     <div class="mk-ic">
@@ -612,6 +617,28 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   });
   document.getElementById('bulmacaKat').addEventListener('change', hesapla);
   hazirSec('esit');
+})();
+// Senin ölçümün: Oyun Salonu'nda oynarken her hamledeki seçenek sayısı (dallanma) bu tarayıcıda kaydedilir.
+// Ortalama dallanma b ve tipik oyun uzunluğu L ile olası oyun sayısı ≈ b^L; merdivene kırmızı basamak olarak eklenir.
+(function () {
+  var m = document.getElementById('merdivenListe'); if (!m) return;
+  var veri = {}; try { veri = JSON.parse(localStorage.getItem('salon.dallanma') || '{}') || {}; } catch (e) {}
+  var OYUN = { satranc: ['Satranç', 80], go: ['Go (9 × 9)', 60], reversi: ['Reversi', 60], mangala: ['Mangala', 40], hex: ['Hex', 50], pentago: ['Pentago', 20] };
+  var eklenen = 0;
+  Object.keys(OYUN).forEach(function (id) {
+    var x = veri[id]; if (!x || !x.sayi || x.sayi < 5) return;
+    var b = x.toplam / x.sayi, L = OYUN[id][1], us = L * Math.log10(Math.max(b, 1.0001));
+    var li = document.createElement('li'); li.className = 'basamak sen'; li.style.setProperty('--g', Math.max(1, Math.min(100, us / 170.3 * 100)).toFixed(1) + '%');
+    li.innerHTML = '<span class="ad">' + OYUN[id][0] + '<small>senin ' + x.sayi + ' hamlenden: b ≈ ' + b.toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + ', ' + L + ' hamle → b<sup>' + L + '</sup></small></span><span class="cubuk"><i></i></span><span class="sayi">≈ 10<sup>' + Math.round(us) + '</sup></span>';
+    // doğru basamağa yerleştir (çubuk uzunluğuna göre sıralı)
+    var once = [].slice.call(m.children).find(function (k) { return parseFloat(k.style.getPropertyValue('--g')) > us / 170.3 * 100; });
+    m.insertBefore(li, once || null); eklenen++;
+  });
+  if (!eklenen) {
+    var ip = document.createElement('li'); ip.className = 'basamak sen-ipucu';
+    ip.innerHTML = 'Kendi ölçümünü buraya eklemek ister misin? <a href="salon/">Oyun Salonu</a>\'nda birkaç oyun oyna; her hamledeki seçenek sayın ölçülür ve oyunun büyüklüğü senin oyunlarından hesaplanıp bu merdivene kırmızı basamak olarak eklenir.';
+    m.appendChild(ip);
+  }
 })();
 // Merdiven görününce çubuklar soldan dolar
 (function () {

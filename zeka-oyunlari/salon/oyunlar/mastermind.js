@@ -31,6 +31,11 @@
     etiketler: ['Knuth minimax', 'Bilgi kuramı', '1 kişi'],
     dallanmaRef: '1296', dallanmaSayi: 1296,
     secenekler: [{ id: 'mod', ad: 'Mod', sec: [['gunluk', 'Günün kodu'], ['sen', 'Sen çöz'], ['bilgisayar', 'Bilgisayar çözsün']], v: 'sen' }],
+    tur: [
+      { baslik: 'Gizli kodu bul', metin: 'Bilgisayar 6 renkten 4\'lü bir kod seçti; renkler tekrar edebilir. Alttaki renklere dokunarak tahminini kur, sonra "Tahmin et"e bas.' },
+      { baslik: 'Çivileri oku', metin: 'Siyah çivi: doğru renk, doğru yerde. Beyaz çivi: doğru renk, yanlış yerde. Hangi rengin hangisi olduğunu söylemez; bulmacanın tadı burada.' },
+      { baslik: 'Noktaların eriyişini izle', metin: 'Sağdaki 1296 nokta bütün olası kodlar. Her ipucundan sonra uymayanlar söner. Kaç "bit" bilgi kazandığın da yazıyor.', vurgu: '.kutu.mat' },
+    ],
     kurallar: ['Gizli kod 4 yuvadan oluşur; her yuva 6 renkten biridir, renkler tekrar edebilir.',
       'Her tahminden sonra <b>siyah</b> çivi: doğru renk doğru yerde; <b>beyaz</b> çivi: doğru renk yanlış yerde.',
       'En fazla 10 tahminde kodu bulmaya çalış.', 'Donald Knuth 1977\'de her kodun en fazla 5 tahminde bulunabileceğini gösterdi.'],

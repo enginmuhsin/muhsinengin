@@ -49,6 +49,11 @@
     ozet: 'Her hamlede tahtanın dörtte biri döner. 288 ilk hamlenin içinde kaybolma.',
     etiketler: ['Alfa-beta (demet)', 'Dönme simetrisi', '2 kişi'],
     dallanmaRef: '≈ 150', dallanmaSayi: 150, oyunUzunlugu: 20,
+    tur: [
+      { baslik: '1. Bilye koy', metin: 'Boş bir yuvaya dokun. Bilye hemen yerleşmez; önce bir çeyreği döndürmen gerekiyor.' },
+      { baslik: '2. Bir çeyreği döndür', metin: 'Dört kırmızı çeyreğin kenarında ↻ ve ↺ okları belirir. Birine dokun: o çeyrek 90° döner, içindeki bilyeler de onunla döner.' },
+      { baslik: 'Beşle', metin: 'Yatay, dikey ya da çapraz beş bilye diziz. Dikkat: döndürdüğün çeyrek rakibin dizisini de tamamlayabilir!' },
+    ],
     kurallar: ['Sırası gelen oyuncu boş bir yuvaya bilye koyar, sonra dört çeyrekten birini 90° saat yönünde veya tersine döndürür.',
       'Yatay, dikey ya da çapraz 5 bilyeyi yan yana getiren kazanır. Bilyeyi koyar koymaz 5 olursa döndürmeye gerek kalmaz.',
       'Döndürme sonunda iki oyuncu birden 5 yaparsa berabere. Tahta dolarsa da berabere.', 'Önce boş bir yuvaya dokun, sonra bir çeyreğin oklarından birine.'],
@@ -58,15 +63,19 @@
       const isci = api.isciYap(kaynak);
       const AYAR = { kolay: { derin: 1, demet: 288, gurultu: 60 }, orta: { derin: 2, demet: 40, gurultu: 0 }, zor: { derin: 3, demet: 18, gurultu: 0 } };
       let st;
-      function yeni() { st = { t: new Array(36).fill(0), sira: 1, bekleyen: -1, gecmis: [], bitti: false, gen: (st?.gen || 0) + 1, bekle: false, son: -1, donen: null }; api.geriAlAktif(false); ciz(); durumYaz(); }
+      function yeni() { st = { t: new Array(36).fill(0), sira: 1, bekleyen: -1, gecmis: [], hamleler: [], bitti: false, gen: (st?.gen || 0) + 1, bekle: false, son: -1, donen: null, yukleniyor: false }; api.konum(''); api.geriAlAktif(false); ciz(); durumYaz(); }
       const insanMi = (p) => api.ayar.rakip === 'insan' || p === 1;
       function tamamla(h, p) {
-        api.dallanma(K.hamleler(st.t).length);
+        if (!st.yukleniyor) api.dallanma(K.hamleler(st.t).length);
         st.gecmis.push({ t: st.t.slice(), sira: p });
+        // konum kodu: hamle başına bir sayı = yuva × 8 + çeyrek × 2 + (saat yönü 0, tersi 1)
+        st.hamleler.push(h[0] * 8 + h[1] * 2 + (h[2] === 1 ? 0 : 1)); api.konum(st.hamleler.join('.'));
+        api.duyur(`${p === 1 ? 'Siyah' : 'Beyaz'}: ${Math.floor(h[0] / 6) + 1}-${h[0] % 6 + 1} yuvası, ${['sol üst', 'sağ üst', 'sol alt', 'sağ alt'][h[1]]} çeyrek ${h[2] === 1 ? 'saat yönünde' : 'saat yönünün tersine'}.`);
         const ara = st.t.slice(); ara[h[0]] = p;
         const u = K.uygula(st.t, h, p);
         st.son = h[0]; st.bekleyen = -1;
         if (u.erken) { st.t = u.a; return bitir(); }
+        if (st.yukleniyor) { st.t = u.a; st.son = K.dondur([...Array(36).keys()], h[1], h[2]).indexOf(h[0]); return bitir(); }
         // dönme animasyonu: önce bilye görünsün, sonra çeyrek dönsün
         st.t = ara; st.donen = { q: h[1], yon: h[2] }; ciz();
         setTimeout(() => { st.t = u.a; st.donen = null; st.son = K.dondur([...Array(36).keys()], h[1], h[2]).indexOf(h[0]); bitir(); }, 420);
@@ -78,6 +87,7 @@
           const m = w === 3 || !w ? 'Berabere.' : api.ayar.rakip === 'insan' ? `${w === 1 ? 'Siyah' : 'Beyaz'} kazandı!` : w === 1 ? 'Kazandın!' : 'Bilgisayar kazandı.';
           api.bitti(m, api.ayar.rakip !== 'insan' && w === 2);
         } else st.sira = 3 - st.sira;
+        if (st.yukleniyor) return;
         api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
         if (!st.bitti && !insanMi(st.sira)) bilgisayar();
       }
@@ -105,7 +115,7 @@
           const kutu = el('div', { style: `display:grid;grid-template-columns:repeat(3,1fr);gap:6%;padding:8%;height:100%;box-sizing:border-box;border-radius:14px;background:linear-gradient(145deg,#c64a40,#9c3530);box-shadow:var(--golge);transition:transform .4s cubic-bezier(.3,.7,.3,1)${st.donen && st.donen.q === q ? `;transform:rotate(${st.donen.yon * 90}deg)` : ''}` });
           for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
             const i = (r0 + r) * 6 + c0 + c, v = st.t[i] || (st.bekleyen === i ? st.sira : 0);
-            const b = el('button', { type: 'button', class: 'hucre-btn', 'aria-label': `yuva ${r0 + r + 1}-${c0 + c + 1}: ${v === 1 ? 'siyah' : v === 2 ? 'beyaz' : 'boş'}`,
+            const b = el('button', { type: 'button', class: 'hucre-btn' + (i === st.son && !st.donen ? ' otur' : ''), 'data-r': r0 + r, 'data-c': c0 + c, 'aria-label': `yuva ${r0 + r + 1}-${c0 + c + 1}: ${v === 1 ? 'siyah' : v === 2 ? 'beyaz' : 'boş'}`,
               style: `border-radius:50%;background:${v === 1 ? 'radial-gradient(circle at 35% 30%,#555,#111)' : v === 2 ? 'radial-gradient(circle at 35% 30%,#fff,#d6d1c3)' : '#7f2a25'};box-shadow:${v ? '0 2px 3px rgba(0,0,0,.4)' : 'inset 0 3px 5px rgba(0,0,0,.45)'};${i === st.son || i === st.bekleyen ? 'outline:2px solid var(--sari);outline-offset:2px;' : ''}cursor:${oynar && (!st.t[i]) ? 'pointer' : 'default'}` });
             if (oynar && !st.t[i]) b.onclick = () => { st.bekleyen = st.bekleyen === i ? -1 : i; ciz(); durumYaz(); };
             kutu.append(b);
@@ -134,7 +144,18 @@
           if (!st.gecmis.length) return; st.gen++; st.bekle = false;
           let h = st.gecmis.pop(); if (api.ayar.rakip !== 'insan') while (h.sira !== 1 && st.gecmis.length) h = st.gecmis.pop();
           st.t = h.t; st.sira = h.sira; st.bitti = false; st.bekleyen = -1; st.son = -1; st.donen = null;
+          st.hamleler = st.hamleler.slice(0, st.gecmis.length); api.konum(st.hamleler.join('.'));
           api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+        },
+        yukle(kod) {
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) {
+            const n = +x, i = n >> 3, q = (n >> 1) & 3, y = n & 1 ? -1 : 1;
+            if (st.bitti || !(i >= 0 && i < 36) || st.t[i]) throw new Error('yasa dışı');
+            tamamla([i, q, y], st.sira);
+          }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.bitti && !insanMi(st.sira)) bilgisayar();
         },
         yokEt() { isci.iptal(); },
       };

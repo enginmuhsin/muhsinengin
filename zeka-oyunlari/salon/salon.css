@@ -70,6 +70,23 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .final span:last-child{color:var(--soluk)}
 .final:hover{border-style:solid}
 
+/* öğretici tur, ekran okuyucu, araç kartı, taş oturma */
+.alan{position:relative}
+.tur-kart{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:20;width:min(92%,380px);background:var(--yuzey);border:2px solid var(--murekkep);border-radius:16px;padding:14px 16px;box-shadow:0 18px 50px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+.tur-kart b{font-family:var(--f-baslik);font-size:20px;color:var(--murekkep)}
+.tur-kart p{margin:0;font-size:14.5px;line-height:1.5}
+.tur-ust{display:flex;justify-content:space-between;align-items:center}
+.tur-kapat{border:0;background:none;font-size:22px;line-height:1;color:var(--soluk)}
+.tur-vurgu{outline:3px solid var(--turuncu)!important;outline-offset:3px;border-radius:8px;animation:nabiz 1.2s ease-in-out infinite}
+@keyframes nabiz{50%{outline-color:transparent}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.kart.arac{border-style:dashed}
+.otur{animation:otur .14s cubic-bezier(.3,1.6,.5,1)}
+@keyframes otur{0%{transform:scale(.6)}100%{transform:scale(1)}}
+@keyframes dalga{0%{opacity:.35}60%{opacity:1;filter:brightness(1.5)}100%{opacity:1;filter:none}}
+svg .otur{transform-box:fill-box;transform-origin:center}
+[data-r][data-c]:focus-visible{outline:3px solid var(--turuncu);outline-offset:-2px}
+
 /* oyun sayfası */
 .oyun-ust{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
 .oyun-ust h1{font-size:clamp(30px,5vw,44px);margin:0}

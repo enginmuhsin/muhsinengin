@@ -1,8 +1,8 @@
 /* Oyun Salonu çevrimdışı önbelleği. Okul ağı kopsa da oyunlar açılır.
    Sayfa: önce ağ, yoksa önbellek. Betik/stil: önbellekten hemen ver, arkada güncelle. */
-const SURUM = 'salon-v2';
+const SURUM = 'salon-v3';
 const DOSYALAR = ['./', 'index.html', 'salon.css', 'cekirdek.js', 'manifest.webmanifest',
-  'oyunlar/mastermind.js', 'oyunlar/sudoku.js', 'oyunlar/hex.js', 'oyunlar/mangala.js', 'oyunlar/reversi.js', 'oyunlar/pentago.js', 'oyunlar/go.js', 'oyunlar/satranc.js',
+  'oyunlar/mastermind.js', 'oyunlar/sudoku.js', 'oyunlar/hex.js', 'oyunlar/mangala.js', 'oyunlar/reversi.js', 'oyunlar/pentago.js', 'oyunlar/go.js', 'oyunlar/satranc.js', 'oyunlar/turnuva.js',
   '../../tema.js', '../../ortak/ana-sayfa.js', '../../simge.svg'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(SURUM).then((c) => c.addAll(DOSYALAR.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x.startsWith('salon-') && x !== SURUM).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });

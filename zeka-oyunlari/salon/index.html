@@ -70,6 +70,8 @@
           <div class="dugmeler" style="margin-top:10px">
             <button class="dug ana" id="yeniOyun" type="button">Yeni oyun</button>
             <button class="dug" id="geriAl" type="button">Geri al</button>
+            <button class="dug" id="paylas" type="button" title="Bu konumun bağlantısını kopyala">Konumu paylaş</button>
+            <button class="dug" id="turAc" type="button">Nasıl oynanır?</button>
           </div>
         </div>
         <div class="kutu neden" id="nedenKutu" hidden><h4>Bilgisayar neden böyle oynadı?</h4><p id="neden"></p></div>
@@ -81,6 +83,7 @@
   </main>
 </div>
 <div class="toast" id="toast" hidden></div>
+<div id="duyuru" class="sr-only" aria-live="polite"></div>
 
 <script src="cekirdek.js"></script>
 <script src="oyunlar/mastermind.js"></script>
@@ -91,6 +94,7 @@
 <script src="oyunlar/pentago.js"></script>
 <script src="oyunlar/go.js"></script>
 <script src="oyunlar/satranc.js"></script>
+<script src="oyunlar/turnuva.js"></script>
 <script>Salon.basla();</script>
 
 </body>

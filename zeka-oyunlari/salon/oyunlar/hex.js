@@ -73,6 +73,11 @@
       { id: 'seviye', ad: 'Seviye', sec: [['kolay', 'Kolay'], ['orta', 'Orta'], ['zor', 'Zor']], v: 'orta', goster: (a) => a.rakip !== 'insan' },
       { id: 'boyut', ad: 'Tahta', sec: [['7', '7×7'], ['9', '9×9'], ['11', '11×11']], v: '9' },
     ],
+    tur: [
+      { baslik: 'Kenarları birleştir', metin: 'Kırmızı üst ve alt kırmızı kenarları, mavi sol ve sağ mavi kenarları kesintisiz bir zincirle bağlamaya çalışır. Sen kırmızısın.' },
+      { baslik: 'Bir altıgene dokun', metin: 'Sırası gelen boş bir altıgene taş koyar. Taşlar hiç hareket etmez ve alınmaz; her taş kalıcıdır.', vurgu: '#tahta svg' },
+      { baslik: 'Sağdaki sayılara bak', metin: '"Canlı matematik" kutusu, iki tarafın da bağlantı için kaç taşa daha ihtiyacı olduğunu her hamlede yeniden hesaplar. Rakibin sayısını büyütmek, kendi sayını küçültmek kadar değerli.', vurgu: '.kutu.mat' },
+    ],
     kurallar: ['Oyuncular sırayla boş bir altıgene taş koyar. Kırmızı başlar.', 'Kırmızı üst ve alt kırmızı kenarları, mavi sol ve sağ mavi kenarları kesintisiz bir zincirle birleştirmeye çalışır.',
       'Tahta dolduğunda mutlaka biri kazanmıştır: beraberlik yoktur.', 'Bilgisayara karşı sen kırmızısın.'],
     onizleme: () => { let s = '<svg viewBox="0 0 170 100">'; const n = 6, w = 16, h = 18; for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) { const x = 18 + c * w + r * w / 2, y = 14 + r * h * 0.78; const f = (r * 7 + c * 3) % 5 === 0 ? '#c8402f' : (r * 3 + c * 5) % 6 === 1 ? '#2f6fd0' : 'none'; s += `<polygon points="${[0, 1, 2, 3, 4, 5].map((k) => { const a = Math.PI / 3 * k + Math.PI / 6; return (x + 9 * Math.cos(a)).toFixed(1) + ',' + (y + 9 * Math.sin(a)).toFixed(1); }).join(' ')}" fill="${f}" stroke="currentColor" stroke-width=".8" opacity=".9"/>`; } return s + '</svg>'; },
@@ -83,19 +88,22 @@
       let st;
       function yeni() {
         const n = +api.ayar.boyut;
-        st = { n, KM: K.komsu(n), t: new Uint8Array(n * n), sira: 1, gecmis: [], kazanan: 0, son: -1, bekle: false, gen: (st?.gen || 0) + 1 };
-        api.geriAlAktif(false); ciz(); durumYaz();
+        st = { n, KM: K.komsu(n), t: new Uint8Array(n * n), sira: 1, gecmis: [], kazanan: 0, son: -1, bekle: false, gen: (st?.gen || 0) + 1, yukleniyor: false };
+        api.konum(''); api.geriAlAktif(false); ciz(); durumYaz();
       }
       const insanMi = (oy) => api.ayar.rakip === 'insan' || oy === 1;
       function oyna(i) {
         if (st.kazanan || st.t[i]) return;
-        api.dallanma(st.t.filter((x) => !x).length);
+        if (!st.yukleniyor) api.dallanma(st.t.filter((x) => !x).length);
         st.gecmis.push(i); st.t[i] = st.sira; st.son = i;
+        api.konum(st.gecmis.join('.'));
+        api.duyur(`${st.sira === 1 ? 'Kırmızı' : 'Mavi'} ${Math.floor(i / st.n) + 1}. satır ${i % st.n + 1}. sütun`);
         if (K.baglandi(st.t, st.n, st.sira, st.KM)) {
           st.kazanan = st.sira;
           api.bitti(api.ayar.rakip === 'insan' ? `${st.sira === 1 ? 'Kırmızı' : 'Mavi'} kazandı!` : st.sira === 1 ? 'Kazandın!' : 'Bilgisayar kazandı.', api.ayar.rakip !== 'insan' && st.sira === 2);
         }
         st.sira = 3 - st.sira;
+        if (st.yukleniyor) return;
         api.geriAlAktif(st.gecmis.length > 0);
         ciz(); durumYaz();
         if (!st.kazanan && !insanMi(st.sira)) bilgisayar();
@@ -129,11 +137,13 @@
         kenar([x0 - w / 2, y0 - R - 4], [x1 + w / 2, y1 - R - 4], 'var(--kirmizi)'); kenar([x2 - w / 2, y2 + R + 4], [x3 + w / 2, y3 + R + 4], 'var(--kirmizi)');
         kenar([x0 - w / 2 - 6, y0 - R / 2], [x2 - w / 2 - 6, y2 + R / 2], 'var(--mavi)'); kenar([x1 + w / 2 + 6, y1 - R / 2], [x3 + w / 2 + 6, y3 + R / 2], 'var(--mavi)');
         const zincir = st.kazanan ? yol(t, n, st.kazanan, st.KM) : new Set();
+        const zincirSira = [...zincir].reverse(); // kenardan kenara: kazanan yol bir dalga gibi yanar
         for (let i = 0; i < n * n; i++) {
           const [x, y] = merkez(i);
           const p = svg('polygon', { points: [0, 1, 2, 3, 4, 5].map((k) => kose(x, y, k).join(',')).join(' '),
             fill: t[i] === 1 ? 'var(--kirmizi)' : t[i] === 2 ? 'var(--mavi)' : 'var(--yuzey2)', stroke: 'var(--cizgi)', 'stroke-width': 1.5,
-            style: `cursor:${t[i] || st.kazanan ? 'default' : 'pointer'};transition:fill .15s`, opacity: st.kazanan && t[i] && !zincir.has(i) ? 0.45 : 1 });
+            style: `cursor:${t[i] || st.kazanan ? 'default' : 'pointer'};transition:fill .15s${zincir.has(i) ? `;animation:dalga .5s ${zincirSira.indexOf(i) * 70}ms both` : ''}`, opacity: st.kazanan && t[i] && !zincir.has(i) ? 0.45 : 1,
+            'data-r': Math.floor(i / n), 'data-c': i % n, role: 'button', 'aria-label': `${Math.floor(i / n) + 1}. satır ${i % n + 1}. sütun: ${t[i] === 1 ? 'kırmızı' : t[i] === 2 ? 'mavi' : 'boş'}`, class: i === st.son && !st.kazanan ? 'otur' : '' });
           if (!t[i] && !st.kazanan) {
             p.addEventListener('click', () => { if (!st.bekle && insanMi(st.sira)) oyna(i); });
             p.addEventListener('mouseenter', () => p.setAttribute('fill', `color-mix(in srgb,${st.sira === 1 ? 'var(--kirmizi)' : 'var(--mavi)'} 30%,var(--yuzey2))`));
@@ -159,7 +169,13 @@
           const geri = api.ayar.rakip === 'insan' ? 1 : (st.sira === 1 ? 2 : 1);
           for (let k = 0; k < geri && st.gecmis.length; k++) { const i = st.gecmis.pop(); st.t[i] = 0; st.sira = 3 - st.sira; }
           if (!insanMi(st.sira) && st.gecmis.length === 0) st.sira = 1;
-          st.kazanan = 0; st.son = st.gecmis.at(-1) ?? -1; api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+          st.kazanan = 0; st.son = st.gecmis.at(-1) ?? -1; api.konum(st.gecmis.join('.')); api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+        },
+        yukle(kod) {
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) { const i = +x; if (st.kazanan || !(i >= 0 && i < st.n * st.n) || st.t[i]) throw new Error('yasa dışı'); oyna(i); }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.kazanan && !insanMi(st.sira)) bilgisayar();
         },
         yokEt() { isci.iptal(); },
       };

@@ -50,6 +50,11 @@
     ozet: 'Taşı bırakmadan önce nereye düşeceğini gör: 13\'lük saat aritmetiği tahtanın üstünde.',
     etiketler: ['Minimax + alfa-beta', 'Modüler aritmetik', '2 kişi'],
     dallanmaRef: '≈ 4–5', dallanmaSayi: 4.5, oyunUzunlugu: 40,
+    tur: [
+      { baslik: 'Kendi kuyundan başla', metin: 'Alttaki altı kuyu senin, hazinen sağda. Bir kuyuya dokun: taşların hepsini alırsın; ilkini aynı kuyuya bırakıp kalanları sağa doğru birer birer dağıtırsın.', vurgu: '#tahta button[aria-label^="Kuyu"]' },
+      { baslik: 'Önce bak, sonra oyna', metin: 'Bir kuyunun üstüne gel: son taşın düşeceği yer sarı yanar. Sağdaki formül bunu 13 duraklı bir saat gibi hesaplar.' },
+      { baslik: 'Üç altın kural', metin: 'Son taş hazinene düşerse bir tur daha. Rakip kuyuyu çift yaparsa o taşlar senin. Kendi boş kuyuna düşerse karşıdakileri de alırsın.' },
+    ],
     kurallar: ['Her kuyuda 4 taş ile başlanır. Sen alttaki sıradasın; hazinen sağda.',
       'Kendi kuyundan tüm taşları al; ilkini aynı kuyuya bırak, kalanları saat yönünün tersine birer birer dağıt. Kuyuda tek taş varsa yan kuyuya geçer.',
       'Son taş kendi hazinene düşerse bir tur daha oynarsın.', 'Son taş rakip kuyuyu çift sayıya tamamlarsa o kuyudaki taşların hepsi senin.',
@@ -63,7 +68,8 @@
       let st, anim = null, onizle = -1;
       function yeni() {
         clearTimeout(anim);
-        st = { a: [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0], sira: 0, gecmis: [], bitti: false, gen: (st?.gen || 0) + 1, bekle: false, gosterim: null, son: -1 };
+        st = { a: [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0], sira: 0, gecmis: [], hamleler: [], bitti: false, gen: (st?.gen || 0) + 1, bekle: false, gosterim: null, son: -1, yukleniyor: false };
+        api.konum('');
         api.geriAlAktif(false); ciz(); durumYaz();
       }
       const insanMi = (p) => api.ayar.rakip === 'insan' || p === 0;
@@ -75,9 +81,16 @@
       }
       function oyna(i) {
         if (st.bitti || st.bekle) return;
-        const p = st.sira; api.dallanma(K.yasal(st.a, p).length);
+        const p = st.sira; if (!st.yukleniyor) api.dallanma(K.yasal(st.a, p).length);
         const s = K.oyna(st.a, p, i);
         st.gecmis.push({ a: st.a.slice(), sira: p });
+        st.hamleler.push(i); api.konum(st.hamleler.join('.'));
+        api.duyur(`${p === 0 ? 'Alt' : 'Üst'} oyuncu ${i % 7 + 1}. kuyudan ${st.a[i]} taş dağıttı.${s.olay ? ' ' + olayMetni(s.olay, p) : ''}`);
+        if (st.yukleniyor) {
+          st.a = s.a; st.sira = s.sira; st.son = s.son;
+          if (s.bitti) { st.bitti = true; const A = st.a[6], B = st.a[13]; api.bitti(A === B ? `Berabere: ${A}–${B}` : `${A > B ? 'Alt' : 'Üst'} taraf kazandı: ${Math.max(A, B)}–${Math.min(A, B)}`); }
+          return;
+        }
         // dağıtma animasyonu: taşlar birer birer düşer
         const goster = st.a.slice(); goster[i] = 0; st.gosterim = goster; st.bekle = true; onizle = -1;
         let k = 0; const adim = () => {
@@ -122,6 +135,7 @@
         for (let k = 0; k < Math.min(n, buyuk ? 30 : 14); k++) tas.append(el('i', { style: `width:${buyuk ? 9 : 10}px;height:${buyuk ? 9 : 10}px;border-radius:50%;background:${TASRENK[(k * 7 + i) % 5]};box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)` }));
         const vurgu = i === onizle ? 'outline:3px solid var(--sari);' : i === st.son ? 'outline:2px solid #fff;' : '';
         const b = el(tiklanir ? 'button' : 'div', {
+          'data-r': buyuk ? null : (i <= 5 ? 1 : 0), 'data-c': buyuk ? null : (i <= 5 ? i : 12 - i),
           type: tiklanir ? 'button' : null, class: 'hucre-btn', 'aria-label': `${buyuk ? 'Hazine' : 'Kuyu'}: ${n} taş`,
           style: `position:relative;border-radius:${buyuk ? '40px' : '50%'};background:var(--ahsap2);box-shadow:inset 0 4px 10px rgba(0,0,0,.35);${buyuk ? 'grid-row:1/3;height:100%' : 'aspect-ratio:1'};${vurgu}${tiklanir ? 'cursor:pointer' : ''}`,
         }, tas, el('span', { class: 'num', style: 'position:absolute;bottom:4px;left:0;right:0;text-align:center;font-family:var(--f-sayi);font-size:13px;color:#fff;text-shadow:0 1px 2px #000' }, String(n)));
@@ -167,8 +181,15 @@
           let h = st.gecmis.pop();
           if (api.ayar.rakip !== 'insan') while (h.sira !== 0 && st.gecmis.length) h = st.gecmis.pop();
           st.a = h.a; st.sira = h.sira; st.bitti = false; st.son = -1;
+          st.hamleler = st.hamleler.slice(0, st.gecmis.length); api.konum(st.hamleler.join('.'));
           if (!insanMi(st.sira)) { st.a = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; st.sira = 0; st.gecmis = []; }
           api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+        },
+        yukle(kod) {
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) { const i = +x; if (st.bitti || !K.yasal(st.a, st.sira).includes(i)) throw new Error('yasa dışı'); oyna(i); }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.bitti && !insanMi(st.sira)) bilgisayar();
         },
         yokEt() { clearTimeout(anim); isci.iptal(); },
       };

@@ -93,6 +93,11 @@
     ozet: 'Kuralları beş cümle, kombinasyonları evrendeki atomlardan fazla. Grupların nefesini say.',
     etiketler: ['Monte Carlo + AMAF', 'Kombinatorik', '2 kişi'],
     dallanmaRef: '≈ 40 (9×9) · 250 (19×19)', dallanmaSayi: 40, oyunUzunlugu: 60,
+    tur: [
+      { baslik: 'Kesişimlere taş koy', metin: 'Taşlar karelerin içine değil, çizgilerin kesiştiği noktalara konur ve bir daha hareket etmez. Sen siyahsın, ilk hamle senin.', vurgu: '#tahta svg' },
+      { baslik: 'Nefes say', metin: 'Bir taşın üzerine gel: grubunun boş komşu noktaları (özgürlükleri) sarı yanar. Son nefesi kapanan grup tahtadan alınır.' },
+      { baslik: 'Alanı çevrele', metin: 'Amaç alan kazanmak. İki taraf art arda pas geçince sayılır: taşların + yalnız senin taşlarınla çevrili boş noktalar. "Alan tahmini" düğmesi şu anki durumu gösterir.' },
+    ],
     kurallar: ['Siyah başlar; oyuncular sırayla kesişimlere taş koyar. Taşlar hareket etmez.', 'Bir grubun boş komşu noktalarına "özgürlük" (nefes) denir. Son özgürlüğü kapanan grup tahtadan alınır.',
       'Kendi grubunu özgürlüksüz bırakan hamle yasaktır, rakibi yakalamıyorsa.', 'Ko: tahtayı bir önceki konuma geri döndüren hamle hemen yapılamaz.',
       'İki oyuncu art arda pas geçince oyun biter. Puan = taşların + yalnızca senin taşlarınla çevrili boş noktalar. Beyaz, ikinci oynadığı için 6,5 puan "komi" alır.'],
@@ -102,7 +107,7 @@
       const isci = api.isciYap(kaynak);
       const SURE = { kolay: 400, orta: 1300, zor: 3200 };
       let st, uzerinde = -1, alanGoster = false;
-      function yeni() { st = { t: new Array(81).fill(0), sira: 1, gecmis: [], esir: [0, 0, 0], pas: 0, bitti: false, son: -1, gen: (st?.gen || 0) + 1, bekle: false }; api.geriAlAktif(false); ciz(); durumYaz(); }
+      function yeni() { st = { t: new Array(81).fill(0), sira: 1, gecmis: [], hamleler: [], esir: [0, 0, 0], pas: 0, bitti: false, son: -1, gen: (st?.gen || 0) + 1, bekle: false, yukleniyor: false }; api.konum(''); api.geriAlAktif(false); ciz(); durumYaz(); }
       const insanMi = (p) => api.ayar.rakip === 'insan' || p === 1;
       const koYasak = () => { // önceki konuma dönen tek nokta
         if (!st.gecmis.length) return -1; const once = st.gecmis[st.gecmis.length - 1].t;
@@ -112,20 +117,23 @@
       function yasalSay() { const ko = koYasak(); let n = 1; for (let i = 0; i < 81; i++) if (K.oyna(st.t, i, st.sira, ko)) n++; return n; }
       function oyna(i) {
         if (st.bitti) return;
-        api.dallanma(yasalSay());
+        if (!st.yukleniyor) api.dallanma(yasalSay());
         const p = st.sira;
         if (i < 0) {
           st.gecmis.push({ t: st.t.slice(), sira: p, esir: st.esir.slice(), pas: st.pas });
-          st.pas++; api.bildir(`${p === 1 ? 'Siyah' : 'Beyaz'} pas geçti.`);
+          st.pas++; if (!st.yukleniyor) api.bildir(`${p === 1 ? 'Siyah' : 'Beyaz'} pas geçti.`);
+          st.hamleler.push('p'); api.konum(st.hamleler.join('.')); api.duyur(`${p === 1 ? 'Siyah' : 'Beyaz'} pas geçti.`);
           if (st.pas >= 2) return bitir();
         } else {
           const r = K.oyna(st.t, i, p, koYasak());
-          if (!r) { api.bildir(st.t[i] ? 'Bu nokta dolu.' : i === koYasak() ? 'Ko kuralı: bu hamle hemen yapılamaz, önce başka yere oyna.' : 'İntihar hamlesi: grubun nefessiz kalır.'); return; }
+          if (!r) { if (st.yukleniyor) throw new Error('yasa dışı'); api.bildir(st.t[i] ? 'Bu nokta dolu.' : i === koYasak() ? 'Ko kuralı: bu hamle hemen yapılamaz, önce başka yere oyna.' : 'İntihar hamlesi: grubun nefessiz kalır.'); return; }
           st.gecmis.push({ t: st.t.slice(), sira: p, esir: st.esir.slice(), pas: st.pas });
           st.t = r.t; st.esir[p] += r.esir; st.pas = 0; st.son = i;
-          if (r.esir) api.bildir(`${r.esir} taş esir alındı.`);
+          if (r.esir && !st.yukleniyor) api.bildir(`${r.esir} taş esir alındı.`);
+          st.hamleler.push(i); api.konum(st.hamleler.join('.')); api.duyur(`${p === 1 ? 'Siyah' : 'Beyaz'} ${ad(i)}${r.esir ? `, ${r.esir} taş esir` : ''}.`);
         }
         st.sira = 3 - p;
+        if (st.yukleniyor) return;
         api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
         if (!st.bitti && !insanMi(st.sira)) bilgisayar();
       }
@@ -172,10 +180,10 @@
           const x = P + (i % 9) * A, y = P + Math.floor(i / 9) * A;
           if (st.t[i]) {
             s.append(svg('circle', { cx: x + 1.5, cy: y + 2, r: A * 0.46, fill: 'rgba(0,0,0,.25)' }));
-            s.append(svg('circle', { cx: x, cy: y, r: A * 0.46, fill: st.t[i] === 1 ? '#151515' : '#f6f4ee', stroke: grupSet.has(i) ? '#e3b21b' : st.t[i] === 1 ? '#000' : '#bbb', 'stroke-width': grupSet.has(i) ? 3 : 1 }));
+            s.append(svg('circle', { class: i === st.son ? 'otur' : '', cx: x, cy: y, r: A * 0.46, fill: st.t[i] === 1 ? '#151515' : '#f6f4ee', stroke: grupSet.has(i) ? '#e3b21b' : st.t[i] === 1 ? '#000' : '#bbb', 'stroke-width': grupSet.has(i) ? 3 : 1 }));
             if (i === st.son) s.append(svg('circle', { cx: x, cy: y, r: 6, fill: 'none', stroke: st.t[i] === 1 ? '#fff' : '#000', 'stroke-width': 2 }));
           } else if (alanGoster && alan.sahip[i]) s.append(svg('rect', { x: x - 7, y: y - 7, width: 14, height: 14, fill: alan.sahip[i] === 1 ? '#151515' : '#f6f4ee', opacity: 0.75 }));
-          const hedef = svg('rect', { x: x - A / 2, y: y - A / 2, width: A, height: A, fill: 'transparent', style: 'cursor:pointer' });
+          const hedef = svg('rect', { x: x - A / 2, y: y - A / 2, width: A, height: A, fill: 'transparent', style: 'cursor:pointer', 'data-r': Math.floor(i / 9), 'data-c': i % 9, role: 'button', 'aria-label': `${ad(i)}: ${st.t[i] === 1 ? 'siyah' : st.t[i] === 2 ? 'beyaz' : 'boş'}` });
           hedef.addEventListener('click', () => { if (!st.bekle && insanMi(st.sira) && !st.bitti) oyna(i); });
           hedef.addEventListener('mouseenter', () => { uzerinde = i; matCiz(); if (st.t[i]) ciz(); });
           s.append(hedef);
@@ -200,7 +208,14 @@
           if (!st.gecmis.length) return; st.gen++; st.bekle = false;
           let h = st.gecmis.pop(); if (api.ayar.rakip !== 'insan') while (h.sira !== 1 && st.gecmis.length) h = st.gecmis.pop();
           Object.assign(st, { t: h.t, sira: h.sira, esir: h.esir, pas: h.pas, bitti: false, son: -1 }); alanGoster = false;
+          st.hamleler = st.hamleler.slice(0, st.gecmis.length); api.konum(st.hamleler.join('.'));
           api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+        },
+        yukle(kod) {
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) { if (st.bitti) break; oyna(x === 'p' ? -1 : +x); }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.bitti && !insanMi(st.sira)) bilgisayar();
         },
         yokEt() { isci.iptal(); },
       };

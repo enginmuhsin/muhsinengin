@@ -56,6 +56,11 @@
       { id: 'bulmaca', ad: 'Bulmaca', sec: [['rastgele', 'Yeni'], ['gunluk', 'Günün Sudokusu']], v: 'rastgele' },
       { id: 'seviye', ad: 'Seviye', sec: [['kolay', 'Kolay'], ['orta', 'Orta'], ['zor', 'Zor']], v: 'kolay', goster: (a) => a.bulmaca !== 'gunluk' },
     ],
+    tur: [
+      { baslik: 'Hücre seç, rakam yaz', metin: 'Bir boş hücreye dokun, sonra alttaki rakamlardan birine. Klavyede 1–9, ok tuşları ve Sil de çalışır.' },
+      { baslik: 'Komşular aynı rakamı alamaz', metin: 'Seçtiğin hücrenin 20 komşusu (satırı, sütunu, kutusu) mavi gölgelenir. Sağdaki kutu, o hücreye hâlâ hangi rakamların girebileceğini söyler.', vurgu: '.kutu.mat' },
+      { baslik: 'İpucu nedenini söyler', metin: '"İpucu" sana cevabı değil, mantığı gösterir: "Bu hücrede yalnızca 7 kalabilir, çünkü…". Takılınca kullan.' },
+    ],
     kurallar: ['Her satıra, her sütuna ve her 3×3 kutuya 1\'den 9\'a kadar rakamlar birer kez yazılır.',
       'Hücre seç, rakama dokun. Klavyede 1–9, Sil ve ok tuşları da çalışır.',
       '"Not" modunda küçük aday rakamları yazarsın.', 'İpucu önce mantık kuralı arar; bulamazsa doğru rakamı açar.'],

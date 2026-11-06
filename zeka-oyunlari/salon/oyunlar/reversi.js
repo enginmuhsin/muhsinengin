@@ -44,6 +44,11 @@
     ozet: 'Bir dakikada öğrenilir, bir ömür sürer. Köşelerin neden altın değerinde olduğunu ısı haritasında gör.',
     etiketler: ['Alfa-beta', 'Konum değeri', '2 kişi'],
     dallanmaRef: '≈ 10', dallanmaSayi: 10, oyunUzunlugu: 60,
+    tur: [
+      { baslik: 'Sıkıştır ve çevir', metin: 'Taşını, rakip taşları kendi iki taşının arasına sıkıştıracak bir kareye koy. Arada kalan bütün rakip taşlar senin rengine döner.' },
+      { baslik: 'Noktalar yasal hamleler', metin: 'Tahtadaki küçük noktalar, şu an oynayabileceğin kareler. Birine dokun ya da ok tuşlarıyla gelip Enter\'a bas.', vurgu: '#tahta [aria-label$="oynanabilir"]' },
+      { baslik: 'Köşeler altın değerinde', metin: '"Köşe değeri haritası"nı aç: köşe taşı hiç çevrilemez. Köşenin yanındaki kareler ise tehlikeli; rakibe köşeyi açabilir.' },
+    ],
     kurallar: ['Siyah başlar. Taşını, arada kalan rakip taşları sıkıştıracak bir kareye koymalısın (yatay, dikey veya çapraz).', 'Sıkışan bütün rakip taşlar senin rengine döner.',
       'Yasal hamlen yoksa pas geçersin. İki oyuncunun da hamlesi kalmayınca en çok taşı olan kazanır.', 'Bilgisayara karşı sen siyahsın.'],
     onizleme: () => { let s = '<svg viewBox="0 0 80 80"><rect width="80" height="80" rx="4" fill="#2f7d55"/>'; for (let k = 1; k < 8; k++) s += `<path d="M${k * 10} 0V80M0 ${k * 10}H80" stroke="#1d5a3c" stroke-width=".6"/>`; [[27, 1], [28, 2], [35, 2], [36, 1], [19, 1], [44, 2], [26, 2]].forEach(([i, p]) => { s += `<circle cx="${(i % 8) * 10 + 5}" cy="${Math.floor(i / 8) * 10 + 5}" r="4" fill="${p === 1 ? '#1b1b1b' : '#f5f3ec'}"/>`; }); return s + '</svg>'; },
@@ -55,14 +60,17 @@
       if (!document.getElementById('reversiStil')) document.head.append(el('style', { id: 'reversiStil' }, '@keyframes cevir{0%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}.cevrildi{animation:cevir .35s ease-out}'));
       function yeni() {
         const t = new Array(64).fill(0); t[27] = t[36] = 2; t[28] = t[35] = 1;
-        st = { t, sira: 1, gecmis: [], bitti: false, son: -1, yeniCevrilen: new Set(), gen: (st?.gen || 0) + 1, bekle: false };
+        st = { t, sira: 1, gecmis: [], hamleler: [], bitti: false, son: -1, yeniCevrilen: new Set(), gen: (st?.gen || 0) + 1, bekle: false, yukleniyor: false };
+        api.konum('');
         api.geriAlAktif(false); ciz(); durumYaz();
       }
       const insanMi = (p) => api.ayar.rakip === 'insan' || p === 1;
       function say(t) { let a = 0, b = 0; for (const c of t) if (c === 1) a++; else if (c === 2) b++; return [a, b]; }
       function oyna(i) {
-        const p = st.sira; api.dallanma(K.yasal(st.t, p).length);
+        const p = st.sira; if (!st.yukleniyor) api.dallanma(K.yasal(st.t, p).length);
         const c = K.cevrilen(st.t, i, p);
+        st.hamleler.push(i); api.konum(st.hamleler.join('.'));
+        api.duyur(`${p === 1 ? 'Siyah' : 'Beyaz'} ${kare(i)}; ${c.length} taş çevrildi.`);
         st.gecmis.push({ t: st.t.slice(), sira: p });
         st.t = K.oyna(st.t, i, p); st.son = i; st.yeniCevrilen = new Set(c);
         sirayiIlerlet();
@@ -76,6 +84,7 @@
           const m = a === b ? `Berabere: ${a}–${b}` : api.ayar.rakip === 'insan' ? `${a > b ? 'Siyah' : 'Beyaz'} kazandı: ${Math.max(a, b)}–${Math.min(a, b)}` : a > b ? `Kazandın! ${a}–${b}` : `Bilgisayar kazandı: ${b}–${a}`;
           api.bitti(m, api.ayar.rakip !== 'insan' && b > a);
         }
+        if (st.yukleniyor) return;
         api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
         if (!st.bitti && !insanMi(st.sira)) bilgisayar();
       }
@@ -109,9 +118,9 @@
           const w = K.AGIRLIK[i];
           let bg = '#2f7d55';
           if (harita) bg = w > 0 ? `color-mix(in srgb,#3ddc97 ${Math.min(90, 20 + w * 0.7)}%,#2f7d55)` : w < 0 ? `color-mix(in srgb,#ff5d6c ${Math.min(90, 20 - w * 1.4)}%,#2f7d55)` : '#2f7d55';
-          const h = el('button', { type: 'button', role: 'gridcell', class: 'hucre-btn', 'aria-label': `${kare(i)} ${st.t[i] === 1 ? 'siyah' : st.t[i] === 2 ? 'beyaz' : yasal.has(i) ? 'oynanabilir' : 'boş'}`,
+          const h = el('button', { type: 'button', role: 'gridcell', class: 'hucre-btn', 'data-r': i >> 3, 'data-c': i & 7, 'aria-label': `${kare(i)} ${st.t[i] === 1 ? 'siyah' : st.t[i] === 2 ? 'beyaz' : yasal.has(i) ? 'oynanabilir' : 'boş'}`,
             style: `background:${bg};border-radius:3px;display:grid;place-items:center;position:relative;min-width:0;${yasal.has(i) ? 'cursor:pointer' : 'cursor:default'}` });
-          if (st.t[i]) h.append(el('i', { class: st.yeniCevrilen.has(i) ? 'cevrildi' : '', style: `width:82%;height:82%;border-radius:50%;background:${st.t[i] === 1 ? 'radial-gradient(circle at 35% 30%,#555,#111)' : 'radial-gradient(circle at 35% 30%,#fff,#d8d4c8)'};box-shadow:0 2px 3px rgba(0,0,0,.4);${i === st.son ? 'outline:2px solid var(--sari);outline-offset:1px' : ''}` }));
+          if (st.t[i]) h.append(el('i', { class: st.yeniCevrilen.has(i) ? 'cevrildi' : i === st.son ? 'otur' : '', style: `width:82%;height:82%;border-radius:50%;background:${st.t[i] === 1 ? 'radial-gradient(circle at 35% 30%,#555,#111)' : 'radial-gradient(circle at 35% 30%,#fff,#d8d4c8)'};box-shadow:0 2px 3px rgba(0,0,0,.4);${i === st.son ? 'outline:2px solid var(--sari);outline-offset:1px' : ''}` }));
           else if (yasal.has(i)) h.append(el('i', { style: `width:26%;height:26%;border-radius:50%;background:${st.sira === 1 ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.55)'}` }));
           if (harita) h.append(el('span', { style: 'position:absolute;bottom:1px;right:3px;font-size:9px;color:#fff;opacity:.85' }, String(w)));
           if (yasal.has(i)) {
@@ -139,8 +148,15 @@
           if (!st.gecmis.length) return; st.gen++; st.bekle = false;
           let h = st.gecmis.pop(); if (api.ayar.rakip !== 'insan') while (h.sira !== 1 && st.gecmis.length) h = st.gecmis.pop();
           st.t = h.t; st.sira = h.sira; st.bitti = false; st.son = -1; st.yeniCevrilen = new Set();
+          st.hamleler = st.hamleler.slice(0, st.gecmis.length); api.konum(st.hamleler.join('.'));
           if (!insanMi(st.sira)) return yeni();
           api.geriAlAktif(st.gecmis.length > 0); api.neden(''); ciz(); durumYaz();
+        },
+        yukle(kod) { // "19.18.17" gibi kare numaraları; bilgisayar karşısındaysa sıra ona geçtiyse oynar
+          st.yukleniyor = true;
+          for (const x of kod.split('.').filter(Boolean)) { const i = +x; if (st.bitti || !K.yasal(st.t, st.sira).includes(i)) throw new Error('yasa dışı'); oyna(i); }
+          st.yukleniyor = false; api.geriAlAktif(st.gecmis.length > 0); ciz(); durumYaz();
+          if (!st.bitti && !insanMi(st.sira)) bilgisayar();
         },
         yokEt() { isci.iptal(); },
       };
