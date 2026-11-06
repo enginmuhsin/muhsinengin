@@ -70,7 +70,8 @@
      r         : renkler { cerceve, plaka, motor, motorUst, pervane, pcb, vtx, batarya, kamera, lens, anten } */
   function model(p, r) {
     const L = [], n = p.kol || 4, kolU = p.L || 1, pr = p.pervane || .5, kn = p.kanat || 2;
-    const bs = p.batarya || 1, t = p.t || 0, e = p.patlat || 0, ekP = { parca: 'pervane' };
+    const bs = p.batarya || 1, t = p.t || 0, e = p.patlat || 0, ekP = { parca: 'pervane' }, tip = p.tip || 'yaris';
+    const kanalli = tip === 'cine' || tip === 'whoop';
     const mr = .07 + .05 * Math.min(1.4, pr);
     // Kollar, motorlar ve pervaneler
     for (let i = 0; i < n; i++) {
@@ -92,6 +93,13 @@
           [c[0] + cb * kok - px * w0, c[1] - .012 * yon, c[2] + sb * kok - pz * w0]] }, ekP));
       }
       silindir(L, 'pervane', r.motorUst, [c[0], c[1] - .02, c[2]], .03, .04, 8);
+      // kanallı tiplerde pervane koruma halkası (duct)
+      if (kanalli) {
+        const rd = pr * 1.12, h = pr * .45, y0 = py - h * .7, y1 = py + h * .3, kr = tip === 'whoop' ? '#2b55c4' : '#2a2e35';
+        const alt = daire([c[0], y0, c[2]], rd, 28), ust = daire([c[0], y1, c[2]], rd, 28);
+        for (let k = 0; k < 28; k++) { const j = (k + 1) % 28; L.push({ tip: 'yuz', parca: 'kanal', renk: kr, p: [alt[k], alt[j], ust[j], ust[k]], alfa: tip === 'whoop' ? .8 : 1 }); }
+        L.push({ tip: 'cizgi', parca: 'kanal', renk: tip === 'whoop' ? '#ffffff' : '#e08a1e', p: ust.concat([ust[0]]), kalin: 2.2 });
+      }
     }
     // Gövde parçaları ayrı listede kurulur, sonra p.govde çarpanıyla ölçeklenir
     const kollar = L.length;
@@ -118,6 +126,33 @@
     const ay = .2 + .45 * e;
     L.push({ tip: 'cizgi', parca: 'anten', renk: r.anten, p: [[0, ay, -.3], [0, ay + .2, -.44]], kalin: 2.4 });
     silindir(L, 'anten', r.anten, [0, ay + .2, -.44], .035, .07, 8);
+    // tipe özgü donanım
+    if (tip === 'yaris') {   // aksiyon kamerası (bataryanın önünde, yukarı bakar)
+      kutu(L, 'kamera', r.kamera, [0, byk + .12 * bs, .17], [.07, .05, .04]);
+      L.push({ tip: 'yuz', parca: 'kamera', renk: r.lens, p: daire([.03, byk + .12 * bs, .212], .022, 10, 'z') });
+    }
+    if (tip === 'cine') {    // sinema kamerası: büyük gövde ve objektif
+      kutu(L, 'kamera', r.kamera, [0, byk + .16, .12], [.11, .08, .09]);
+      L.push({ tip: 'yuz', parca: 'kamera', renk: r.lens, p: daire([0, byk + .16, .215], .06, 16, 'z') });
+      L.push({ tip: 'cizgi', parca: 'kamera', renk: '#e08a1e', p: daire([0, byk + .16, .22], .065, 16, 'z').concat([[.065, byk + .16, .22]]), kalin: 2 });
+    }
+    if (tip === 'uzun' || tip === 'agir') {   // GPS direği ve mantar anten
+      const gy = ustY + .02 + .4 * e;
+      L.push({ tip: 'cizgi', parca: 'gps', renk: r.cerceve, p: [[0, gy, -.2], [0, gy + .32, -.2]], kalin: 2.2 });
+      silindir(L, 'gps', '#e9edf2', [0, gy + .32, -.2], .07, .03, 14, { kapak: '#e08a1e' });
+    }
+    if (tip === 'uzun') {    // iki uzun dipol anten
+      for (const x of [-.12, .12]) L.push({ tip: 'cizgi', parca: 'anten', renk: r.anten, p: [[x, ay - .05, -.3], [x * 2.2, ay + .32, -.62]], kalin: 2 });
+    }
+    if (tip === 'agir') {    // uzun iniş takımı ve yük kancası
+      const yy = -.42 - .25 * e;
+      for (const x of [-.24, .24]) {
+        for (const z of [-.18, .18]) L.push({ tip: 'cizgi', parca: 'takim', renk: r.cerceve, p: [[x * .8, -.02, z], [x, yy, z]], kalin: 3 });
+        L.push({ tip: 'cizgi', parca: 'takim', renk: r.cerceve, p: [[x, yy, -.36], [x, yy, .36]], kalin: 3.4 });
+      }
+      kutu(L, 'yuk', '#e08a1e', [0, -.12 - .2 * e, -.05], [.09, .05, .09]);
+      L.push({ tip: 'cizgi', parca: 'yuk', renk: '#9aa3ad', p: [[0, -.17 - .2 * e, -.05], [0, -.3 - .2 * e, -.05]], kalin: 1.6 });
+    }
     const gv = p.govde || 1;
     if (gv !== 1) for (let i = kollar; i < L.length; i++) L[i].p = L[i].p.map(([x, y, z]) => [x * gv, y * gv, z * gv]);
     return L;
@@ -127,6 +162,16 @@
      Birim: 5 inç sınıfında merkezden motora uzaklık (≈110 mm) = 1.
      Kol ≈ 22 mm × sınıf, pervane yarıçapı = çap(inç) × 12,7 mm. Çok motorlu
      tasarımlarda pervaneler çakışmasın diye kol gerekirse uzatılır. */
+  /* Gövde tipi tasarımdan çıkarılır (uçuş simülatöründeki dronTipi ile aynı kural):
+     ≥6 motor ya da ≥9" → ağır yük · ≤2,5" → tiny whoop · ≤3,5" → cinewhoop · ≥6" → uzun menzil · diğerleri yarış */
+  function dronTipi(t) {
+    const c = +t.pervaneCap || 5, n = +t.motorSayisi || 4;
+    if (n >= 6 || c >= 9) return 'agir';
+    if (c <= 2.5) return 'whoop';
+    if (c <= 3.5) return 'cine';
+    if (c >= 6) return 'uzun';
+    return 'yaris';
+  }
   function tasarimdan(t) {
     const n = +t.motorSayisi || 4, sinif = +t.cerceveSinif || 5;
     const pr = (+t.pervaneCap || 5) * 12.7 / 110;
@@ -134,7 +179,7 @@
     L = Math.max(L, pr * 1.08 / Math.sin(PI / n), .3);
     const govde = Math.min(1.25, .45 + .11 * sinif);
     const batarya = Math.max(.5, Math.min(1.6, Math.cbrt((+t.bataryaG || 200) / 200) / govde));
-    return { kol: n, L, pervane: pr, kanat: +t.kanat || 2, govde, batarya };
+    return { kol: n, L, pervane: pr, kanat: +t.kanat || 2, govde, batarya, tip: dronTipi(t) };
   }
 
   /* ---------- Çizim ---------- */
@@ -305,5 +350,5 @@
     };
   }
 
-  kok.Dron3D = { model, ciz, zeminCiz, palet, Sahne, ton, tasarimdan, izdusur };
+  kok.Dron3D = { model, ciz, zeminCiz, palet, Sahne, ton, tasarimdan, izdusur, dronTipi };
 })(window);

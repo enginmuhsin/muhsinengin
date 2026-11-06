@@ -1,5 +1,5 @@
 /* Dron Uçuş Simülatörü çevrimdışı önbelleği (Oyun Salonu ile aynı yöntem). */
-const SURUM = 'ucus-v3';
+const SURUM = 'ucus-v5';
 const DOSYALAR = ['./', 'index.html', 'manifest.webmanifest', '../dron-lab/hesap.js', '../ortak/kutuphane/three-r128.min.js', '../simge.svg'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(SURUM).then((c) => c.addAll(DOSYALAR.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x.startsWith('ucus-') && x !== SURUM).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });
