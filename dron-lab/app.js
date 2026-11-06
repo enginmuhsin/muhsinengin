@@ -429,7 +429,7 @@
     ].filter(p => p[1] > 0);
     $('agirlikBar').innerHTML = parcalar.map(([ad, g, r]) => {
       const yuzde = g / k.toplam * 100;
-      return `<div style="width:${yuzde}%;background:var(${r})" title="${ad}: ${g} g">${yuzde > 9 ? Math.round(yuzde) + '%' : ''}</div>`;
+      return `<div style="width:${yuzde}%;background:var(${r})${r === '--c2' || r === '--c3' ? ';color:#111b1c' : ''}" title="${ad}: ${g} g">${yuzde > 9 ? Math.round(yuzde) + '%' : ''}</div>`;
     }).join('');
     $('agirlikBar').setAttribute('aria-label', 'Ağırlık dağılımı: ' + parcalar.map(([ad, g]) => `${ad} ${Math.round(g / k.toplam * 100)}%`).join(', '));
     $('agirlikLejant').innerHTML = parcalar.map(([ad, g, r]) => `<span style="--renk:var(${r})">${ad}: ${bicim(g, 0)} g (%${bicim(g / k.toplam * 100, 0)})</span>`).join('');

@@ -560,7 +560,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     <li class="proje"><div>
       <svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-medar"/></svg>
       <h3>Oyunların sayfaları</h3><span class="adres">muhsinengin.com/zeka-oyunlari</span>
-      <p>Her oyunun kısa tarihi, nasıl oynandığı ve arkasındaki matematik, ayrı sayfada. <span class="dugmeler alt-girisler"><a class="yaz" href="zeka-oyunlari/satranc/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-satranc"/></svg>Satranç</a><a class="yaz" href="zeka-oyunlari/go/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-go"/></svg>Go</a><a class="yaz" href="zeka-oyunlari/mangala/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-mangala"/></svg>Mangala</a><a class="yaz" href="zeka-oyunlari/pentago/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-pentago"/></svg>Pentago</a><a class="yaz" href="zeka-oyunlari/reversi/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-reversi"/></svg>Reversi</a><a class="yaz" href="zeka-oyunlari/hex/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-hex"/></svg>Hex</a><a class="yaz" href="zeka-oyunlari/mastermind/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-mastermind"/></svg>Mastermind</a><a class="yaz" href="zeka-oyunlari/sudoku/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-sudoku"/></svg>Sudoku</a></span></p></div></li>
+      <p>Her oyunun kısa tarihi, nasıl oynandığı ve arkasındaki matematik, ayrı sayfada. <span class="dugmeler alt-girisler"><a class="yaz" href="zeka-oyunlari/satranc/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-satranc"/></svg>Satranç</a><a class="yaz" href="zeka-oyunlari/go/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-go"/></svg>Go<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> oyunu</span></a><a class="yaz" href="zeka-oyunlari/mangala/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-mangala"/></svg>Mangala</a><a class="yaz" href="zeka-oyunlari/pentago/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-pentago"/></svg>Pentago</a><a class="yaz" href="zeka-oyunlari/reversi/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-reversi"/></svg>Reversi</a><a class="yaz" href="zeka-oyunlari/hex/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-hex"/></svg>Hex</a><a class="yaz" href="zeka-oyunlari/mastermind/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-mastermind"/></svg>Mastermind</a><a class="yaz" href="zeka-oyunlari/sudoku/"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none"><use href="ortak/oyun-ikonlari.svg#ik-sudoku"/></svg>Sudoku</a></span></p></div></li>
     </ul>
   </details>
   <details class="grup" id="g-egitim">
@@ -857,7 +857,11 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   }
   function medarIlerle() { teta += .009; if (teta > 2 * Math.PI) teta -= 2 * Math.PI; dronAci += .006; pervane += .9; disli += .012; }
   const yumusak = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  // Sahne ekranda değilse hesap yapma (pil ve işlemci için)
+  let sahneGorunur = true;
+  if ("IntersectionObserver" in window) new IntersectionObserver((e) => { const once = sahneGorunur; sahneGorunur = e[0].isIntersecting; if (!once && sahneGorunur) uyandir(); }).observe(sahne);
   function dongu() {
+    if (!sahneGorunur && !surukle) { bekliyor = true; return; }
     if (!az.matches) medarIlerle();
     if (!surukle) { ay += vy; ax += vx; vx *= .96; if (Math.abs(vy) > .0035) vy *= .97; else if (!az.matches) vy = .0035; else vy = 0; }
     kare(); if (!az.matches || surukle || Math.abs(vy) > 1e-4 || Math.abs(vx) > 1e-4) requestAnimationFrame(dongu); else bekliyor = true;
@@ -1378,14 +1382,21 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
     duraklat = !duraklat; cip.setAttribute("aria-pressed", String(duraklat));
     cip.title = duraklat ? "Gün döngüsünü sürdür" : "Gün döngüsünü durdur";
   });
+  // Manzara yavaş değişir: saniyede en çok 30 kare çizilir (zaman gerçek akışla ilerler).
+  let cizimArasi = 0;
   function dongu(zm) {
     const dt = Math.min(.05, (zm - (son || zm)) / 1000); son = zm;
-    if (gorunur && !az.matches) { t += dt; if (!duraklat) { tau = (tau + dt / GUN_SN) % 1; evre = (evre + dt / GUN_SN * EVRE_HIZ) % 1; } kare(); saatYaz(); }
+    if (gorunur && !az.matches) {
+      t += dt; if (!duraklat) { tau = (tau + dt / GUN_SN) % 1; evre = (evre + dt / GUN_SN * EVRE_HIZ) % 1; }
+      cizimArasi += dt; if (cizimArasi >= 1 / 31) { cizimArasi = 0; kare(); saatYaz(); }
+    }
     requestAnimationFrame(dongu);
   }
   new ResizeObserver(() => { kur(); kare(); }).observe(tv);
   if ("IntersectionObserver" in window) new IntersectionObserver((e) => { gorunur = e[0].isIntersecting; }).observe(tv);
-  kur(); kare(); saatYaz(); requestAnimationFrame(dongu);
+  // İlk kare hemen çizilir; canlandırma tarayıcı ilk boş anını bulunca başlar (sayfa önce açılsın).
+  kur(); kare(); saatYaz();
+  (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(() => requestAnimationFrame(dongu), { timeout: 1500 });
   window.__manzaraSaat = (v, e) => { tau = v; if (e != null) evre = e; kare(); saatYaz(); };   // test ve sunum için: sahneyi belli bir saate al
 })();
 </script>

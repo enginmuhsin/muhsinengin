@@ -18,6 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="../simge.svg" type="image/svg+xml">
 <script src="../tema.js"></script>
 <script src="../ortak/ana-sayfa.js" data-gecis defer></script>
@@ -289,7 +290,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   <h1>Zeka <span>Oyunları</span></h1>
   <p class="giris">İyi bir zeka oyununun kuralları bir dakikada öğrenilir, ustalığı bir ömür sürer. Burada kendi tasarladığım MEDAR'ı ve dünyanın en sevilen zeka oyunlarını bulacaksın. Her oyunun kendi sayfasındaki <b>“Bunun arkasındaki matematik”</b> kutusu, o oyunu matematikçilerin neden bu kadar sevdiğini kısaca anlatıyor.</p>
   <ul class="cipler">
-    <li><a href="#medar">MEDAR</a></li><li><a href="satranc/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-satranc"/></svg>Satranç</a></li><li><a href="go/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-go"/></svg>Go</a></li><li><a href="mangala/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-mangala"/></svg>Mangala</a></li><li><a href="pentago/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-pentago"/></svg>Pentago</a></li>
+    <li><a href="#medar">MEDAR</a></li><li><a href="satranc/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-satranc"/></svg>Satranç</a></li><li><a href="go/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-go"/></svg>Go<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> oyunu</span></a></li><li><a href="mangala/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-mangala"/></svg>Mangala</a></li><li><a href="pentago/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-pentago"/></svg>Pentago</a></li>
     <li><a href="reversi/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-reversi"/></svg>Reversi</a></li><li><a href="hex/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-hex"/></svg>Hex</a></li><li><a href="mastermind/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-mastermind"/></svg>Mastermind</a></li><li><a href="sudoku/"><svg class="ikon" aria-hidden="true"><use href="../ortak/oyun-ikonlari.svg#ik-sudoku"/></svg>Sudoku</a></li><li><a href="#merdiven">Sayıların merdiveni</a></li><li><a href="#kiyas">Çok yönlü karşılaştırma</a></li>
   </ul>
   <p style="margin-top:18px"><a class="dugme dolu" href="salon/">Hepsini oyna: Oyun Salonu →</a></p>
@@ -603,5 +604,6 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   ac(); window.addEventListener('hashchange', ac);
 })();
 </script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});</script>
 </body>
 </html>

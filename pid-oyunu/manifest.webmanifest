@@ -1,0 +1,19 @@
+{
+  "name": "PID Ayar Oyunu · Muhsin ENGİN",
+  "short_name": "PID Oyunu",
+  "description": "Sanal bir dronu PID kazançlarıyla dengede tut.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#1d3b8b",
+  "icons": [
+    {
+      "src": "../simge.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

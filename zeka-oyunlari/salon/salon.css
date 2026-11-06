@@ -43,7 +43,7 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .kart p{margin:0;color:var(--soluk);font-size:13.5px;line-height:1.45}
 .kart .etiketler{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 .etiket{font-size:11.5px;border:1px solid var(--cizgi);border-radius:999px;padding:2px 8px;color:var(--soluk)}
-.etiket.ai{border-color:transparent;background:color-mix(in srgb,var(--mavi) 14%,transparent);color:var(--mavi)}
+.etiket.ai{border-color:transparent;background:color-mix(in srgb,var(--mavi) 14%,transparent);color:var(--murekkep)}
 .olcum{margin-top:40px;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:18px;box-shadow:var(--golge)}
 .olcum h2{font-family:var(--f-baslik);font-weight:600;font-size:24px;margin:0 0 4px}
 .olcum>p{color:var(--soluk);margin:0 0 14px;max-width:70ch}

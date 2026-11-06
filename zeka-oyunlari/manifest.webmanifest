@@ -1,0 +1,19 @@
+{
+  "name": "Zeka Oyunları · Muhsin ENGİN",
+  "short_name": "Zeka Oyunları",
+  "description": "Zeka oyunlarının tarihi, kuralları ve arkasındaki matematik.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#1d3b8b",
+  "icons": [
+    {
+      "src": "../simge.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

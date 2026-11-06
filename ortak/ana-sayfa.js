@@ -178,7 +178,7 @@
       connectedCallback() {
         if (this.shadowRoot) return;
         var r = this.attachShadow({ mode: 'open' });
-        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" aria-label="Ana sayfaya dön: muhsinengin.com"><span class="r"><me-imza boyut="30" aria-hidden="true"></me-imza>' +
+        r.innerHTML = '<style>' + DUGME_CSS + '</style><a href="' + ANA + '" part="dugme" title="Ana sayfaya dön"><span class="r"><me-imza boyut="30" aria-hidden="true"></me-imza>' +
           '</span><span class="m"><span>Ana sayfa</span><small>muhsinengin.com</small></span></a>';
         var el = this, imza = r.querySelector('me-imza'), a = r.querySelector('a');
         var guncelle = function () { var koyu = el.getAttribute('tema') === 'koyu' || (!el.hasAttribute('tema') && koyuMu()); el.classList.toggle('koyu-site', !el.hasAttribute('tema') && koyuMu()); imza.setAttribute('tema', koyu ? 'koyu' : 'acik'); };
