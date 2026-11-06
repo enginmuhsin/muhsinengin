@@ -2,8 +2,8 @@
 /* SINIF TURNUVASI — öğretmen için eleme tablosu. Kişisel veri yok: yalnızca takım takma adları, yalnızca bu cihazda.
    Akıllı tahtada açılır; maç sonucu kazanan takıma dokunarak girilir. */
 (() => {
-  const OYUNLAR = [['satranc', 'Satranç'], ['go', 'Go'], ['mangala', 'Mangala'], ['reversi', 'Reversi'], ['hex', 'Hex'], ['pentago', 'Pentago'], ['mastermind', 'Mastermind'], ['sudoku', 'Sudoku']];
-  const TEK = new Set(['mastermind', 'sudoku']); // tek kişilik oyunlar: maçı "daha az tahmin / daha kısa süre" kazanır
+  const OYUNLAR = [['satranc', 'Satranç'], ['go', 'Go'], ['mangala', 'Mangala'], ['reversi', 'Reversi'], ['hex', 'Hex'], ['gizlikod', 'Gizli Kod'], ['sudoku', 'Sudoku']];
+  const TEK = new Set(['gizlikod', 'sudoku']); // tek kişilik oyunlar: maçı "daha az tahmin / daha kısa süre" kazanır
   const TUR_AD = { 8: ['Çeyrek final', 'Yarı final', 'Final'], 4: ['Yarı final', 'Final'], 2: ['Final'] };
 
   Salon.kaydet('turnuva', {
@@ -21,7 +21,7 @@
       { baslik: 'Kazananı işaretle', metin: 'Maçı kazanan takımın adına dokun; bir sonraki tura geçer. Final kazananı şampiyon olur.' },
     ],
     kurallar: ['Takım sayısını ve oyunu seç; takım adlarını yaz.', '"Kura çek" eşleşmeleri rastgele yapar.', 'Kazanan takımın adına dokun; yanlış işaretlediysen aynı maça yeniden dokunarak değiştir.',
-      'Mastermind ve Sudoku tek kişilik: iki takım aynı bulmacayı çözer, daha az tahmin ya da daha kısa süre kazanır.', 'Her şey bu tarayıcıda kalır; "Turnuvayı sıfırla" ile temizlenir.'],
+      'Gizli Kod ve Sudoku tek kişilik: iki takım aynı bulmacayı çözer, daha az tahmin ya da daha kısa süre kazanır.', 'Her şey bu tarayıcıda kalır; "Turnuvayı sıfırla" ile temizlenir.'],
     onizleme: () => `<svg viewBox="0 0 160 100" fill="none" stroke="currentColor" stroke-width="2">${[12, 32, 56, 76].map((y) => `<rect x="6" y="${y - 6}" width="40" height="12" rx="3"/>`).join('')}<path d="M46 12h12v20H46M46 56h12v20H46M58 22h14M58 66h14"/><rect x="72" y="16" width="40" height="12" rx="3"/><rect x="72" y="60" width="40" height="12" rx="3"/><path d="M112 22h12v44h-12M124 44h10"/><rect x="134" y="37" width="20" height="14" rx="3" fill="currentColor" opacity=".25"/></svg>`,
     olustur(api) {
       const { el } = api;

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gizli Kod · Zeka Oyunları · Muhsin ENGİN</title>
+<meta name="description" content="Gizli Kod: kısa tarihi, nasıl oynandığı ve arkasındaki matematik. Bir oyuncu renkli pimlerden gizli bir kod kurar, öbürü onu tahminlerle bulmaya çalışır. Bir şifre kırma oyunu ve bilgi biliminin en sevimli örneği.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhsin ENGİN">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Gizli Kod · Zeka Oyunları">
+<meta property="og:description" content="Gizli Kod: kısa tarihi, nasıl oynandığı ve arkasındaki matematik. Bir oyuncu renkli pimlerden gizli bir kod kurar, öbürü onu tahminlerle bulmaya çalışır. Bir şifre kırma oyunu ve bilgi biliminin en sevimli örneği.">
+<meta property="og:url" content="https://muhsinengin.com/zeka-oyunlari/gizli-kod/">
+<meta property="og:image" content="https://muhsinengin.com/ortak/og/oyun-gizli-kod.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gizli Kod tahtası ve arkasındaki matematik sorusu">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://muhsinengin.com/zeka-oyunlari/gizli-kod/">
+<link rel="icon" href="../../simge.svg" type="image/svg+xml">
+<script src="../../tema.js"></script>
+<script src="../../ortak/ana-sayfa.js" data-gecis defer></script>
+<script src="../../muzik/muzik.js" data-tema="odak" defer></script>
+<link rel="stylesheet" href="../../ortak/matematik.css">
+<link rel="stylesheet" href="../../ortak/tokenlar.css">
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 700; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-ext-800-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../../fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url(../../fonts/fraunces-latin-ext-500-italic.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url(../../fonts/fraunces-latin-500-italic.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Fraunces"; font-weight: 600; font-style: normal; font-display: swap; src: url(../../fonts/fraunces-latin-ext-600-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Fraunces"; font-weight: 600; font-style: normal; font-display: swap; src: url(../../fonts/fraunces-latin-600-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../../fonts/onest-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../../fonts/onest-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../../fonts/onest-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../../fonts/onest-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* Ana sayfayla aynı defter dili: kareli kâğıt, mavi mürekkep, kırmızı marj */
+:root {
+  --kagit: #f5f7fa; --kare: #dde5ef; --kare-kalin: #c9d5e4;
+  --murekkep: #1d3b8b; --metin: #1b2433; --kursun: #5c6778; --kirmizi: #c8323b; --turuncu: #e08a1e;
+  --kart: color-mix(in srgb, #fff 80%, var(--kagit));
+  --yazi: "Onest", "Segoe UI", system-ui, sans-serif; --baslik: "Bricolage", "Arial Black", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --kagit: #111b1c; --kare: #1b2a2b; --kare-kalin: #253839; --murekkep: #a9c4ff; --metin: #e9efe8; --kursun: #a1b0aa; --kirmizi: #ff7a72; --turuncu: #ffb04a; --kart: #172324; color-scheme: dark; } }
+:root[data-theme="dark"] { --kagit: #111b1c; --kare: #1b2a2b; --kare-kalin: #253839; --murekkep: #a9c4ff; --metin: #e9efe8; --kursun: #a1b0aa; --kirmizi: #ff7a72; --turuncu: #ffb04a; --kart: #172324; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; color: var(--metin); font: 18px/1.6 var(--yazi); background-color: var(--kagit); overflow-x: clip;
+  background-image:
+    linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
+    linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--kirmizi); outline-offset: 4px; border-radius: 4px; }
+.sayfa { position: relative; max-width: 1080px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)) 64px; }
+.sayfa::before { content: ""; position: absolute; top: 0; bottom: 0; left: max(20px, env(safe-area-inset-left)); width: 2px; background: var(--kirmizi); opacity: .35; }
+.ic { padding-left: 40px; }
+
+/* ---------- Üst çubuk ---------- */
+.ust { display: flex; align-items: center; gap: 8px; padding-top: 18px; flex-wrap: wrap; }
+.ust ana-sayfa-dugmesi { margin-right: auto; }
+.ust-link, .ust-dugme { text-decoration: none; font: inherit; font-weight: 700; font-size: .92rem; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--kare-kalin);
+  background: var(--kagit); color: var(--murekkep); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.ust-link:hover, .ust-dugme:hover { border-color: var(--murekkep); }
+.ust-linkler { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-sayfa, .menu-dugme { display: none; }
+.mc-hamburger { position: relative; width: 18px; height: 14px; }
+.mc-hamburger i { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s, opacity .2s, top .25s; }
+.mc-hamburger i:nth-child(1) { top: 0; } .mc-hamburger i:nth-child(2) { top: 6px; } .mc-hamburger i:nth-child(3) { top: 12px; }
+.menu-dugme[aria-expanded="true"] .mc-hamburger i:nth-child(1) { top: 6px; transform: rotate(45deg); }
+.menu-dugme[aria-expanded="true"] .mc-hamburger i:nth-child(2) { opacity: 0; }
+.menu-dugme[aria-expanded="true"] .mc-hamburger i:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+/* ---------- Açılış ---------- */
+.acilis { padding: 40px 0 8px; max-width: 760px; }
+.ust-etiket { font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--kirmizi); }
+h1 { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; font-size: clamp(2.3rem, 6vw, 3.6rem); line-height: 1.05; margin: 6px 0 14px; }
+h1 span { font-style: normal; font-weight: 600; color: var(--murekkep); letter-spacing: .02em; }
+.giris { font-size: clamp(1.02rem, 2vw, 1.18rem); margin: 0 0 16px; }
+.cipler { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.cipler a { display: inline-flex; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--kare-kalin); background: var(--kagit); text-decoration: none; font-size: .9rem; font-weight: 700; color: var(--murekkep); }
+.cipler a:hover { border-color: var(--murekkep); }
+
+h2 { font-family: var(--baslik); font-weight: 800; font-size: clamp(1.6rem, 3.6vw, 2.2rem); margin: 0 0 6px; color: var(--kirmizi); letter-spacing: -.01em; }
+.bolum { margin-top: 48px; scroll-margin-top: 80px; }
+.aciklama { color: var(--kursun); margin: 0 0 18px; max-width: 64ch; }
+
+/* ---------- MEDAR vitrini ---------- */
+.medar-kart { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px 28px; padding: 24px; border-radius: 18px; background: var(--kart);
+  border: 1.5px solid var(--kare-kalin); border-top: 5px solid var(--murekkep); }
+.medar-kart img { width: 170px; height: 170px; border-radius: 34px; box-shadow: 0 12px 30px -14px rgba(7, 10, 18, .6); }
+.medar-kart h3 { font-family: var(--baslik); font-weight: 800; font-size: 2rem; letter-spacing: .04em; margin: 0; color: var(--murekkep); line-height: 1.1; }
+.medar-kart .alt { font-style: italic; color: var(--kursun); margin: 2px 0 8px; }
+.medar-kart p { margin: 0 0 10px; }
+.medar-kart .mat-kutu { grid-column: 1 / -1; }
+.rozet { display: inline-block; font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--kirmizi); border: 1.5px solid currentColor; border-radius: 999px; padding: 0 9px; vertical-align: middle; margin-left: 8px; }
+.dugmeler { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.dugme { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px 9px; border-radius: 999px; border: 1.5px solid var(--murekkep); text-decoration: none; font-weight: 700; color: var(--murekkep); background: var(--kagit); }
+.dugme svg { width: 15px; height: 15px; fill: currentColor; }
+.dugme.dolu { background: var(--murekkep); color: var(--kagit); }
+.dugme:hover { background: var(--murekkep); color: var(--kagit); }
+.dugme.dolu:hover { background: transparent; color: var(--murekkep); }
+
+/* ---------- Popüler oyun kartları ---------- */
+.oyunlar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.oyun { display: flex; flex-direction: column; padding: 18px 18px 16px; border-radius: 18px; background: var(--kart); border: 1.5px solid var(--kare-kalin); scroll-margin-top: 80px; }
+.oyun figure { margin: -4px -4px 14px; padding: 18px; border-radius: 14px; display: grid; place-items: center; min-height: 250px;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--murekkep) 10%, var(--kagit)), var(--kagit) 75%); border: 1px solid var(--kare); }
+.tahta-svg { width: min(100%, 230px); height: auto; display: block; filter: drop-shadow(0 10px 18px rgba(10, 18, 50, .28)); }
+.tahta-svg.genis { width: min(100%, 330px); }
+@media (prefers-reduced-motion: no-preference) { .oyun:hover .tahta-svg { transform: translateY(-3px) rotate(-1deg); } .tahta-svg { transition: transform .35s ease; } }
+.oyun-ust { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.oyun h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.5rem; margin: 0; line-height: 1.15; color: var(--metin); }
+.oyun h3 small { font-family: var(--yazi); font-weight: 400; font-size: .9rem; color: var(--kursun); margin-left: 4px; }
+.etiketler { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; padding: 0; list-style: none; }
+.etiketler li { font-size: .78rem; font-weight: 700; padding: 1px 9px; border-radius: 999px; border: 1.5px solid var(--kare-kalin); color: var(--kursun); }
+.etiketler li.cozuldu { border-color: color-mix(in srgb, var(--murekkep) 55%, transparent); color: var(--murekkep); }
+.etiketler li.acik-soru { border-color: color-mix(in srgb, var(--kirmizi) 55%, transparent); color: var(--kirmizi); }
+.oyun p { margin: 0 0 8px; font-size: .98rem; }
+.oyun .nasil b { color: var(--murekkep); }
+.oyun .mat-kutu { margin-top: auto; }
+.oyun .mat-kutu:first-of-type { margin-top: 10px; }
+.gorsel-not { font-size: .84rem; color: var(--kursun); margin: 8px 0 0; text-align: center; }
+
+/* ---------- Sayıların merdiveni ---------- */
+.merdiven { list-style: none; margin: 0; padding: 18px 18px 8px; border-radius: 18px; background: var(--kart); border: 1.5px solid var(--kare-kalin); }
+.basamak { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr) 110px; gap: 4px 14px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--kare-kalin); }
+.basamak:last-child { border-bottom: 0; }
+.basamak .ad { font-weight: 700; font-size: .95rem; line-height: 1.25; }
+.basamak .ad small { display: block; font-weight: 400; font-size: .8rem; color: var(--kursun); }
+.cubuk { height: 14px; border-radius: 7px; background: var(--kare); overflow: hidden; }
+.cubuk i { display: block; height: 100%; width: var(--g); border-radius: 7px; background: var(--murekkep); }
+.basamak.cozuk .cubuk i { background: linear-gradient(90deg, var(--murekkep), color-mix(in srgb, var(--murekkep) 60%, #5bb5a6)); }
+.basamak.acik .cubuk i { background: linear-gradient(90deg, var(--kirmizi), var(--turuncu)); }
+.basamak.medar .ad { color: var(--murekkep); }
+.basamak.medar .cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--turuncu) 35%, transparent); }
+.basamak.medar .sayi { color: var(--turuncu); }
+.lejant .l-medar::before { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
+.basamak.kiyas .cubuk i { background: repeating-linear-gradient(135deg, var(--kursun) 0 6px, color-mix(in srgb, var(--kursun) 55%, transparent) 6px 12px); }
+.basamak.sen .cubuk i { background: repeating-linear-gradient(90deg, var(--kirmizi) 0 10px, color-mix(in srgb, var(--kirmizi) 55%, transparent) 10px 14px); }
+.basamak.sen .ad, .basamak.sen .sayi { color: var(--kirmizi); }
+.basamak.sen-ipucu { grid-template-columns: 1fr; color: var(--kursun); font-size: .95rem; }
+.basamak.sen-ipucu a { color: var(--kirmizi); font-weight: 700; }
+.lejant .l-sen::before { background: var(--kirmizi); }
+.basamak .sayi { font: italic 600 1.05rem/1.2 "Fraunces", Georgia, serif; color: var(--murekkep); text-align: right; white-space: nowrap; }
+.basamak .sayi sup { font-size: .7em; }
+@media (prefers-reduced-motion: no-preference) { .merdiven.gorundu .cubuk i { animation: cubukDol 1.2s cubic-bezier(.3, .7, .2, 1) both; } }
+@keyframes cubukDol { from { width: 0; } }
+.lejant { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .85rem; color: var(--kursun); margin: 10px 2px 0; }
+.lejant span::before { content: ""; display: inline-block; width: 18px; height: 8px; border-radius: 4px; margin-right: 6px; vertical-align: middle; background: var(--murekkep); }
+.lejant .l-acik::before { background: linear-gradient(90deg, var(--kirmizi), var(--turuncu)); }
+.lejant .l-kiyas::before { background: var(--kursun); }
+
+/* ---------- Çok yönlü karşılaştırma ---------- */
+.olcutler { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.olcut { padding: 14px 16px 12px; border-radius: 16px; background: var(--kart); border: 1.5px solid var(--kare-kalin); display: flex; flex-direction: column; }
+.olcut h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.12rem; margin: 0; color: var(--murekkep); }
+.olcut .olc-ne { font-size: .84rem; color: var(--kursun); margin: 2px 0 10px; line-height: 1.4; }
+.olcut .tur { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 0 7px; border-radius: 999px; border: 1.5px solid currentColor; margin-left: 6px; vertical-align: 2px; }
+.olcut .tur.olcum { color: var(--murekkep); } .olcut .tur.yorum { color: var(--turuncu); }
+.satirlar { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.satirlar li { display: grid; grid-template-columns: 86px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: .84rem; }
+.satirlar .o-ad { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.satirlar li.medar .o-ad { color: var(--turuncu); }
+.satirlar .o-cubuk { height: 10px; border-radius: 5px; background: var(--kare); overflow: hidden; }
+.satirlar .o-cubuk i { display: block; height: 100%; border-radius: 5px; background: var(--murekkep); width: calc(var(--p) * 20%); }
+.satirlar li.medar .o-cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
+.satirlar li.yok .o-cubuk { background: repeating-linear-gradient(135deg, var(--kare) 0 5px, transparent 5px 10px); }
+.satirlar .o-deger { font-size: .78rem; color: var(--kursun); white-space: nowrap; text-align: right; min-width: 70px; }
+.olcut .olc-kural { margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed var(--kare-kalin); font-size: .78rem; color: var(--kursun); line-height: 1.45; }
+.onde { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.onde li { font-size: .86rem; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--kare-kalin); background: var(--kart); }
+.onde li b { color: var(--murekkep); }
+.agirlik { margin-top: 26px; padding: 18px; border-radius: 18px; background: var(--kart); border: 1.5px solid var(--kare-kalin); border-top: 5px solid var(--turuncu); }
+.agirlik h3 { font-family: var(--baslik); font-weight: 800; font-size: 1.3rem; margin: 0 0 4px; }
+.agirlik > p { margin: 0 0 12px; font-size: .95rem; max-width: 70ch; }
+.hazir { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.hazir button { font: inherit; font-size: .88rem; font-weight: 700; padding: 5px 14px; border-radius: 999px; border: 1.5px solid var(--murekkep); background: var(--kagit); color: var(--murekkep); cursor: pointer; }
+.hazir button[aria-pressed="true"] { background: var(--murekkep); color: var(--kagit); }
+.agirlik-izgara { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 22px; align-items: start; }
+.surgu { display: grid; grid-template-columns: minmax(0, 1fr) 110px 22px; gap: 8px; align-items: center; font-size: .88rem; padding: 3px 0; }
+.surgu input { width: 100%; accent-color: var(--murekkep); }
+.surgu output { font-weight: 700; text-align: right; color: var(--murekkep); }
+.sira { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sira li { display: grid; grid-template-columns: 24px 96px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: .9rem; transition: transform .3s; }
+.sira .s-no { font-weight: 800; color: var(--kursun); text-align: right; }
+.sira .s-ad { font-weight: 700; }
+.sira li.medar .s-ad { color: var(--turuncu); }
+.sira .s-cubuk { height: 14px; border-radius: 7px; background: var(--kare); overflow: hidden; }
+.sira .s-cubuk i { display: block; height: 100%; border-radius: 7px; background: var(--murekkep); transition: width .45s cubic-bezier(.3, .7, .2, 1); }
+.sira li.medar .s-cubuk i { background: linear-gradient(90deg, #b8860b, var(--turuncu)); }
+.sira .s-puan { font: italic 600 .98rem/1 "Fraunces", Georgia, serif; text-align: right; color: var(--murekkep); }
+.sira .s-eksik { grid-column: 3 / -1; font-size: .74rem; color: var(--kirmizi); margin-top: -4px; }
+.bulmaca-sec { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; margin: 0 0 14px; cursor: pointer; }
+.bulmaca-sec input { width: 18px; height: 18px; accent-color: var(--murekkep); }
+.agirlik-not { margin: 14px 0 0; font-size: .85rem; color: var(--kursun); }
+@media (max-width: 760px) { .agirlik-izgara { grid-template-columns: minmax(0, 1fr); } .satirlar li { grid-template-columns: 74px minmax(0, 1fr) auto; } .sira li { grid-template-columns: 22px 84px minmax(0, 1fr) 36px; } .surgu { grid-template-columns: minmax(0, 1fr) 90px 22px; } }
+
+/* ---------- Kaynaklar ve alt bilgi ---------- */
+.kaynaklar { font-size: .88rem; color: var(--kursun); columns: 2 320px; column-gap: 28px; padding-left: 18px; margin: 0; }
+.kaynaklar li { margin-bottom: 4px; break-inside: avoid; }
+.kaynaklar a { color: var(--murekkep); }
+footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare-kalin); font-size: .9rem; color: var(--kursun); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.imzali { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ---------- Telefon ---------- */
+@media (max-width: 860px) { .oyunlar { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .ic { padding-left: 22px; }
+  .ust { position: sticky; top: 0; z-index: 50; margin: 0 -20px 0 -42px; padding: 8px 14px; min-height: 58px;
+    background: color-mix(in srgb, var(--kagit) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1.5px solid var(--kare-kalin); }
+  .ust ana-sayfa-dugmesi { margin-right: 0; }
+  .mc-sayfa { display: block; flex: 1 1 0; min-width: 0; font-weight: 700; font-size: .92rem; color: var(--kursun); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .menu-dugme { display: inline-flex; min-height: 44px; padding: 0 14px 0 12px; }
+  .menu-dugme[aria-expanded="true"] { border-color: var(--kirmizi); color: var(--metin); }
+  .ust-linkler, .ust .ust-dugme:not(.menu-dugme) { display: none; }
+  .ust.acik .ust-linkler { display: flex; flex: 1 1 100%; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .ust.acik .ust-link { min-height: 50px; padding: 12px 16px; border-radius: 14px; border-left: 4px solid var(--murekkep); }
+  .ust.acik .ust-dugme:not(.menu-dugme) { display: inline-flex; flex: 1 1 calc(50% - 4px); justify-content: center; min-height: 46px; border-radius: 14px; }
+  .acilis { padding-top: 24px; }
+  .medar-kart { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+  .medar-kart img { width: 110px; height: 110px; border-radius: 24px; }
+  .oyun { padding: 14px 14px 14px; }
+  .oyun figure { min-height: 0; padding: 14px; }
+  .basamak { grid-template-columns: minmax(0, 1fr) auto; }
+  .basamak .cubuk { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 380px) { .ust .mc-yazi { display: none; } .menu-dugme { padding: 0 12px; } }
+@media print { .ust, .mat-kutu > summary::after { display: none; } .mat-kutu { break-inside: avoid; } .oyun { break-inside: avoid; } }
+
+.oyun-sayfa .yol{font-size:.9rem;color:var(--kursun);margin:0 0 6px}
+.oyun-sayfa .yol a{color:inherit}
+.oyun-sayfa .oyunlar{grid-template-columns:minmax(0,1fr)}
+.oyun-sayfa article.oyun{max-width:1040px}
+.oyun-sayfa .oyun-baslik{font-family:var(--baslik);font-weight:800;font-size:clamp(1.7rem,4vw,2.4rem);margin:0;line-height:1.1;color:var(--metin);display:flex;align-items:center;gap:10px}
+.oyun-sayfa .oyun-baslik .ikon{width:34px;height:34px}
+.oyun-sayfa .oyun-baslik small{font-family:var(--yazi);font-weight:400;font-size:.95rem;color:var(--kursun)}
+@media (min-width:900px){
+  .oyun-sayfa article.oyun{display:grid;grid-template-columns:minmax(300px,400px) minmax(0,1fr);column-gap:30px;align-items:start}
+  .oyun-sayfa article.oyun>figure{grid-row:1/span 9;position:sticky;top:90px;margin:0}
+  .oyun-sayfa article.oyun>*:not(figure){grid-column:2}
+}
+.ikon{width:22px;height:22px;flex:none;vertical-align:-5px;color:var(--murekkep)}
+.oyun-gez{display:flex;justify-content:space-between;gap:12px;margin:34px 0 10px;flex-wrap:wrap}
+.oyun-gez a{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--kare-kalin);border-radius:12px;background:var(--kagit);color:var(--metin);text-decoration:none;font-weight:700}
+.oyun-gez a:hover{border-color:var(--murekkep)}
+.oyun-gez small{display:block;font-weight:400;color:var(--kursun);font-size:.78rem}
+.oyun-izgara{list-style:none;padding:0;margin:8px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.oyun-izgara a{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--kare-kalin);border-radius:10px;color:var(--metin);text-decoration:none;background:var(--kagit)}
+.oyun-izgara a[aria-current]{border-color:var(--murekkep);box-shadow:inset 0 0 0 1px var(--murekkep)}
+.oyun-ozet .devam{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--murekkep);margin-top:4px}
+.oyun-ozet .devam small{font-weight:400;color:var(--kursun)}
+</style>
+</head>
+<body class="oyun-sayfa">
+<a class="me-atla" href="#icerik">İçeriğe atla</a>
+<div class="sayfa"><div class="ic">
+
+<nav class="ust" aria-label="Site">
+  <ana-sayfa-dugmesi><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+  <span class="mc-sayfa" aria-hidden="true">Gizli Kod</span>
+  <button type="button" class="ust-dugme menu-dugme" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+  <div class="ust-linkler">
+    <a class="ust-link" href="../salon/">Oyun Salonu</a>
+    <a class="ust-link" href="../#medar">MEDAR</a>
+    <a class="ust-link" href="../#populer">Popüler oyunlar</a>
+    <a class="ust-link" href="../#merdiven">Sayıların merdiveni</a>
+    <a class="ust-link" href="../#kiyas">Karşılaştırma</a>
+  </div>
+  <button type="button" class="ust-dugme muzik-sekme" id="muzikDugme" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="muzik-yazi">Müzik</span></button>
+  <button type="button" class="ust-dugme" data-tema-dugme aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span><span class="tema-yazi">Otomatik</span></button>
+</nav>
+
+<main id="icerik" tabindex="-1">
+<p class="yol"><a href="../">Zeka Oyunları</a> › <a href="../#populer">Popüler oyunlar</a> › Gizli Kod</p>
+<section class="bolum" style="margin-top:6px">
+<div class="oyunlar">
+    <article class="oyun" id="gizli-kod">
+      <figure><svg class="tahta-svg" viewBox="0 0 200 204" role="img" aria-label="Gizli Kod tahtası: dört tahminle gizli kod bulunmuş. Her satırın sağındaki küçük pimler: siyah doğru renk doğru yer, beyaz doğru renk yanlış yer."><defs><radialGradient id="mmP" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="200" height="204" rx="12" fill="#2b2f3a"/><rect x="10" y="7" width="180" height="30" rx="8" fill="#1a1d25" stroke="#e08a1e" stroke-width="1.5"/><circle cx="34" cy="23.2" r="10" fill="#000" opacity=".35"/><circle cx="34" cy="22" r="10" fill="#3b6fd8"/><circle cx="34" cy="22" r="10" fill="url(#mmP)"/><circle cx="64" cy="23.2" r="10" fill="#000" opacity=".35"/><circle cx="64" cy="22" r="10" fill="#f2c230"/><circle cx="64" cy="22" r="10" fill="url(#mmP)"/><circle cx="94" cy="23.2" r="10" fill="#000" opacity=".35"/><circle cx="94" cy="22" r="10" fill="#d6403f"/><circle cx="94" cy="22" r="10" fill="url(#mmP)"/><circle cx="124" cy="23.2" r="10" fill="#000" opacity=".35"/><circle cx="124" cy="22" r="10" fill="#d6403f"/><circle cx="124" cy="22" r="10" fill="url(#mmP)"/><text x="178" y="26" text-anchor="middle" font-family="Onest, sans-serif" font-weight="700" font-size="11" fill="#e08a1e">kod</text><rect x="10" y="48" width="180" height="28" rx="7" fill="#353a47"/><circle cx="34" cy="63.2" r="9" fill="#000" opacity=".35"/><circle cx="34" cy="62" r="9" fill="#d6403f"/><circle cx="34" cy="62" r="9" fill="url(#mmP)"/><circle cx="64" cy="63.2" r="9" fill="#000" opacity=".35"/><circle cx="64" cy="62" r="9" fill="#d6403f"/><circle cx="64" cy="62" r="9" fill="url(#mmP)"/><circle cx="94" cy="63.2" r="9" fill="#000" opacity=".35"/><circle cx="94" cy="62" r="9" fill="#3aa35b"/><circle cx="94" cy="62" r="9" fill="url(#mmP)"/><circle cx="124" cy="63.2" r="9" fill="#000" opacity=".35"/><circle cx="124" cy="62" r="9" fill="#3aa35b"/><circle cx="124" cy="62" r="9" fill="url(#mmP)"/><circle cx="168" cy="57" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="57" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="168" cy="67" r="3.6" fill="#4a5060" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="67" r="3.6" fill="#4a5060" stroke="#1a1d25" stroke-width=".8"/><rect x="10" y="82" width="180" height="28" rx="7" fill="#353a47"/><circle cx="34" cy="97.2" r="9" fill="#000" opacity=".35"/><circle cx="34" cy="96" r="9" fill="#d6403f"/><circle cx="34" cy="96" r="9" fill="url(#mmP)"/><circle cx="64" cy="97.2" r="9" fill="#000" opacity=".35"/><circle cx="64" cy="96" r="9" fill="#3b6fd8"/><circle cx="64" cy="96" r="9" fill="url(#mmP)"/><circle cx="94" cy="97.2" r="9" fill="#000" opacity=".35"/><circle cx="94" cy="96" r="9" fill="#f2c230"/><circle cx="94" cy="96" r="9" fill="url(#mmP)"/><circle cx="124" cy="97.2" r="9" fill="#000" opacity=".35"/><circle cx="124" cy="96" r="9" fill="#ec8a2d"/><circle cx="124" cy="96" r="9" fill="url(#mmP)"/><circle cx="168" cy="91" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="91" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="168" cy="101" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="101" r="3.6" fill="#4a5060" stroke="#1a1d25" stroke-width=".8"/><rect x="10" y="116" width="180" height="28" rx="7" fill="#353a47"/><circle cx="34" cy="131.2" r="9" fill="#000" opacity=".35"/><circle cx="34" cy="130" r="9" fill="#3b6fd8"/><circle cx="34" cy="130" r="9" fill="url(#mmP)"/><circle cx="64" cy="131.2" r="9" fill="#000" opacity=".35"/><circle cx="64" cy="130" r="9" fill="#d6403f"/><circle cx="64" cy="130" r="9" fill="url(#mmP)"/><circle cx="94" cy="131.2" r="9" fill="#000" opacity=".35"/><circle cx="94" cy="130" r="9" fill="#f2c230"/><circle cx="94" cy="130" r="9" fill="url(#mmP)"/><circle cx="124" cy="131.2" r="9" fill="#000" opacity=".35"/><circle cx="124" cy="130" r="9" fill="#d6403f"/><circle cx="124" cy="130" r="9" fill="url(#mmP)"/><circle cx="168" cy="125" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="125" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/><circle cx="168" cy="135" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="135" r="3.6" fill="#f4f4f0" stroke="#1a1d25" stroke-width=".8"/><rect x="10" y="150" width="180" height="28" rx="7" fill="#353a47"/><circle cx="34" cy="165.2" r="9" fill="#000" opacity=".35"/><circle cx="34" cy="164" r="9" fill="#3b6fd8"/><circle cx="34" cy="164" r="9" fill="url(#mmP)"/><circle cx="64" cy="165.2" r="9" fill="#000" opacity=".35"/><circle cx="64" cy="164" r="9" fill="#f2c230"/><circle cx="64" cy="164" r="9" fill="url(#mmP)"/><circle cx="94" cy="165.2" r="9" fill="#000" opacity=".35"/><circle cx="94" cy="164" r="9" fill="#d6403f"/><circle cx="94" cy="164" r="9" fill="url(#mmP)"/><circle cx="124" cy="165.2" r="9" fill="#000" opacity=".35"/><circle cx="124" cy="164" r="9" fill="#d6403f"/><circle cx="124" cy="164" r="9" fill="url(#mmP)"/><circle cx="168" cy="159" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="159" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/><circle cx="168" cy="169" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/><circle cx="178" cy="169" r="3.6" fill="#0b0b0d" stroke="#1a1d25" stroke-width=".8"/></svg><figcaption class="gorsel-not">Dört tahminde bulunan kod. Sağdaki küçük pimler: siyah “doğru renk, doğru yer”, beyaz “doğru renk, yanlış yer”.</figcaption></figure>
+      <div class="oyun-ust"><h2 class="oyun-baslik"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-gizlikod"/></svg> Gizli Kod</h2><a class="dugme dolu" href="../salon/#gizlikod" style="margin-left:auto">Oyna</a></div>
+      <ul class="etiketler"><li>Mordecai Meirowitz · 1970</li><li>2 oyuncu</li><li class="cozuldu">Kanıtlı: en çok 5 tahmin</li></ul>
+      <p>Ticari <i>Mastermind</i> adıyla da bilinir; kökü çok daha eski, kâğıt kalemle oynanan <i>Boğa ve İnek</i> sayı oyunudur. Bir oyuncu renkli pimlerden gizli bir kod kurar, öbürü onu tahminlerle bulmaya çalışır. Bir şifre kırma oyunu ve bilgi biliminin en sevimli örneği.</p>
+      <p class="nasil"><b>Nasıl oynanır?</b> 6 renkten 4 pimlik bir kod (aynı renk tekrar edebilir). Her tahmine siyah ve beyaz küçük pimlerle cevap verilir; amaç kodu en az tahminde bulmak.</p>
+      <details class="mat-kutu" open>
+        <summary><span class="mk-rozet" aria-hidden="true">∑</span><span class="mk-baslik">Bunun arkasındaki matematik</span><span class="mk-ipucu">1296 koddan birini 5 soruda bulmak</span></summary>
+        <div class="mk-ic">
+          <p>Her yere 6 renkten biri gelebilir: 6 × 6 × 6 × 6 = <b>1296</b> olası kod. Bir cevap (kaç siyah, kaç beyaz) en fazla 14 farklı biçimde gelebilir.</p>
+          <p class="mk-formul">6<sup>4</sup> = 1296 &nbsp;·&nbsp; log₂ 1296 ≈ 10,3 bit</p>
+          <p>Bilgisayar bilimci Donald Knuth 1977'de her kodun <b>en çok 5 tahminde</b> bulunabileceğini gösterdi. Yöntemi şöyle: her olası tahmin için “hangi cevap gelirse kaç aday kalır?” diye bak, en kötü durumda en az aday bırakan tahmini seç. Buna <i>minimaks</i> denir; satranç programları da aynı fikirle düşünür.</p>
+          <p class="mk-benzetme"><b>Benzetme</b> “Aklımdan bir hayvan tuttum” oyunu gibi: “Dört ayaklı mı?” sorusu “Zürafa mı?” sorusundan iyidir, çünkü cevap ne olursa olsun adayları ikiye böler. İyi tahmin, kodu bulmaya değil, aday listesini en hızlı küçültmeye çalışır.</p>
+        </div>
+      </details>
+    </article>
+</div>
+<nav class="oyun-gez" aria-label="Oyunlar arasında gezin">
+  <a href="../hex/" rel="prev"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-hex"/></svg><span><small>Önceki oyun</small>Hex</span></a>
+  <a href="../sudoku/" rel="next"><span style="text-align:right"><small>Sonraki oyun</small>Sudoku</span><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-sudoku"/></svg></a>
+</nav>
+<h2 style="font-size:1.05rem;margin:22px 0 4px">Bütün oyunlar</h2>
+<ul class="oyun-izgara"><li><a href="../satranc/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-satranc"/></svg>Satranç</a></li><li><a href="../go/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-go"/></svg>Go<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> oyunu</span></a></li><li><a href="../mangala/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-mangala"/></svg>Mangala</a></li><li><a href="../reversi/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-reversi"/></svg>Reversi</a></li><li><a href="../hex/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-hex"/></svg>Hex</a></li><li><a href="../gizli-kod/" aria-current="page"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-gizlikod"/></svg>Gizli Kod</a></li><li><a href="../sudoku/"><svg class="ikon" aria-hidden="true"><use href="../../ortak/oyun-ikonlari.svg#ik-sudoku"/></svg>Sudoku</a></li></ul>
+<p style="margin-top:18px"><a class="dugme" href="../#merdiven">Sayıların merdiveni</a> <a class="dugme" href="../#kiyas">Çok yönlü karşılaştırma</a> <a class="dugme dolu" href="../salon/#gizlikod">Gizli Kod oyna →</a></p>
+</section>
+</main>
+
+<footer>
+  <span class="imzali"><me-imza boyut="26" duragan aria-hidden="true"></me-imza>© 2026 Muhsin ENGİN</span>
+  <a href="../">Zeka Oyunları ↩</a>
+</footer>
+
+</div></div>
+</body>
+</html>

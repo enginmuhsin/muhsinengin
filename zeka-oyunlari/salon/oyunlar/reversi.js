@@ -40,7 +40,7 @@
   const kare = (i) => 'abcdefgh'[i & 7] + (8 - (i >> 3));
 
   Salon.kaydet('reversi', {
-    baslik: 'Reversi', alt: 'Othello: sıkıştır ve çevir.',
+    baslik: 'Reversi', alt: 'Sıkıştır ve çevir.',
     ozet: 'Bir dakikada öğrenilir, bir ömür sürer. Köşelerin neden altın değerinde olduğunu ısı haritasında gör.',
     etiketler: ['Alfa-beta', 'Konum değeri', '2 kişi'],
     dallanmaRef: '≈ 10', dallanmaSayi: 10, oyunUzunlugu: 60,
@@ -139,7 +139,7 @@
           const c = K.cevrilen(st.t, i, st.sira).length, w = K.AGIRLIK[i];
           m += `<p style="margin-top:6px"><b>${kare(i)}</b>: ${c} taş çevirir, konum değeri <b>${w}</b>. ${w >= 100 ? 'Köşe taşı hiçbir yönden sıkıştırılamaz: kalıcıdır.' : w <= -20 ? 'Köşeye komşu "X/C karesi": rakibe köşeyi açabilir.' : ''}</p>`;
         }
-        m += `<p style="margin-top:6px;color:var(--soluk)">Othello 2023'te bilgisayarla çözüldü: iki taraf da kusursuz oynarsa oyun <b>berabere</b> biter.</p><code class="formul">konum sayısı ≈ 10^28 · oyun ağacı ≈ 10^58</code>`;
+        m += `<p style="margin-top:6px;color:var(--soluk)">8 × 8 Reversi 2023'te bilgisayarla çözüldü: iki taraf da kusursuz oynarsa oyun <b>berabere</b> biter.</p><code class="formul">konum sayısı ≈ 10^28 · oyun ağacı ≈ 10^58</code>`;
         api.mat(m);
       }
       return {

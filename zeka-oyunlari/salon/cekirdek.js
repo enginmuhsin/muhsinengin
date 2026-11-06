@@ -36,7 +36,8 @@ const Salon = (() => {
   /* ---------- yardımcılar ---------- */
   const tr = (x, b = 0) => Number(x).toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b });
   // Ortak oyun ikonları (ortak/oyun-ikonlari.svg); kendi sayfası olan oyunlar
-  const SAYFALI = new Set(['satranc', 'go', 'mangala', 'pentago', 'reversi', 'hex', 'mastermind', 'sudoku']);
+  const SAYFALI = new Set(['satranc', 'go', 'mangala', 'reversi', 'hex', 'gizlikod', 'sudoku']);
+  const SAYFA_ADI = { gizlikod: 'gizli-kod' };   // oyun kimliği ≠ sayfa klasörü olanlar
   function ikon(id) {
     if (!SAYFALI.has(id)) return null;
     const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('class', 'ikon'); s.setAttribute('aria-hidden', 'true');
@@ -152,7 +153,7 @@ const Salon = (() => {
     aktifId = id;
     $('salon').hidden = true; $('oyunSayfa').hidden = false; $('salonaDon').hidden = false;
     $('oyunBaslik').textContent = t.baslik; $('oyunAlt').textContent = t.alt;
-    $('kurallar').innerHTML = t.kurallar.map((k) => `<li>${k}</li>`).join('') + (SAYFALI.has(id) ? `<li class="sayfa-bag"><a href="../${id}/">${t.baslik}: tarihi ve arkasındaki matematik →</a></li>` : '');
+    $('kurallar').innerHTML = t.kurallar.map((k) => `<li>${k}</li>`).join('') + (SAYFALI.has(id) ? `<li class="sayfa-bag"><a href="../${SAYFA_ADI[id] || id}/">${t.baslik}: tarihi ve arkasındaki matematik →</a></li>` : '');
     $('tahta').innerHTML = ''; $('mat').innerHTML = '';
     document.title = t.baslik + ' · Oyun Salonu';
     aktif = { tanim: t, ayar: null, oyun: null };
@@ -214,8 +215,10 @@ const Salon = (() => {
     }).join('') + '<p style="font-size:12px;color:var(--soluk);margin:8px 0 0">Ölçek logaritmik: her çizgi aralığı 10 kat.</p>';
   }
 
-  // #oyun ya da #oyun-secenek (ör. #mastermind-gunluk): seçeneği doğrudan açar
+  // #oyun ya da #oyun-secenek (ör. #gizlikod-gunluk): seçeneği doğrudan açar
   function rota() {
+    // eski bağlantılar: #mastermind… → #gizlikod… (oyunun adı Gizli Kod oldu)
+    if (/^#mastermind/.test(location.hash)) { history.replaceState(null, '', location.hash.replace(/^#mastermind/, '#gizlikod')); }
     const h = decodeURIComponent(location.hash.slice(1));
     if (oyunlar[h]) return oyunAc(h);
     if (h.includes('~')) { const [id, kod] = [h.slice(0, h.indexOf('~')), h.slice(h.indexOf('~') + 1)]; if (oyunlar[id]) return oyunAc(id, null, kod); }
