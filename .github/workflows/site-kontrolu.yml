@@ -56,3 +56,32 @@ jobs:
             --exclude-path fonts
             'index.html' 'zeka-oyunlari/index.html'
           fail: false
+
+  tarayici:
+    name: Tarayıcıda konsol taraması
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Playwright ve Chromium
+        run: |
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: Her sayfayı masaüstü ve telefon boyutunda aç
+        run: |
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 2
+          node araclar/konsol-tarama.cjs
+
+  lighthouse:
+    name: Lighthouse puanları
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Erişilebilirlik ve temel kalite eşikleri
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=araclar/lighthouserc.json
