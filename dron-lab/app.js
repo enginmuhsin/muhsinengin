@@ -221,6 +221,19 @@
       });
     }
     onizleme.ayarla(Dron3D.tasarimdan(tasarim));
+    // gövde tipi: tasarımın kendisinden çıkar (uçuş simülatörüyle aynı kural)
+    const tipKutu = $('govdeTipi');
+    if (tipKutu && Dron3D.dronTipi) {
+      const c = +tasarim.pervaneCap, n = +tasarim.motorSayisi;
+      const TIP = {
+        agir: ['Ağır yük gövdesi', n >= 6 ? `${n} motor` : `${c}" pervane`, 'boru kollar, uzun iniş takımı, GPS'],
+        whoop: ['Tiny whoop (kanallı mikro)', `${c}" pervane`, 'pervaneler halka kanal içinde; sınıfta güvenli'],
+        cine: ['Cinewhoop (kanallı)', `${c}" pervane`, 'kanallı pervaneler ve üstte sinema kamerası'],
+        uzun: ['Uzun menzil gövdesi', `${c}" pervane`, 'GPS direği ve uzun antenler'],
+        yaris: ['Yarış (FPV) gövdesi', `${c}" pervane`, 'açık karbon gövde, aksiyon kamerası'],
+      }[Dron3D.dronTipi(tasarim)];
+      tipKutu.innerHTML = `<b>${TIP[0]}</b> · çünkü ${TIP[1]}: ${TIP[2]}. Uçuş Simülatörü'nde bu tip kendi karakteriyle uçar.`;
+    }
     onizleme.ucus(!!s.ucabilir);
     onizleme.hiz(s.ucabilir ? .45 + 1.4 * Math.min(1, s.hoverGaz) : .25);
   }

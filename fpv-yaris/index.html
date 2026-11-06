@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FPV Yarış Gözlüğü · Muhsin ENGİN</title>
+<meta name="description" content="Gözlükten bakarak dronunu turuncu kapılardan geçir: kamera açısı, akro modu, analog ve dijital görüntü, gecikme ve kaplumbağa modu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhsin ENGİN">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="FPV Yarış Gözlüğü · Muhsin ENGİN">
+<meta property="og:description" content="Gözlükten bakarak dronunu turuncu kapılardan geçir: kamera açısı, akro modu, analog ve dijital görüntü, gecikme.">
+<meta property="og:url" content="https://muhsinengin.com/fpv-yaris/">
+<meta property="og:image" content="https://muhsinengin.com/ortak/og/fpv.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b1012">
+<link rel="icon" href="../simge.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../ortak/tokenlar.css">
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 800; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext-800-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../fonts/onest-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Onest"; font-weight: 400; font-display: swap; src: url(../fonts/onest-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../fonts/onest-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Onest"; font-weight: 700; font-display: swap; src: url(../fonts/onest-latin-ext-700-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+:root{
+  --gece:#0b1012; --cam:rgba(11,16,18,.8); --cizgi:rgba(214,226,245,.16); --yazi:#eef3fa; --soluk:#a9b7cc;
+  --itki:#ffb04a; --iyi:#5fd39d; --kotu:#ff7a72; --osd:#f4f7ff;
+  --f-baslik:"Bricolage","Arial Black",system-ui,sans-serif; --f-govde:"Onest","Segoe UI",system-ui,sans-serif; --f-osd:ui-monospace,"Cascadia Mono","Consolas",monospace;
+  color-scheme:dark;
+}
+html,body{height:100%;margin:0;background:#0b1012;color:var(--yazi);font-family:var(--f-govde);overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#osd{pointer-events:none}
+#sahne{touch-action:none}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--itki);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* menü */
+.menu{position:fixed;inset:0;overflow:auto;background:linear-gradient(90deg,rgba(8,12,14,.94) 0,rgba(8,12,14,.86) 46%,rgba(8,12,14,.25) 100%);z-index:5}
+.menu-ic{max-width:560px;padding:22px 22px 40px}
+.ust-bag{color:var(--itki);text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+h1{font-family:var(--f-baslik);font-weight:800;font-size:clamp(28px,4.4vw,42px);line-height:1.05;margin:8px 0 6px}
+.giris{color:var(--soluk);font-size:15px;line-height:1.5;margin:0 0 18px}
+h2{font-family:var(--f-baslik);font-weight:800;font-size:15px;margin:18px 0 9px;display:flex;gap:8px}
+h2 span{color:var(--itki)}
+.cipler{display:flex;flex-wrap:wrap;gap:8px}
+.cip{background:transparent;border:1px solid var(--cizgi);border-radius:999px;padding:8px 13px;font-size:13px}
+.cip[aria-pressed="true"]{background:var(--itki);border-color:var(--itki);color:#1a0d02;font-weight:700}
+.kartlar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kart{text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--cizgi);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:3px}
+.kart b{font-size:14px}.kart small{color:var(--soluk);font-size:12px;line-height:1.35}
+.kart[aria-pressed="true"]{border-color:var(--itki);background:rgba(255,176,74,.12)}
+.kart .rek{color:var(--iyi)}
+.secim{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.secim>span{font-size:13px;color:var(--soluk);width:110px}
+.kaydirac{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+.kaydirac input{flex:1;accent-color:var(--itki)}
+.kaydirac b{font-variant-numeric:tabular-nums;min-width:44px}
+.bilgi{font-size:12.5px;color:var(--soluk);line-height:1.5;margin:6px 0 0}
+.bilgi b{color:var(--yazi)}
+.basla{margin-top:20px;width:100%;background:var(--itki);color:#1a0d02;border:0;border-radius:14px;padding:15px 18px;font-family:var(--f-baslik);font-weight:800;font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.basla kbd{font-family:var(--f-govde);font-size:12px;opacity:.7}
+.tuslar{margin-top:16px;font-size:12.5px;color:var(--soluk);line-height:1.7}
+.tuslar kbd{display:inline-block;border:1px solid var(--cizgi);border-radius:5px;padding:0 5px;font-size:11.5px;color:var(--yazi)}
+
+/* uçuş üst düğmeleri */
+.ust{position:fixed;top:12px;right:12px;display:flex;gap:8px;z-index:4}
+.ust button{background:var(--cam);border:1px solid var(--cizgi);border-radius:10px;padding:8px 12px;font-size:13px;backdrop-filter:blur(6px)}
+#turtle{position:fixed;left:50%;bottom:22%;transform:translateX(-50%);z-index:4;background:var(--itki);color:#1a0d02;border:0;border-radius:12px;padding:12px 18px;font-weight:700}
+
+/* sonuç */
+.sonuc{position:fixed;inset:0;display:grid;place-items:center;background:rgba(5,8,10,.7);z-index:6;padding:16px}
+.sonuc-kart{max-width:560px;width:100%;background:var(--gece);border:1px solid var(--cizgi);border-radius:18px;padding:22px}
+.sonuc-kart h3{font-family:var(--f-baslik);font-weight:800;font-size:26px;margin:2px 0 10px}
+.sonuc-kart .ust-yazi{color:var(--itki);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.olcumler{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cizgi);border:1px solid var(--cizgi);border-radius:12px;overflow:hidden;margin:12px 0}
+.olcumler div{background:#0f171a;padding:10px}
+.olcumler b{display:block;font-family:var(--f-baslik);font-size:19px;font-variant-numeric:tabular-nums}
+.olcumler small{color:var(--soluk);font-size:11.5px}
+.sonuc-kart p{line-height:1.55;font-size:14.5px;color:#d5deea}
+.formul{font-family:var(--f-osd);font-size:13px;background:rgba(255,176,74,.08);border:1px solid rgba(255,176,74,.3);border-radius:10px;padding:9px 11px;color:#ffd9a6}
+.dugmeler{display:flex;gap:10px;margin-top:14px}
+.dugmeler button{flex:1;border-radius:12px;padding:12px;border:1px solid var(--cizgi);background:transparent;font-weight:700}
+.dugmeler button:first-child{background:var(--itki);border-color:var(--itki);color:#1a0d02}
+
+/* dokunmatik kollar */
+.kol{position:fixed;bottom:22px;width:132px;height:132px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);z-index:3;touch-action:none}
+.kol i{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(255,176,74,.55)}
+#kolSol{left:18px}#kolSag{right:18px}
+@media (max-width:700px){ .menu{background:rgba(8,12,14,.93)} .kartlar{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<canvas id="sahne" aria-label="FPV gözlüğü görüntüsü"></canvas>
+<canvas id="osd" aria-hidden="true"></canvas>
+
+<div class="menu" id="menu">
+  <div class="menu-ic">
+    <a class="ust-bag" href="../dron/fpv.html">← FPV Rehberi</a>
+    <h1>FPV Yarış Gözlüğü</h1>
+    <p class="giris">Rehberdeki gözlük görüntüsünü bu kez sen uçur. Turuncu kapılardan sırayla geç, süreni düşür. Fizik, laboratuvardaki hesaplarla aynı: her dron kendi kütlesi, itkisi ve gövdesiyle uçar.</p>
+
+    <h2><span>1</span> Dronunu seç</h2>
+    <div class="cipler" id="dronlar"></div>
+    <p class="bilgi" id="dronBilgi"></p>
+
+    <h2><span>2</span> Parkuru seç</h2>
+    <div class="kartlar" id="parkurlar"></div>
+
+    <h2><span>3</span> Ayarlar</h2>
+    <div class="secim" role="group" aria-label="Uçuş modu"><span>Uçuş modu</span>
+      <button class="cip" data-mod="aci" aria-pressed="true">Açı · bırakınca düzelir</button>
+      <button class="cip" data-mod="akro" aria-pressed="false">Akro · yarışçılar gibi</button>
+    </div>
+    <div class="secim" role="group" aria-label="Görüntü"><span>Görüntü</span>
+      <button class="cip" data-video="dijital" aria-pressed="true">Dijital · net, 28 ms</button>
+      <button class="cip" data-video="analog" aria-pressed="false">Analog · karlı, 8 ms</button>
+    </div>
+    <div class="secim"><span>Kamera açısı</span>
+      <label class="kaydirac"><input type="range" id="tilt" min="0" max="45" step="1" value="25" aria-label="Kamera açısı (derece)"><b id="tiltYaz">25°</b></label>
+    </div>
+    <p class="bilgi">Kamera yukarı eğikse dron öne eğilerek hızlanırken ekranda ufuk düz kalır. Hızlı parkurda 30–40°, yavaşta 10–20° rahattır.</p>
+    <div class="secim" role="group" aria-label="Gecikme deneyi"><span>Gecikme deneyi</span>
+      <button class="cip" data-gecikme="0" aria-pressed="true">Kapalı</button>
+      <button class="cip" data-gecikme="200" aria-pressed="false">+200 ms ekle</button>
+    </div>
+
+    <button class="basla" id="basla" type="button">Gözlüğü tak <kbd>Enter</kbd></button>
+    <div class="tuslar">
+      <kbd>W</kbd>/<kbd>S</kbd> gaz · <kbd>A</kbd>/<kbd>D</kbd> dönüş · <kbd>↑</kbd><kbd>↓</kbd> ileri-geri eğim · <kbd>←</kbd><kbd>→</kbd> yana eğim · <kbd>T</kbd> kaplumbağa modu · <kbd>R</kbd> son kapıya dön · <kbd>Esc</kbd> menü<br>
+      Kumanda (Mode 2) ve dokunmatik çift kol da çalışır.
+    </div>
+  </div>
+</div>
+
+<div class="ust" id="ust" hidden>
+  <button type="button" id="bSes">Ses: açık</button>
+  <button type="button" id="bMenu">Menü</button>
+</div>
+<button type="button" id="turtle" hidden>Kaplumbağa modu: dronu çevir (T)</button>
+<div class="kol" id="kolSol" hidden><i></i></div>
+<div class="kol" id="kolSag" hidden><i></i></div>
+
+<div class="sonuc" id="sonuc" hidden>
+  <div class="sonuc-kart" role="dialog" aria-modal="true" aria-labelledby="sBaslik">
+    <div class="ust-yazi" id="sUst"></div>
+    <h3 id="sBaslik"></h3>
+    <div class="olcumler" id="sOlcum"></div>
+    <p id="sMetin"></p>
+    <div class="formul" id="sFormul"></div>
+    <div class="dugmeler"><button type="button" id="sTekrar">Tekrar uç</button><button type="button" id="sMenu">Menü</button></div>
+  </div>
+</div>
+
+<script src="../ortak/kutuphane/three-r128.min.js"></script>
+<script src="../dron-lab/hesap.js"></script>
+<script>
+'use strict';
+/* =====================================================================
+   FPV YARIŞ GÖZLÜĞÜ
+   - Fizik: hesap.js'teki şablonlardan itki, kütle, gerilim. İtki gövdenin
+     "yukarı" ekseni boyunca; açı modunda kol → eğim, akro modunda kol → dönüş hızı.
+   - Gözlük: dronun burnundaki kamera, gövdeye göre "kamera açısı" kadar yukarı bakar.
+   - Gecikme: ekrandaki görüntü, dronun gerçek konumunun birkaç ms gerisinden gelir.
+   - Gövde tipi (uçuş simülatörüyle aynı kural): kanallı dronlar kapıya hafif değince kırılmaz.
+   ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const G = 9.80665, rad = (d) => d * Math.PI / 180, der = (r) => r * 180 / Math.PI;
+const trs = (x, b) => Number(x).toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b });
+const oku = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+const yazK = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+function dronTipi(t) {
+  const c = +t.pervaneCap || 5, n = +t.motorSayisi || 4;
+  if (n >= 6 || c >= 9) return 'agir';
+  if (c <= 2.5) return 'whoop';
+  if (c <= 3.5) return 'cine';
+  if (c >= 6) return 'uzun';
+  return 'yaris';
+}
+const TIP = {
+  yaris: { ad: 'Yarış gövdesi', koruma: 1, cda: 1, oran: 720, not: 'En hızlı ve en çevik. Koruması yok: kapıya hızlı değerse pervane kırılır.' },
+  cine:  { ad: 'Cinewhoop', koruma: 2, cda: 1.35, oran: 520, not: 'Kanallı pervaneler kapıya sürtünmeyi affeder; hava direnci yüksek, son hızı düşük.' },
+  whoop: { ad: 'Tiny whoop', koruma: 2.4, cda: 1.5, oran: 560, not: 'Hafif ve korumalı. Dar parkurda rahat, rüzgârsız havada en eğlencelisi.' },
+  uzun:  { ad: 'Uzun menzil', koruma: 1, cda: 0.85, oran: 420, not: 'Büyük pervaneler: düzlükte hızlı ve verimli, virajda ağır tepkili.' },
+  agir:  { ad: 'Ağır yük', koruma: 1, cda: 1.2, oran: 220, not: 'Yarış için yapılmadı: yavaş döner, ağır tepki verir. Meydan okuma isteyenlere.' },
+};
+const PARKURLAR = {
+  tarla: { ad: 'Tarla koşusu', kisa: '12 kapı, yumuşak virajlar. Rehberdeki gözlük görüntüsünün parkuru.', kapi: 12, ara: 34, A: [3.4, 0.042, 1.6, 0.105, 1.3], Y: [2.1, 0.9, 0.055, 2], agacUzak: 9 },
+  orman: { ad: 'Orman slalomu', kisa: '14 kapı, sert virajlar, ağaçlar parkura yakın, kapı yükseklikleri değişir.', kapi: 14, ara: 24, A: [7, 0.07, 2.6, 0.16, 0.4], Y: [2.4, 1.5, 0.11, 0.7], agacUzak: 4.2 },
+};
+const ayar = { sablon: 'yaris5', parkur: 'tarla', mod: 'aci', video: 'dijital', tilt: 25, ekGecikme: 0 };
+let durum = 'menu', sesAcik = true;
+
+/* ---------- 3B sahne ---------- */
+const tuval = $('sahne'), osd = $('osd'), og = osd.getContext('2d');
+const renderer = new THREE.WebGLRenderer({ canvas: tuval, antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
+renderer.outputEncoding = THREE.sRGBEncoding;
+const sahne = new THREE.Scene();
+const UFUK = new THREE.Color('#d9ecfa');
+sahne.fog = new THREE.Fog(UFUK, 80, 520);
+const kamera = new THREE.PerspectiveCamera(100, 1, 0.03, 1500);
+{
+  const mat = new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, fog: false,
+    uniforms: { ust: { value: new THREE.Color('#3d7cc9') }, alt: { value: UFUK } },
+    vertexShader: 'varying float h; void main(){ h = normalize(position).y; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+    fragmentShader: 'uniform vec3 ust; uniform vec3 alt; varying float h; void main(){ float k = pow(clamp(h,0.0,1.0),0.5); gl_FragColor = vec4(mix(alt,ust,k),1.0); }',
+  });
+  sahne.add(new THREE.Mesh(new THREE.SphereGeometry(1200, 32, 16), mat));
+}
+sahne.add(new THREE.HemisphereLight('#e6f1ff', '#4c6630', 0.8));
+const gunes = new THREE.DirectionalLight('#fff3df', 1.1); gunes.position.set(-60, 120, 40); sahne.add(gunes);
+
+// tarla: ileri doğru uzanan ekin şeritleri (gözlük görüntüsündeki gibi)
+{
+  const c = document.createElement('canvas'); c.width = 64; c.height = 512; const x = c.getContext('2d');
+  for (let i = 0; i < 16; i++) { x.fillStyle = i % 2 ? '#6c9c47' : '#5a8a39'; x.fillRect(0, i * 32, 64, 32); }
+  for (let i = 0; i < 2600; i++) { x.fillStyle = `rgba(${40 + Math.random() * 50},${90 + Math.random() * 60},${30 + Math.random() * 20},0.35)`; x.fillRect(Math.random() * 64, Math.random() * 512, 2, 2); }
+  const d = new THREE.CanvasTexture(c); d.wrapS = d.wrapT = THREE.RepeatWrapping; d.repeat.set(220, 20); d.encoding = THREE.sRGBEncoding;
+  d.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const z = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshStandardMaterial({ map: d, roughness: 1 }));
+  z.rotation.x = -Math.PI / 2; sahne.add(z);
+}
+// uzak tepeler
+{
+  const m = new THREE.MeshStandardMaterial({ color: '#7d9fb4', flatShading: true });
+  for (let i = 0; i < 30; i++) {
+    const a = i / 30 * Math.PI * 2, r = 600 + (i % 3) * 40, h = 50 + ((i * 37) % 60);
+    const t = new THREE.Mesh(new THREE.ConeGeometry(90 + (i % 4) * 20, h, 5), m); t.position.set(Math.cos(a) * r, h / 2 - 3, Math.sin(a) * r - 200); sahne.add(t);
+  }
+}
+
+/* ---------- parkur ---------- */
+const parkurGrubu = new THREE.Group(); sahne.add(parkurGrubu);
+let P = null;   // { kapilar[], agaclar[], yolX(s), yolY(s) }
+const KAPI_W = 2.6, KAPI_H = 1.9, CUBUK = 0.14;
+function parkurKur(ad) {
+  while (parkurGrubu.children.length) parkurGrubu.remove(parkurGrubu.children[0]);
+  const p = PARKURLAR[ad], [a1, f1, a2, f2, q2] = p.A, [y0, y1, fy, qy] = p.Y;
+  const yolX = (s) => a1 * Math.sin(s * f1) + a2 * Math.sin(s * f2 + q2);
+  const yolY = (s) => y0 + y1 * Math.sin(s * fy + qy);
+  const kapilar = [], agaclar = [];
+  // kapı çubukları: rehberdeki gözlük görüntüsü gibi turuncu üstüne beyaz şeritler
+  const serit = (dik) => {
+    const c = document.createElement('canvas'); c.width = 128; c.height = 8; const x = c.getContext('2d');
+    x.fillStyle = '#ff6a10'; x.fillRect(0, 0, 128, 8); x.fillStyle = '#ffffff'; for (let i = 0; i < 8; i++) x.fillRect(i * 16 + 4, 0, 8, 8);
+    const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    if (dik) { t.center.set(0.5, 0.5); t.rotation = Math.PI / 2; }
+    return t;
+  };
+  const seritY = serit(false), seritD = serit(true);
+  const dama = (() => {
+    const c = document.createElement('canvas'); c.width = 64; c.height = 16; const x = c.getContext('2d');
+    for (let i = 0; i < 16; i++) for (let j = 0; j < 4; j++) { x.fillStyle = (i + j) % 2 ? '#111' : '#f5f5f5'; x.fillRect(i * 4, j * 4, 4, 4); }
+    const d = new THREE.CanvasTexture(c); d.magFilter = THREE.NearestFilter; return new THREE.MeshStandardMaterial({ map: d, roughness: 0.6 });
+  })();
+  for (let i = 0; i < p.kapi; i++) {
+    const s = 18 + i * p.ara, x = yolX(s), y = yolY(s), z = -s;
+    const ileri = new THREE.Vector3(yolX(s + 1) - x, 0, -1).normalize();   // kapının normali (uçuş yönü)
+    const g = new THREE.Group(); g.position.set(x, 0, z); g.lookAt(x + ileri.x, 0, z + ileri.z);
+    const ilkSon = i === 0 || i === p.kapi - 1;
+    const m = ilkSon ? dama : new THREE.MeshStandardMaterial({ map: seritY, roughness: 0.45 });
+    const md = ilkSon ? dama : new THREE.MeshStandardMaterial({ map: seritD, roughness: 0.45 });
+    const ust = new THREE.Mesh(new THREE.BoxGeometry(KAPI_W + 2 * CUBUK, CUBUK, CUBUK), m); ust.position.y = y + KAPI_H / 2 + CUBUK / 2; g.add(ust);
+    const alt = new THREE.Mesh(new THREE.BoxGeometry(KAPI_W + 2 * CUBUK, CUBUK, CUBUK), m); alt.position.y = y - KAPI_H / 2 - CUBUK / 2; g.add(alt);
+    for (const sx of [-1, 1]) {
+      const yan = new THREE.Mesh(new THREE.BoxGeometry(CUBUK, KAPI_H, CUBUK), md); yan.position.set(sx * (KAPI_W / 2 + CUBUK / 2), y, 0); g.add(yan);
+      const ayak = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, y - KAPI_H / 2 - CUBUK), new THREE.MeshStandardMaterial({ color: '#8a94a3' }));
+      ayak.position.set(sx * (KAPI_W / 2 + CUBUK / 2), (y - KAPI_H / 2 - CUBUK) / 2, 0); g.add(ayak);
+    }
+    // kapı numarası (zeminde)
+    const c = document.createElement('canvas'); c.width = c.height = 128; const cx = c.getContext('2d');
+    cx.fillStyle = '#fff'; cx.font = '800 96px Bricolage, Arial'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.fillText(i === 0 ? 'S' : i === p.kapi - 1 ? 'B' : String(i), 64, 70);
+    const no = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 1.4), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+    no.rotation.x = -Math.PI / 2; no.position.set(0, 0.02, 1.6); g.add(no);
+    parkurGrubu.add(g);
+    g.updateMatrixWorld(true);
+    kapilar.push({ grup: g, merkez: new THREE.Vector3(x, y, z), n: new THREE.Vector3(0, 0, 1).applyQuaternion(g.quaternion), sag: new THREE.Vector3(1, 0, 0).applyQuaternion(g.quaternion), mat: m, matD: md, ilkSon });
+  }
+  // toprak patika
+  {
+    const pts = [], uzun = 18 + (p.kapi + 1) * p.ara;
+    for (let s = -10; s < uzun; s += 3) pts.push(new THREE.Vector3(yolX(s) - 1.1, 0.02, -s));
+    const sekil = new THREE.Shape(); sekil.moveTo(-1.3, 0); sekil.lineTo(1.3, 0);
+    const geo = new THREE.BufferGeometry(), v = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1], yan = new THREE.Vector3(b.z - a.z, 0, -(b.x - a.x)).normalize().multiplyScalar(1.3);
+      const bYan = yan;
+      v.push(a.x - yan.x, 0.02, a.z - yan.z, a.x + yan.x, 0.02, a.z + yan.z, b.x - bYan.x, 0.02, b.z - bYan.z);
+      v.push(a.x + yan.x, 0.02, a.z + yan.z, b.x + bYan.x, 0.02, b.z + bYan.z, b.x - bYan.x, 0.02, b.z - bYan.z);
+    }
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(v, 3)); geo.computeVertexNormals();
+    parkurGrubu.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: '#b0926a', roughness: 1, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 })));
+  }
+  // ağaçlar: parkurun iki yanında (çarpışmalı)
+  {
+    let tohum = ad === 'orman' ? 21 : 9; const rnd = () => (tohum = (tohum * 16807) % 2147483647) / 2147483647;
+    const n = ad === 'orman' ? 260 : 150, uzun = 18 + (p.kapi + 1) * p.ara;
+    const gov = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.12, 0.18, 1.6, 6), new THREE.MeshStandardMaterial({ color: '#6b4a2f' }), n);
+    const tac = new THREE.InstancedMesh(new THREE.ConeGeometry(1.3, 3.6, 7), new THREE.MeshStandardMaterial({ color: '#3f6b35', flatShading: true }), n);
+    const o = new THREE.Object3D();
+    for (let k = 0; k < n; k++) {
+      const s = -20 + rnd() * (uzun + 40), yan = (rnd() < 0.5 ? -1 : 1) * (p.agacUzak + rnd() * (ad === 'orman' ? 14 : 40));
+      const x = yolX(s) + yan, z = -s, sc = 0.8 + rnd() * 1.1;
+      o.position.set(x, 0.8 * sc, z); o.scale.setScalar(sc); o.rotation.y = rnd() * 6; o.updateMatrix(); gov.setMatrixAt(k, o.matrix);
+      o.position.y = 3.2 * sc; o.updateMatrix(); tac.setMatrixAt(k, o.matrix);
+      agaclar.push({ x, z, s: sc });
+    }
+    parkurGrubu.add(gov, tac);
+  }
+  P = { ad, kapilar, agaclar, yolX, yolY };
+}
+
+/* ---------- dron fiziği ---------- */
+let fz = null, uc = null;
+function dronHazirla(ad) {
+  const t = { ...SABLONLAR[ad] }, s = hesapla(t), tip = dronTipi(t);
+  const boy = t.cerceveSinif;
+  return Object.assign(s, {
+    t, ad, tip, T: TIP[tip], N: t.motorSayisi,
+    CdA: 0.03 * Math.pow(boy / 5, 2) * TIP[tip].cda,
+    kLin: 0.12,
+    oranMaks: rad(TIP[tip].oran * (0.6 + 0.4 * s.ceviklik / 100)),   // en büyük dönüş hızı
+    tauOran: 0.03 + 0.03 * (t.pervaneCap / 5),
+    tauMotor: 0.03 * Math.pow(t.pervaneCap / 5, 1.2),
+    kol: t.pervaneCap * 0.0254 * 0.9,
+    rD: t.pervaneCap * 0.0254 * 0.9 + t.pervaneCap * 0.0254 / 2,
+  });
+}
+const Voc = (soc) => 3.4 + 0.8 * soc;
+const _q = new THREE.Quaternion(), _q2 = new THREE.Quaternion(), _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _e = new THREE.Euler();
+const EKSEN_X = new THREE.Vector3(1, 0, 0), EKSEN_Y = new THREE.Vector3(0, 1, 0), EKSEN_Z = new THREE.Vector3(0, 0, 1);
+
+function ucusBaslat() {
+  fz = dronHazirla(ayar.sablon); parkurKur(ayar.parkur);
+  const k0 = P.kapilar[0], bas = k0.merkez.clone().addScaledVector(k0.n, -10); bas.y = 0.1;
+  uc = {
+    poz: bas, hiz: new THREE.Vector3(), q: new THREE.Quaternion().setFromAxisAngle(EKSEN_Y, Math.atan2(-k0.n.x, -k0.n.z)),
+    w: new THREE.Vector3(),   // gövde dönüş hızı (rad/s): x=pitch, y=yaw, z=roll
+    gaz: 0, gazK: 0, soc: 1, Vh: Voc(1), I: 0, zaman: 0, integ: 0,
+    sira: 0, basladi: false, sure: 0, bitti: false, ters: false, kirik: false, yerde: true, sonKapi: -1,
+    maksHiz: 0, hizTop: 0, hizSay: 0, egimTop: 0, temasSay: 0,
+    gecmis: [], sayac: 3.2,
+  };
+  for (const k of P.kapilar) if (!k.ilkSon) { k.mat.color.set('#ffffff'); k.matD.color.set('#ffffff'); }
+  durum = 'ucus'; $('menu').hidden = true; $('sonuc').hidden = true; $('ust').hidden = false; $('turtle').hidden = true;
+  const dok = matchMedia('(pointer: coarse)').matches; $('kolSol').hidden = $('kolSag').hidden = !dok;
+  sesBaslat();
+}
+
+const girdi = { gaz: 0, tirman: 0, yaw: 0, pitch: 0, roll: 0 }, tus = {};
+addEventListener('keydown', (e) => {
+  tus[e.code] = true;
+  if (e.code === 'Enter' && durum === 'menu') ucusBaslat();
+  if (e.code === 'Escape' && durum !== 'menu') menuyeDon();
+  if (e.code === 'KeyT' && durum === 'ucus') kaplumbaga();
+  if (e.code === 'KeyR' && durum === 'ucus') sonKapiyaDon();
+  if (durum === 'ucus' && e.code.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', (e) => { tus[e.code] = false; });
+const kollar = { kolSol: { x: 0, y: -1, aktif: false }, kolSag: { x: 0, y: 0, aktif: false } };
+function kolKur(id) {
+  const el = $(id), top = el.querySelector('i'), k = kollar[id];
+  const guncelle = (e) => {
+    const r = el.getBoundingClientRect(), x = sinirla((e.clientX - r.left) / r.width * 2 - 1, -1, 1), y = sinirla(-((e.clientY - r.top) / r.height * 2 - 1), -1, 1);
+    k.x = x; k.y = y; top.style.transform = `translate(${x * 40}px,${-y * 40}px)`;
+  };
+  el.addEventListener('pointerdown', (e) => { k.aktif = true; el.setPointerCapture(e.pointerId); guncelle(e); });
+  el.addEventListener('pointermove', (e) => { if (k.aktif) guncelle(e); });
+  const birak = () => {
+    k.aktif = false; k.x = 0;
+    if (id === 'kolSag' || ayar.mod === 'aci') k.y = id === 'kolSol' && ayar.mod === 'akro' ? k.y : 0;   // akroda gaz kolu yaylı değil
+    top.style.transform = `translate(0px,${-k.y * 40}px)`;
+  };
+  el.addEventListener('pointerup', birak); el.addEventListener('pointercancel', birak);
+}
+kolKur('kolSol'); kolKur('kolSag');
+const yum = { pitch: 0, roll: 0, yaw: 0, tirman: 0 };
+function girdiOku(dt) {
+  const k = (a, b) => (tus[a] || tus[b] ? 1 : 0);
+  const p = k('ArrowUp', 'KeyI') - k('ArrowDown', 'KeyK'), r = k('ArrowRight', 'KeyL') - k('ArrowLeft', 'KeyJ');
+  const y = k('KeyD', 'KeyD') - k('KeyA', 'KeyA'), c = k('KeyW', 'KeyW') - k('KeyS', 'KeyS');
+  const a = 1 - Math.exp(-dt * 9);
+  yum.pitch += (p - yum.pitch) * a; yum.roll += (r - yum.roll) * a; yum.yaw += (y - yum.yaw) * a; yum.tirman += (c - yum.tirman) * a;
+  girdi.pitch = yum.pitch; girdi.roll = yum.roll; girdi.yaw = yum.yaw; girdi.tirman = yum.tirman;
+  if (ayar.mod === 'akro') girdi.gaz = sinirla(girdi.gaz + c * dt * 0.6, 0, 1);
+  const gp = navigator.getGamepads ? [...navigator.getGamepads()].find((g) => g && g.connected) : null;
+  if (gp && gp.axes.length >= 4) {
+    const ol = (v) => (Math.abs(v) < 0.06 ? 0 : v), ax = gp.axes.map(ol);
+    if (ax.some((v) => v !== 0)) {
+      girdi.yaw = ax[0]; girdi.roll = ax[2]; girdi.pitch = -ax[3];
+      if (ayar.mod === 'akro') girdi.gaz = (-gp.axes[1] + 1) / 2; else girdi.tirman = -ax[1];
+    }
+  }
+  const L = kollar.kolSol, R = kollar.kolSag;
+  if (!$('kolSol').hidden) {
+    if (L.aktif || L.x) girdi.yaw = L.x;
+    if (ayar.mod === 'akro') { if (L.aktif || L.y > -1) girdi.gaz = (L.y + 1) / 2; } else if (L.aktif) girdi.tirman = L.y;
+    if (R.aktif || R.x || R.y) { girdi.roll = R.x; girdi.pitch = R.y; }
+  }
+}
+// akro eğrisi: kolun ortası hassas, uçları hızlı (Betaflight "expo" benzeri)
+const expo = (x, e) => x * (1 - e) + x * x * x * e;
+
+const ADIM = 1 / 240;
+function fizikAdim(dt) {
+  const u = uc, f = fz;
+  u.zaman += dt;
+  if (u.sayac > 0) { u.sayac -= dt; if (u.sayac > 0) return; }
+  const olcek = u.soc > 0 ? Math.pow(u.Vh / 3.85, 2) : 0, Tmaks = f.Ttoplam * olcek, W = f.m * G;
+  // gövde eksenleri (dünyada)
+  const yukari = new THREE.Vector3(0, 1, 0).applyQuaternion(u.q), egimSimdi = Math.acos(sinirla(yukari.y, -1, 1));
+  if (!u.ters && !u.kirik) {
+    // --- dönüş hızı hedefi ---
+    const hedef = _v2;
+    if (ayar.mod === 'akro') hedef.set(-expo(girdi.pitch, 0.45), -expo(girdi.yaw, 0.35) * 0.6, -expo(girdi.roll, 0.45)).multiplyScalar(f.oranMaks);
+    else {
+      // açı modu: kol → hedef eğim; dronun şimdiki eğimini gövde ekseninde ölç
+      const maks = rad(50);
+      _e.setFromQuaternion(u.q, 'YXZ');
+      const pitchH = girdi.pitch * maks, rollH = girdi.roll * maks;
+      hedef.set(sinirla(8 * (-pitchH - _e.x), -4, 4), -girdi.yaw * rad(200), sinirla(8 * (-rollH - _e.z), -4, 4));
+    }
+    u.w.lerp(hedef, Math.min(1, dt / f.tauOran));
+  } else u.w.multiplyScalar(0.9);
+  // gövdeyi döndür (gövde ekseninde)
+  const wl = u.w.length();
+  if (wl > 1e-6) { _q2.setFromAxisAngle(_v2.copy(u.w).divideScalar(wl), wl * dt); u.q.multiply(_q2).normalize(); }
+
+  // --- gaz ---
+  if (u.ters || u.kirik) u.gazK = 0;
+  else if (ayar.mod === 'akro') u.gazK = girdi.gaz;
+  else {
+    // açı modu: dikey hız denetleyicisi (W/S tırmanma hızı ister)
+    if (u.yerde && girdi.tirman <= 0.05) { u.gazK = 0; u.integ = 0; }
+    else {
+      const vz = girdi.tirman >= 0 ? girdi.tirman * 4 : girdi.tirman * 3, hata = vz - u.hiz.y;
+      u.integ = sinirla(u.integ + hata * dt, -3, 3);
+      const cosT = Math.max(0.45, yukari.y), Tist = f.m * (G + 4 * hata + 1.5 * u.integ) / cosT;
+      u.gazK = Math.sqrt(sinirla(Tist / Math.max(Tmaks, 1e-6), 0, 1));
+    }
+  }
+  u.gaz += (u.gazK - u.gaz) * Math.min(1, dt / f.tauMotor);
+  // --- batarya ---
+  const Pel = f.N * f.Pmil * Math.pow(u.gaz, 3) / 0.6 + 2;
+  u.I = Pel / (f.t.hucre * Math.max(u.Vh, 2.8)); u.Vh = Math.max(2.8, Voc(Math.max(0, u.soc)) - u.I * f.Rhucre);
+  u.soc -= u.I * dt / (f.t.kapasite / 1000 * 3600 * 0.8);
+  // --- kuvvetler ---
+  const T = Tmaks * u.gaz * u.gaz;
+  const F = yukari.clone().multiplyScalar(T); F.y -= W;
+  const vm = u.hiz.length();
+  F.addScaledVector(u.hiz, -0.5 * f.rho * f.CdA * vm - f.kLin * f.m);
+  u.onceki = (u.onceki || new THREE.Vector3()).copy(u.poz);
+  u.hiz.addScaledVector(F, dt / f.m); u.poz.addScaledVector(u.hiz, dt);
+  u.T = T;
+  // --- zemin ---
+  const taban = 0.06;
+  if (u.poz.y <= taban) {
+    const vd = -u.hiz.y, yatayV = Math.hypot(u.hiz.x, u.hiz.z), egim = Math.acos(sinirla(yukari.y, -1, 1));
+    u.poz.y = taban;
+    if (!u.yerde && !u.ters && !u.kirik && (vd > 3.2 || (yatayV > 6 && egim > rad(30)))) return carp('yer', Math.max(vd, yatayV * 0.5));
+    if (u.hiz.y < 0) u.hiz.y = 0;
+    u.hiz.x *= Math.exp(-dt * 6); u.hiz.z *= Math.exp(-dt * 6);
+    if (yukari.y < 0.2 && !u.kirik && !u.ters && vm < 6) devrildi();
+    if (T < W * 1.02) { u.yerde = true; }
+  } else if (u.poz.y > taban + 0.05) u.yerde = false;
+  // --- engeller ---
+  engeller(dt);
+  // --- kapılar ---
+  if (!u.bitti && !u.kirik) kapiKontrol();
+  if (u.basladi && !u.bitti) {
+    u.sure += dt; u.maksHiz = Math.max(u.maksHiz, vm); u.hizTop += vm * dt; u.hizSay += dt;
+    u.egimTop += egimSimdi * dt;
+  }
+  if (u.soc <= 0 && !u.kirik && !u.bitti) carp('batarya', 0);
+}
+
+function temas(n, pen, ne) {
+  const u = uc; u.poz.addScaledVector(n, pen);
+  const vn = u.hiz.dot(n); if (vn >= 0) return;
+  u.temasSay++;
+  if (-vn > 2.2 * fz.T.koruma && !u.kirik) return carp(ne, -vn);
+  u.hiz.addScaledVector(n, -1.3 * vn); u.hiz.multiplyScalar(0.85);
+  // çarpma dronu döndürür: hafif sarsıntı
+  u.w.x += (Math.random() - 0.5) * 6; u.w.z += (Math.random() - 0.5) * 6;
+}
+function engeller() {
+  const u = uc, p = u.poz, rD = fz.rD;
+  for (const a of P.agaclar) {
+    const dx = p.x - a.x, dz = p.z - a.z, kap = 1.4 * a.s + rD;
+    if (dx > kap || dx < -kap || dz > kap || dz < -kap) continue;
+    const d = Math.hypot(dx, dz) || 1e-6, yA = 1.4 * a.s, yU = 5 * a.s;
+    let R = -1;
+    if (p.y < yU && p.y > yA - rD) R = 1.3 * a.s * (yU - Math.max(p.y, yA)) / (yU - yA);
+    if (p.y < 1.6 * a.s) R = Math.max(R, 0.2 * a.s);
+    if (R > 0 && R + rD - d > 0) temas(_v.set(dx / d, 0, dz / d).clone(), R + rD - d, 'agac');
+  }
+  // kapı çubukları: kapının yerel düzleminde 4 dikdörtgen
+  for (const k of P.kapilar) {
+    _v.copy(p).sub(k.merkez); const z = _v.dot(k.n); if (Math.abs(z) > CUBUK / 2 + rD) continue;
+    const x = _v.dot(k.sag), y = _v.y;
+    const kutular = [[0, KAPI_H / 2 + CUBUK / 2, KAPI_W / 2 + CUBUK, CUBUK / 2], [0, -KAPI_H / 2 - CUBUK / 2, KAPI_W / 2 + CUBUK, CUBUK / 2], [-(KAPI_W / 2 + CUBUK / 2), 0, CUBUK / 2, KAPI_H / 2], [KAPI_W / 2 + CUBUK / 2, 0, CUBUK / 2, KAPI_H / 2]];
+    for (const [cx, cy, hx, hy] of kutular) {
+      const qx = sinirla(x, cx - hx, cx + hx), qy = sinirla(y, cy - hy, cy + hy), qz = sinirla(z, -CUBUK / 2, CUBUK / 2);
+      const dx = x - qx, dy = y - qy, dz = z - qz, d = Math.hypot(dx, dy, dz);
+      if (d < rD && d > 1e-6) {
+        const n = new THREE.Vector3().addScaledVector(k.sag, dx / d).addScaledVector(k.n, dz / d); n.y += dy / d; n.normalize();
+        temas(n, rD - d, 'kapi');
+      }
+    }
+  }
+}
+function kapiKontrol() {
+  const u = uc, k = P.kapilar[u.sira];
+  if (!k) return;
+  const z0 = _v.copy(u.onceki).sub(k.merkez).dot(k.n), z1 = _v2.copy(u.poz).sub(k.merkez).dot(k.n);
+  if (z0 < 0 && z1 >= 0) {
+    const x = _v2.dot(k.sag), y = _v2.y;
+    if (Math.abs(x) < KAPI_W / 2 && Math.abs(y) < KAPI_H / 2) {
+      if (u.sira === 0) { u.basladi = true; bildir('Başla!', 700); }
+      if (!k.ilkSon) { k.mat.color.set('#3ddc97'); k.matD.color.set('#3ddc97'); }   // geçilen kapı yeşile döner
+      u.sonKapi = u.sira; u.sira++; bip(u.sira === P.kapilar.length ? 2 : 1);
+      if (u.sira === P.kapilar.length) bitir();
+      else if (u.sira > 1) bildir(`${u.sira - 1}/${P.kapilar.length - 2}`, 500);
+    }
+  }
+}
+function devrildi() {
+  const u = uc; u.ters = true; u.gaz = 0; $('turtle').hidden = false; u.hiz.set(0, 0, 0);
+  bildir('Ters düştün. Kaplumbağa modu ile çevir (T)', 2400);
+}
+// Betaflight "turtle mode": motorlar ters döner, dron kendi kendini çevirir
+function kaplumbaga() {
+  const u = uc; if (!u.ters || u.kirik) return;
+  u.cevirme = 0.9; $('turtle').hidden = true; bip(3);
+}
+function sonKapiyaDon() {
+  const u = uc; if (u.kirik || u.bitti) return;
+  const k = P.kapilar[Math.max(0, u.sonKapi)];
+  u.poz.copy(k.merkez).addScaledVector(k.n, u.sonKapi < 0 ? -10 : 1.5); u.poz.y = Math.max(0.1, u.sonKapi < 0 ? 0.1 : k.merkez.y);
+  u.hiz.set(0, 0, 0); u.w.set(0, 0, 0); u.q.setFromAxisAngle(EKSEN_Y, Math.atan2(-k.n.x, -k.n.z)); u.ters = false; $('turtle').hidden = true;
+  if (u.basladi) u.sure += 3;   // ceza
+  bildir(u.basladi ? 'Son kapıya dönüldü (+3 s ceza)' : 'Başlangıca dönüldü', 1500);
+}
+function carp(ne, v) {
+  const u = uc; if (u.kirik) return;
+  u.kirik = true; u.gaz = 0; u.carpNe = ne; u.carpV = v; u.statik = 1;
+  sesSus(); bip(4);
+  setTimeout(() => { if (uc === u) sonuc(false); }, 1400);   // bu arada yeni uçuş başladıysa eski sonucu gösterme
+}
+
+/* ---------- görüntü: gecikme, gözlük kamerası ---------- */
+function kameraGuncelle() {
+  const u = uc, simdi = u.zaman;
+  u.gecmis.push({ t: simdi, p: u.poz.clone(), q: u.q.clone() });
+  const gecikme = (ayar.video === 'analog' ? 8 : 28) + ayar.ekGecikme;
+  const hedefT = simdi - gecikme / 1000;
+  while (u.gecmis.length > 2 && u.gecmis[1].t <= hedefT) u.gecmis.shift();
+  const k = u.gecmis[0];
+  // kamera dronun burnunda, gövdeye göre "kamera açısı" kadar yukarı bakar
+  kamera.position.copy(k.p).add(_v.set(0, 0.03, -fz.kol * 0.4).applyQuaternion(k.q));
+  kamera.quaternion.copy(k.q).multiply(_q2.setFromAxisAngle(EKSEN_X, rad(ayar.tilt)));
+}
+
+/* ---------- OSD (gözlük üstü yazılar) ---------- */
+let W = 0, H = 0, dpr = 1, bildirimYazi = '', bildirimSon = 0;
+function bildir(m, ms) { bildirimYazi = m; bildirimSon = performance.now() + (ms || 1200); }
+const gurultu = document.createElement('canvas'); gurultu.width = 160; gurultu.height = 90;
+const gg = gurultu.getContext('2d'), gImg = gg.createImageData(160, 90);
+function osdCiz() {
+  og.setTransform(dpr, 0, 0, dpr, 0, 0); og.clearRect(0, 0, W, H);
+  const u = uc, f = fz; if (!u) return;
+  const analog = ayar.video === 'analog';
+  // gövde parçaları görüş alanında: kanallı dronlarda alt köşelerde kanal, yarışçıda üstte pervane uçları
+  if (f.tip === 'cine' || f.tip === 'whoop') {
+    og.fillStyle = 'rgba(15,18,22,.85)';
+    for (const s of [-1, 1]) { og.beginPath(); og.ellipse(W / 2 + s * W * 0.52, H * 1.08, W * 0.2, H * 0.22, 0, 0, Math.PI * 2); og.fill(); }
+  } else if (f.tip === 'yaris' && u.gaz > 0.05) {
+    og.strokeStyle = 'rgba(255,140,40,.1)'; og.lineWidth = 5;
+    for (const s of [-1, 1]) { og.beginPath(); og.arc(W / 2 + s * W * 0.46, -H * 0.06, W * 0.12, 0, Math.PI); og.stroke(); }
+  }
+  // analog kar ve tarama çizgileri
+  if (analog || u.statik) {
+    const d = gImg.data, yog = u.statik ? 0.9 : 0.12 + Math.min(0.3, u.poz.distanceTo(P.kapilar[0].merkez) / 2500);
+    for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = Math.random() < yog ? 90 + Math.random() * 120 : 0; }
+    gg.putImageData(gImg, 0, 0); og.imageSmoothingEnabled = false; og.drawImage(gurultu, 0, 0, W, H);
+    og.fillStyle = 'rgba(0,0,0,.12)'; for (let y = 0; y < H; y += 3) og.fillRect(0, y, W, 1);
+    if (u.statik) u.statik = Math.max(0.6, u.statik);
+  }
+  // kenar karartması (gözlük merceği)
+  const v = og.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.55)'); og.fillStyle = v; og.fillRect(0, 0, W, H);
+  // yazılar
+  const fs = Math.max(13, Math.min(20, W / 60));
+  og.font = `700 ${fs}px ui-monospace, Consolas, monospace`; og.textBaseline = 'top';
+  og.shadowColor = 'rgba(0,0,0,.8)'; og.shadowBlur = 3;
+  const yaz = (s, x, y, hiz, renk) => { og.fillStyle = renk || '#f4f7ff'; og.textAlign = hiz || 'left'; og.fillText(s, x, y); };
+  const k = 16, V = u.Vh * f.t.hucre, dusuk = u.Vh < 3.5;
+  yaz(`${trs(V, 1)}V  ${f.t.hucre}S`, k, k, 'left', dusuk && (u.zaman * 3 % 1 < 0.5) ? '#ff6a5e' : undefined);
+  yaz(`%${Math.round(Math.max(0, u.soc) * 100)}`, k, k + fs * 1.3);
+  yaz(ayar.mod === 'akro' ? 'AKRO' : 'AÇI', W / 2, k, 'center');
+  const sure = u.basladi ? u.sure : 0, ky = k + 44;   // sağ üst: düğmelerin altında
+  yaz(`${String(Math.floor(sure / 60)).padStart(2, '0')}:${trs(sure % 60, 2).padStart(5, '0')}`, W - k, ky, 'right');
+  yaz(`KAPI ${Math.max(0, Math.min(u.sira - 1, P.kapilar.length - 2))}/${P.kapilar.length - 2}`, W - k, ky + fs * 1.3, 'right', '#ffd27a');
+  yaz(`İRT ${trs(Math.max(0, u.poz.y), 1)}m`, k, H - k - fs);
+  yaz(`${Math.round(u.hiz.length() * 3.6)} km/sa`, W - k, H - k - fs, 'right');
+  yaz(`GAZ %${Math.round(u.gaz * 100)}`, W / 2, H - k - fs, 'center');
+  if (!analog) { og.fillStyle = '#ff3b3b'; og.beginPath(); og.arc(W - k - fs * 6.2, ky + fs * 0.55, fs * 0.28, 0, 7); og.fill(); }
+  // nişangâh
+  og.strokeStyle = 'rgba(244,247,255,.85)'; og.lineWidth = 2; og.beginPath();
+  og.moveTo(W / 2 - 18, H / 2); og.lineTo(W / 2 - 6, H / 2); og.moveTo(W / 2 + 6, H / 2); og.lineTo(W / 2 + 18, H / 2); og.moveTo(W / 2, H / 2 - 6); og.lineTo(W / 2, H / 2 - 12); og.stroke();
+  // sıradaki kapıya ok (ekran dışındaysa)
+  const hk = P.kapilar[u.sira];
+  if (hk && !u.kirik) {
+    const p = hk.merkez.clone().project(kamera), arkada = p.z > 1;
+    if (arkada || Math.abs(p.x) > 0.9 || Math.abs(p.y) > 0.9) {
+      let ax = arkada ? -p.x : p.x, ay = arkada ? -p.y : p.y; const m = Math.max(Math.abs(ax), Math.abs(ay)) || 1; ax /= m; ay /= m;
+      const x = W / 2 + ax * (W / 2 - 60), y = H / 2 - ay * (H / 2 - 60), a = Math.atan2(-ay, ax);
+      og.save(); og.translate(x, y); og.rotate(a); og.fillStyle = '#ffb04a'; og.beginPath(); og.moveTo(16, 0); og.lineTo(-10, -11); og.lineTo(-10, 11); og.closePath(); og.fill(); og.restore();
+    }
+  }
+  if (u.sayac > 0) { og.font = `800 ${fs * 4}px Bricolage, Arial`; yaz(String(Math.ceil(u.sayac - 0.2)) === '0' ? 'KALK!' : String(Math.max(1, Math.ceil(u.sayac - 0.2))), W / 2, H * 0.32, 'center', '#ffb04a'); }
+  if (performance.now() < bildirimSon) { og.font = `700 ${fs * 1.2}px Onest, Arial`; yaz(bildirimYazi, W / 2, H * 0.22, 'center', '#ffe1b0'); }
+  if (u.statik && u.kirik) { og.font = `800 ${fs * 2}px ui-monospace, monospace`; yaz(analog ? 'SİNYAL YOK' : 'BAĞLANTI KESİLDİ', W / 2, H / 2 - fs, 'center', '#ffffff'); }
+  og.shadowBlur = 0;
+}
+
+/* ---------- ses: motor uğultusu + kapı bip ---------- */
+let ses = null;
+function sesBaslat() {
+  if (!sesAcik) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    if (!ses) {
+      const c = new AC(), k = c.createGain(), f = c.createBiquadFilter(); k.gain.value = 0; f.type = 'lowpass'; f.frequency.value = 1800;
+      const o1 = c.createOscillator(), o2 = c.createOscillator(); o1.type = 'sawtooth'; o2.type = 'square';
+      o1.connect(f); o2.connect(f); f.connect(k); k.connect(c.destination); o1.start(); o2.start();
+      ses = { c, k, o1, o2 };
+    }
+    ses.c.resume();
+  } catch (e) {}
+}
+function sesGuncelle() {
+  if (!ses || !uc) return;
+  const g = uc.kirik ? 0 : uc.gaz, fr = 90 + 520 * g * (5 / Math.max(2, fz.t.pervaneCap));
+  ses.o1.frequency.setTargetAtTime(fr, ses.c.currentTime, 0.04); ses.o2.frequency.setTargetAtTime(fr * 1.5, ses.c.currentTime, 0.04);
+  ses.k.gain.setTargetAtTime(sesAcik && durum === 'ucus' ? 0.025 + 0.06 * g : 0, ses.c.currentTime, 0.08);
+}
+function sesSus() { if (ses) ses.k.gain.setTargetAtTime(0, ses.c.currentTime, 0.05); }
+function bip(tur) {
+  if (!ses || !sesAcik) return;
+  const c = ses.c, t = c.currentTime, o = c.createOscillator(), k = c.createGain();
+  o.type = tur === 4 ? 'sawtooth' : 'sine';
+  o.frequency.value = tur === 2 ? 1320 : tur === 3 ? 440 : tur === 4 ? 120 : 990;
+  k.gain.setValueAtTime(0.0001, t); k.gain.exponentialRampToValueAtTime(0.12, t + 0.01); k.gain.exponentialRampToValueAtTime(0.0001, t + (tur === 4 ? 0.5 : 0.14));
+  o.connect(k); k.connect(c.destination); o.start(t); o.stop(t + 0.6);
+}
+
+/* ---------- sonuç ---------- */
+function bitir() { const u = uc; u.bitti = true; bildir('BİTİŞ!', 1200); setTimeout(() => { if (uc === u) sonuc(true); }, 900); }
+function sonuc(basarili) {
+  if (durum !== 'ucus') return;
+  durum = 'sonuc'; sesSus();
+  const u = uc, f = fz, ort = u.hizSay ? u.hizTop / u.hizSay : 0, egim = u.hizSay ? u.egimTop / u.hizSay : 0;
+  const anahtar = `fpvYaris.${ayar.parkur}.${ayar.sablon}`, rekor = oku(anahtar);
+  let baslik, metin, formul;
+  const olcum = [];
+  if (basarili) {
+    const yeni = !rekor || u.sure < rekor; if (yeni) yazK(anahtar, u.sure);
+    baslik = yeni ? 'Yeni rekor!' : 'Parkur tamam';
+    olcum.push(['Süre', trs(u.sure, 2) + ' s'], ['Ortalama hız', trs(ort * 3.6, 0) + ' km/sa'], ['En yüksek hız', trs(u.maksHiz * 3.6, 0) + ' km/sa']);
+    const gec = (ayar.video === 'analog' ? 8 : 28) + ayar.ekGecikme;
+    metin = `${rekor && !yeni ? `En iyin <b>${trs(rekor, 2)} s</b>. ` : ''}Uçuş boyunca dron ortalama <b>${trs(der(egim), 0)}°</b> eğikti; kameran <b>${ayar.tilt}°</b> yukarı bakıyordu. Bu iki açı birbirine ne kadar yakınsa, hızlanırken ufuk ekranda o kadar düz kalır. Gözlükte gördüğün görüntü <b>${gec} ms</b> eskiydi: ortalama hızınla dron sen görmeden <b>${trs(ort * gec / 1000 * 100, 0)} cm</b> yol aldı.`;
+    formul = `yatay itki = T·sin θ   ·   gecikme yolu = v·Δt = ${trs(ort, 1)} m/s × ${gec / 1000} s ≈ ${trs(ort * gec / 1000, 2)} m`;
+    if (u.temasSay) olcum.push(['Sürtünme', u.temasSay + ' kez']);
+  } else {
+    const E = 0.5 * f.m * (u.carpV || 0) ** 2;
+    const ad = { yer: 'Yere çakıldın', agac: 'Ağaca çarptın', kapi: 'Kapıya çarptın', batarya: 'Batarya bitti' }[u.carpNe] || 'Düştün';
+    baslik = ad;
+    olcum.push(['Çarpma hızı', trs(u.carpV || 0, 1) + ' m/s'], ['Kapı', `${Math.max(0, u.sira - 1)}/${P.kapilar.length - 2}`], ['Süre', trs(u.sure, 1) + ' s']);
+    metin = u.carpNe === 'batarya'
+      ? 'Bataryanın güvenle kullanılabilir kısmı bitti. Yarışta tam gaz akım çeker: gerilim düşer, itki gerilimin karesiyle azalır.'
+      : `${f.T.koruma > 1 ? 'Kanallı gövde hafif sürtünmeleri affeder, ama bu darbe sınırın üstündeydi. ' : 'Yarış gövdesinde pervane koruması yok: kapıya ya da ağaca hızlı değmek pervaneyi kırar. '}Engelin yanından geçerken yavaşlamak darbe enerjisini hızın karesiyle azaltır. Hafif düşüşlerde dron ters kalırsa <b>kaplumbağa modu</b> (T) motorları ters çevirip dronu doğrultur; gerçek yarışlarda da böyle yapılır.`;
+    formul = u.carpNe === 'batarya' ? 'T ∝ V²' : `E = ½·m·v² = ½ · ${trs(f.m, 3)} kg · (${trs(u.carpV || 0, 1)} m/s)² ≈ ${trs(E, 1)} J`;
+  }
+  $('sUst').textContent = `${PARKURLAR[ayar.parkur].ad} · ${SABLONLAR[ayar.sablon].ad}`;
+  $('sBaslik').textContent = baslik;
+  $('sOlcum').innerHTML = olcum.map(([a, b]) => `<div><b>${b}</b><small>${a}</small></div>`).join('');
+  $('sMetin').innerHTML = metin; $('sFormul').textContent = formul;
+  $('sonuc').hidden = false; $('turtle').hidden = true; $('sTekrar').focus();
+}
+function menuyeDon() {
+  durum = 'menu'; sesSus(); $('menu').hidden = false; $('sonuc').hidden = true; $('ust').hidden = true; $('turtle').hidden = true;
+  $('kolSol').hidden = $('kolSag').hidden = true; menuDoldur();
+}
+
+/* ---------- menü ---------- */
+function menuDoldur() {
+  $('dronlar').innerHTML = Object.entries(SABLONLAR).map(([k, v]) => `<button class="cip" data-sablon="${k}" aria-pressed="${k === ayar.sablon}">${v.ad}</button>`).join('');
+  const f = dronHazirla(ayar.sablon);
+  $('dronBilgi').innerHTML = `<b>${f.T.ad}</b> · ${trs(f.kutle.toplam, 0)} g · itki/ağırlık ${trs(f.TWR, 1)} · en hızlı dönüş ${Math.round(der(f.oranMaks))}°/s. ${f.T.not}`;
+  $('parkurlar').innerHTML = Object.entries(PARKURLAR).map(([k, v]) => {
+    const r = oku(`fpvYaris.${k}.${ayar.sablon}`);
+    return `<button class="kart" data-parkur="${k}" aria-pressed="${k === ayar.parkur}"><b>${v.ad}</b><small>${v.kisa}</small>${r ? `<small class="rek">En iyi: ${trs(r, 2)} s</small>` : ''}</button>`;
+  }).join('');
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.sablon) { ayar.sablon = b.dataset.sablon; menuDoldur(); menuSahne(); }
+  if (b.dataset.parkur) { ayar.parkur = b.dataset.parkur; menuDoldur(); parkurKur(ayar.parkur); }
+  for (const anahtar of ['mod', 'video', 'gecikme']) if (b.dataset[anahtar] !== undefined) {
+    ayar[anahtar === 'gecikme' ? 'ekGecikme' : anahtar] = anahtar === 'gecikme' ? +b.dataset[anahtar] : b.dataset[anahtar];
+    document.querySelectorAll(`[data-${anahtar}]`).forEach((c) => c.setAttribute('aria-pressed', c === b));
+  }
+});
+$('tilt').addEventListener('input', (e) => { ayar.tilt = +e.target.value; $('tiltYaz').textContent = ayar.tilt + '°'; });
+$('basla').addEventListener('click', ucusBaslat);
+$('sTekrar').addEventListener('click', ucusBaslat); $('sMenu').addEventListener('click', menuyeDon); $('bMenu').addEventListener('click', menuyeDon);
+$('turtle').addEventListener('click', kaplumbaga);
+$('bSes').addEventListener('click', () => { sesAcik = !sesAcik; $('bSes').textContent = 'Ses: ' + (sesAcik ? 'açık' : 'kapalı'); if (sesAcik) sesBaslat(); else sesSus(); });
+
+// menüde arka plan: gözlük görüntüsü gibi kendi kendine akan uçuş
+let menuS = 0;
+function menuSahne() { if (!P || P.ad !== ayar.parkur) parkurKur(ayar.parkur); }
+
+function boyut() {
+  W = innerWidth; H = innerHeight; dpr = Math.min(devicePixelRatio || 1, 2);
+  renderer.setSize(W, H, false); kamera.aspect = W / H;
+  kamera.fov = W / H < 1 ? 115 : 100; kamera.updateProjectionMatrix();
+  osd.width = W * dpr; osd.height = H * dpr;
+}
+addEventListener('resize', boyut);
+
+let son = performance.now(), birikim = 0;
+function dongu(simdi) {
+  const dt = Math.min(0.05, (simdi - son) / 1000); son = simdi;
+  if (durum === 'ucus' || durum === 'sonuc') {
+    const u = uc;
+    if (durum === 'ucus') {
+      girdiOku(dt);
+      if (u.cevirme > 0) {   // kaplumbağa: 0,9 s içinde gövdeyi düzle
+        u.cevirme -= dt; _e.setFromQuaternion(u.q, 'YXZ'); _q2.setFromEuler(new THREE.Euler(0, _e.y, 0, 'YXZ'));
+        u.q.slerp(_q2, Math.min(1, dt * 4)); if (u.cevirme <= 0) { u.ters = false; u.q.copy(_q2); bildir('Dron düzeldi', 900); }
+      }
+      birikim += dt; while (birikim >= ADIM) { fizikAdim(ADIM); birikim -= ADIM; if (u.kirik) break; }
+    }
+    if (!(u.kirik && ayar.video === 'dijital' && u.statik)) kameraGuncelle();   // dijital: çarpınca görüntü donar
+    sesGuncelle();
+  } else {
+    // menü arka planı: parkur boyunca otomatik uçuş (rehberdeki gözlük görüntüsü)
+    menuS += dt * 14; const L = 18 + (PARKURLAR[ayar.parkur].kapi) * PARKURLAR[ayar.parkur].ara; if (menuS > L) menuS = 0;
+    const s = menuS, x = P.yolX(s), y = P.yolY(s);
+    kamera.position.set(x, y, -s); kamera.lookAt(P.yolX(s + 8), P.yolY(s + 8), -(s + 8));
+    const egr = P.yolX(s + 14) - 2 * P.yolX(s + 7) + x; kamera.rotateZ(sinirla(-egr * 0.12, -0.25, 0.25));
+  }
+  renderer.render(sahne, kamera);
+  if (durum !== 'menu') osdCiz(); else og.clearRect(0, 0, osd.width, osd.height);
+  requestAnimationFrame(dongu);
+}
+
+boyut(); menuDoldur(); parkurKur(ayar.parkur);
+const hash = new URLSearchParams(location.hash.slice(1));
+if (hash.get('dron') && SABLONLAR[hash.get('dron')]) { ayar.sablon = hash.get('dron'); menuDoldur(); }
+requestAnimationFrame(dongu);
+</script>
+</body>
+</html>

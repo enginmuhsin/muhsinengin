@@ -41,6 +41,7 @@
         <a class="nav-link" href="index.html" aria-current="page">Tasarım Laboratuvarı</a>
         <a class="nav-link" href="../pid-oyunu/index.html">PID Ayar Oyunu</a>
         <a class="nav-link" href="../dron-ucus/index.html" id="ucusLink">Uçuş Simülatörü</a>
+        <a class="nav-link" href="../fpv-yaris/">FPV Yarış</a>
       </div>
       <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
       <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
@@ -92,6 +93,7 @@
         <section class="kart onizleme-kart" aria-labelledby="onizBaslik">
           <h2 id="onizBaslik">3B önizleme <span class="yaklasik">ölçekli şema</span></h2>
           <canvas id="dron3b" class="dron3b-tuval" role="img" aria-label="Tasarımın 3B şeması: motor sayısı, kol uzunluğu, pervane çapı, kanat sayısı ve batarya boyutu girdilere göre değişir."></canvas>
+          <p class="not" id="govdeTipi" aria-live="polite"></p>
           <p class="not">Sürükleyerek çevir. Pervaneler hover gazına göre hızlanır; tasarım uçamıyorsa dron yerde bekler. <button type="button" class="metin-dugme" id="labPatlat" aria-pressed="false">Parçaları ayır</button></p>
         </section>
 

@@ -186,6 +186,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 @media (max-width:620px){
   #menu{background:rgba(10,17,18,.9)}
   .ozellik{grid-template-columns:repeat(3,1fr)}
+  .ozellik div:last-child:nth-child(3n+2){grid-column:span 2}
   .gorevler{grid-template-columns:1fr}
   #telem{min-width:0}
 }
@@ -328,6 +329,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="../ortak/kutuphane/three-r128.min.js"></script>
 
 <script src="../dron-lab/hesap.js"></script>
+<script src="ek-gorevler.js"></script>
 
 <script>
 'use strict';
@@ -357,9 +359,15 @@ const GOREVLER = {
   teslimat: { ad: 'Rüzgârlı teslimat', kisa: 'Kargoyu yükle, yan rüzgârda 60 m öteye götür, in.', ders: 'Yük ve TWR' },
   pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
   tunel:    { ad: 'Rüzgâr tüneli', kisa: 'Önce eğimi tahmin et, sonra sabit rüzgârda yerinde dur.', ders: 'Kuvvet dengesi: tan θ = F/W' },
+  kurtarma: { ad: 'Gece arama-kurtarma', kisa: 'Kayıp kedi Pamuk karanlıkta kasabada bir yerde. İniş farınla ara, bul, yanına in.', ders: 'Işık ve uzaklık: E = I / d²' },
   cati:     { ad: 'Çatıya teslimat', kisa: 'Kargoyu okulun çatısındaki H pistine bırak. Çatı kenarında rüzgâr döner.', ders: 'Potansiyel enerji ve hover maliyeti' },
   serbest:  { ad: 'Serbest uçuş', kisa: 'Kural yok. V ile rüzgârı aç/kapat.', ders: 'Keşif' },
 };
+// Ek görevler (ek-gorevler.js): kart bilgisi + kur/adim/girdi/hud/bitir/kapat kancaları.
+// Serbest uçuş listenin sonunda kalsın diye araya eklenir.
+const EK = window.EK_GOREVLER || {};
+{ const s = GOREVLER.serbest; delete GOREVLER.serbest; for (const k in EK) GOREVLER[k] = EK[k].kart; GOREVLER.serbest = s; }
+const ek = (tip, ad, ...a) => (EK[tip] && EK[tip][ad] ? EK[tip][ad](...a) : undefined);
 
 /* ---------- güvenli localStorage ---------- */
 function oku(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
@@ -463,12 +471,13 @@ function geceKur() {
   const bGrup = new THREE.Group(); pedB.add(bGrup); bGrup.rotation.x = Math.PI / 2; halkaIsik(0, 0, 0, 1.75, '#5aa2ff', bGrup);
 
   // dronun iniş farı: dronu izleyen, ileri-aşağı bakan spot ışık
-  dronFar = new THREE.SpotLight('#eaf2ff', 0, 28, rad(26), 0.5, 1.4);
+  dronFar = new THREE.SpotLight('#eaf2ff', 0, 40, rad(26), 0.45, 1.4);
   sahne.add(dronFar, dronFar.target);
 }
 
-function zamanUygula() {
-  const gece = ayar.zaman === 'aksam';
+let geceAcik = false;
+function zamanUygula(zorla) {
+  const gece = !!zorla || ayar.zaman === 'aksam'; geceAcik = gece;
   if (gokMat) {
     gokMat.uniforms.ust.value.set(gece ? '#071026' : '#3f7fc8');
     gokMat.uniforms.alt.value.set(gece ? '#3b4568' : '#cfe0ee');
@@ -485,13 +494,220 @@ function zamanUygula() {
 
 // her kare: ped ışıkları sırayla yanıp söner (pist ışığı gibi), iniş farı dronu izler
 function geceAdim(t) {
-  if (ayar.zaman !== 'aksam') return;
+  if (!geceAcik) return;
   GECE.pedIsik.forEach((p) => { p.m.scale.setScalar(((t * 0.8 + p.faz) % 1) < 0.14 ? 1.8 : 1); });
   if (dronFar && dron && uc) {
     dronFar.position.copy(uc.poz);
-    _v.set(-Math.sin(uc.yaw) * 4, -3, -Math.cos(uc.yaw) * 4);
+    const arama = gorevD && gorevD.tip === 'kurtarma';   // aramada fener aşağı bakar
+    _v.set(-Math.sin(uc.yaw) * (arama ? 0.3 : 4), arama ? -8 : -3, -Math.cos(uc.yaw) * (arama ? 0.3 : 4));
     dronFar.target.position.copy(uc.poz).add(_v);
   }
+}
+
+/* =====================================================================
+   KASABA: okulun çevresi. Yollar, yaya geçidi, otobüs durağı, park etmiş
+   arabalar, evler ve apartmanlar, basketbol sahası, futbol sahası, yaprak
+   döken ağaçlar, sokak lambaları. Büyük nesneler çarpışmalı ve çatılarına
+   inilebilir (KUTULAR). Akşam pencereler, lambalar ve far ışıkları yanar.
+   Performans: ışık kaynağı eklenmez; lamba havuzları zemine çizilen
+   yarı saydam ışık lekeleridir.
+   ===================================================================== */
+const yuvarlakAgaclar = [];   // { x, z, s }: gövde + küre taç
+
+function tuvalDoku(w, h, ciz, tekrar) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; ciz(c.getContext('2d'), w, h);
+  const d = new THREE.CanvasTexture(c); d.encoding = THREE.sRGBEncoding; d.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  if (tekrar) { d.wrapS = d.wrapT = THREE.RepeatWrapping; d.repeat.set(tekrar[0], tekrar[1]); }
+  return d;
+}
+
+// ev cephesi: kat sayısı kadar pencere sırası, gece ışık haritasıyla
+function evMalz(gen, kat, renk, tohum) {
+  const px = 24, W = Math.max(64, Math.round(gen * px)), H = Math.round(kat * 3 * px);
+  let s = tohum; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const ce = document.createElement('canvas'); ce.width = W; ce.height = H; const e = ce.getContext('2d');
+  e.fillStyle = '#000'; e.fillRect(0, 0, W, H);
+  const map = tuvalDoku(W, H, (x) => {
+    x.fillStyle = renk; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < W * H / 80; i++) { x.fillStyle = `rgba(90,70,50,${Math.random() * 0.05})`; x.fillRect(Math.random() * W, Math.random() * H, 2, 2); }
+    const adet = Math.max(1, Math.floor(gen / 3)), ara = W / adet, pw = 1.2 * px, ph = 1.4 * px;
+    for (let k = 0; k < kat; k++) {
+      const ust = H - (k + 1) * 3 * px + 0.8 * px;
+      if (k > 0) { x.fillStyle = 'rgba(0,0,0,0.08)'; x.fillRect(0, H - k * 3 * px - 3, W, 3); }
+      for (let i = 0; i < adet; i++) {
+        const sx = i * ara + (ara - pw) / 2;
+        if (k === 0 && i === Math.floor(adet / 2)) {   // kapı
+          x.fillStyle = '#6b4a2f'; x.fillRect(sx + pw * 0.15, H - 2.2 * px, pw * 0.7, 2.2 * px);
+          e.fillStyle = '#5a3a1a'; e.fillRect(sx + pw * 0.15, H - 2.2 * px, pw * 0.7, 2.2 * px);
+          continue;
+        }
+        x.fillStyle = '#f4f1ea'; x.fillRect(sx - 3, ust - 3, pw + 6, ph + 6);
+        const g = x.createLinearGradient(sx, ust, sx, ust + ph); g.addColorStop(0, '#9dbcd2'); g.addColorStop(1, '#41637e');
+        x.fillStyle = g; x.fillRect(sx, ust, pw, ph);
+        x.fillStyle = '#f4f1ea'; x.fillRect(sx + pw / 2 - 1.5, ust, 3, ph);
+        if (rnd() < 0.55) {   // akşam: evde ışık var mı?
+          const sicak = rnd() < 0.8;
+          e.fillStyle = sicak ? '#ffc777' : '#bfd9ff'; e.fillRect(sx, ust, pw, ph);
+          e.fillStyle = '#000'; e.fillRect(sx + pw / 2 - 1.5, ust, 3, ph);
+          if (rnd() < 0.4) { e.fillStyle = 'rgba(0,0,0,0.55)'; e.fillRect(sx, ust, pw * 0.45, ph); }   // perde
+        }
+      }
+    }
+  });
+  const em = new THREE.CanvasTexture(ce); em.encoding = THREE.sRGBEncoding;
+  const m = new THREE.MeshStandardMaterial({ map, roughness: 0.9, emissiveMap: em, emissive: '#ffffff', emissiveIntensity: 0 });
+  GECE.malz.push([m, 1.05]); return m;
+}
+
+function kasabaYap() {
+  const k = new THREE.Group(); sahne.add(k);
+  const std = (renk, o) => new THREE.MeshStandardMaterial(Object.assign({ color: renk, roughness: 0.85 }, o));
+  const kutuEkle = (x0, x1, z0, z1, y0, ust, ad) => KUTULAR.push({ x0, x1, z0, z1, y0, ust, ad });
+
+  // ---------- yollar ----------
+  const asfalt = (uzun) => tuvalDoku(256, 64, (x, w, h) => {
+    x.fillStyle = '#3c3f44'; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 900; i++) { const v = 50 + Math.random() * 30; x.fillStyle = `rgba(${v},${v},${v + 4},0.5)`; x.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+    x.fillStyle = '#e8e2c8'; for (let i = 0; i < w; i += 64) x.fillRect(i + 8, h / 2 - 1.5, 34, 3);   // kesikli orta çizgi
+    x.fillStyle = 'rgba(240,240,235,0.85)'; x.fillRect(0, 3, w, 2); x.fillRect(0, h - 5, w, 2);
+  }, [uzun / 16, 1]);
+  const yol = (cx, cz, uzun, aci) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(uzun, 7), std('#ffffff', { map: asfalt(uzun), roughness: 0.95, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+    m.rotation.set(-Math.PI / 2, 0, aci); m.position.set(cx, 0.012, cz); m.receiveShadow = true; k.add(m);
+    for (const yon of [-1, 1]) {   // kaldırım
+      const kd = new THREE.Mesh(new THREE.BoxGeometry(uzun, 0.15, 1.6), std('#b9b3a7'));
+      kd.rotation.y = -aci; const ox = -Math.sin(aci) * 0, oz = 0;
+      kd.position.set(cx + (aci ? yon * 4.3 : ox), 0.075, cz + (aci ? oz : yon * 4.3)); kd.receiveShadow = true; k.add(kd);
+    }
+  };
+  yol(-78, -2, 124, 0);                 // okulun önünden geçen cadde (x: -140 … -16)
+  yol(-66, -25, 110, Math.PI / 2);      // kuzey-güney sokak (z: -80 … 30)
+  // yaya geçidi (okul girişinin önünde)
+  const zebra = new THREE.Mesh(new THREE.PlaneGeometry(4, 7), std('#ffffff', { transparent: true, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, map: tuvalDoku(64, 128, (x, w, h) => { x.clearRect(0, 0, w, h); x.fillStyle = '#f2f2ee'; for (let i = 0; i < 7; i++) x.fillRect(0, 6 + i * 17.5, w, 9); }) }));
+  zebra.rotation.x = -Math.PI / 2; zebra.position.set(-38, 0.016, -2); k.add(zebra);
+
+  // ---------- binalar ----------
+  const evler = [
+    [-118, 12, 9, 8, 2, '#e9d6b5', 'kirma'], [-102, 13, 12, 10, 4, '#d9e3ea', 'duz'], [-86, 12, 9, 8, 2, '#f0c9a8', 'kirma'],
+    [-52, 14, 14, 10, 4, '#e7e1d2', 'duz'], [-35, 12, 8, 8, 2, '#cfe0d0', 'kirma'],
+    [-82, -32, 10, 9, 3, '#efd9c4', 'duz'], [-84, -56, 9, 8, 2, '#dcd2e6', 'kirma'], [-128, -18, 10, 9, 3, '#e6d3d3', 'duz'],
+  ];
+  evler.forEach(([x, z, w, d, kat, renk, cati], i) => {
+    const h = kat * 3, on = evMalz(w, kat, renk, 7 + i * 13), yan = evMalz(d, kat, renk, 3 + i * 17);
+    const govde = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), [yan, yan, std('#8a8378'), std('#8a8378'), on, on]);
+    govde.position.set(x, h / 2, z); govde.castShadow = govde.receiveShadow = true; k.add(govde);
+    if (cati === 'kirma') {   // kırma çatı: dört yüzlü piramit, kiremit rengi
+      const ch = 2.2, c = new THREE.Mesh(new THREE.ConeGeometry(0.5 * Math.SQRT2, 1, 4, 1), std('#b4553d', { flatShading: true }));
+      c.rotation.y = Math.PI / 4; c.scale.set(w + 0.8, ch, d + 0.8); c.position.set(x, h + ch / 2, z); c.castShadow = true; k.add(c);
+      kutuEkle(x - w / 2, x + w / 2, z - d / 2, z + d / 2, 0, h + ch * 0.5, 'ev');
+    } else {                  // düz çatı + korkuluk + su deposu + çanak anten
+      const kork = new THREE.Mesh(new THREE.BoxGeometry(w + 0.3, 0.5, d + 0.3), std('#cfc7b8')); kork.position.set(x, h + 0.25, z); k.add(kork);
+      const ic = new THREE.Mesh(new THREE.BoxGeometry(w - 0.2, 0.52, d - 0.2), std('#7d776d')); ic.position.set(x, h + 0.27, z); k.add(ic);
+      const dep = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.2, 14), std('#d9d9d9', { metalness: 0.4, roughness: 0.4 })); dep.rotation.z = Math.PI / 2; dep.position.set(x - w / 4, h + 1.2, z); dep.castShadow = true; k.add(dep);
+      const can = new THREE.Mesh(new THREE.SphereGeometry(0.5, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2.6), std('#eeeeee', { side: THREE.DoubleSide })); can.rotation.x = -1.1; can.position.set(x + w / 4, h + 1, z + d / 4); k.add(can);
+      kutuEkle(x - w / 2 - 0.15, x + w / 2 + 0.15, z - d / 2 - 0.15, z + d / 2 + 0.15, 0, h + 0.5, 'ev');
+    }
+  });
+
+  // ---------- otobüs durağı ----------
+  {
+    const x = -46, z = -7.4, cam = std('#a9cbe0', { transparent: true, opacity: 0.45, roughness: 0.1 });
+    const cati = new THREE.Mesh(new THREE.BoxGeometry(4.4, 0.12, 1.8), std('#1d3b8b', { roughness: 0.5 })); cati.position.set(x, 2.6, z); cati.castShadow = true; k.add(cati);
+    const arka = new THREE.Mesh(new THREE.BoxGeometry(4.2, 2.3, 0.06), cam); arka.position.set(x, 1.4, z - 0.8); k.add(arka);
+    for (const sx of [-2.1, 2.1]) { const d = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2.6, 0.08), std('#9aa3ad', { metalness: 0.6 })); d.position.set(x + sx, 1.3, z - 0.8); k.add(d); }
+    const bank = new THREE.Mesh(new THREE.BoxGeometry(3, 0.1, 0.45), std('#c79a5b')); bank.position.set(x, 0.5, z - 0.5); k.add(bank);
+    const tm = std('#ffffff', { map: tuvalDoku(128, 72, (c, w, h) => { c.fillStyle = '#1d3b8b'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.font = '700 26px Onest, Arial'; c.textAlign = 'center'; c.fillText('DURAK', w / 2, 46); }) });
+    const tabela = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.05), tm);
+    tabela.position.set(x + 2.6, 2.4, z + 0.4); k.add(tabela);
+    const tdirek = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 2.6, 8), std('#9aa3ad')); tdirek.position.set(x + 2.6, 1.3, z + 0.4); k.add(tdirek);
+    kutuEkle(x - 2.2, x + 2.2, z - 0.9, z + 0.9, 0, 2.66, 'durak');
+  }
+
+  // ---------- park etmiş arabalar ----------
+  const arabalar = [[-100, 0.4, 0, '#c8372d'], [-91, 0.4, 0, '#e9eef3'], [-58, 0.4, 0, '#2c5aa0'], [-28, 0.4, 0, '#f2b23a'], [-112, -4.4, Math.PI, '#5b6470'], [-66.5, -40, Math.PI / 2, '#2f8a5a']];
+  const farM = new THREE.MeshStandardMaterial({ color: '#fffbe8', emissive: '#fff4cf', emissiveIntensity: 0.1 }); farM.userData.gunduz = 0.1; GECE.malz.push([farM, 2.2]);
+  const stopM = new THREE.MeshStandardMaterial({ color: '#7a1414', emissive: '#ff2a2a', emissiveIntensity: 0 }); GECE.malz.push([stopM, 1.4]);
+  arabalar.forEach(([x, z, aci, renk]) => {
+    const a = new THREE.Group(); a.position.set(x, 0, z); a.rotation.y = aci; k.add(a);
+    const kasa = new THREE.Mesh(yuvarlakKutu(4.2, 0.75, 1.8, 0.35, 0.12), std(renk, { metalness: 0.5, roughness: 0.35 })); kasa.rotation.y = Math.PI / 2; kasa.position.y = 0.65; a.add(kasa);
+    const kabin = new THREE.Mesh(yuvarlakKutu(2.3, 0.7, 1.6, 0.3, 0.12), std('#20262e', { metalness: 0.3, roughness: 0.15 })); kabin.rotation.y = Math.PI / 2; kabin.position.set(-0.2, 1.3, 0); a.add(kabin);
+    for (const [wx, wz] of [[-1.35, -0.85], [1.35, -0.85], [-1.35, 0.85], [1.35, 0.85]]) { const t = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.24, 14), std('#15171b')); t.rotation.x = Math.PI / 2; t.position.set(wx, 0.34, wz); a.add(t); }
+    for (const wz of [-0.6, 0.6]) {
+      const f = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.16, 0.34), farM); f.position.set(2.1, 0.75, wz); a.add(f);
+      const s = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.14, 0.3), stopM); s.position.set(-2.1, 0.78, wz); a.add(s);
+    }
+    a.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+    const ca = Math.abs(Math.cos(aci)) > 0.5, hx = ca ? 2.15 : 0.95, hz = ca ? 0.95 : 2.15;
+    kutuEkle(x - hx, x + hx, z - hz, z + hz, 0, 1.62, 'araba');
+  });
+
+  // ---------- basketbol sahası ----------
+  {
+    const cx = -80, cz = -13;
+    const zemin = new THREE.Mesh(new THREE.PlaneGeometry(12, 14), std('#ffffff', { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, map: tuvalDoku(240, 280, (x, w, h) => {
+      x.fillStyle = '#c4643a'; x.fillRect(0, 0, w, h); x.strokeStyle = '#f5f1e8'; x.lineWidth = 3; x.strokeRect(6, 6, w - 12, h - 12);
+      x.beginPath(); x.moveTo(6, h / 2); x.lineTo(w - 6, h / 2); x.stroke(); x.beginPath(); x.arc(w / 2, h / 2, 30, 0, Math.PI * 2); x.stroke();
+      for (const [y, s] of [[6, 1], [h - 6, -1]]) { x.strokeRect(w / 2 - 30, s > 0 ? y : y - 70, 60, 70); x.beginPath(); x.arc(w / 2, y, 95, s > 0 ? 0 : Math.PI, s > 0 ? Math.PI : Math.PI * 2); x.stroke(); }
+    }) }));
+    zemin.rotation.x = -Math.PI / 2; zemin.position.set(cx, 0.014, cz); zemin.receiveShadow = true; k.add(zemin);
+    for (const s of [-1, 1]) {
+      const z = cz + s * 6.6;
+      const d = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3.4, 10), std('#2b3038', { metalness: 0.6 })); d.position.set(cx, 1.7, z); k.add(d);
+      const pano = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.05, 0.05), std('#ffffff', { transparent: true, opacity: 0.85 })); pano.position.set(cx, 3.3, z - s * 0.3); k.add(pano);
+      const pota = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.02, 8, 20), std('#e05a1e')); pota.rotation.x = Math.PI / 2; pota.position.set(cx, 3.05, z - s * 0.6); k.add(pota);
+      DIREKLER.push({ x: cx, z, h: 3.8, R: 0.12 });
+    }
+  }
+
+  // ---------- futbol sahası (okulun arkasında) ----------
+  {
+    const cx = -38, cz = -59;
+    const zemin = new THREE.Mesh(new THREE.PlaneGeometry(36, 22), std('#ffffff', { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, map: tuvalDoku(360, 220, (x, w, h) => {
+      for (let i = 0; i < 12; i++) { x.fillStyle = i % 2 ? '#4f8a3c' : '#5a9645'; x.fillRect(i * w / 12, 0, w / 12 + 1, h); }
+      x.strokeStyle = '#f5f5f0'; x.lineWidth = 3; x.strokeRect(6, 6, w - 12, h - 12);
+      x.beginPath(); x.moveTo(w / 2, 6); x.lineTo(w / 2, h - 6); x.stroke(); x.beginPath(); x.arc(w / 2, h / 2, 28, 0, Math.PI * 2); x.stroke();
+      x.strokeRect(6, h / 2 - 45, 50, 90); x.strokeRect(w - 56, h / 2 - 45, 50, 90);
+    }) }));
+    zemin.rotation.x = -Math.PI / 2; zemin.position.set(cx, 0.013, cz); zemin.receiveShadow = true; k.add(zemin);
+    const kaleM = std('#f5f5f0', { roughness: 0.4 });
+    for (const s of [-1, 1]) {
+      const x = cx + s * 17.4;
+      for (const dz of [-1.8, 1.8]) { const d = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.1, 10), kaleM); d.position.set(x, 1.05, cz + dz); k.add(d); DIREKLER.push({ x, z: cz + dz, h: 2.1, R: 0.06 }); }
+      const ust = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 3.6, 10), kaleM); ust.rotation.x = Math.PI / 2; ust.position.set(x, 2.1, cz); k.add(ust);
+      const ag = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 2.1), std('#ffffff', { transparent: true, opacity: 0.25, side: THREE.DoubleSide })); ag.rotation.y = Math.PI / 2; ag.position.set(x + s * 0.9, 1.05, cz); k.add(ag);
+    }
+  }
+
+  // ---------- yaprak döken ağaçlar (yuvarlak taçlı, sonbahar renkleri) ----------
+  const tacRenk = ['#4f7f3a', '#6a8f3a', '#b5832a', '#c4642e', '#5d8a46', '#a9a03a'];
+  const agacYer = [[-130, 5], [-110, 4.6], [-94, 4.8], [-72, 5], [-44, 5.5], [-26, 5.4], [-125, -9], [-98, -9], [-78, -26], [-60, -35], [-60, -50], [-72, -66], [-92, -40], [-20, -44], [-56, -44], [-40, -76], [-110, 22], [-60, 24], [-28, 24], [-140, -40], [-120, -60]];
+  const govM = std('#6b4a2f'), tacG = new THREE.IcosahedronGeometry(1, 1);
+  agacYer.forEach(([x, z], i) => {
+    const s = 0.85 + ((i * 37) % 10) / 22;
+    const g = new THREE.Mesh(new THREE.CylinderGeometry(0.14 * s, 0.22 * s, 2.4 * s, 7), govM); g.position.set(x, 1.2 * s, z); g.castShadow = true; k.add(g);
+    const t = new THREE.Mesh(tacG, std(tacRenk[i % tacRenk.length], { flatShading: true })); t.scale.set(1.7 * s, 1.5 * s, 1.7 * s); t.position.set(x, 3.4 * s, z); t.rotation.y = i; t.castShadow = true; k.add(t);
+    yuvarlakAgaclar.push({ x, z, s });
+  });
+
+  // ---------- sokak lambaları + akşam ışık havuzları ----------
+  const havuzDoku = tuvalDoku(128, 128, (x, w, h) => { const g = x.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2); g.addColorStop(0, 'rgba(255,205,140,0.55)'); g.addColorStop(0.5, 'rgba(255,190,120,0.18)'); g.addColorStop(1, 'rgba(255,180,110,0)'); x.fillStyle = g; x.fillRect(0, 0, w, h); });
+  const havuzM = new THREE.MeshBasicMaterial({ map: havuzDoku, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, polygonOffset: true, polygonOffsetFactor: -6, polygonOffsetUnits: -6 });
+  const direkM = std('#3a3f47', { metalness: 0.6, roughness: 0.4 });
+  const basM = new THREE.MeshStandardMaterial({ color: '#fff1d0', emissive: '#ffd99a', emissiveIntensity: 0 }); GECE.malz.push([basM, 1.8]);
+  const lambalar = [];
+  for (let x = -130; x <= -20; x += 22) if (Math.abs(x + 66) > 6) lambalar.push([x, 4.6, 0]);   // kol yola doğru (-z)
+  for (let z = -70; z <= 20; z += 22) if (Math.abs(z + 2) > 6) lambalar.push([-61.5, z, Math.PI / 2]);   // kol yola doğru (-x)
+  lambalar.forEach(([x, z, aci]) => {
+    const d = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.1, 5, 8), direkM); d.position.set(x, 2.5, z); d.castShadow = true; k.add(d);
+    const bx = x - Math.sin(aci) * 0.6, bz = z - Math.cos(aci) * 0.6;
+    const kol = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.7), direkM); kol.rotation.y = aci; kol.position.set((x + bx) / 2, 5, (z + bz) / 2); k.add(kol);
+    const b = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.12, 0.25), basM); b.position.set(bx, 4.92, bz); b.rotation.y = aci; k.add(b);
+    const hv = new THREE.Mesh(new THREE.PlaneGeometry(11, 11), havuzM); hv.rotation.x = -Math.PI / 2; hv.position.set(bx, 0.03, bz); hv.renderOrder = 2; k.add(hv); GECE.nesne.push(hv);
+    DIREKLER.push({ x, z, h: 5.1, R: 0.12 });
+  });
+  // okul bahçesindeki 3 lambaya da ışık havuzu
+  for (const [x, z] of [[-52, -16], [-24, -16], [-38, -8]]) { const hv = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), havuzM); hv.rotation.x = -Math.PI / 2; hv.position.set(x, 0.03, z); hv.renderOrder = 2; k.add(hv); GECE.nesne.push(hv); }
+
 }
 
 // gökyüzü: dikey renk geçişli büyük küre
@@ -557,9 +773,10 @@ const KUTULAR = [
 ];
 const DIREKLER = [{ x: -6, z: -2, h: 4, R: 0.05 }];                   // rüzgâr tulumu direği (+ bayrak direği)
 // (x, z) noktasında, y yüksekliğinin hemen altındaki en yüksek yüzey: yer (0), çatı, saçak…
+let zeminAd = '';   // son bulunan yüzeyin adı (iniş bildirimi için)
 function zeminY(x, z, y = Infinity) {
-  let h = 0;
-  for (const k of KUTULAR) if (x > k.x0 && x < k.x1 && z > k.z0 && z < k.z1 && k.ust <= y + 0.3 && k.ust > h) h = k.ust;
+  let h = 0; zeminAd = '';
+  for (const k of KUTULAR) if (x > k.x0 && x < k.x1 && z > k.z0 && z < k.z1 && k.ust <= y + 0.3 && k.ust > h) { h = k.ust; zeminAd = k.ad; }
   return h;
 }
 {
@@ -570,7 +787,7 @@ function zeminY(x, z, y = Infinity) {
   while (k < n) {
     const x = (rnd() - 0.5) * 360, z = (rnd() - 0.5) * 360;
     if (x > -18 && x < 55 && z > -75 && z < 22) continue;   // parkur alanını boş bırak
-    if (x > -60 && x < -16 && z > -43 && z < -8) continue;  // okul ve bahçesi
+    if (x > -146 && x < -16 && z > -84 && z < 30) continue;  // okul, kasaba ve spor sahaları
     const s = 0.7 + rnd() * 0.9;
     o.position.set(x, 0.8 * s, z); o.scale.set(s, s, s); o.rotation.y = rnd() * 6; o.updateMatrix(); gov.setMatrixAt(k, o.matrix);
     o.position.y = (1.6 + 1.6) * s; o.updateMatrix(); tac.setMatrixAt(k, o.matrix); agaclar.push({ x, z, s }); k++;
@@ -585,6 +802,7 @@ function zeminY(x, z, y = Infinity) {
   // ---------- okul: Muhsin Engin Bilim ve Sanat Merkezi (kurgusal) ----------
   okulYap();
   geceKur();
+  kasabaYap();
 }
 
 /* Okul binası: 3 katlı, pencereli cephe, giriş saçağı, isim tabelası, düz çatıda
@@ -751,7 +969,7 @@ function okulYap() {
   tabela.position.set(cx, 4.55, cz + 6 + 0.1); tabela.castShadow = true; okul.add(tabela);
 
   // okul bahçesi (beton zemin) ve bordür
-  const bahce = new THREE.Mesh(new THREE.PlaneGeometry(36, 14), new THREE.MeshStandardMaterial({ color: '#9d978c', roughness: 1 }));
+  const bahce = new THREE.Mesh(new THREE.PlaneGeometry(36, 14), new THREE.MeshStandardMaterial({ color: '#9d978c', roughness: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
   bahce.rotation.x = -Math.PI / 2; bahce.position.set(cx, 0.003, cz + 13); bahce.receiveShadow = true; okul.add(bahce);
 
   // bayrak direği ve dalgalanan bayrak
@@ -1208,6 +1426,7 @@ function girdiOku(dt) {
     }
     if (R.aktif || R.x || R.y) { girdi.roll = R.x; girdi.pitch = R.y; }
   }
+  if (gorevD) ek(gorevD.tip, 'girdi', gorevD, dt);
   if (gorevD && gorevD.bekle) { girdi.roll = girdi.pitch = girdi.yaw = girdi.tirman = 0; if (ayar.mod === 'normal') girdi.gaz = 0; }
 }
 
@@ -1250,6 +1469,10 @@ function gorevKur() {
     pedB.visible = true; g.hedef = new THREE.Vector3(20, 0.5, -55);
     const kutu = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#c79a5b' }));
     kutu.castShadow = true; g.kutu = kutu;
+  }
+  if (g.tip === 'kurtarma') {
+    const [kx, kz] = KEDI_YERLERI[Math.floor(Math.random() * KEDI_YERLERI.length)];
+    g.kedi = kediYap(kx, kz); g.kediPoz = g.kedi.position.clone(); g.bulundu = false; g.gorme = 0; g.ruzgarHiz = 1; g.miyavT = 4; g.ipucu = false;
   }
   if (g.tip === 'cati') {
     const bos = (fz0().Ttoplam / G * 1000 - fz0().kutle.toplam);
@@ -1303,6 +1526,7 @@ function gorevKur() {
     g.asili = 0; g.egimToplam = 0; g.ruzToplam = 0; g.olcSay = 0;
     g.hedef = new THREE.Vector3(0, 3, 0);
   }
+  if (EK[g.tip]) t = ek(g.tip, 'kur', g, t) || t;
   if (g.tip === 'serbest') { g.ruzgarHiz = 0; }
   return { g, t };
 }
@@ -1350,8 +1574,10 @@ function baslat() {
   hoverIzKonum();
   sesBaslat();
   kameraAni = true;
-  if (g.tip !== 'tunel') bildir(ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç', 1600);
-  if (ayar.zaman === 'aksam') setTimeout(() => { if (durum === 'ucus') bildir('Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
+  if (g.tip !== 'tunel' && !EK[g.tip]) bildir(ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç', 1600);
+  ek(g.tip, 'basla', g);
+  zamanUygula(g.tip === 'kurtarma');
+  if (geceAcik) setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
 }
 function tahminSor() {
   const g = gorevD;
@@ -1367,7 +1593,8 @@ function tahminTamam() {
 
 function menuyeDon() {
   durum = 'menu'; $('hud').hidden = true; $('sonuc').hidden = true; $('menu').hidden = false; $('tahminP').hidden = true;
-  sesSus(); menuOnizle(); pidBilgiYaz();
+  for (const k in EK) ek(k, 'kapat');
+  sesSus(); zamanUygula(); menuOnizle(); pidBilgiYaz();
 }
 addEventListener('focus', () => { if (durum === 'menu') pidBilgiYaz(); });
 
@@ -1502,7 +1729,10 @@ function fizikAdim(dt) {
     if (u.hiz.y < 0) u.hiz.y = 0;
     const surtunme = Math.exp(-dt * 8); u.hiz.x *= surtunme; u.hiz.z *= surtunme;
     if (u.T * Math.cos(egim) < W * 1.001) {
-      if (!u.yerde && zy > 0.5) bildir(zy > 9 ? `Okulun çatısına indin: ${tr(zy, 1)} m yükseklik` : `Giriş saçağına indin: ${tr(zy, 1)} m`, 1800);
+      if (!u.yerde && zy > 0.5) {
+        const yer = { cati: 'Okulun çatısına', makine: 'Okulun çatısına', panel: 'Güneş panellerinin üstüne', sacak: 'Giriş saçağına', ev: 'Bir evin çatısına', durak: 'Otobüs durağının çatısına', araba: 'Bir arabanın tavanına' }[zeminAd] || 'Bir çatıya';
+        bildir(`${yer} indin: ${tr(zy, 1)} m yükseklik`, 1800);
+      }
       u.yerde = true; u.hiz.set(0, 0, 0); u.roll *= 0.9; u.pitch *= 0.9; u.rRoll = u.rPitch = 0; }
   } else if (u.poz.y > taban + 0.02) u.yerde = false;
 
@@ -1517,6 +1747,7 @@ function fizikAdim(dt) {
    Engele dik yöndeki hız sınırı aşarsa pervane kırılır (düşüş); daha yavaş temasta dron
    engelden itilir, içeri doğru hızı silinir ve hafifçe seker. */
 const _n = new THREE.Vector3(), _d = new THREE.Vector3(), _r = new THREE.Vector3();
+const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac' };
 function engelKontrol() {
   const u = uc, f = fz, p = u.poz;
   const rD = f.kol + f.t.pervaneCap * 0.0254 / 2;
@@ -1560,13 +1791,26 @@ function engelKontrol() {
     const dx = p.x - qx, dy = p.y - qy, dz = p.z - qz, d = Math.hypot(dx, dy, dz);
     if (d > 0) {
       enYakin = Math.min(enYakin, d - rD);
-      if (d < rD) { _n.set(dx / d, dy / d, dz / d); temas(_n, rD - d, 'bina'); }
+      if (d < rD) { _n.set(dx / d, dy / d, dz / d); temas(_n, rD - d, KUTU_NE[B.ad] || 'bina'); }
     } else {
       // merkez kutunun içine girdi (çok hızlı): en kısa yoldan dışarı it
       const s = [[p.x - B.x0, -1, 0, 0], [B.x1 - p.x, 1, 0, 0], [p.z - B.z0, 0, 0, -1], [B.z1 - p.z, 0, 0, 1]];
       if (B.y0 > 0) s.push([p.y - B.y0, 0, -1, 0]);
       const e = s.sort((a, b) => a[0] - b[0])[0];
-      _n.set(e[1], e[2], e[3]); temas(_n, e[0] + rD, 'bina'); enYakin = -1;
+      _n.set(e[1], e[2], e[3]); temas(_n, e[0] + rD, KUTU_NE[B.ad] || 'bina'); enYakin = -1;
+    }
+  }
+
+  // yaprak döken ağaçlar: küre taç + gövde
+  for (const a of yuvarlakAgaclar) {
+    const dx = p.x - a.x, dz = p.z - a.z, kap = 1.8 * a.s + rD;
+    if (dx > kap || dx < -kap || dz > kap || dz < -kap) continue;
+    _n.set(dx, (p.y - 3.4 * a.s) * 1.1, dz); const d = _n.length() || 1e-6, pay = 1.6 * a.s + rD - d;
+    enYakin = Math.min(enYakin, -pay);
+    if (pay > 0) { _n.multiplyScalar(1 / d); temas(_n.clone(), pay, 'agac'); continue; }
+    if (p.y < 2.4 * a.s) {
+      const dh = Math.hypot(dx, dz) || 1e-6, pay2 = 0.22 * a.s + rD - dh; enYakin = Math.min(enYakin, -pay2);
+      if (pay2 > 0) { _n.set(dx / dh, 0, dz / dh); temas(_n.clone(), pay2, 'agac'); }
     }
   }
 
@@ -1608,11 +1852,49 @@ function engelKontrol() {
   return carp;
 }
 
+/* ---------- gece arama-kurtarma: kayıp kedi Pamuk ----------
+   Dronun iniş farı aşağı bakan bir fener: ışık şiddeti I (kandela), zemindeki aydınlık
+   E = I / d² (lüks). Işık izi yarıçapı r = h · tan(α). Yükseldikçe iz büyür ama söner. */
+const FAR_I = 1000, FAR_ACI = rad(26), E_ESIK = 10;
+const KEDI_YERLERI = [[-90, -22], [-74, 8], [-120, 2.6], [-30, 22], [-48, -46], [-100, -40], [-58, -64], [-128, -30]];
+const ISARETLER = [['basketbol sahasının', -80, -13], ['futbol sahasının', -38, -59], ['otobüs durağının', -46, -7], ['apartmanların', -102, 13], ['kavşağın', -66, -2], ['okulun arka bahçesinin', -38, -42], ['batıdaki evlerin', -125, -20]];
+function kediYap(x, z) {
+  const k = new THREE.Group(), tuy = new THREE.MeshStandardMaterial({ color: '#8f8a84', roughness: 0.9 });
+  const govde = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), tuy); govde.scale.set(0.13, 0.12, 0.24); govde.position.y = 0.15; k.add(govde);
+  const bas = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 10), tuy); bas.position.set(0, 0.27, -0.22); k.add(bas);
+  for (const s of [-1, 1]) {
+    const kulak = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.08, 4), tuy); kulak.position.set(s * 0.055, 0.37, -0.22); k.add(kulak);
+    const goz = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: '#000000' })); goz.position.set(s * 0.04, 0.29, -0.31); k.add(goz);
+    (k.userData.gozler = k.userData.gozler || []).push(goz);
+  }
+  const kuyruk = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.025, 0.3, 6), tuy); kuyruk.position.set(0, 0.25, 0.3); kuyruk.rotation.x = 0.7; k.add(kuyruk);
+  const halka = new THREE.Mesh(new THREE.RingGeometry(1.1, 1.3, 40), new THREE.MeshBasicMaterial({ color: '#3ddc97', transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false }));
+  halka.rotation.x = -Math.PI / 2; halka.position.y = 0.05; halka.visible = false; k.add(halka); k.userData.halka = halka;
+  k.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  k.position.set(x, zeminY(x, z), z); k.rotation.y = Math.random() * 6; gorevGrubu.add(k); return k;
+}
+// sentez miyav: frekansı yükselip alçalan, burundan gelen bir ton
+function miyav(guc) {
+  if (!sesAcik) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    const c = miyav.c || (miyav.c = new AC()), t = c.currentTime;
+    const o = c.createOscillator(), f = c.createBiquadFilter(), k = c.createGain();
+    o.type = 'sawtooth'; f.type = 'bandpass'; f.Q.value = 3;
+    o.frequency.setValueAtTime(520, t); o.frequency.linearRampToValueAtTime(820, t + 0.18); o.frequency.linearRampToValueAtTime(560, t + 0.6);
+    f.frequency.setValueAtTime(900, t); f.frequency.linearRampToValueAtTime(1600, t + 0.2); f.frequency.linearRampToValueAtTime(800, t + 0.6);
+    k.gain.setValueAtTime(0, t); k.gain.linearRampToValueAtTime(0.18 * guc, t + 0.06); k.gain.linearRampToValueAtTime(0, t + 0.65);
+    o.connect(f); f.connect(k); k.connect(c.destination); o.start(t); o.stop(t + 0.7);
+  } catch (e) {}
+}
+
 /* ---------- görev mantığı ---------- */
 function gorevAdim(dt) {
   const u = uc, g = gorevD;
   if (g.bitti || g.bekle) return;
+  if (window.EK_HER_ADIM) EK_HER_ADIM(dt);       // uçuş kaydı (her görevde)
   if (!u.yerde || u.zaman > 0.3) g.sure += dt;
+  ek(g.tip, 'adim', g, dt);
   if (g.tip === 'ilk') {
     const yatay = Math.hypot(u.poz.x, u.poz.z);
     if (g.adim === 0) {
@@ -1653,6 +1935,34 @@ function gorevAdim(dt) {
     } else if (!icinde) g.asili = Math.max(0, g.asili - dt * 0.5);
     g.zon.material.opacity = sakin ? 0.34 : icinde ? 0.24 : 0.14;
     if (g.asili >= 8) bitir(true);
+  }
+  if (g.tip === 'kurtarma') {
+    const yer = zeminY(u.poz.x, u.poz.z, u.poz.y), h = Math.max(0.3, u.poz.y - yer);
+    const dx = u.poz.x - g.kediPoz.x, dz = u.poz.z - g.kediPoz.z, yatay = Math.hypot(dx, dz);
+    const dk = Math.hypot(yatay, u.poz.y - g.kediPoz.y), E = FAR_I / (dk * dk), iz = Math.tan(FAR_ACI) * Math.max(0.3, u.poz.y - g.kediPoz.y);
+    g.E0 = FAR_I / (h * h); g.izR = h * Math.tan(FAR_ACI); g.yatay = yatay;
+    const isikta = yatay < iz;
+    // kedinin gözleri: ışık gelirse geri yansıtır (tapetum lucidum)
+    const parlak = isikta ? Math.min(1, E / 25) : 0;
+    g.kedi.userData.gozler.forEach((m) => m.material.color.setRGB(0.45 * parlak, 1 * parlak, 0.3 * parlak));
+    if (!g.bulundu) {
+      g.gorme = isikta && E >= E_ESIK ? g.gorme + dt : Math.max(0, g.gorme - dt * 0.5);
+      if (g.gorme > 0.8) {
+        g.bulundu = true; g.bulY = h; g.bulE = E; g.bulD = dk; g.bulT = g.sure; g.hedef = g.kediPoz.clone().setY(g.kediPoz.y + 0.5);
+        g.kedi.userData.halka.visible = true; miyav(1); bildir('Pamuk bulundu! Yanına in (4 m içinde)', 2600);
+      } else if (isikta && E < E_ESIK && !g.sonukUyari) { g.sonukUyari = true; bildir('Bir şey var ama ışık çok sönük: alçal', 2000); }
+      // ses ipucu: yaklaştıkça miyav sıklaşır ve güçlenir
+      g.miyavT -= dt;
+      if (g.miyavT <= 0 && yatay < 45) { miyav(Math.max(0.15, 1 - yatay / 45)); g.miyavT = 3 + yatay / 8; }
+      if (!g.ipucu && g.sure > 60) {
+        g.ipucu = true;
+        const en = ISARETLER.reduce((a, b) => Math.hypot(b[1] - g.kediPoz.x, b[2] - g.kediPoz.z) < Math.hypot(a[1] - g.kediPoz.x, a[2] - g.kediPoz.z) ? b : a);
+        bildir(`İpucu: Pamuk ${en[0]} yakınında görülmüş`, 3500);
+      }
+    } else {
+      g.kedi.userData.halka.material.opacity = 0.5 + 0.4 * Math.sin(u.zaman * 5);
+      if (u.yerde && u.gaz < 0.12 && yatay < 4 && u.zaman > 2) bitir(true);
+    }
   }
   if (g.tip === 'cati') {
     g.enerji += u.I * fz.t.hucre * u.Vh * dt;   // bataryadan çekilen elektrik enerjisi
@@ -1749,7 +2059,7 @@ function dus(neden, v) {
     metin = `Yere <b>${tr(der(v.egim), 0)}°</b> eğik değdin. İnişten önce dronu düzle (sağ kolu bırak). Eğik dronda itkinin yalnızca T·cosθ kadarı yukarı çeker, gerisi dronu yana iter.`;
     formul = `cos ${tr(der(v.egim), 0)}° = ${tr(Math.cos(v.egim), 2)} → itkinin %${tr(100 * (1 - Math.cos(v.egim)), 0)}'i yana gidiyor`;
   } else if (neden === 'engel') {
-    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'], kapi: ['Kapıya çarptın', 'yarış kapısının çerçevesine'] }[v.ne] || ['Engele çarptın', 'engele'];
+    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], ev: ['Binaya çarptın', 'binanın duvarına'], arac: ['Arabaya çarptın', 'park etmiş arabaya'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'], kapi: ['Kapıya çarptın', 'yarış kapısının çerçevesine'] }[v.ne] || ['Engele çarptın', 'engele'];
     const cap = f.t.pervaneCap * 2.54;
     baslik = ad[0];
     metin = `Dron ${ad[1]} <b>${tr(v.v, 1)} m/s</b> hızla değdi. Dakikada binlerce devirle dönen pervane bir dala ya da duvara değince kırılır; o köşenin itkisi bir anda kaybolur ve dron takla atar. Engelin yanından geçerken en az bir pervane çapı (<b>${tr(cap, 0)} cm</b>) boşluk bırak ve yavaşla. Hızı yarıya indirmek darbe enerjisini dörtte bire düşürür.`;
@@ -1789,6 +2099,12 @@ function bitir(basarili) {
     metin = `<b>${g.kargo} g</b> kargoyu rüzgârda teslim ettin. Kargo, dronun itki/ağırlık oranını <b>${tr(g.twrOnce, 1)}</b>'dan <b>${tr(g.twrSonra, 1)}</b>'a düşürdü: aynı motorlar daha ağır bir yükü taşıdı, bu yüzden dron daha hantal ve rüzgâra daha açıktı.`;
     formul = `TWR = T_maks / (m·g)   ·   hover gazı %${tr(fz0().hoverGaz * 100, 0)} → %${tr(f.hoverGaz * 100, 0)}`;
   }
+  if (g.tip === 'kurtarma') {
+    baslik = 'Pamuk kurtarıldı';
+    metin = `Pamuk'u yerden <b>${tr(g.bulY, 1)} m</b> yükseklikteyken, fenerin ışığı kediye <b>${tr(g.bulE, 0)} lx</b> ulaştığı anda buldun. Fener ışığı uzaklığın karesiyle zayıflar: 5 m'den 10 m'ye çıkınca zemindeki aydınlık dörtte bire iner, ama ışık izinin alanı dört kat büyür. Arama pilotları bu yüzden önce yüksekten geniş tarar, bir şey görünce alçalır. Kedinin gözlerinin parlaması da fizik: gözün arkasındaki yansıtıcı tabaka (tapetum lucidum) ışığı geldiği yöne geri yollar.`;
+    formul = `E = I / d² = ${FAR_I} cd / (${tr(g.bulD, 1)} m)² ≈ ${tr(g.bulE, 0)} lx   ·   iz yarıçapı r = h·tan 26°`;
+    olcum.push(['Bulma yüksekliği', tr(g.bulY, 1) + ' m'], ['Bulma anı', tr(g.bulT, 1) + ' s']);
+  }
   if (g.tip === 'cati') {
     const m = f.m, Ep = m * G * 9.6, Eb = Math.max(g.enerji, 1), oran = Ep / Eb * 100;
     baslik = 'Kargo çatıda';
@@ -1815,6 +2131,7 @@ function bitir(basarili) {
     formul = `tan θ = F/W = (½·ρ·CdA·v² + k·m·v) / (m·g) = ${tr(Fs, 3)} N / ${tr(W, 2)} N  →  θ ≈ ${tr(der(thF), 1)}°`;
     olcum.splice(0, olcum.length, ['Tahminin', g.tahmin + '°'], ['Ölçülen eğim', tr(der(th), 1) + '°'], ['Formül', tr(der(thF), 1) + '°'], ['Rüzgâr (3 m)', tr(v, 1) + ' m/s'], ['Sürükleme F', tr(Fs, 3) + ' N']);
   }
+  if (EK[g.tip]) { const r = ek(g.tip, 'bitir', g, olcum, basarili) || {}; baslik = r.baslik || baslik; metin = r.metin || metin; formul = r.formul || formul; }
   if (g.tip === 'serbest') return;
   sesSus();
   setTimeout(() => sonucGoster(GOREVLER[g.tip].ad, baslik, metin, formul, olcum), 500);
@@ -1943,6 +2260,10 @@ function hudGuncelle(dt) {
   let hedef = '', ek = '';
   if (g.tip === 'ilk') { hedef = g.adim === 0 ? '3 m yüksekliğe çık ve turuncu silindirin içinde 5 saniye kal.' : 'Turuncu H pedine yumuşak in.'; ek = g.adim === 0 ? `Asılı <b>${tr(Math.min(5, g.asili), 1)}/5 s</b>` : ''; }
   if (g.tip === 'halka') { hedef = 'Turuncu halkadan geç, sıradakine yönel.'; ek = `Halka <b>${g.sira}/${g.halkalar.length}</b>` + (g.rekor ? ` · Rekor <b>${tr(g.rekor, 1)} s</b>` : ''); }
+  if (g.tip === 'kurtarma') {
+    if (!g.bulundu) { hedef = 'Kayıp kedi Pamuk kasabada bir yerde. Işık izinle tara; miyav sesine kulak ver.'; ek = `Zeminde <b>${tr(g.E0 || 0, 0)} lx</b> (bulmak için ≥ ${E_ESIK}) · İz çapı <b>${tr(2 * (g.izR || 0), 1)} m</b>`; }
+    else { hedef = 'Pamuk bulundu! Yeşil halkanın içine yumuşak in.'; ek = `Uzaklık <b>${tr(g.yatay || 0, 0)} m</b>`; }
+  }
   if (g.tip === 'cati') { hedef = `${g.kargo} g kargo yüklü. Okulun çatısındaki ${ayar.zaman === 'aksam' ? 'yeşil ışıklı ' : ''}H pistine in.`; ek = `Çatı 9,6 m · Harcanan <b>${tr(g.enerji || 0, 0)} J</b>`; }
   if (g.tip === 'teslimat') { hedef = `${g.kargo} g kargo yüklü. Rüzgâr soldan esiyor; mavi B pedine in.`; ek = `TWR <b>${tr(g.twrOnce, 1)} → ${tr(g.twrSonra, 1)}</b>`; }
   if (g.tip === 'pist') {
@@ -1954,6 +2275,7 @@ function hudGuncelle(dt) {
     hedef = g.bekle ? 'Önce eğimi tahmin et.' : 'Mavi silindirin içinde kıpırdamadan dur. Rüzgâr seni sola itiyor.';
     ek = g.bekle ? '' : `Sabit <b>${tr(Math.min(8, g.asili), 1)}/8 s</b> · Tahminin <b>${g.tahmin}°</b>`;
   }
+  if (EK[g.tip]) { const r = EK[g.tip].hud ? EK[g.tip].hud(g) : null; if (r) { hedef = r.hedef; ek = r.ek; } }
   if (g.tip === 'serbest') { hedef = 'Serbest uçuş. V: rüzgâr, C: kamera.'; ek = ''; }
   $('gHedef').textContent = hedef; $('gEk').innerHTML = ek;
   // uyarılar
