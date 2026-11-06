@@ -224,6 +224,8 @@ figcaption a { color: var(--murekkep); }
 @media (max-width: 760px) { .manzara { margin: 0 -20px 10px -34px; } }
 .saat-cip { position: absolute; right: 16%; bottom: 16px; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: .78rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--murekkep); background: color-mix(in srgb, var(--kagit) 82%, transparent); border: 1px solid var(--kare-kalin); border-radius: 999px; padding: 2px 10px 2px 6px; cursor: pointer; backdrop-filter: blur(4px); }
 .saat-cip:hover { border-color: var(--murekkep); }
+.ay-cip { font-weight: 600; color: var(--kursun); padding-left: 7px; margin-left: 1px; border-left: 1px solid var(--kare-kalin); }
+@media (max-width: 420px) { .ay-cip { display: none; } }
 .saat-ikon { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; position: relative; }
 .saat-ikon::after { content: ""; position: absolute; left: 3px; top: 1px; width: 2px; height: 4px; background: currentColor; transform-origin: 1px 4px; animation: saatDon 4s linear infinite; }
 .saat-cip[aria-pressed="true"] .saat-ikon::after { animation-play-state: paused; }
@@ -449,7 +451,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <div>
     <div class="manzara">
       <canvas id="filo" aria-hidden="true"></canvas>
-      <button type="button" class="saat-cip" id="saatCip" aria-pressed="false" title="Gün döngüsünü durdur"><span class="saat-ikon" aria-hidden="true"></span><span class="sr-only">Sahne saati: </span><span id="saatYazi">--:--</span></button>
+      <button type="button" class="saat-cip" id="saatCip" aria-pressed="false" title="Gün döngüsünü durdur"><span class="saat-ikon" aria-hidden="true"></span><span class="sr-only">Sahne saati: </span><span id="saatYazi">--:--</span><span class="ay-cip"><span class="sr-only">, ay evresi: </span><span id="ayYazi"></span></span></button>
     </div>
     <h1>Muhsin <span>ENGİN</span><me-imza class="imza" boyut="76" aria-hidden="true"></me-imza></h1>
     <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
@@ -994,7 +996,7 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   document.querySelector(".mc-marka").addEventListener("click", (e) => { e.preventDefault(); menuKapat(); scrollTo({ top: 0, behavior: "smooth" }); });
 })();
 </script>
-<script src="dron/dron3d.js"></script>
+<script src="ortak/filo.js"></script>
 <script>
 /* Görsel açıklama paneli: dışarı tıklayınca ya da Esc ile kapanır */
 (function () {
@@ -1013,11 +1015,20 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
 (function () {
   const tv = document.getElementById("filo"); if (!tv) return;
   const g = tv.getContext("2d"), az = matchMedia("(prefers-reduced-motion: reduce)");
-  const cip = document.getElementById("saatCip"), cipYazi = document.getElementById("saatYazi");
+  const cip = document.getElementById("saatCip"), cipYazi = document.getElementById("saatYazi"), cipAy = document.getElementById("ayYazi");
   let W = 0, H = 0, oran = 1, t = 0, son = 0, gorunur = true, duraklat = false, G = null;
   const simdi = new Date();
   let tau = (simdi.getHours() * 60 + simdi.getMinutes()) / 1440;   // günün kesri (0 = gece yarısı)
   const GUN_SN = 120;                                               // bir gün kaç saniyede geçer
+  // Ay evresi: bugünün gerçek evresinden başlar (0 = yeni ay, .5 = dolunay). Sahnede her gün
+  // 1/8 evre ilerler; 8 sahne gününde (16 dakikada) bütün evreler görülür. Ay, evresi kadar
+  // geç doğar: dolunay gün batarken doğar, ilk dördün öğlen, yeni ay güneşle birlikte.
+  const AY_DONGU = 29.530588853, YENI_AY_2000 = Date.UTC(2000, 0, 6, 18, 14) / 864e5;
+  let evre = (((Date.now() / 864e5 - YENI_AY_2000) / AY_DONGU) % 1 + 1) % 1;
+  const EVRE_HIZ = 1 / 8;
+  const EVRELER = ["Yeni ay", "Büyüyen hilal", "İlk dördün", "Büyüyen şişkin ay", "Dolunay", "Küçülen şişkin ay", "Son dördün", "Küçülen hilal"];
+  const evreAdi = (e) => EVRELER[Math.round(e * 8) % 8];
+  const logo = window.Filo ? Filo.logoYukle("ortak/imza-koyu.svg") : null;
   const css = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
 
   /* ---------- Renk anahtar kareleri ---------- */
@@ -1076,7 +1087,10 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
     agac.sort((a, b) => b.z - a.z);
     const parilti = Array.from({ length: 40 }, () => ({ z: 15 + 70 * R(), x: -14 + 10 * R(), w: .5 + R() }));
     const kus = Array.from({ length: 2 }, (_, i) => ({ y: H * (.12 + .14 * i), v: .045 + .02 * i, faz: i * .45, n: 5 + i }));
-    G = { x0, y0, f, hC: 1, sirt, yildiz, bulut, turbin, binalar, agac, parilti, kus };
+    // ufuk çizgisi (dağ sırtı ve bina tepeleri): ay bunun arkasına batar
+    const ufuk = []; for (let x = 0; x <= W + 4; x += 4) ufuk.push(Math.min(sirt(x, 0), sirt(x, 1), y0));
+    for (const b of binalar[0].concat(binalar[1])) for (let i = Math.max(0, Math.floor(b.x / 4)); i <= Math.min(ufuk.length - 1, Math.ceil((b.x + b.w) / 4)); i++) ufuk[i] = Math.min(ufuk[i], y0 - b.h - (b.anten || 0));
+    G = { x0, y0, f, hC: 1, sirt, yildiz, bulut, turbin, binalar, agac, parilti, kus, ufuk };
   }
 
   /* ---------- Bir kare ---------- */
@@ -1104,11 +1118,8 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
       g.fillStyle = isi; g.fillRect(0, 0, W, y0);
       g.fillStyle = rgb(renk); g.beginPath(); g.arc(gs.x, gs.y, r0, 0, 7); g.fill();
     }
-    const ay = gok((tau + .5) % 1);
-    if (ay.e > -.1) {
-      const r0 = H * .05; g.fillStyle = rgb(h("#f4ecd2"), Math.min(1, .25 + p.yildiz)); g.beginPath(); g.arc(ay.x, ay.y, r0, 0, 7); g.fill();
-      g.fillStyle = rgb(mix(p.gok[0], p.gok[1], Math.max(0, Math.min(1, ay.y / y0)))); g.beginPath(); g.arc(ay.x + r0 * .4, ay.y - r0 * .2, r0 * .86, 0, 7); g.fill();
-    }
+    const ay = gok(((tau - evre) % 1 + 1) % 1), aydinlik = (1 - cos(2 * PI * evre)) / 2;
+
     // Bulutlar
     G.bulut.forEach((b) => {
       const x = ((b.x + t * b.v) % (W * 1.4)) - W * .2, s = H * .05 * b.s;
@@ -1162,7 +1173,8 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
       g.save(); g.clip();
       // Güneşin / ayın yansıması ve dalga parıltıları
       const kaynak = tau > .22 && tau < .78 ? gs : ay;
-      if (kaynak.e > -.05) for (let i = 0; i < 14; i++) { const y = y0 + 2 + i * i * .55, w = (3 + i * 1.6) * (1 + .25 * sin(t * 3 + i)); g.fillStyle = rgb(tau > .22 && tau < .78 ? h("#ffd9a0") : h("#f4ecd2"), .5 - i * .03); g.fillRect(kaynak.x - w / 2, y, w, 1.2); }
+      const gunduz = tau > .22 && tau < .78, yG = gunduz ? 1 : aydinlik * p.yildiz;
+      if (kaynak.e > -.05 && yG > .03) for (let i = 0; i < 14; i++) { const y = y0 + 2 + i * i * .55, w = (3 + i * 1.6) * (gunduz ? 1 : .4 + .6 * aydinlik) * (1 + .25 * sin(t * 3 + i)); g.fillStyle = rgb(gunduz ? h("#ffd9a0") : h("#f4ecd2"), (.5 - i * .03) * yG); g.fillRect(kaynak.x - w / 2, y, w, 1.2); }
       G.parilti.forEach((s, i) => { const q = yer(s.x + .3 * sin(t * .8 + i), s.z); g.fillStyle = rgb(p.isik > .5 ? h("#ffd27a") : h("#ffffff"), .22 + .12 * sin(t * 2 + i)); g.fillRect(q[0], q[1], s.w * f / s.z * .25, 1); });
       g.restore();
     }
@@ -1214,12 +1226,16 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
     const ARA = 6.5, direk = []; for (let z = ARA - (kz % ARA) + 1.4; z < 160; z += ARA) direk.push(z);
     direk.reverse();
     const tepe = (yan, z) => { const s = f / z; return { x: x0 + yan * 1.75 * s, y: y0 + (hC - 2.05) * s, kol: .42 * s, s }; };
+    // zSinir: yalnız bu derinlikten yakın direkler ve teller (dronun önünde kalanlar)
+    const direkCiz = (zSinir) => {
     [-1, 1].forEach((yan) => { for (let i = 0; i < direk.length - 1; i++) {
+      if (direk[i + 1] >= zSinir) continue;
       const A = tepe(yan, direk[i]), B = tepe(yan, direk[i + 1]);
       g.strokeStyle = rgb(p.cizgi, Math.min(.5, 3 / direk[i + 1])); g.lineWidth = .8;
       for (const u of [-1, 1]) { const ax = A.x + u * A.kol, bx = B.x + u * B.kol; g.beginPath(); g.moveTo(ax, A.y); g.quadraticCurveTo((ax + bx) / 2, (A.y + B.y) / 2 + (A.s + B.s) * .09, bx, B.y); g.stroke(); }
     } });
     direk.forEach((z) => [-1, 1].forEach((yan) => {
+      if (z >= zSinir) return;
       const T = tepe(yan, z), ay2 = y0 + hC * f / z, s = T.s;
       g.strokeStyle = rgb(p.cizgi, Math.min(.95, 4.5 / z)); g.lineWidth = Math.max(.6, s * .028);
       g.beginPath(); g.moveTo(T.x - s * .14, ay2); g.lineTo(T.x, T.y); g.lineTo(T.x + s * .14, ay2);
@@ -1227,6 +1243,8 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
       g.moveTo(T.x - T.kol, T.y + s * .02); g.lineTo(T.x + T.kol, T.y + s * .02); g.stroke();
       if (p.isik > .4 && z < 30 && Math.floor(t * 1.4) % 2) { g.globalAlpha = Math.min(1, 12 / z); g.fillStyle = "#ff4d4d"; g.beginPath(); g.arc(T.x, T.y - 1, Math.max(1, s * .03), 0, 7); g.fill(); g.globalAlpha = 1; }
     }));
+    };
+    direkCiz(Infinity);
     // Atmosfer perspektifi: ufukta pus
     const ps = g.createLinearGradient(0, y0 - H * .2, 0, y0 + H * .16);
     ps.addColorStop(0, rgb(p.pus, 0)); ps.addColorStop(.55, rgb(p.pus, .5)); ps.addColorStop(1, rgb(p.pus, 0));
@@ -1266,28 +1284,80 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
         g.strokeStyle = (c.gj % 5 === 0) ? kalin : kare; g.beginPath(); g.moveTo(c.x, c.y + .5); g.lineTo(c.x + K, c.y + .5); g.stroke();
       });
       g.globalAlpha = 1; }
-    // Dronlar: derinliğe göre ölçek, zeminde gölge, gece seyir ışıkları
-    if (window.Dron3D) {
-      const metin = css("--metin") || "#1b2433";
-      [{ renk: "#16a394", hiz: .27, faz: 2.6, z: 6.5, kanat: 2 }, { renk: "#e8892a", hiz: .36, faz: 0, z: 3.4, kanat: 3 }].forEach((d, i) => {
-        const a = t * d.hiz + d.faz, b = 2 * a + d.faz;
-        const x = W * (.5 + .33 * sin(a)), y = H * (.32 + .12 * sin(b)) + (d.z > 5 ? H * .06 : 0);
-        const vx = cos(a) * d.hiz * W, vy = cos(b) * d.hiz * H * .26, r = H * .88 / d.z, gy = y0 + hC * f / d.z * .55;
-        g.fillStyle = "#000"; for (const [k, al] of [[1, .035], [.7, .05], [.4, .06]]) { g.globalAlpha = al * (.4 + .6 * p.gun); g.beginPath(); g.ellipse(x, gy, r * .95 * k, r * .2 * k, 0, 0, 7); g.fill(); } g.globalAlpha = 1;
-        const renk = { cerceve: koyuTema || p.isik > .6 ? "#c9d1de" : metin, plaka: d.renk, motor: "#7d8794", motorUst: "#d8dee5", pervane: d.renk, pcb: "#1f8a4c", vtx: "#2c5aa0", batarya: d.renk, kamera: "#1c1f24", lens: "#0b0d10", anten: d.renk };
-        const kam = { yaw: 0, pitch: .5, mesafe: 500, f: 500, cx: x, cy: y }, poz = { olcek: r / 1.52, yaw: Math.atan2(vx, -vy * 3), pitch: .22, roll: Math.max(-.3, Math.min(.3, -vy / H)) };
-        Dron3D.ciz(g, Dron3D.model({ kol: 4, L: 1, pervane: .52, kanat: d.kanat, batarya: .85, t: t * 45 + i }, renk), kam, poz);
-        if (p.isik > .3 && Dron3D.izdusur) {
-          g.globalCompositeOperation = "lighter";
-          [[.707, .707, "#e9fff2"], [-.707, .707, "#e9fff2"], [.707, -.707, "#ff4040"], [-.707, -.707, "#ff4040"]].forEach(([mx, mz, c], j) => {
-            if ((j > 1) && Math.floor(t * 2.5) % 2) return;
-            const q = Dron3D.izdusur([mx, .05, mz], poz, kam), rr = r * .22, gl = g.createRadialGradient(q[0], q[1], 0, q[0], q[1], rr);
-            gl.addColorStop(0, rgb(h(c), .9 * p.isik)); gl.addColorStop(1, rgb(h(c), 0)); g.fillStyle = gl; g.fillRect(q[0] - rr, q[1] - rr, 2 * rr, 2 * rr);
-          });
-          g.globalCompositeOperation = "source-over";
-        }
+    // Ay, defter kenarının dağılmasından sonra çizilir (evresi net görünsün); gökyüzü
+    // bölgesine kırpılır, böylece dağların ve binaların arkasına doğup batar.
+    if (ay.e > -.08) { g.save(); g.beginPath(); g.moveTo(0, 0); g.lineTo(W, 0); for (let i = G.ufuk.length - 1; i >= 0; i--) g.lineTo(i * 4, G.ufuk[i]); g.closePath(); g.clip(); ayCiz(ay.x, ay.y, H * .066, p, Math.min(1, (ay.e + .08) * 6)); g.restore(); }
+    // Dronlar: dünyada gerçek konumları var (x, y, z). Hepsi elektrik tellerinin üstünde,
+    // y ≥ 2,7 birimde uçar (direk tepesi 2,05); bu yüzden hiçbir direğe ya da tele değmez.
+    // Önlerinde kalan direkler, dron çizildikten sonra dronun kutusunda yeniden çizilir.
+    if (window.Filo) {
+      const ton = mix([.36, .41, .58], mix(p.gok[2].map((v) => v / Math.max(...p.gok[2])), [1, 1, 1], .65), p.gun);
+      const kaynakI = tau > .22 && tau < .78 ? gs : ay;
+      const isikY = [(.5 - kaynakI.x / W) * -2.2, Math.max(.25, kaynakI.e + .2), .55];
+      const durumlar = FILO.map((d) => {
+        const sx = d.sx[0] + d.sx[1] * sin(t * d.w + d.faz) + d.sx[2] * sin(t * d.w * 2.3 + d.faz * 1.7);
+        const z = d.z[0] + d.z[1] * sin(t * d.w * .7 + d.faz * 2.1);
+        const yw = d.y[0] + (d.y[1] - d.y[0]) * (.5 + .5 * sin(t * d.w * 1.3 + d.faz * .6)) + .025 * sin(t * 2.1 + d.faz);
+        const xw = (sx * W - x0) * z / f;
+        return { d, xw, yw, z };
+      }).sort((A, B) => B.z - A.z);
+      durumlar.forEach(({ d, xw, yw, z }) => {
+        // hız ve ivme: önceki karelerden (kamera ileri gider, dronlar ona eşlik eder)
+        const o = d.o || (d.o = { xw, z, vx: 0, vz: 0, yaw: PI, roll: 0, pitch: .12 }), dtt = Math.max(1 / 240, d.sonT == null ? 1 / 60 : t - d.sonT);
+        const vx = (xw - o.xw) / dtt, vz = (z - o.z) / dtt + 2.4, ax = (vx - o.vx) / dtt, az = (vz - o.vz) / dtt;
+        const k = Math.min(1, dtt * 4);
+        const yawH = Math.atan2(vx, -vz); let dy = yawH - o.yaw; dy = Math.atan2(sin(dy), cos(dy)); o.yaw += dy * Math.min(1, dtt * 2.5);
+        // ivmeyi dronun kendi eksenine çevir: yana ivme → yatış, ileri hız ve ivme → burun aşağı
+        const yanA = ax * cos(o.yaw) - az * sin(o.yaw), ileriA = -(ax * sin(o.yaw) + az * cos(o.yaw));
+        o.roll += (Math.max(-.42, Math.min(.42, -yanA * .06 * d.cevik)) - o.roll) * k;
+        o.pitch += (Math.max(-.1, Math.min(.38, .1 + Math.hypot(vx, vz) * .02 * d.cevik + ileriA * .03)) - o.pitch) * k;
+        Object.assign(o, { xw, z, vx: o.vx + (vx - o.vx) * k, vz: o.vz + (vz - o.vz) * k }); d.sonT = t;
+        const q = yuk(xw, yw, z), olcek = d.olcek * f / z;
+        // zemindeki gölge: yükseldikçe büyür ve silikleşir
+        if (p.gun > .15) { const gz = yer(xw, z), gr = olcek * d.yaricap; g.fillStyle = "#000";
+          for (const [kk, al] of [[1, .03], [.72, .045], [.45, .055]]) { g.globalAlpha = al * p.gun * .8; g.beginPath(); g.ellipse(gz[0], gz[1], gr * kk, gr * .22 * kk, 0, 0, 7); g.fill(); } g.globalAlpha = 1; }
+        const kutu = Filo.ciz(g, d.tip, { x: q[0], y: q[1], olcek, yaw: o.yaw, pitch: o.pitch, roll: o.roll, t: t + d.faz * 3, kamPitch: .34, isik: isikY, ton, gece: Math.max(0, p.isik - .15), logo: logo && logo.hazir ? logo.img : null });
+        // önde kalan direkleri ve telleri dronun üstüne yeniden çiz
+        g.save(); g.beginPath(); g.rect(kutu.x0 - 2, kutu.y0 - 2, kutu.x1 - kutu.x0 + 4, kutu.y1 - kutu.y0 + 4); g.clip(); direkCiz(z); g.restore();
       });
     }
+  }
+
+  // Filo: üç farklı dron. sx: ekranda yatay konum (orta, genlik, ikinci dalga), z: derinlik,
+  // y: uçuş yüksekliği (tellerin üstünde), olcek: model biriminin dünya karşılığı, cevik: ne kadar yatar
+  const FILO = [
+    { tip: "kargo",   sx: [.33, .19, .04], z: [8.2, .9],  y: [3.4, 3.75], olcek: .85, yaricap: 1.5,  w: .11, faz: 4.1, cevik: .6 },
+    { tip: "gezgin",  sx: [.56, .27, .05], z: [5.4, .9],  y: [3.0, 3.35], olcek: .95, yaricap: 1.55, w: .21, faz: 2.6, cevik: 1 },
+    { tip: "yarisci", sx: [.5, .33, .09],  z: [4.6, .6],  y: [2.95, 3.3], olcek: .74, yaricap: 1.4,  w: .32, faz: 0,   cevik: 1.8 },
+  ];
+
+  /* ---------- Ay: evresiyle birlikte ----------
+     Aydınlık kısım, bir yarım daire (ayın kenarı) ile bir yarım elips (gölge sınırı) arasında kalır.
+     Elipsin yatay yarıçapı r·cos(2π·evre): yeni ayda kenarla çakışır, dördünde düz çizgi olur,
+     dolunayda karşı kenara geçer. Büyürken sağ (batı), küçülürken sol yan aydınlıktır. */
+  function ayCiz(x, y, r, p, gorun) {
+    const s = evre < .5 ? 1 : -1, c = cos(2 * PI * evre), aydinlik = (1 - c) / 2;
+    const gece = p.yildiz, alfa = gorun * Math.min(1, .5 + gece);
+    g.save();
+    // parıltı (dolunayda en büyük)
+    if (gece > .1 && aydinlik > .05) { const hl = g.createRadialGradient(x, y, r * .8, x, y, r * (2.4 + 2 * aydinlik)); hl.addColorStop(0, rgb(h("#f4ecd2"), .22 * gece * aydinlik * gorun)); hl.addColorStop(1, rgb(h("#f4ecd2"), 0)); g.fillStyle = hl; g.fillRect(x - r * 5, y - r * 5, r * 10, r * 10); }
+    // dünya ışığı: karanlık kısım gece hafifçe seçilir
+    g.fillStyle = rgb(mix(p.gok[0], h("#5a6488"), .55), .55 * gece * gorun); g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    // aydınlık kısım
+    g.beginPath();
+    for (let i = 0; i <= 24; i++) { const a = -PI / 2 + i / 24 * PI; g.lineTo(x + s * r * cos(a), y + r * sin(a)); }
+    for (let i = 24; i >= 0; i--) { const a = -PI / 2 + i / 24 * PI; g.lineTo(x + s * r * c * cos(a), y + r * sin(a)); }
+    g.closePath();
+    const yz = g.createRadialGradient(x - r * .3, y - r * .3, r * .1, x, y, r * 1.05);
+    yz.addColorStop(0, rgb(h("#fffaf0"), alfa)); yz.addColorStop(.75, rgb(h("#f1e6c8"), alfa)); yz.addColorStop(1, rgb(h("#d8cba6"), alfa));
+    g.fillStyle = yz; g.fill();
+    // denizler (koyu lekeler) yalnız aydınlık kısımda
+    g.clip();
+    for (const [mx, my, rx, ry, a2] of [[-.28, -.22, .3, .2, .5], [.12, -.32, .2, .14, -.3], [.3, .04, .17, .22, .2], [-.1, .18, .26, .15, -.6], [-.46, .2, .11, .16, .3], [.08, .48, .09, .06, 0]]) {
+      g.fillStyle = rgb(h("#b4a88a"), .3 * alfa); g.beginPath(); g.ellipse(x + mx * r, y + my * r, rx * r, ry * r, a2, 0, 7); g.fill();
+    }
+    g.fillStyle = rgb(h("#fffdf6"), .5 * alfa); g.beginPath(); g.arc(x + .05 * r, y + .62 * r, .05 * r, 0, 7); g.fill();   // Tycho krateri
+    g.restore();
   }
 
   /* ---------- Sahne saati düğmesi ---------- */
@@ -1296,7 +1366,8 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   function saatYaz() {
     if (!cipYazi) return;
     const dk = Math.floor(tau * 1440), yazi = String(Math.floor(dk / 60)).padStart(2, "0") + ":" + String(dk % 60).padStart(2, "0") + " · " + DONEM.find(([s]) => tau < s)[1];
-    if (yazi !== sonYazi) { cipYazi.textContent = yazi; sonYazi = yazi; }
+    const ayY = evreAdi(evre);
+    if (yazi + ayY !== sonYazi) { cipYazi.textContent = yazi; if (cipAy) cipAy.textContent = ayY; sonYazi = yazi + ayY; }
   }
   if (cip) cip.addEventListener("click", () => {
     duraklat = !duraklat; cip.setAttribute("aria-pressed", String(duraklat));
@@ -1304,13 +1375,13 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   });
   function dongu(zm) {
     const dt = Math.min(.05, (zm - (son || zm)) / 1000); son = zm;
-    if (gorunur && !az.matches) { t += dt; if (!duraklat) tau = (tau + dt / GUN_SN) % 1; kare(); saatYaz(); }
+    if (gorunur && !az.matches) { t += dt; if (!duraklat) { tau = (tau + dt / GUN_SN) % 1; evre = (evre + dt / GUN_SN * EVRE_HIZ) % 1; } kare(); saatYaz(); }
     requestAnimationFrame(dongu);
   }
   new ResizeObserver(() => { kur(); kare(); }).observe(tv);
   if ("IntersectionObserver" in window) new IntersectionObserver((e) => { gorunur = e[0].isIntersecting; }).observe(tv);
   kur(); kare(); saatYaz(); requestAnimationFrame(dongu);
-  window.__manzaraSaat = (v) => { tau = v; kare(); saatYaz(); };   // test ve sunum için: sahneyi belli bir saate al
+  window.__manzaraSaat = (v, e) => { tau = v; if (e != null) evre = e; kare(); saatYaz(); };   // test ve sunum için: sahneyi belli bir saate al
 })();
 </script>
 </body>
