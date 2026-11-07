@@ -5,12 +5,10 @@
    ===================================================================== */
 .hero { display: grid; gap: 24px; align-items: center; margin: .5rem 0 1.5rem; }
 @media (min-width: 800px) { .hero { grid-template-columns: 1.3fr 1fr; } }
-.hero h1 { font-size: 2rem; }
+.hero h1 { font: 600 clamp(2rem, 4vw, 2.5rem)/1.15 var(--serif); letter-spacing: -.005em; }
 .hero .alt { color: var(--muted); max-width: 60ch; font-size: 1.05rem; }
-.hero-gorsel {
-  background: var(--panel); border: 1px solid var(--border); border-radius: var(--yaricap);
-  box-shadow: var(--golge); padding: 12px; display: grid; place-items: center;
-}
+/* İki Kalem: 3B sahnenin çevresindeki gölgeli kart kalktı; sahne doğrudan kâğıdın üstünde durur */
+.hero-gorsel { padding: 0; display: grid; place-items: center; }
 .hero-gorsel svg { width: min(100%, 320px); height: auto; }
 .pervane { transform-box: fill-box; transform-origin: center; animation: don .35s linear infinite; }
 .pervane.ters { animation-direction: reverse; }
@@ -19,25 +17,44 @@
 @keyframes salin { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-6px) rotate(1.5deg); } }
 @media (prefers-reduced-motion: reduce) { .pervane, .gövde-gezin { animation: none; } }
 
-.dugme-satir { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+/* İki Kalem: hap düğme yerine mavi kalemle altı çizili bağlantı + el çizimi ok.
+   Giriş alanında bağlantılar cetvel çizgileriyle ayrılmış bir liste olur; ilk satır (birincil) Fraunces ile büyük. */
+.dugme-satir { display: flex; flex-wrap: wrap; gap: 0 var(--b3); margin-top: var(--b2); }
 .dugme {
-  display: inline-block; text-decoration: none; font-weight: 700;
-  padding: .6rem 1.1rem; border-radius: 999px; border: 2px solid var(--accent);
-  color: var(--accent); background: transparent;
+  display: inline-flex; align-items: center; gap: .4em; min-height: var(--optik-hedef); padding: 0;
+  font: 700 1rem/1.3 var(--yazi); color: var(--murekkep); text-decoration: none; border: 0; border-radius: 0;
+  background: linear-gradient(var(--cetvel-vurgu), var(--cetvel-vurgu)) 0 calc(100% - 9px) / 100% var(--kalem-ince) no-repeat;
+  transition: background-size .2s ease-out;
 }
-.dugme.birincil { background: var(--accent); color: var(--accent-ink); }
-.dugme:hover { filter: brightness(1.08); }
+.dugme::after { content: ""; flex: none; width: 1.1em; height: .66em; background: var(--cetvel-vurgu); transition: transform .2s ease-out;
+  -webkit-mask: var(--el-ok) center / contain no-repeat; mask: var(--el-ok) center / contain no-repeat; }
+.dugme:hover { background-size: 100% var(--kalem-kalin); }
+.dugme:hover::after, .dugme:focus-visible::after { transform: translateX(4px); }
+.dugme.birincil { font: 600 1.25rem/1.25 var(--serif); }
+.hero .dugme-satir { flex-direction: column; gap: 0; margin-top: var(--b3); max-width: 34rem; border-top: var(--kalem-kalin) solid var(--metin); }
+.hero .dugme { justify-content: space-between; padding: var(--b1) 0; background: none; border-bottom: var(--kalem-ince) solid var(--cetvel); transition: border-color .2s ease-out; }
+.hero .dugme:hover { border-bottom-color: var(--murekkep); }
+.hero .dugme.birincil { min-height: 56px; }
 
 .bolum { margin: 2rem 0 1rem; }
 .bolum > p { color: var(--muted); max-width: 70ch; }
 .izgara { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 1rem; }
 .adim-kart { position: relative; padding-top: 44px; }
+/* İki Kalem: üç adım kartları zeminsiz, gölgesiz sütunlar; üstte koyu cetvel, numara kırmızı halkalı */
+.kart.adim-kart { background: none; border: 0; border-top: var(--kalem-kalin) solid var(--text); border-radius: 0; box-shadow: none; padding: 60px 0 var(--b3); }
+.kart.adim-kart h3 { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; }
 .adim-no {
-  position: absolute; top: 12px; left: 16px; width: 28px; height: 28px; border-radius: 50%;
-  display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--accent-ink);
+  position: absolute; top: 14px; left: 6px; width: 30px; height: 30px; border-radius: 0;
+  display: grid; place-items: center; font: 600 1.5rem/1 var(--serif); background: none; color: var(--accent);
 }
+.adim-no::before { content: ""; position: absolute; inset: -5px -9px; background: var(--kirmizi); pointer-events: none;
+  -webkit-mask: var(--el-halka) center / 100% 100% no-repeat; mask: var(--el-halka) center / 100% 100% no-repeat; }
 .benzetme { background: var(--panel-2); border-left: 4px solid var(--c3); padding: .5rem .75rem; border-radius: 6px; margin-top: .6rem; font-size: .95rem; }
-.etiket-kucuk { display: inline-block; font-size: .78rem; font-weight: 700; padding: .1rem .55rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+/* İki Kalem: hap etiket yerine kırmızı kalem notu; bağlantı olan etiket altı çizili mavi kalem yazısı */
+.etiket-kucuk { display: inline-block; font: italic 500 .9375rem/1.4 var(--serif); padding: 0; border: 0; border-radius: 0; color: var(--kirmizi); }
+a.etiket-kucuk { display: inline-flex; align-items: center; min-height: var(--optik-hedef); font: 700 .9375rem/1.3 var(--yazi); color: var(--accent);
+  text-decoration: underline; text-decoration-thickness: var(--kalem-ince); text-underline-offset: .3em; }
+a.etiket-kucuk:hover { text-decoration-thickness: var(--kalem-kalin); }
 .kavram dt { font-weight: 700; margin-top: .9rem; }
 .kavram dd { margin: .2rem 0 0; color: var(--text); }
 .kavram dd .teknik { color: var(--muted); font-size: .92rem; }
@@ -58,25 +75,39 @@ table.karsilastir tbody th { background: var(--panel-2); white-space: nowrap; }
 
 /* ---------- 3B sahneler ---------- */
 .dron3b-tuval { display: block; width: 100%; height: 340px; border-radius: 10px; }
-.hangar-3b { display: flex; flex-direction: column; gap: 10px; padding: 12px; place-items: stretch;
-  background: radial-gradient(120% 90% at 50% 20%, var(--panel) 40%, var(--panel-2) 100%); }
-.sablon-satir { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.sablon { font: inherit; font-size: .85rem; font-weight: 700; padding: .3rem .75rem; border-radius: 999px; border: 1.5px solid var(--border); background: var(--panel); color: var(--text); cursor: pointer; transition: transform .15s, border-color .15s; }
-.sablon:hover { border-color: var(--accent); transform: translateY(-1px); }
-.sablon[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.hangar-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: space-between; }
-.ipucu-3b { color: var(--muted); font-size: .85rem; }
-.kucuk-dugme { font: inherit; font-size: .85rem; font-weight: 700; padding: .3rem .8rem; border-radius: 8px; border: 1.5px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; text-decoration: none; }
-.kucuk-dugme.dolu { background: var(--accent); color: var(--accent-ink); }
-.kucuk-dugme[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.hangar-3b { display: flex; flex-direction: column; gap: var(--b2); padding: 0; place-items: stretch; }
+/* Şablon seçici: optik form yuvarlakları (A–E). Harf görsel; ekran okuyucu yalnız düğme adını okur.
+   Seçilince yuvarlak 120 ms içinde mürekkeple dolar; hareket azaltılmışsa anında dolu. */
+.sablon-satir { display: flex; flex-wrap: wrap; gap: 0 var(--b3); justify-content: center; counter-reset: sablon; border-top: var(--kalem-ince) solid var(--cetvel); border-bottom: var(--kalem-ince) solid var(--cetvel); padding: var(--b1) 0; }
+.sablon { counter-increment: sablon; display: inline-flex; align-items: center; gap: 8px; min-height: var(--optik-hedef); padding: 0 4px 0 0;
+  font: 700 .9375rem/1.2 var(--yazi); color: var(--metin); background: none; border: 0; border-radius: 0; cursor: pointer; }
+.sablon::before { content: ""; content: counter(sablon, upper-alpha) / ""; flex: none; display: grid; place-items: center;
+  width: var(--optik-cap); height: var(--optik-cap); box-sizing: border-box; border-radius: 50%; border: var(--kalem) solid var(--murekkep);
+  font: 600 .8125rem/1 var(--serif); color: var(--murekkep); box-shadow: inset 0 0 0 0 var(--murekkep);
+  transition: box-shadow var(--optik-sure) ease-out, color var(--optik-sure) ease-out; }
+.sablon:hover::before { box-shadow: inset 0 0 0 2px var(--murekkep); }
+.sablon[aria-pressed="true"] { color: var(--murekkep); }
+.sablon[aria-pressed="true"]::before { box-shadow: inset 0 0 0 calc(var(--optik-cap) / 2) var(--murekkep); color: var(--kagit); }
+.hangar-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--b3); justify-content: space-between; }
+.ipucu-3b { color: var(--muted); font-size: .875rem; }
+/* Küçük düğme: altı çizili kalem yazısı; basılıyken (Parçaları ayır) kırmızı el çizimi halka */
+.kucuk-dugme { position: relative; display: inline-flex; align-items: center; min-height: var(--optik-hedef); padding: 0 var(--b1);
+  font: 700 .9375rem/1.2 var(--yazi); color: var(--murekkep); background: none; border: 0; border-radius: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-thickness: var(--kalem-ince); text-underline-offset: .3em; }
+.kucuk-dugme:hover { text-decoration-thickness: var(--kalem-kalin); }
+.kucuk-dugme.dolu { font: 600 1.0625rem/1.2 var(--serif); }
+.kucuk-dugme::before { content: ""; position: absolute; inset: 4px -4px; background: var(--kirmizi); pointer-events: none;
+  -webkit-mask: var(--el-halka) center / 100% 100% no-repeat; mask: var(--el-halka) center / 100% 100% no-repeat;
+  clip-path: inset(0 100% 0 0); transition: clip-path .22s ease-out; }
+.kucuk-dugme[aria-pressed="true"]::before { clip-path: inset(0); }
 .sablon-bilgi { margin: 0; color: var(--muted); font-size: .92rem; min-height: 2.8em; text-align: center; }
 @media (max-width: 600px) { .dron3b-tuval { height: 260px; } }
 
 /* Kaydırınca belirme */
 .belir-kaydir { transition: opacity .6s ease, transform .6s ease; }
 .belir-kaydir.gizli { opacity: 0; transform: translateY(18px); }
-.adim-kart, .kart.yakinda { transition: transform .2s ease, box-shadow .2s ease; }
-.adim-kart:hover, .kart.yakinda:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,.08); }
+.kart.yakinda { transition: transform .2s ease, box-shadow .2s ease; }
+.kart.yakinda:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,.08); }
 
 /* =====================================================================
    FPV REHBERİ — canlı tasarım
@@ -95,9 +126,17 @@ table.karsilastir tbody th { background: var(--panel-2); white-space: nowrap; }
 .gozluk-cerceve::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 70px; height: 14px; transform: translateX(-50%); background: var(--bg); border-radius: 14px 14px 0 0; }
 .gozluk-cerceve canvas { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; background: #0b0f14; }
 .gozluk-kontrol { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; margin-top: 12px; }
-.secici { display: inline-flex; border: 1.5px solid var(--border); border-radius: 999px; padding: 3px; background: var(--panel); }
-.secici button { font: inherit; font-size: .88rem; font-weight: 700; border: 0; background: none; color: var(--muted); padding: .3rem .9rem; border-radius: 999px; cursor: pointer; }
-.secici button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+/* Görüntü sistemi seçici: optik form yuvarlakları (A, B); şablon seçiciyle aynı kalıp */
+.secici { display: inline-flex; flex-wrap: wrap; gap: 0 var(--b3); counter-reset: secici; }
+.secici button { counter-increment: secici; display: inline-flex; align-items: center; gap: 8px; min-height: var(--optik-hedef); padding: 0 4px 0 0;
+  font: 700 .9375rem/1.2 var(--yazi); color: var(--metin); background: none; border: 0; border-radius: 0; cursor: pointer; }
+.secici button::before { content: ""; content: counter(secici, upper-alpha) / ""; flex: none; display: grid; place-items: center;
+  width: var(--optik-cap); height: var(--optik-cap); box-sizing: border-box; border-radius: 50%; border: var(--kalem) solid var(--murekkep);
+  font: 600 .8125rem/1 var(--serif); color: var(--murekkep); box-shadow: inset 0 0 0 0 var(--murekkep);
+  transition: box-shadow var(--optik-sure) ease-out, color var(--optik-sure) ease-out; }
+.secici button:hover::before { box-shadow: inset 0 0 0 2px var(--murekkep); }
+.secici button[aria-pressed="true"] { color: var(--murekkep); }
+.secici button[aria-pressed="true"]::before { box-shadow: inset 0 0 0 calc(var(--optik-cap) / 2) var(--murekkep); color: var(--kagit); }
 .gozluk figcaption { color: var(--muted); font-size: .92rem; margin-top: 8px; min-height: 2.8em; }
 
 /* Parça gezgini */

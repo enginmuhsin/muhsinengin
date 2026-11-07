@@ -26,6 +26,7 @@
 :root{
   --gece:#0b1012; --cam:rgba(11,16,18,.8); --cizgi:rgba(214,226,245,.16); --yazi:#eef3fa; --soluk:#a9b7cc;
   --itki:#ffb04a; --iyi:#5fd39d; --kotu:#ff7a72; --osd:#f4f7ff;
+  --agirlik:#8fb3ff;         /* mavi kalem: uçuş simülatöründeki --agirlik ile aynı */
   --f-baslik:"Bricolage","Arial Black",system-ui,sans-serif; --f-govde:"Onest","Segoe UI",system-ui,sans-serif; --f-osd:ui-monospace,"Cascadia Mono","Consolas",monospace;
   color-scheme:dark;
 }
@@ -40,56 +41,82 @@ button:focus-visible{outline:2px solid var(--itki);outline-offset:2px}
 /* menü */
 .menu{position:fixed;inset:0;overflow:auto;background:linear-gradient(90deg,rgba(8,12,14,.94) 0,rgba(8,12,14,.86) 46%,rgba(8,12,14,.25) 100%);z-index:5}
 .menu-ic{max-width:560px;padding:22px 22px 40px}
-.ust-bag{color:var(--itki);text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-h1{font-family:var(--f-baslik);font-weight:800;font-size:clamp(28px,4.4vw,42px);line-height:1.05;margin:8px 0 6px}
+/* İki Kalem (sahne): simülatör menüsüyle aynı yapı. Mavi kalem --agirlik, kırmızı kalem --kotu, zemin --gece. */
+.menu,.sonuc{--cetvel-vurgu:var(--agirlik)}
+.ust-bag{display:inline-flex;align-items:center;min-height:var(--optik-hedef);color:var(--kotu);text-decoration:none;font:italic 500 14px/1.4 var(--serif);letter-spacing:0;text-transform:none}
+.ust-bag:hover{text-decoration:underline;text-underline-offset:.25em}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4.4vw,42px);line-height:1.08;margin:8px 0 10px}
 .giris{color:var(--soluk);font-size:15px;line-height:1.5;margin:0 0 18px}
-h2{font-family:var(--f-baslik);font-weight:800;font-size:15px;margin:18px 0 9px;display:flex;gap:8px}
-h2 span{color:var(--itki)}
-.cipler{display:flex;flex-wrap:wrap;gap:8px}
-.cip{background:transparent;border:1px solid var(--cizgi);border-radius:999px;padding:8px 13px;font-size:13px}
-.cip[aria-pressed="true"]{background:var(--itki);border-color:var(--itki);color:#1a0d02;font-weight:700}
-.kartlar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kart{text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--cizgi);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:3px}
-.kart b{font-size:14px}.kart small{color:var(--soluk);font-size:12px;line-height:1.35}
-.kart[aria-pressed="true"]{border-color:var(--itki);background:rgba(255,176,74,.12)}
+h2{font-family:var(--serif);font-weight:600;font-size:18px;margin:22px 0 8px;display:flex;gap:12px;align-items:baseline}
+h2 span{position:relative;color:var(--kotu);font-variant-numeric:tabular-nums;padding:0 .2em}
+h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(--kotu);pointer-events:none;
+  -webkit-mask:var(--el-halka) center/100% 100% no-repeat;mask:var(--el-halka) center/100% 100% no-repeat}
+/* optik seçici: her grupta A, B, C… ; seçilince 120 ms içinde mavi kalemle dolar */
+.cipler,.secim{counter-reset:optik}
+.cipler{display:flex;flex-wrap:wrap;gap:0 var(--b3)}
+.cip{counter-increment:optik;display:inline-flex;align-items:center;gap:8px;min-height:var(--optik-hedef);padding:0 6px 0 0;background:none;border:0;border-radius:0;font:500 14px/1.25 var(--f-govde);color:var(--yazi);text-align:left}
+.cip::before{content:"";content:counter(optik,upper-alpha) / "";flex:none;display:grid;place-items:center;width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;
+  border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
+.cip:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
+.cip[aria-pressed="true"]{color:var(--agirlik);font-weight:700}
+.cip[aria-pressed="true"]::before{box-shadow:inset 0 0 0 calc(var(--optik-cap) / 2) var(--agirlik);color:var(--gece)}
+/* parkurlar: kart yerine cetvelli liste, solda optik yuvarlak */
+.kartlar{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--b3);counter-reset:parkur;border-top:var(--kalem) solid var(--cizgi)}
+.kart{counter-increment:parkur;display:grid;grid-template-columns:var(--optik-cap) minmax(0,1fr);column-gap:10px;row-gap:2px;align-content:start;text-align:left;
+  min-height:var(--optik-hedef);background:none;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:var(--b2) 0}
+.kart>*{grid-column:2}
+.kart::before{content:"";content:counter(parkur,upper-alpha) / "";grid-column:1;grid-row:1/span 4;align-self:start;display:grid;place-items:center;
+  width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);
+  box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
+.kart:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
+.kart b{font-size:14.5px}.kart small{color:var(--soluk);font-size:12.5px;line-height:1.4}
+.kart[aria-pressed="true"] b{color:var(--agirlik)}
+.kart[aria-pressed="true"]::before{box-shadow:inset 0 0 0 calc(var(--optik-cap) / 2) var(--agirlik);color:var(--gece)}
 .kart .rek{color:var(--iyi)}
 .secim{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
 .secim>span{font-size:13px;color:var(--soluk);width:110px}
 .kaydirac{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
-.kaydirac input{flex:1;accent-color:var(--itki)}
+.kaydirac input{flex:1;height:var(--optik-hedef);margin:0;accent-color:var(--agirlik)}
 .kaydirac b{font-variant-numeric:tabular-nums;min-width:44px}
 .bilgi{font-size:12.5px;color:var(--soluk);line-height:1.5;margin:6px 0 0}
 .bilgi b{color:var(--yazi)}
-.basla{margin-top:20px;width:100%;background:var(--itki);color:#1a0d02;border:0;border-radius:14px;padding:15px 18px;font-family:var(--f-baslik);font-weight:800;font-size:18px;display:flex;justify-content:space-between;align-items:center}
-.basla kbd{font-family:var(--f-govde);font-size:12px;opacity:.7}
+/* Birincil eylem: simülatördeki "Uçuşa başla" ile aynı; dolu mavi kalem (--agirlik zemin, --gece yazı) */
+.basla{margin-top:22px;width:100%;background:var(--agirlik);color:var(--gece);border:var(--kalem) solid var(--agirlik);border-radius:0;min-height:56px;padding:0 18px;font:600 20px/1.2 var(--serif);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.basla:hover{box-shadow:0 0 0 3px var(--gece),0 0 0 4.5px var(--agirlik)}
+.basla kbd{font-family:var(--f-govde);font-size:12px;font-weight:500;color:var(--gece);border:1px solid currentColor;border-radius:5px;padding:0 5px}
 .tuslar{margin-top:16px;font-size:12.5px;color:var(--soluk);line-height:1.7}
 .tuslar kbd{display:inline-block;border:1px solid var(--cizgi);border-radius:5px;padding:0 5px;font-size:11.5px;color:var(--yazi)}
 
 /* uçuş üst düğmeleri */
 .ust{position:fixed;top:12px;right:12px;display:flex;gap:8px;z-index:4}
-.ust button{background:var(--cam);border:1px solid var(--cizgi);border-radius:10px;padding:8px 12px;font-size:13px;backdrop-filter:blur(6px)}
+/* İki Kalem: buzlu cam yerine düz gece zemini üstünde altı çizili kalem yazısı; görüntü üstünde okunurluk için saydam değil */
+.ust button{min-height:var(--optik-hedef,44px);padding:0 14px;background:var(--gece);border:0;border-radius:0;font:600 14px/1 var(--f-govde);color:var(--yazi);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.ust button:hover{text-decoration-thickness:2px}
 #turtle{position:fixed;left:50%;bottom:22%;transform:translateX(-50%);z-index:4;background:var(--itki);color:#1a0d02;border:0;border-radius:12px;padding:12px 18px;font-weight:700}
 
 /* sonuç */
 .sonuc{position:fixed;inset:0;display:grid;place-items:center;background:rgba(5,8,10,.7);z-index:6;padding:16px}
-.sonuc-kart{max-width:560px;width:100%;background:var(--gece);border:1px solid var(--cizgi);border-radius:18px;padding:22px}
-.sonuc-kart h3{font-family:var(--f-baslik);font-weight:800;font-size:26px;margin:2px 0 10px}
-.sonuc-kart .ust-yazi{color:var(--itki);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-.olcumler{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cizgi);border:1px solid var(--cizgi);border-radius:12px;overflow:hidden;margin:12px 0}
-.olcumler div{background:#0f171a;padding:10px}
-.olcumler b{display:block;font-family:var(--f-baslik);font-size:19px;font-variant-numeric:tabular-nums}
+.sonuc-kart{max-width:560px;width:100%;box-sizing:border-box;background:var(--gece);border:0;border-left:var(--kalem-kalin) solid var(--agirlik);border-radius:0;padding:22px}
+.sonuc-kart h3{font-family:var(--serif);font-weight:600;font-size:28px;margin:2px 0 10px}
+.sonuc-kart .ust-yazi{color:var(--kotu);font:italic 500 14px/1.4 var(--serif);letter-spacing:0;text-transform:none}
+.olcumler{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cizgi);border:1px solid var(--cizgi);border-radius:0;overflow:hidden;margin:12px 0}
+.olcumler div{background:var(--gece);padding:10px}
+.olcumler b{display:block;font-family:var(--serif);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums}
 .olcumler small{color:var(--soluk);font-size:11.5px}
-.sonuc-kart p{line-height:1.55;font-size:14.5px;color:#d5deea}
-.formul{font-family:var(--f-osd);font-size:13px;background:rgba(255,176,74,.08);border:1px solid rgba(255,176,74,.3);border-radius:10px;padding:9px 11px;color:#ffd9a6}
-.dugmeler{display:flex;gap:10px;margin-top:14px}
-.dugmeler button{flex:1;border-radius:12px;padding:12px;border:1px solid var(--cizgi);background:transparent;font-weight:700}
-.dugmeler button:first-child{background:var(--itki);border-color:var(--itki);color:#1a0d02}
+.sonuc-kart p{line-height:1.55;font-size:14.5px;color:var(--yazi)}
+.formul{font-family:var(--f-osd);font-size:13px;background:none;border:0;border-top:var(--kalem-ince) solid var(--cizgi);border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:8px 0;color:var(--yazi)}
+.dugmeler{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.dugmeler button{flex:1;min-height:var(--optik-hedef);border:0;border-radius:0;background:none;padding:0 8px;font:700 14px/1.2 var(--f-govde);color:var(--agirlik);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.dugmeler button:hover{text-decoration-thickness:2px}
+.dugmeler button:first-child{border:var(--kalem) solid var(--agirlik);color:var(--yazi);font:600 18px/1.2 var(--serif);text-decoration:none}
+.dugmeler button:first-child:hover{box-shadow:inset 0 0 0 1px var(--agirlik)}
 
 /* dokunmatik kollar */
 .kol{position:fixed;bottom:22px;width:132px;height:132px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);z-index:3;touch-action:none}
 .kol i{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(255,176,74,.55)}
 #kolSol{left:18px}#kolSag{right:18px}
-@media (max-width:700px){ .menu{background:rgba(8,12,14,.93)} .kartlar{grid-template-columns:1fr} }
+@media (max-width:700px){ .menu{background:rgba(8,12,14,.93)} .kartlar{grid-template-columns:1fr} .dugmeler button:first-child{flex:1 1 100%} .secim>span{flex:1 1 100%;width:auto} }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
 </style>
 </head>
@@ -100,7 +127,7 @@ h2 span{color:var(--itki)}
 <div class="menu" id="menu">
   <div class="menu-ic">
     <a class="ust-bag" href="../dron/fpv.html">← FPV Rehberi</a>
-    <h1>FPV Yarış Gözlüğü</h1>
+    <h1>FPV Yarış <span class="ik-alt">Gözlüğü</span></h1>
     <p class="giris">Rehberdeki gözlük görüntüsünü bu kez sen uçur. Turuncu kapılardan sırayla geç, süreni düşür. Fizik, laboratuvardaki hesaplarla aynı: her dron kendi kütlesi, itkisi ve gövdesiyle uçar.</p>
 
     <h2><span>1</span> Dronunu seç</h2>

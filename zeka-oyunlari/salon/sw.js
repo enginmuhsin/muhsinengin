@@ -1,6 +1,6 @@
 /* Oyun Salonu çevrimdışı önbelleği. Okul ağı kopsa da oyunlar açılır.
    Sayfa: önce ağ, yoksa önbellek. Betik/stil: önbellekten hemen ver, arkada güncelle. */
-const SURUM = 'salon-v6';
+const SURUM = 'salon-v13';
 const DOSYALAR = ['./', 'index.html', 'salon.css', 'cekirdek.js', 'manifest.webmanifest',
   'oyunlar/gizli-kod.js', 'oyunlar/sudoku.js', 'oyunlar/hex.js', 'oyunlar/mangala.js', 'oyunlar/reversi.js', 'oyunlar/go.js', 'oyunlar/satranc.js', 'oyunlar/turnuva.js',
   '../../tema.js', '../../ortak/ana-sayfa.js', '../../simge.svg', '../../ortak/oyun-ikonlari.svg'];
