@@ -63,35 +63,56 @@ button:focus-visible,input:focus-visible,label:focus-within{outline:2px solid va
 #menu .ic{width:min(560px,100%);overflow-y:auto;box-sizing:border-box;
   padding-block:max(22px,env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-bottom,0px));
   padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:20px;display:flex;flex-direction:column;gap:18px}
-.kas{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--itki);font-weight:700}
-h1{font-family:var(--f-baslik);font-weight:800;font-size:clamp(30px,5vw,44px);line-height:1.02;margin:4px 0 6px;text-wrap:balance}
+/* İki Kalem (sahne): mavi kalem = --agirlik, kırmızı kalem = --kotu, zemin = --gece; hepsi bu sayfanın yerel tokenları.
+   Kart, hap, buzlu cam ve dolu turuncu düğme yok; seçiciler optik form yuvarlakları. */
+#menu,#hud,#sonuc{--cetvel-vurgu:var(--agirlik)}
+.kas{font:italic 500 14px/1.4 var(--serif);letter-spacing:0;text-transform:none;color:var(--kotu)}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,44px);line-height:1.08;margin:4px 0 10px;text-wrap:balance}
 .giris{color:var(--soluk);line-height:1.5;margin:0;max-width:60ch}
-h2{font-family:var(--f-baslik);font-weight:600;font-size:15px;margin:0 0 10px;color:var(--yazi);display:flex;gap:8px;align-items:baseline}
-h2 span{color:var(--itki);font-variant-numeric:tabular-nums}
-.cipler{display:flex;flex-wrap:wrap;gap:8px}
-.cip{background:transparent;border:1px solid var(--cizgi);border-radius:999px;padding:8px 13px;font-size:13px;color:var(--yazi)}
-.cip[aria-pressed="true"]{background:var(--itki);border-color:var(--itki);color:#1a0d02;font-weight:700}
+h2{font-family:var(--serif);font-weight:600;font-size:18px;margin:0 0 8px;color:var(--yazi);display:flex;gap:12px;align-items:baseline}
+h2 span{position:relative;color:var(--kotu);font-variant-numeric:tabular-nums;padding:0 .2em}
+h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(--kotu);pointer-events:none;
+  -webkit-mask:var(--el-halka) center/100% 100% no-repeat;mask:var(--el-halka) center/100% 100% no-repeat}
+/* optik seçici: her grupta A, B, C… ; seçilince 120 ms içinde mavi kalemle dolar */
+.cipler,.secim{counter-reset:optik}
+.cipler{display:flex;flex-wrap:wrap;gap:0 var(--b3)}
+.cip{counter-increment:optik;display:inline-flex;align-items:center;gap:8px;min-height:var(--optik-hedef);padding:0 6px 0 0;background:none;border:0;border-radius:0;font:500 14px/1.25 var(--f-govde);color:var(--yazi);text-align:left}
+.cip::before{content:counter(optik,upper-alpha);content:counter(optik,upper-alpha) / "";flex:none;display:grid;place-items:center;width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;
+  border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
+.cip:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
+.cip[aria-pressed="true"]{color:var(--agirlik);font-weight:700}
+.cip[aria-pressed="true"]::before{box-shadow:inset 0 0 0 calc(var(--optik-cap) / 2) var(--agirlik);color:var(--gece)}
 .lab-al{display:flex;gap:8px;margin-top:10px}
-.lab-al input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid var(--cizgi);border-radius:10px;color:var(--yazi);padding:9px 11px;font:inherit;font-size:13px}
-.lab-al button{border:1px solid var(--cizgi);background:rgba(255,255,255,.06);border-radius:10px;padding:0 13px;font-size:13px}
+.lab-al input{flex:1;min-width:0;min-height:var(--optik-hedef);box-sizing:border-box;background:none;border:0;border-bottom:var(--kalem) solid var(--cizgi);border-radius:0;color:var(--yazi);padding:0 2px;font:inherit;font-size:14px}
+.lab-al input::placeholder{color:var(--soluk)}
+.lab-al button{min-height:var(--optik-hedef);border:0;background:none;border-radius:0;padding:0 8px;font:700 14px/1 var(--f-govde);color:var(--agirlik);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.lab-al button:hover{text-decoration-thickness:2px}
 .hata{color:var(--kotu);font-size:12.5px;margin:6px 0 0;min-height:1em}
-.ozellik{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--cizgi);border:1px solid var(--cizgi);border-radius:12px;overflow:hidden}
+.ozellik{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--cizgi);border:1px solid var(--cizgi);border-radius:0;overflow:hidden}
 .ozellik div{background:var(--gece);padding:10px 8px}
-.ozellik b{display:block;font-family:var(--f-baslik);font-size:19px;font-variant-numeric:tabular-nums}
+.ozellik b{display:block;font-family:var(--serif);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums}
 .tip-bilgi{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--soluk)}
 .tip-bilgi b{color:var(--yazi,#fff)}
 .ozellik small{color:var(--soluk);font-size:11px}
 .yorum{margin:10px 0 0;font-size:13.5px;line-height:1.45}
 .yorum.iyi b{color:var(--iyi)}.yorum.dikkat b{color:var(--dikkat)}.yorum.kotu b{color:var(--kotu)}
-.gorevler{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.gorev-k{text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--cizgi);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:3px}
-.gorev-k b{font-size:14px}.gorev-k small{color:var(--soluk);font-size:12px;line-height:1.35}
-.gorev-k[aria-pressed="true"]{border-color:var(--itki);background:rgba(255,176,74,.12)}
+.gorevler{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--b3);counter-reset:gorev;border-top:var(--kalem) solid var(--cizgi)}
+.gorev-k{counter-increment:gorev;display:grid;grid-template-columns:var(--optik-cap) minmax(0,1fr);column-gap:10px;row-gap:2px;align-content:start;text-align:left;
+  min-height:var(--optik-hedef);background:none;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:var(--b2) 0}
+.gorev-k>*{grid-column:2}
+.gorev-k::before{content:counter(gorev,upper-alpha);content:counter(gorev,upper-alpha) / "";grid-column:1;grid-row:1/span 4;align-self:start;display:grid;place-items:center;
+  width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);
+  box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
+.gorev-k:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
+.gorev-k b{font-size:14.5px}.gorev-k small{color:var(--soluk);font-size:12.5px;line-height:1.4}
+.gorev-k[aria-pressed="true"] b{color:var(--agirlik)}
+.gorev-k[aria-pressed="true"]::before{box-shadow:inset 0 0 0 calc(var(--optik-cap) / 2) var(--agirlik);color:var(--gece)}
 .gorev-k .rek{color:var(--iyi);font-size:11.5px}
 .ayarlar{display:flex;flex-direction:column;gap:10px}
 .secim{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .secim>span{font-size:13px;color:var(--soluk);width:96px}
-.basla{background:var(--itki);color:#1a0d02;border:0;border-radius:14px;padding:15px 18px;font-family:var(--f-baslik);font-weight:800;font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.basla{background:none;color:var(--yazi);border:var(--kalem) solid var(--agirlik);border-radius:0;min-height:56px;padding:0 18px;font:600 20px/1.2 var(--serif);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.basla:hover:not(:disabled){box-shadow:inset 0 0 0 1px var(--agirlik)}
 .basla:disabled{opacity:.4;cursor:not-allowed}
 .basla kbd{font-family:var(--f-govde);font-size:12px;font-weight:500;opacity:.75}
 details{border-top:1px solid var(--cizgi);padding-top:12px;font-size:13px;color:var(--soluk)}
@@ -104,7 +125,8 @@ kbd{font-family:var(--f-govde);background:rgba(255,255,255,.08);border:1px solid
 /* ---------- HUD ---------- */
 #hud{position:fixed;inset:0;pointer-events:none;z-index:10}
 [hidden]{display:none!important}
-.panel{background:var(--cam);border:1px solid var(--cizgi);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+/* panel: buzlu cam yerine düz gece zemini ve solda mavi kalem çizgisi (sahne üstünde okunurluk için saydam değil) */
+.panel{background:var(--gece);border:0;border-left:var(--kalem-kalin) solid var(--agirlik);border-radius:0}
 #gorevP{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));padding:11px 14px;max-width:min(330px,calc(100vw - 150px))}
 #gorevP .ad{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--itki);font-weight:700}
 #gorevP .hedef{font-size:14.5px;margin-top:4px;line-height:1.35}
@@ -161,15 +183,18 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 /* ---------- SONUÇ KARTI ---------- */
 #sonuc{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(6,10,18,.55);padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
 #sonuc .kart{width:min(460px,100%);padding:22px;display:flex;flex-direction:column;gap:12px;max-height:100%;overflow:auto;box-sizing:border-box}
-#sonuc h2{font-size:26px;font-weight:800;margin:0}
+#sonuc h2{font-family:var(--serif);font-size:28px;font-weight:600;margin:0}
 #sonucMetin{margin:0;line-height:1.55;font-size:14.5px;color:var(--soluk)}
 #sonucMetin b{color:var(--yazi)}
-.formul{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:rgba(255,255,255,.05);border:1px solid var(--cizgi);border-radius:8px;padding:8px 10px;color:var(--yazi)}
+.formul{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:none;border:0;border-top:var(--kalem-ince) solid var(--cizgi);border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:8px 0;color:var(--yazi)}
 #sonucOlcum{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:13.5px}
 #sonucOlcum span{color:var(--soluk)}
 .kart .satir{display:flex;gap:8px}
-.kart .satir button{flex:1;border-radius:12px;padding:12px;border:1px solid var(--cizgi);background:rgba(255,255,255,.06);font-weight:700}
-.kart .satir button.ana{background:var(--itki);border-color:var(--itki);color:#1a0d02}
+.kart .satir{flex-wrap:wrap;align-items:center}
+.kart .satir button{flex:1;min-height:var(--optik-hedef);border:0;border-radius:0;background:none;padding:0 8px;font:700 14px/1.2 var(--f-govde);color:var(--agirlik);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.kart .satir button:hover{text-decoration-thickness:2px}
+.kart .satir button.ana{border:var(--kalem) solid var(--agirlik);color:var(--yazi);font:600 18px/1.2 var(--serif);text-decoration:none}
+.kart .satir button.ana:hover{box-shadow:inset 0 0 0 1px var(--agirlik)}
 .pid-bilgi{margin:0;font-size:12.5px;color:var(--soluk);line-height:1.5;padding-left:102px}
 .pid-bilgi a{color:var(--yazi)}
 .cip:disabled{opacity:.45;cursor:not-allowed}
@@ -180,8 +205,9 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 .tahmin-satir{display:flex;gap:12px;align-items:center}
 .tahmin-satir input{flex:1;accent-color:var(--itki)}
 .tahmin-satir output{font-size:22px;font-weight:800;min-width:52px;text-align:right}
-#tahminP button{border-radius:12px;padding:11px;border:1px solid var(--itki);background:var(--itki);color:#1a0d02;font-weight:700}
-@media (max-width:620px){.pid-bilgi{padding-left:0}}
+#tahminP button{min-height:var(--optik-hedef);border-radius:0;padding:0 14px;border:var(--kalem) solid var(--agirlik);background:none;color:var(--yazi);font:600 17px/1.2 var(--serif)}
+#tahminP button:hover{box-shadow:inset 0 0 0 1px var(--agirlik)}
+@media (max-width:620px){.pid-bilgi{padding-left:0}.kart .satir button.ana{flex:1 1 100%}}
 
 @media (max-width:620px){
   #menu{background:rgba(10,17,18,.9)}
@@ -200,7 +226,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   <div class="ic">
     <div>
       <div class="kas"><a href="../dron/index.html" style="color:inherit;text-decoration:none">← Dron Hangarı</a> · 4. adım: Uçur</div>
-      <h1>Dron Uçuş Simülatörü</h1>
+      <h1>Dron Uçuş <span class="ik-alt">Simülatörü</span></h1>
       <p class="giris">Laboratuvarda hesapladığın itki, ağırlık ve batarya burada gerçekten uçuyor. Aynı formüller, artık elinde kumanda var.</p>
     </div>
 
