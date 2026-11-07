@@ -34,16 +34,24 @@ h1{font-family:var(--f-baslik);font-weight:600;font-size:clamp(34px,6vw,58px);li
 h1 em{font-style:italic;color:var(--kirmizi)}
 .oyun-ust h1,.kart h3{color:var(--murekkep)}
 .giris{max-width:62ch;color:var(--soluk);font-size:16px;margin:0 0 26px}
-.izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-.kart{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left;box-shadow:var(--golge);transition:transform .15s,border-color .15s}
-.kart:hover{transform:translateY(-2px);border-color:var(--kirmizi)}
-.kart .onizle{aspect-ratio:16/10;border-radius:10px;background:var(--yuzey2);display:grid;place-items:center;overflow:hidden}
+.izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:var(--b4);row-gap:0;border-top:var(--kalem-kalin) solid var(--metin)}
+/* İki Kalem: kart zemini, gölge ve köşe yok; oyunlar cetvel çizgileriyle ayrılır.
+   Üzerine gelince ya da odaklanınca simge kırmızı halkayla çevrilir, başlığın altı çizilir. */
+.kart{background:none;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:var(--b3) 0;display:flex;flex-direction:column;gap:var(--b2);text-align:left}
+.kart .onizle{aspect-ratio:16/10;background:none;border-radius:0;display:grid;place-items:center;overflow:hidden}
 .kart .onizle svg{width:78%;height:78%}
-.kart h3{font-family:var(--f-baslik);font-size:22px;font-weight:600;margin:0}
-.kart p{margin:0;color:var(--soluk);font-size:13.5px;line-height:1.45}
-.kart .etiketler{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
-.etiket{font-size:11.5px;border:1px solid var(--cizgi);border-radius:999px;padding:2px 8px;color:var(--soluk)}
-.etiket.ai{border-color:transparent;background:color-mix(in srgb,var(--mavi) 14%,transparent);color:var(--murekkep)}
+.kart h3{position:relative;align-self:flex-start;font-family:var(--f-baslik);font-size:22px;font-weight:600;margin:0;padding-bottom:2px;
+  background:linear-gradient(var(--cetvel-vurgu),var(--cetvel-vurgu)) 32px 100%/0 var(--kalem) no-repeat;transition:background-size .2s ease-out}
+.kart h3::before{content:"";position:absolute;left:-7px;top:50%;width:38px;height:32px;margin-top:-17px;background:var(--kirmizi);pointer-events:none;
+  -webkit-mask:var(--el-halka) center/100% 100% no-repeat;mask:var(--el-halka) center/100% 100% no-repeat;clip-path:inset(0 100% 0 0);transition:clip-path .22s ease-out}
+.kart:hover h3,.kart:focus-visible h3{background-size:calc(100% - 32px) var(--kalem)}
+.kart:hover h3::before,.kart:focus-visible h3::before{clip-path:inset(0)}
+.kart p{margin:0;color:var(--soluk);font-size:14px;line-height:1.5}
+.kart .etiketler{display:flex;flex-wrap:wrap;gap:0 var(--b1);margin-top:auto}
+/* Etiket: hap yerine düz yazı; ilk etiket mavi kalemle italik not */
+.etiket{font:400 13px/1.5 var(--f-govde);border:0;border-radius:0;padding:0;color:var(--soluk)}
+.etiket:not(:last-child)::after{content:"·";content:"·" / "";margin-left:var(--b1);font:400 13px/1 var(--f-govde);color:var(--soluk)}
+.etiket.ai{background:none;font:italic 500 14px/1.5 var(--f-baslik);color:var(--murekkep)}
 .olcum{margin-top:40px;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:18px;box-shadow:var(--golge)}
 .olcum h2{font-family:var(--f-baslik);font-weight:600;font-size:24px;margin:0 0 4px}
 .olcum>p{color:var(--soluk);margin:0 0 14px;max-width:70ch}
@@ -80,7 +88,9 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .tur-vurgu{outline:3px solid var(--turuncu)!important;outline-offset:3px;border-radius:8px;animation:nabiz 1.2s ease-in-out infinite}
 @keyframes nabiz{50%{outline-color:transparent}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.kart.arac{border-style:dashed}
+.kart.arac{border-bottom-style:dashed}
+.kart.arac h3{background-position:0 100%}.kart.arac:hover h3,.kart.arac:focus-visible h3{background-size:100% var(--kalem)}
+.kart.arac h3::before{inset:-6px -14px;width:auto;height:auto;margin:0}
 .otur{animation:otur .14s cubic-bezier(.3,1.6,.5,1)}
 @keyframes otur{0%{transform:scale(.6)}100%{transform:scale(1)}}
 @keyframes dalga{0%{opacity:.35}60%{opacity:1;filter:brightness(1.5)}100%{opacity:1;filter:none}}
