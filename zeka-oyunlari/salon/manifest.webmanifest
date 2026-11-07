@@ -1,7 +1,7 @@
 {
   "name": "Oyun Salonu · Muhsin ENGİN",
   "short_name": "Oyun Salonu",
-  "description": "8 zeka oyunu: bilgisayara karşı ya da iki kişi, canlı matematikle.",
+  "description": "7 zeka oyunu: bilgisayara karşı ya da iki kişi, canlı matematikle.",
   "lang": "tr",
   "start_url": "./",
   "scope": "./",
