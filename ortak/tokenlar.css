@@ -52,6 +52,19 @@
   --kirmizi: #ff7a72; --turuncu: #ffb04a; --yesil: #5fd39d; --mavi: #8fb3ff;
   --golge: 0 1px 2px rgba(0,0,0,.35), 0 8px 22px rgba(0,0,0,.3); color-scheme: dark; }
 
+/* İki Kalem: kart ve gölge yerine cetvel çizgisi, mavi ve kırmızı kalemle el çizimi.
+   Renk tokenları mevcut tokenların takma adıdır; yeni renk kodu yoktur. */
+:root {
+  --cetvel: var(--kare-kalin); --cetvel-vurgu: var(--murekkep);
+  --kalem-ince: 1px; --kalem: 1.5px; --kalem-kalin: 2px;
+  --satir: 24px; --b1: 6px; --b2: 12px; --b3: 24px; --b4: 48px;
+  --optik-cap: 26px; --optik-hedef: 44px; --optik-sure: 120ms;
+  /* el çizimi biçimler: maske olarak kullanılır, rengi background ile verilir */
+  --el-alt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8C40 4 90 3 130 5S182 8 197 4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --el-halka: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60' preserveAspectRatio='none'%3E%3Cpath d='M66 5C97 5 116 16 114 31S88 57 56 55 5 44 6 29 32 6 62 7C74 7 84 10 92 14' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --el-ok: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 24'%3E%3Cpath d='M3 4C11 15 22 19 34 15M27 9.5 35 15 28 21' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
 /* Sahne: oyun ve simülatör sayfaları, temadan bağımsız koyu */
 .sahne {
   --kagit: #0c1415; --kare: #16232480; --kare-kalin: #22353680; --kart: rgba(12,20,21,.78);
@@ -74,6 +87,28 @@
   background-image: linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
     linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
+
+/* ---------- İki Kalem parçaları ---------- */
+/* Başlıkta anahtar kelimenin el çizimi alt çizgisi: <span class="ik-alt">kelime</span> */
+.ik-alt { position: relative; white-space: nowrap; }
+.ik-alt::after { content: ""; position: absolute; left: -3%; right: -3%; bottom: -.16em; height: .3em; background: var(--cetvel-vurgu);
+  -webkit-mask: var(--el-alt) center / 100% 100% no-repeat; mask: var(--el-alt) center / 100% 100% no-repeat; pointer-events: none; }
+/* Başlığın yanındaki el çizimi ok (dekoratif: aria-hidden="true") */
+.ik-ok { display: inline-block; width: 1.25em; height: .75em; margin-left: .3em; vertical-align: -.05em; background: var(--cetvel-vurgu);
+  -webkit-mask: var(--el-ok) center / contain no-repeat; mask: var(--el-ok) center / contain no-repeat; }
+/* Kırmızı el çizimi halka: kapsayıcıya .ik-halka; görünmesi için .etkin, :hover ya da :focus-visible kuralı sayfada verilir */
+.ik-halka { position: relative; }
+.ik-halka::before { content: ""; position: absolute; inset: -.32em -.5em; background: var(--kirmizi); pointer-events: none;
+  -webkit-mask: var(--el-halka) center / 100% 100% no-repeat; mask: var(--el-halka) center / 100% 100% no-repeat;
+  clip-path: inset(0 100% 0 0); transition: clip-path .22s ease-out; }
+.ik-halka.etkin::before { clip-path: inset(0); }
+/* Kenar notu: kırmızı kalemle yazılmış kısa not. 1280 px ve üstünde kırmızı marjın soluna taşınır
+   (--ik-not-ara: satırın sol kenarından marj çizgisinin solundaki not sütununa uzaklık). */
+.ik-not { font: italic 500 .9375rem/1.5 var(--serif); color: var(--kirmizi); letter-spacing: 0; text-transform: none; }
+@media (min-width: 1280px) {
+  .ik-not-yer { position: relative; }
+  .ik-not-yer .ik-not { position: absolute; right: calc(100% + var(--ik-not-ara, 52px)); top: var(--ik-not-ust, .9rem); width: 7.5rem; text-align: right; }
+}
 
 /* Sayfalar arası yumuşak geçiş (destekleyen tarayıcılarda; diğerlerinde etkisiz) */
 @view-transition { navigation: auto; }
