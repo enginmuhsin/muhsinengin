@@ -325,6 +325,8 @@ h2 { font-family: var(--baslik); font-weight: 700; font-size: clamp(1.6rem, 3.6v
 .oyna-kart:hover b::after, .oyna-kart:focus-visible b::after { transform: translateX(4px); }
 .oyna-kart:focus-visible { outline-offset: 2px; }
 .ok-ust { margin-bottom: 2px; }
+/* Kenar notu bölünürse tarih tek parça alt satıra iner; "·" önceki kelimeye bağlı kalır */
+#bugunYazi { white-space: nowrap; }
 .ok-alt { color: var(--kursun); font-size: 1rem; line-height: 1.5; }
 .ok-liste { font-size: .9375rem; line-height: 1.5; color: var(--metin); }
 .oyna-kart .ok-kod, .oyna-kart .ok-cizim { grid-column: 3; grid-row: 1 / span 4; }
@@ -529,7 +531,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
   <h2 id="oynaBaslik">Hemen <span class="ik-alt">dene</span><span class="ik-ok" aria-hidden="true"></span></h2>
   <ol class="oyna-izgara" role="list">
     <li><a class="oyna-kart ik-not-yer" href="zeka-oyunlari/salon/#gizlikod-gunluk">
-      <span class="ok-ust ik-not">Günün bulmacası · <span id="bugunYazi">bugün</span></span>
+      <span class="ok-ust ik-not">Günün bulmacası&nbsp;· <span id="bugunYazi">bugün</span></span>
       <b>Günün Gizli Kodu</b>
       <span class="ok-kod" aria-hidden="true"><i></i><i></i><i></i><i></i><em>?</em></span>
       <span class="ok-alt">Herkese aynı gizli kod. 10 tahminde bulabilir misin?</span>
