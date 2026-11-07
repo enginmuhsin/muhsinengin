@@ -67,7 +67,10 @@ h2 span{color:var(--itki)}
 
 /* uçuş üst düğmeleri */
 .ust{position:fixed;top:12px;right:12px;display:flex;gap:8px;z-index:4}
-.ust button{background:var(--cam);border:1px solid var(--cizgi);border-radius:10px;padding:8px 12px;font-size:13px;backdrop-filter:blur(6px)}
+/* İki Kalem: buzlu cam yerine düz gece zemini üstünde altı çizili kalem yazısı; görüntü üstünde okunurluk için saydam değil */
+.ust button{min-height:var(--optik-hedef,44px);padding:0 14px;background:var(--gece);border:0;border-radius:0;font:600 14px/1 var(--f-govde);color:var(--yazi);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.ust button:hover{text-decoration-thickness:2px}
 #turtle{position:fixed;left:50%;bottom:22%;transform:translateX(-50%);z-index:4;background:var(--itki);color:#1a0d02;border:0;border-radius:12px;padding:12px 18px;font-weight:700}
 
 /* sonuç */
