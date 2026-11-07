@@ -134,7 +134,10 @@ kbd{font-family:var(--f-govde);background:rgba(255,255,255,.08);border:1px solid
 #gorevP .ilerleme{display:flex;gap:12px;margin-top:7px;font-size:13px;color:var(--soluk)}
 #gorevP .ilerleme b{color:var(--yazi)}
 .dugmeler{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));display:flex;gap:6px;pointer-events:auto}
-.dugmeler button{background:var(--cam);border:1px solid var(--cizgi);border-radius:10px;padding:8px 11px;font-size:12.5px;backdrop-filter:blur(8px)}
+/* HUD düğmeleri: FPV Yarış'taki gibi buzlu cam yerine düz gece zemini üstünde altı çizili kalem yazısı */
+.dugmeler button{min-height:var(--optik-hedef);padding:0 14px;background:var(--gece);border:0;border-radius:0;font:600 14px/1.15 var(--f-govde);color:var(--yazi);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}
+.dugmeler button:hover{text-decoration-thickness:2px}
 #gazG{position:absolute;left:calc(14px + env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%);width:44px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
 #gazG .kolon{position:relative;width:14px;height:170px;border-radius:7px;background:rgba(255,255,255,.08);overflow:visible}
 #gazDolu{position:absolute;left:0;right:0;bottom:0;border-radius:7px;background:var(--itki)}
@@ -177,7 +180,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   #ok,body.dokun #ok{top:calc(168px + env(safe-area-inset-top,0px));left:30%}
   #gazG,body.dokun #gazG{top:calc(164px + env(safe-area-inset-top,0px));transform:none}
   #gazG .kolon{height:130px}
-  .dugmeler button{padding:7px 9px;font-size:12px}
+  .dugmeler button{padding:0 7px;font-size:12.5px}
   body.dokun.fizikAcik #fizikP{top:auto;bottom:calc(190px + env(safe-area-inset-bottom,0px))}
 }
 
