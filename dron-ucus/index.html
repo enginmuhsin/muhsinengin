@@ -111,10 +111,11 @@ h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(-
 .ayarlar{display:flex;flex-direction:column;gap:10px}
 .secim{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .secim>span{font-size:13px;color:var(--soluk);width:96px}
-.basla{background:none;color:var(--yazi);border:var(--kalem) solid var(--agirlik);border-radius:0;min-height:56px;padding:0 18px;font:600 20px/1.2 var(--serif);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.basla:hover:not(:disabled){box-shadow:inset 0 0 0 1px var(--agirlik)}
+/* Birincil eylem: dolu mavi kalem (--agirlik zemin, --gece yazı; 8,93:1). Temadan bağımsız, sahne üstünde seçilir. */
+.basla{background:var(--agirlik);color:var(--gece);border:var(--kalem) solid var(--agirlik);border-radius:0;min-height:56px;padding:0 18px;font:600 20px/1.2 var(--serif);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.basla:hover:not(:disabled){box-shadow:0 0 0 3px var(--gece),0 0 0 4.5px var(--agirlik)}
 .basla:disabled{opacity:.4;cursor:not-allowed}
-.basla kbd{font-family:var(--f-govde);font-size:12px;font-weight:500;opacity:.75}
+.basla kbd{font-family:var(--f-govde);font-size:12px;font-weight:500;color:var(--gece);background:none;border-color:currentColor}
 details{border-top:1px solid var(--cizgi);padding-top:12px;font-size:13px;color:var(--soluk)}
 summary{cursor:pointer;color:var(--yazi);font-weight:500}
 .tus{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-top:10px}
