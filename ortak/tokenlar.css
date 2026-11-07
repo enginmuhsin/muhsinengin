@@ -59,6 +59,8 @@
   --kalem-ince: 1px; --kalem: 1.5px; --kalem-kalin: 2px;
   --satir: 24px; --b1: 6px; --b2: 12px; --b3: 24px; --b4: 48px;
   --optik-cap: 26px; --optik-hedef: 44px; --optik-sure: 120ms;
+  /* ortak/ana-sayfa.js "Ana sayfa" düğmesi: bu tokenları tanımlamayan sayfalarda (Teşhis, MEDAR oyun, Masterclass) düğme eski hâlinde kalır */
+  --ana-sayfa-zemin: transparent; --ana-sayfa-kalk: 0px;
   /* el çizimi biçimler: maske olarak kullanılır, rengi background ile verilir */
   --el-alt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8C40 4 90 3 130 5S182 8 197 4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
   --el-halka: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60' preserveAspectRatio='none'%3E%3Cpath d='M66 5C97 5 116 16 114 31S88 57 56 55 5 44 6 29 32 6 62 7C74 7 84 10 92 14' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
