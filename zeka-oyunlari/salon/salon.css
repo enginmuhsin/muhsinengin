@@ -93,6 +93,13 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .tur-kart p{margin:0;font-size:14.5px;line-height:1.5}
 .tur-ust{display:flex;justify-content:space-between;align-items:center}
 .tur-kapat{min-width:var(--optik-hedef);min-height:var(--optik-hedef);margin:-10px -12px -10px 0;border:0;background:none;font-size:22px;line-height:1;color:var(--soluk)}
+/* tur kartı düğmeleri: hap yerine kalem yazısı; "İleri" mavi kalem çerçeveli birincil (oyun panelindeki .dug aynı kalır) */
+.tur-kart .dug{min-height:var(--optik-hedef);padding:0 10px;border:0;border-radius:0;background:none;color:var(--murekkep);font:700 14.5px/1.2 var(--f-govde);
+  text-decoration:underline;text-decoration-thickness:var(--kalem-ince);text-underline-offset:.3em}
+.tur-kart .dug:hover{text-decoration-thickness:var(--kalem-kalin)}
+.tur-kart .dug.ana{padding:0 16px;background:none;border:var(--kalem) solid var(--murekkep);color:var(--metin);font:600 17px/1.2 var(--f-baslik);text-decoration:none}
+.tur-kart .dug.ana:hover{box-shadow:inset 0 0 0 1px var(--murekkep)}
+body.sinif .tur-kart .dug{min-height:56px;font-size:18px}
 .tur-vurgu{outline:3px solid var(--turuncu)!important;outline-offset:3px;border-radius:8px;animation:nabiz 1.2s ease-in-out infinite}
 @keyframes nabiz{50%{outline-color:transparent}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
