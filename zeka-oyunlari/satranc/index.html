@@ -132,6 +132,26 @@ h2 { font-family: var(--baslik); font-weight: 800; font-size: clamp(1.6rem, 3.6v
 .oyun .mat-kutu:first-of-type { margin-top: 10px; }
 .gorsel-not { font-size: .84rem; color: var(--kursun); margin: 8px 0 0; text-align: center; }
 
+/* İki Kalem: oyun kartları cetvelli defter sayfasına döner. Kart zemini, köşe ve iç kutu yok;
+   etiket hapları düz yazı olur ("Çözülmedi" kırmızı kalem notu), "Oyna" altı çizili kalem yazısı,
+   üzerine gelince ya da odaklanınca kırmızı halkayla çevrilir. */
+.oyunlar { column-gap: var(--b4); row-gap: 0; border-top: var(--kalem-kalin) solid var(--metin); }
+.oyun { padding: var(--b3) 0; border: 0; border-bottom: var(--kalem-ince) solid var(--cetvel); border-radius: 0; background: none; }
+.oyun figure { margin: 0 0 var(--b2); padding: var(--b2) 0; border: 0; border-radius: 0; background: none; }
+.oyun h3 { font: 600 1.5rem/1.15 var(--serif); }
+.oyun .dugme, .oyun .dugme:hover, .oyun .dugme.dolu, .oyun .dugme.dolu:hover { position: relative; min-height: var(--optik-hedef); padding: 0 var(--b1); border: 0; border-radius: 0; background: none;
+  color: var(--murekkep); font: 600 1.125rem/1 var(--serif); text-decoration: underline; text-decoration-thickness: var(--kalem); text-underline-offset: .3em; }
+.oyun .dugme::before { content: ""; position: absolute; inset: 2px -8px; background: var(--kirmizi); pointer-events: none;
+  -webkit-mask: var(--el-halka) center / 100% 100% no-repeat; mask: var(--el-halka) center / 100% 100% no-repeat; clip-path: inset(0 100% 0 0); transition: clip-path .22s ease-out; }
+.oyun .dugme:hover::before, .oyun .dugme:focus-visible::before { clip-path: inset(0); }
+.oyun .etiketler { gap: 0 var(--b1); margin: var(--b1) 0 var(--b2); }
+.oyun .etiketler li { padding: 0; border: 0; border-radius: 0; font: 400 .875rem/1.5 var(--yazi); color: var(--kursun); }
+.oyun .etiketler li:not(:last-child)::after { content: "·"; content: "·" / ""; margin-left: var(--b1); color: var(--kursun); font: 400 .875rem/1 var(--yazi); }
+.oyun .etiketler li.acik-soru, .oyun .etiketler li.cozuldu { font: italic 500 .9375rem/1.4 var(--serif); }
+.oyun .etiketler li.acik-soru { color: var(--kirmizi); } .oyun .etiketler li.cozuldu { color: var(--murekkep); }
+.oyun-ozet .devam { min-height: var(--optik-hedef); }
+.oyun-sayfa article.oyun .oyun-baslik { font-family: var(--serif); font-weight: 600; }
+
 /* ---------- Sayıların merdiveni ---------- */
 .merdiven { list-style: none; margin: 0; padding: 18px 18px 8px; border-radius: 18px; background: var(--kart); border: 1.5px solid var(--kare-kalin); }
 .basamak { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr) 110px; gap: 4px 14px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--kare-kalin); }
@@ -231,8 +251,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1.5px solid var(--kare
   .acilis { padding-top: 24px; }
   .medar-kart { grid-template-columns: minmax(0, 1fr); padding: 18px; }
   .medar-kart img { width: 110px; height: 110px; border-radius: 24px; }
-  .oyun { padding: 14px 14px 14px; }
-  .oyun figure { min-height: 0; padding: 14px; }
+  .oyun { padding: var(--b3) 0; }
+  .oyun figure { min-height: 0; padding: var(--b2) 0; }
   .basamak { grid-template-columns: minmax(0, 1fr) auto; }
   .basamak .cubuk { grid-column: 1 / -1; grid-row: 2; }
 }
