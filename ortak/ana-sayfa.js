@@ -171,7 +171,7 @@
     'a:active{transform:translateY(0) scale(.98);}' +
     'a:focus-visible{outline:3px solid #ff8a2b;outline-offset:2px;}' +
     '.r{display:grid;place-items:center;width:32px;height:32px;}' +
-    '.m{display:flex;flex-direction:column;gap:2px;}.m small{font-weight:500;font-size:10.5px;opacity:.68;letter-spacing:.02em;}' +
+    '.m{display:flex;flex-direction:column;gap:2px;}.m small{font-weight:500;font-size:10.5px;color:var(--kursun,color-mix(in srgb,currentColor 68%,transparent));letter-spacing:.02em;}' +
     ':host([kisa]) .m{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}:host([kisa]) a{padding:4px;}' +
     '@media (max-width:480px){.m small{display:none}}';
 
