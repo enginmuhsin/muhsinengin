@@ -68,23 +68,31 @@ h1 em{font-style:italic;color:var(--kirmizi)}
 .gunluk{margin:0 0 22px}
 .gunluk h2{font-family:var(--f-baslik);font-weight:600;font-size:22px;margin:0 0 4px}
 .gunluk>p{margin:0 0 10px;color:var(--soluk);max-width:70ch}
-.gunluk-satir{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.gunluk-kart{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;background:var(--murekkep);color:var(--kagit);text-decoration:none;box-shadow:var(--golge);transition:transform .15s}
-.gunluk-kart:hover{transform:translateY(-2px)}
-.gunluk-kart b{font-family:var(--f-baslik);font-size:19px;font-weight:600}
-.gunluk-kart span{font-size:13px;opacity:.8}
-.final{display:flex;flex-direction:column;gap:6px;margin-top:22px;padding:20px;border-radius:18px;border:2px dashed var(--kirmizi);text-decoration:none;color:inherit;background:var(--yuzey)}
-.final b{font-family:var(--f-baslik);font-size:clamp(20px,3vw,26px);font-weight:600}
+/* İki Kalem: günün bulmacaları dolu mavi kart yerine cetvelli satır; başlık mavi kalem, el çizimi ok */
+.gunluk-satir{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));column-gap:var(--b4);row-gap:0;border-top:var(--kalem-kalin) solid var(--metin)}
+.gunluk-kart{display:flex;flex-direction:column;gap:2px;min-height:var(--optik-hedef);padding:var(--b2) 0;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;background:none;color:var(--metin);text-decoration:none}
+.gunluk-kart b{align-self:flex-start;font-family:var(--f-baslik);font-size:20px;font-weight:600;color:var(--murekkep);padding-bottom:2px;
+  background:linear-gradient(var(--cetvel-vurgu),var(--cetvel-vurgu)) 0 100%/0 var(--kalem) no-repeat;transition:background-size .2s ease-out}
+.gunluk-kart b::after{content:"";display:inline-block;width:1.1em;height:.66em;margin-left:.35em;background:var(--cetvel-vurgu);transition:transform .2s ease-out;
+  -webkit-mask:var(--el-ok) center/contain no-repeat;mask:var(--el-ok) center/contain no-repeat}
+.gunluk-kart:hover b,.gunluk-kart:focus-visible b{background-size:100% var(--kalem)}
+.gunluk-kart:hover b::after,.gunluk-kart:focus-visible b::after{transform:translateX(4px)}
+.gunluk-kart span{font-size:14px;color:var(--soluk)}
+/* final: kesik kırmızı kutu yerine kırmızı marj çizgisiyle işaretli not */
+.final{display:flex;flex-direction:column;gap:6px;margin-top:var(--b4);padding:var(--b1) 0 var(--b1) var(--b3);border:0;border-left:var(--kalem-kalin) solid var(--kirmizi);border-radius:0;text-decoration:none;color:inherit;background:none}
+.final b{align-self:flex-start;font-family:var(--f-baslik);font-size:clamp(20px,3vw,26px);font-weight:600;
+  background:linear-gradient(var(--cetvel-vurgu),var(--cetvel-vurgu)) 0 100%/0 var(--kalem) no-repeat;transition:background-size .2s ease-out}
 .final span:last-child{color:var(--soluk)}
-.final:hover{border-style:solid}
+.final:hover b,.final:focus-visible b{background-size:100% var(--kalem)}
 
 /* öğretici tur, ekran okuyucu, araç kartı, taş oturma */
 .alan{position:relative}
-.tur-kart{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:20;width:min(92%,380px);background:var(--yuzey);border:2px solid var(--murekkep);border-radius:16px;padding:14px 16px;box-shadow:0 18px 50px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+/* tur kartı: tahtanın üstünde okunurluk için dolu zemin; gölge ve köşe yok, mavi kalem çerçeve */
+.tur-kart{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:20;width:min(92%,380px);background:var(--kagit);border:var(--kalem) solid var(--murekkep);border-radius:0;padding:14px 16px;box-shadow:none;display:flex;flex-direction:column;gap:8px}
 .tur-kart b{font-family:var(--f-baslik);font-size:20px;color:var(--murekkep)}
 .tur-kart p{margin:0;font-size:14.5px;line-height:1.5}
 .tur-ust{display:flex;justify-content:space-between;align-items:center}
-.tur-kapat{border:0;background:none;font-size:22px;line-height:1;color:var(--soluk)}
+.tur-kapat{min-width:var(--optik-hedef);min-height:var(--optik-hedef);margin:-10px -12px -10px 0;border:0;background:none;font-size:22px;line-height:1;color:var(--soluk)}
 .tur-vurgu{outline:3px solid var(--turuncu)!important;outline-offset:3px;border-radius:8px;animation:nabiz 1.2s ease-in-out infinite}
 @keyframes nabiz{50%{outline-color:transparent}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
