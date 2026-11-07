@@ -78,7 +78,7 @@ h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(-
 .cipler,.secim{counter-reset:optik}
 .cipler{display:flex;flex-wrap:wrap;gap:0 var(--b3)}
 .cip{counter-increment:optik;display:inline-flex;align-items:center;gap:8px;min-height:var(--optik-hedef);padding:0 6px 0 0;background:none;border:0;border-radius:0;font:500 14px/1.25 var(--f-govde);color:var(--yazi);text-align:left}
-.cip::before{content:counter(optik,upper-alpha);content:counter(optik,upper-alpha) / "";flex:none;display:grid;place-items:center;width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;
+.cip::before{content:"";content:counter(optik,upper-alpha) / "";flex:none;display:grid;place-items:center;width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;
   border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
 .cip:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
 .cip[aria-pressed="true"]{color:var(--agirlik);font-weight:700}
@@ -101,7 +101,7 @@ h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(-
 .gorev-k{counter-increment:gorev;display:grid;grid-template-columns:var(--optik-cap) minmax(0,1fr);column-gap:10px;row-gap:2px;align-content:start;text-align:left;
   min-height:var(--optik-hedef);background:none;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:var(--b2) 0}
 .gorev-k>*{grid-column:2}
-.gorev-k::before{content:counter(gorev,upper-alpha);content:counter(gorev,upper-alpha) / "";grid-column:1;grid-row:1/span 4;align-self:start;display:grid;place-items:center;
+.gorev-k::before{content:"";content:counter(gorev,upper-alpha) / "";grid-column:1;grid-row:1/span 4;align-self:start;display:grid;place-items:center;
   width:var(--optik-cap);height:var(--optik-cap);box-sizing:border-box;border-radius:50%;border:var(--kalem) solid var(--agirlik);font:600 13px/1 var(--serif);color:var(--agirlik);
   box-shadow:inset 0 0 0 0 var(--agirlik);transition:box-shadow var(--optik-sure) ease-out,color var(--optik-sure) ease-out}
 .gorev-k:hover::before{box-shadow:inset 0 0 0 2px var(--agirlik)}
