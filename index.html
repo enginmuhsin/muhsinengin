@@ -104,7 +104,7 @@ body { overflow-x: clip; }
 .acilir a.alt::before { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; border-top: 1.5px solid var(--kare-kalin); }
 .acilir .tumu { margin-top: 4px; border-top: 1px dashed var(--kare-kalin); border-radius: 0 0 8px 8px; font-size: .88rem; font-weight: 700; color: var(--kirmizi); }
 .sekme-grup:last-of-type .acilir { left: auto; right: 0; }
-@media (min-width: 761px) { .ayrac > a, .sekme, .tema-sekme { padding-left: 12px; padding-right: 12px; } .ayrac .muzik-yazi, .ayrac .tema-yazi { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .ayrac .tema-sekme { min-width: 44px; justify-content: center; } }
+@media (min-width: 761px) { .ayrac { gap: 4px; } .ayrac > a, .sekme, .tema-sekme { padding-left: 10px; padding-right: 10px; } .ayrac .muzik-yazi, .ayrac .tema-yazi { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .ayrac .tema-sekme { min-width: 44px; justify-content: center; } }
 /* ---------- Telefon: üst çubuk ve tam genişlik menü ----------
    Masaüstünde sekmeler defter ayracı gibi yan yana durur. Telefonda yedi sekme üç-dört satıra dağılıp
    düzensiz görünüyordu; burada tek bir ince çubuk (imza + ad + Menü) kalır, sekmeler Menü'ye basınca
@@ -401,7 +401,81 @@ details.bag-grup:target > summary, details.bag-grup.vurgu > summary { background
 .bag-grup a small { display: block; font-weight: 400; font-size: .82rem; color: var(--kursun); margin-top: 1px; }
 .bag-grup a:hover { background: color-mix(in srgb, var(--murekkep) 6%, transparent); }
 
+/* ---------- Vitrin (açılış): unvanlar kırmızı kalemle, başarılar cetvelli liste ---------- */
+.unvanlar { margin: 0 0 var(--b1); max-width: 42ch; font: italic 500 clamp(1.0625rem, 1.9vw, 1.1875rem)/1.5 var(--serif); color: var(--kirmizi); text-wrap: pretty; }
+.unvanlar span { white-space: nowrap; }
+.unvanlar i { font-style: normal; color: var(--kursun); }
+.kurum { margin: 0 0 var(--b3); font-weight: 700; font-size: 1rem; line-height: 1.5; }
+.acilis .tanitim { margin-bottom: var(--b3); }
+.basarilar { list-style: none; margin: 0 0 var(--b1); padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--b3); border-top: var(--kalem-kalin) solid var(--metin); }
+.basarilar li { padding: 7px 0 6px; border-bottom: var(--kalem-ince) solid var(--cetvel); font-size: .9375rem; line-height: 1.45; color: var(--kursun); text-wrap: pretty; }
+.basarilar strong { font-weight: 700; color: var(--murekkep); white-space: nowrap; }
+.hakkimda-bag { display: inline-flex; align-items: center; min-height: 44px; font: 600 1.1875rem/1.2 var(--serif); color: var(--murekkep); text-decoration: none; }
+.hakkimda-bag .ik-ok { transition: transform .2s ease-out; }
+.hakkimda-bag:hover .ik-ok, .hakkimda-bag:focus-visible .ik-ok { transform: translateX(4px); }
+@media (max-width: 560px) { .basarilar { grid-template-columns: minmax(0, 1fr); } }
+/* Telefonda ilk 4 madde; kalanı "Tümünü gör (9)" ile açılır. .kisa sınıfını betik ekler: JavaScript yoksa 9 madde görünür. */
+.basari-tumu { display: none; }
+@media (max-width: 760px) {
+  .basarilar.kisa > li:nth-child(n+5) { display: none; }
+  .basari-tumu:not([hidden]) { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; margin: 0 0 var(--b1); padding: 0; border: 0; background: none; cursor: pointer;
+    font: 600 1.0625rem/1.2 var(--serif); color: var(--murekkep); }
+}
+.basari-tumu-ok { width: 1.1rem; height: .7rem; background: var(--murekkep); transform: rotate(90deg);
+  -webkit-mask: var(--el-ok) center / contain no-repeat; mask: var(--el-ok) center / contain no-repeat; }
+.basarilar > li:focus { outline: none; }
+.basarilar > li:focus-visible { outline: 3px solid var(--kirmizi); outline-offset: 2px; }
+/* Müzik daveti (muzik.js ekrana sabitler): içerikle çakışmasın diye köşeye alınır.
+   Masaüstünde sağ alt (3B sahne sütunu), telefonda üst çubuğun altında sağ (dekoratif dron manzarası). muzik.js değişmedi. */
+body > .sm-davet { left: auto; right: max(16px, env(safe-area-inset-right)); transform: translateY(20px); }
+body > .sm-davet.gor { transform: none; }
+@media (max-width: 760px) {
+  body > .sm-davet { top: calc(68px + env(safe-area-inset-top, 0px)); bottom: auto; transform: translateY(-12px); padding: 0 14px; font-size: 14px; }
+}
+
+/* ---------- Hakkımda (katlanır) ---------- */
+/* İki Kalem: kutu yok. Başlık satırı cetvelle ayrılır; açma göstergesi el çizimi ok (aşağı / yukarı). */
+.hakkimda { margin-top: var(--b4); scroll-margin-top: var(--b3); }
+.hakkimda > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: var(--b2); min-height: 52px; padding: var(--b1) 0; border-bottom: var(--kalem-kalin) solid var(--metin); }
+.hakkimda > summary::-webkit-details-marker { display: none; }
+.hakkimda > summary h2 { margin: 0; font-family: var(--serif); font-weight: 600; letter-spacing: -.005em; }
+.hakkimda-ok { flex: none; width: 1.6rem; height: 1rem; background: var(--murekkep); transform: rotate(90deg); transition: transform .2s ease-out;
+  -webkit-mask: var(--el-ok) center / contain no-repeat; mask: var(--el-ok) center / contain no-repeat; }
+.hakkimda[open] .hakkimda-ok { transform: rotate(-90deg); background: var(--kirmizi); }
+.hakkimda > summary:hover .hakkimda-ok, .hakkimda > summary:focus-visible .hakkimda-ok { transform: rotate(90deg) translateX(3px); }
+.hakkimda[open] > summary:hover .hakkimda-ok, .hakkimda[open] > summary:focus-visible .hakkimda-ok { transform: rotate(-90deg) translateX(3px); }
+.hakkimda > summary:focus-visible { outline-offset: 2px; }
+.hakkimda-ic { max-width: 66ch; padding: var(--b3) 0 var(--b2); }
+.hakkimda-ic p { margin: 0 0 var(--b2); text-wrap: pretty; }
+.hakkimda-giris { font-size: 1.125rem; }
+/* Yedi alt bölüm: her biri ayrı katlanır satır, varsayılan kapalı. Cetvel çizgisiyle ayrılır; işaret el çizimi ok (kapalı: aşağı, açık: yukarı, kırmızı). */
+.hk-bolum { border-bottom: var(--kalem-ince) solid var(--cetvel); }
+.hakkimda-giris + .hk-bolum { border-top: var(--kalem-ince) solid var(--cetvel); }
+.hk-bolum > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: var(--b2); min-height: 48px; padding: var(--b1) 0; }
+.hk-bolum > summary::-webkit-details-marker { display: none; }
+.hk-bolum > summary h3 { margin: 0; font: 600 1.3125rem/1.25 var(--serif); color: var(--murekkep); padding-bottom: 2px;
+  background: linear-gradient(var(--cetvel-vurgu), var(--cetvel-vurgu)) 0 100% / 0 var(--kalem) no-repeat; transition: background-size .2s ease-out; }
+.hk-bolum > summary:hover h3, .hk-bolum > summary:focus-visible h3, .hk-bolum[open] > summary h3 { background-size: 100% var(--kalem); }
+.hk-bolum > summary:focus-visible { outline-offset: 2px; }
+.hk-ok { flex: none; width: 1.4rem; height: .875rem; background: var(--murekkep); transform: rotate(90deg); transition: transform .2s ease-out;
+  -webkit-mask: var(--el-ok) center / contain no-repeat; mask: var(--el-ok) center / contain no-repeat; }
+.hk-bolum[open] > summary .hk-ok { transform: rotate(-90deg); background: var(--kirmizi); }
+.hk-ic { padding: var(--b1) 0 var(--b3); }
+@media (prefers-reduced-motion: no-preference) { .hk-bolum[open] > .hk-ic { animation: hakkimdaAc .3s cubic-bezier(.16, 1, .3, 1); } }
+.hakkimda-ic a { color: var(--murekkep); text-decoration-thickness: from-font; text-underline-offset: 3px; }
+/* Vaka: kalemle ayrılmış blok; üstte ve altta mürekkep çizgi, solda ince kırmızı kalem çizgisi */
+.vaka { position: relative; margin: var(--b3) 0; padding: var(--b2) 0 var(--b1) var(--b3); border-top: var(--kalem-kalin) solid var(--murekkep); border-bottom: var(--kalem-kalin) solid var(--murekkep); }
+.vaka::before { content: ""; position: absolute; left: 0; top: var(--b2); bottom: var(--b2); width: var(--kalem-ince); background: var(--kirmizi); }
+.hakkimda-ic .vaka-etiketler { display: flex; flex-wrap: wrap; gap: var(--b1) var(--b2); margin: 0 0 var(--b1); }
+.vaka h4 { margin: 0 0 var(--b1); font: 600 1.1875rem/1.3 var(--serif); }
+/* Yolculuk bölümünün son cümlesi: kırmızı kalemle yazılmış satır */
+.ik-alinti { margin: var(--b3) 0 0; padding-left: var(--b3); border-left: var(--kalem-ince) solid var(--kirmizi); }
+.hakkimda-ic .ik-alinti p { margin: 0; max-width: 36ch; font: italic 500 clamp(1.25rem, 2.6vw, 1.6rem)/1.4 var(--serif); color: var(--kirmizi); }
+@media (prefers-reduced-motion: no-preference) { .hakkimda[open] .hakkimda-ic { animation: hakkimdaAc .3s cubic-bezier(.16, 1, .3, 1); } }
+@keyframes hakkimdaAc { from { opacity: 0; } }
+
 footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
+footer a { color: var(--murekkep); text-underline-offset: 3px; }
 
 @media (max-width: 760px) {
   body { font-size: 17px; }
@@ -472,6 +546,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
         <a class="tumu" href="#g-muh" data-grup="g-muh">Hepsini listede gör ↓</a>
     </div>
   </div>
+  <a href="#hakkimda" data-grup="hakkimda">Hakkımda</a>
   <a href="#takvim">Takvim</a>
   <div class="sekme-grup">
     <button type="button" class="sekme" aria-expanded="false" aria-controls="m-bag">Bağlantılar<span class="sekme-ok" aria-hidden="true"></span></button>
@@ -498,8 +573,22 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
       <button type="button" class="saat-cip ik-halka" id="saatCip" aria-pressed="false" title="Gün döngüsünü durdur"><span class="saat-ikon" aria-hidden="true"></span><span class="sr-only">Sahne saati: </span><span id="saatYazi">--:--</span><span class="ay-cip"><span class="sr-only">, ay evresi: </span><span id="ayYazi"></span></span></button>
     </div>
     <h1>Muhsin <span>ENGİN</span><me-imza class="imza" boyut="76" aria-hidden="true"></me-imza></h1>
-    <p class="tanitim">Öğrencilerin sayılarla, şekillerle ve deneylerle düşünmesi için araçlar tasarlıyorum.</p>
-    <p class="tanitim-ek">Uzun yıllar pek çok özel ve devlet okulunda uzman matematik öğretmeni, proje koordinatörü ve öğrenci araştırma projelerinde mentör olarak çalıştım. Bugün BİLSEM'de öğrencilerle bilim projeleri yürütüyorum. Matematiksel yazılım ve geometri, emek vermeyi en çok sevdiğim iki alan. Dron tasarımı, havacılık ve mühendislik uygulamaları da tutkuyla ilgilendiğim konular: uçan, ölçen ve hesaplayan araçları öğrencilerle birlikte tasarlamayı seviyorum.</p>
+    <p class="unvanlar"><span>Matematik Öğretmeni</span><i aria-hidden="true"> · </i><span>Araştırmacı</span><i aria-hidden="true"> · </i><span>Proje Danışmanı</span><i aria-hidden="true"> · </i><span>Öğrenci Mentörü</span><i aria-hidden="true"> · </i><span>Zekâ Oyunu Tasarımcısı</span><i aria-hidden="true"> · </i><span>Eğitim Teknolojileri Geliştiricisi</span></p>
+    <p class="kurum">Ankara Kahramankazan Bilim ve Sanat Merkezi</p>
+    <p class="tanitim">Matematiği keşfedilen, oynanan ve üretilen bir şeye dönüştürüyorum: projelerle, oyunlarla, yazılımlarla ve araştırmalarla.</p>
+    <ul class="basarilar" id="basarilar" role="list">
+      <li><strong>20 yıl</strong> öğretmenlik deneyimi</li>
+      <li><strong>2 TÜBİTAK</strong> Türkiye finali</li>
+      <li><strong>TEKNOFEST</strong> Türkiye finali</li>
+      <li>Türkiye ilk <strong>1.000 · 5.000 · 10.000</strong>'e giren onlarca öğrenci</li>
+      <li tabindex="-1"><strong>7+</strong> bölge derecesi</li>
+      <li><strong>Bilim Olimpiyatları</strong> Matematik Takım Koordinatörü</li>
+      <li><strong>YKS ve LGS</strong> birebir mentörlük · Matematik + Geometri</li>
+      <li><strong>Zekâ oyunu</strong> tasarımcısı</li>
+      <li><strong>Dron</strong> tasarımı ve uygulamaları</li>
+    </ul>
+    <button type="button" class="basari-tumu" aria-controls="basarilar" aria-expanded="false" hidden><span class="ik-alt">Tümünü gör (9)</span><span class="basari-tumu-ok" aria-hidden="true"></span></button>
+    <a class="hakkimda-bag" href="#hakkimda" data-grup="hakkimda"><span class="ik-alt">Hakkımda</span><span class="ik-ok" aria-hidden="true"></span></a>
     <p class="tanitim-ek tanitim-not">Buradaki araçlar ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
   <figure class="cizim-kutu">
@@ -529,6 +618,42 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
     </details>
   </figure>
 </header>
+
+<details class="hakkimda" id="hakkimda">
+  <summary><h2><span class="ik-alt">Hakkımda</span></h2><span class="hakkimda-ok" aria-hidden="true"></span></summary>
+  <div class="hakkimda-ic">
+    <p class="hakkimda-giris">Matematiği yalnızca öğretilen bir ders olarak değil; araştırılan, tasarlanan ve gerçek problemlere uygulanan canlı bir alan olarak görüyorum. Yirmi yıldır matematik öğretiyorum; bunun on yedi yılı resmî öğretmenlik.</p>
+
+    <details class="hk-bolum"><summary><h3>Öğrenci mentörlüğü</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Yirmi yıldır YKS ve LGS'ye hazırlanan öğrencilerle hem matematikte hem geometride birebir çalışıyorum. Bu deneyimi birkaç yıl özel okullarda ve dershanelerde çalışarak pekiştirdim. Türkiye sıralamasında ilk 1.000, ilk 5.000 ve ilk 10.000'e giren onlarca öğrencim oldu. Her öğrencinin eksiğini, hızını ve sınav stratejisini ayrı ayrı ele alan bu çalışma, bana bir konuyu aynı anda hem en temelden hem de en zor soru düzeyinden görebilmeyi öğretti.</p>
+    <p>Sınav hazırlığı, olimpiyat çalışması ve araştırma projesi çoğu zaman farklı öğretmenlerin alanıdır; ben üçünü bir arada yürütüyorum. Bu yüzden bir öğrenciye hem sınavda başarıyı hem de matematiği üretmeyi aynı yolda gösterebiliyorum.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Proje danışmanlığı</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>TÜBİTAK 2204-A, 2204-B ve 2204-C kategorilerinde matematik, fizik, biyoloji, psikoloji, coğrafya ve değerler eğitimi gibi farklı alanlarda, disiplinler arası bir yaklaşımla çok sayıda projeye danışmanlık yaptım. Danışmanlığını yaptığım projeler iki TÜBİTAK Türkiye finaline ve bir TEKNOFEST Türkiye finaline ulaştı. Bölge sergilerinde de birincilik, ikincilik ve üçüncülük dahil yedinin üzerinde derece aldı.</p>
+    <article class="vaka" aria-labelledby="vakaBaslik">
+      <h4 id="vakaBaslik">Kaldera ve göl havzasında açık hava laboratuvarı</h4>
+      <p class="vaka-etiketler"><span class="me-rozet">TÜBİTAK 2204-C Türkiye Finali</span> <span class="me-rozet">TEKNOFEST Türkiye Finali</span></p>
+      <p>Yer bilimleri, jeoloji ve jeomorfoloji eğitimi için önerdiğimiz, bir kaldera ve göl havzasını kapsayan açık hava laboratuvarı fikri. Proje hem TÜBİTAK 2204-C Kutup Araştırmaları kategorisinde hem de TEKNOFEST'te Türkiye finaline kaldı.</p>
+    </article>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Yarışmalar ve olimpiyatlar</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Bilim Olimpiyatları Matematik Takım Koordinatörlüğü yürüttüm. Öğrencilerimle ulusal ve uluslararası matematik ve geometri yarışmalarında madalyalar ve katılım ödülleri kazandık.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Zekâ oyunu tasarımı</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Zekâ oyunları tasarlıyorum; bir kısmı yayımlandı, bir kısmı geliştirme ve test aşamasında. Benim için iyi bir zekâ oyunu, kuralları birkaç cümlede anlatılan ama ardında derin bir matematik yapısı taşıyan oyundur. Bu oyunlardan biri olan <a href="medar/">MEDAR</a>, altıgen bir tahta üzerinde oynanan bir strateji oyunu; web sürümünü öğrencilerim çevrim içi oynayabiliyor.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Dron mühendisliği</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Dron tasarımı ve kullanım alanları üzerine çalışıyorum. Bir dronun uçuşu baştan sona matematiktir: dengesi vektörlerle, rotası geometriyle, kontrolü fonksiyonlarla kurulur. Bu yüzden dronu, matematiğin havada çalıştığını öğrencilere gösterebildiğim en somut araçlardan biri olarak görüyorum. Bu çalışmaların öğrencilere açık kısmı <a href="dron/">Dron Hangarı</a>'nda.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Araştırma ve üretim</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Yazılım, matematik ve mühendislik alanlarında aktif projeler yürütüyorum: etkileşimli matematik platformları, proje mentörlüğü uygulamaları ve özgün matematik araştırmaları.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Yolculuk</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <p>Öğretmenliğimin büyük bölümü, Doğu Anadolu'da, Van'da, kalabalık okullarda ve kalabalık sınıflarda geçti. Farklı okul türlerinde, çoğu zaman sınırlı imkânlarla çalıştım. Buradaki derece ve projelerin çoğu da bu koşullarda üretildi. İki yıldır Ankara Kahramankazan Bilim ve Sanat Merkezi'nde görev yapıyorum.</p>
+    <blockquote class="ik-alinti"><p>Bu yol bana şunu öğretti: iyi bir fikir ve kararlı bir emek, imkânların eksik kaldığı yeri tamamlayabilir.</p></blockquote>
+    </div></details>
+  </div>
+</details>
 
 <section class="oyna-serit" aria-labelledby="oynaBaslik">
   <h2 id="oynaBaslik">Hemen <span class="ik-alt">dene</span><span class="ik-ok" aria-hidden="true"></span></h2>
@@ -708,6 +833,7 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 <footer>
   <span class="imzali"><me-imza boyut="26" duragan aria-hidden="true"></me-imza>© 2026 Muhsin ENGİN</span>
   <span>Projeler reklamsızdır; öğrenciden ad, e-posta ya da konum istenmez.</span>
+  <a href="#hakkimda" data-grup="hakkimda">Hakkımda</a>
 </footer>
 
 </div></div>
@@ -715,6 +841,12 @@ footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: fle
 /* Geri sayım (PİKRAM'daki sayacın sade sürümü). Tarihler Türkiye saatiyle; her ders yılı başında güncellenir.
    Kaynaklar: TÜBİTAK 2204-A/B çağrı duyuruları (Ekim 2026), MEB 2026-2027 çalışma takvimi.
    LGS ve YKS 2027 tarihlerini MEB ve ÖSYM henüz açıklamadı: geçmiş yıllara dayalı tahmin. */
+/* Başarı listesi: telefonda ilk 4 madde; düğmeye basınca 9'u da görünür ve odak 5. maddeye geçer */
+(function () {
+  const ul = document.getElementById("basarilar"), d = document.querySelector(".basari-tumu"); if (!ul || !d) return;
+  ul.classList.add("kisa"); d.hidden = false;
+  d.addEventListener("click", () => { ul.classList.remove("kisa"); d.setAttribute("aria-expanded", "true"); d.hidden = true; const l = ul.children[4]; if (l) l.focus(); });
+})();
 (function () { const b = document.getElementById("bugunYazi"); if (b) b.textContent = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" }); })();
 (function () {
   const kutu = document.getElementById("sayac"); if (!kutu) return;
@@ -1028,10 +1160,8 @@ document.querySelectorAll(".yaz[data-k]").forEach((a) => {
   document.addEventListener("click", (e) => { if (!e.target.closest(".sekme-grup")) kapat(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") { const a = sekmeler.find((b) => b.getAttribute("aria-expanded") === "true"); if (a) { kapat(); a.focus(); } } });
   const grubuAc = (id) => { const d = document.getElementById(id); if (d && d.tagName === "DETAILS") d.open = true; };
-  document.querySelectorAll(".acilir [data-grup]").forEach((a) => a.addEventListener("click", () => { grubuAc(a.dataset.grup); kapat(); }));
+  document.querySelectorAll("[data-grup]").forEach((a) => a.addEventListener("click", () => { grubuAc(a.dataset.grup); kapat(); }));
   document.querySelectorAll("[data-tumu-ac]").forEach((a) => a.addEventListener("click", () => { document.querySelectorAll("details.bag-grup").forEach((d) => d.open = true); kapat(); }));
-  // Bağlantı kutuları: geniş ekranda açık gelir (sütunlar yan yana), telefonda kapalı (liste kısa kalsın)
-  if (matchMedia("(min-width: 761px)").matches) document.querySelectorAll("details.bag-grup").forEach((d) => d.open = true);
   if (location.hash) grubuAc(location.hash.slice(1));
   // Telefon menüsü: aç/kapa, bağlantıya basınca kapan, Esc ile kapan, açıkken sayfa kaymasın
   const mb = document.querySelector(".mc-menu"), menu = document.getElementById("anaMenu");
