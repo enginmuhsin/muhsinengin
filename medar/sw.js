@@ -3,7 +3,7 @@
      İnternet yoksa önbellekteki kopya açılır.
    - Simgeler ve yazı tipleri önce önbellekten gelir (değişmezler, hızlı açılır).
    Oyunu güncellediğinde bu sayıyı bir artır (medar-v2, medar-v3 ...): eski önbellek silinir. */
-const V = 'medar-v2';
+const V = 'medar-v3';
 const DOSYALAR = [
   './', './oyun/', './antrenman/',
   './manifest.webmanifest',
