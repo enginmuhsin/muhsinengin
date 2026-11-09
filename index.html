@@ -414,7 +414,7 @@ details.bag-grup:target > summary, details.bag-grup.vurgu > summary { background
 .hakkimda-bag .ik-ok { transition: transform .2s ease-out; }
 .hakkimda-bag:hover .ik-ok, .hakkimda-bag:focus-visible .ik-ok { transform: translateX(4px); }
 @media (max-width: 560px) { .basarilar { grid-template-columns: minmax(0, 1fr); } }
-/* Telefonda ilk 4 madde; kalanı "Tümünü gör (9)" ile açılır. .kisa sınıfını betik ekler: JavaScript yoksa 9 madde görünür. */
+/* Telefonda ilk 4 madde; kalanı "Tümünü gör (11)" ile açılır. .kisa sınıfını betik ekler: JavaScript yoksa 11 madde görünür. */
 .basari-tumu { display: none; }
 @media (max-width: 760px) {
   .basarilar.kisa > li:nth-child(n+5) { display: none; }
@@ -448,7 +448,7 @@ body > .sm-davet.gor { transform: none; }
 .hakkimda-ic { max-width: 66ch; padding: var(--b3) 0 var(--b2); }
 .hakkimda-ic p { margin: 0 0 var(--b2); text-wrap: pretty; }
 .hakkimda-giris { font-size: 1.125rem; }
-/* Yedi alt bölüm: her biri ayrı katlanır satır, varsayılan kapalı. Cetvel çizgisiyle ayrılır; işaret el çizimi ok (kapalı: aşağı, açık: yukarı, kırmızı). */
+/* Sekiz alt bölüm: her biri ayrı katlanır satır, varsayılan kapalı. Cetvel çizgisiyle ayrılır; işaret el çizimi ok (kapalı: aşağı, açık: yukarı, kırmızı). */
 .hk-bolum { border-bottom: var(--kalem-ince) solid var(--cetvel); }
 .hakkimda-giris + .hk-bolum { border-top: var(--kalem-ince) solid var(--cetvel); }
 .hk-bolum > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: var(--b2); min-height: 48px; padding: var(--b1) 0; }
@@ -462,6 +462,16 @@ body > .sm-davet.gor { transform: none; }
 .hk-bolum[open] > summary .hk-ok { transform: rotate(-90deg); background: var(--kirmizi); }
 .hk-ic { padding: var(--b1) 0 var(--b3); }
 @media (prefers-reduced-motion: no-preference) { .hk-bolum[open] > .hk-ic { animation: hakkimdaAc .3s cubic-bezier(.16, 1, .3, 1); } }
+/* Alt bölüm içi madde listesi: vitrindeki başarı listesinin cetvel dili, tek sütun */
+.hk-liste { list-style: none; margin: 0 0 var(--b2); padding: 0; border-top: var(--kalem-kalin) solid var(--metin); }
+.hk-liste li { padding: 7px 0 6px; border-bottom: var(--kalem-ince) solid var(--cetvel); line-height: 1.5; text-wrap: pretty; }
+.hk-liste strong { font-weight: 700; color: var(--murekkep); }
+/* Kitap kapağı: küçük, sağa yaslı; ince cetvel çerçeve, gölge ve yuvarlama yok */
+.kitap-kapak { float: right; width: 120px; height: auto; margin: 4px 0 var(--b2) var(--b3); border: var(--kalem-ince) solid var(--cetvel); }
+.hk-ic::after { content: ""; display: block; clear: both; }
+@media (max-width: 400px) { .kitap-kapak { width: 96px; margin-left: var(--b2); } }
+/* Hakkımda'nın son satırı: katlanır değil, cetvel çizgisinin altında */
+.hakkimda-ic .hk-iletisim { margin: var(--b3) 0 0; padding-top: var(--b2); border-top: var(--kalem-ince) solid var(--cetvel); }
 .hakkimda-ic a { color: var(--murekkep); text-decoration-thickness: from-font; text-underline-offset: 3px; }
 /* Vaka: kalemle ayrılmış blok; üstte ve altta mürekkep çizgi, solda ince kırmızı kalem çizgisi */
 .vaka { position: relative; margin: var(--b3) 0; padding: var(--b2) 0 var(--b1) var(--b3); border-top: var(--kalem-kalin) solid var(--murekkep); border-bottom: var(--kalem-kalin) solid var(--murekkep); }
@@ -476,6 +486,7 @@ body > .sm-davet.gor { transform: none; }
 
 footer { margin-top: 56px; color: var(--kursun); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; }
 footer a { color: var(--murekkep); text-underline-offset: 3px; }
+footer .dip-bag { display: inline-flex; flex-wrap: wrap; gap: 6px 24px; }
 
 @media (max-width: 760px) {
   body { font-size: 17px; }
@@ -586,8 +597,10 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
       <li><strong>YKS ve LGS</strong> birebir mentörlük · Matematik + Geometri</li>
       <li><strong>Zekâ oyunu</strong> tasarımcısı</li>
       <li><strong>Dron</strong> tasarımı ve uygulamaları</li>
+      <li><strong>SASMO</strong> Dünya Finali · Taşkent, Aralık 2026</li>
+      <li><strong>9. Sınıf Matematik</strong> Soru Bankası yazarı (yayına hazırlanıyor)</li>
     </ul>
-    <button type="button" class="basari-tumu" aria-controls="basarilar" aria-expanded="false" hidden><span class="ik-alt">Tümünü gör (9)</span><span class="basari-tumu-ok" aria-hidden="true"></span></button>
+    <button type="button" class="basari-tumu" aria-controls="basarilar" aria-expanded="false" hidden><span class="ik-alt">Tümünü gör (11)</span><span class="basari-tumu-ok" aria-hidden="true"></span></button>
     <a class="hakkimda-bag" href="#hakkimda" data-grup="hakkimda"><span class="ik-alt">Hakkımda</span><span class="ik-ok" aria-hidden="true"></span></a>
     <p class="tanitim-ek tanitim-not">Buradaki araçlar ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
@@ -637,7 +650,19 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
     </article>
     </div></details>
     <details class="hk-bolum"><summary><h3>Yarışmalar ve olimpiyatlar</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
-    <p>Bilim Olimpiyatları Matematik Takım Koordinatörlüğü yürüttüm. Öğrencilerimle ulusal ve uluslararası matematik ve geometri yarışmalarında madalyalar ve katılım ödülleri kazandık.</p>
+    <p>Bilim Olimpiyatları Matematik Takım Koordinatörlüğü yürüttüm. Öğrencilerimle ulusal ve uluslararası pek çok matematik yarışmasında dereceler kazandık:</p>
+    <ul class="hk-liste" role="list">
+      <li><strong>SASMO</strong> (Singapore and Asian Schools Math Olympiad): gümüş ve bronz madalyalar. Olimpiyat takımımız, Aralık 2026'da Özbekistan'ın başkenti Taşkent'te düzenlenecek dünya finaline katılma hakkı kazandı.</li>
+      <li><strong>UAMO</strong> (Ulusal Antalya Matematik Olimpiyatı): bölge ikinciliği, final hakkı ve mansiyon ödülü.</li>
+      <li><strong>UGEMO</strong> (Ulusal Genç Matematikçiler Olimpiyatı): bölge birinciliği ve final hakkı.</li>
+      <li><strong>Kanguru Matematik</strong>: Ankara birinciliği ve Türkiye finali.</li>
+      <li><strong>TÜBİTAK Bilim Olimpiyatları</strong>: Türkiye'nin en zorlu olimpiyat kulvarına her yıl azimle öğrenci hazırlıyor ve iki aşamalı sınava katılımlarını sağlıyorum.</li>
+    </ul>
+    <p>UAMO'da danışman öğretmen olarak özel onur belgesiyle ödüllendirildim.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Kitaplar</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <img class="kitap-kapak" src="ortak/soru-bankasi-kapak.webp" width="120" height="170" loading="lazy" decoding="async" alt="9. Sınıf Matematik Yeni Nesil Soru Bankası kapağı">
+    <p>Matematik kitapları yazıyorum. Türkiye Yüzyılı Maarif Modeli 9. sınıf matematik öğretim programına uygun "9. Sınıf Matematik Yeni Nesil Soru Bankası" büyük ölçüde tamamlandı ve yayına hazırlanıyor: 7 tema, 65 test ve 780 soru. Sorular görselli ve bağlam temelli; her bölümün ilk testi adım adım çözümlü ve her soru programdaki öğrenme çıktılarıyla birebir eşleştirildi.</p>
     </div></details>
     <details class="hk-bolum"><summary><h3>Zekâ oyunu tasarımı</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
     <p>Zekâ oyunları tasarlıyorum; bir kısmı yayımlandı, bir kısmı geliştirme ve test aşamasında. Benim için iyi bir zekâ oyunu, kuralları birkaç cümlede anlatılan ama ardında derin bir matematik yapısı taşıyan oyundur. Bu oyunlardan biri olan <a href="medar/">MEDAR</a>, altıgen bir tahta üzerinde oynanan bir strateji oyunu; web sürümünü öğrencilerim çevrim içi oynayabiliyor.</p>
@@ -652,6 +677,7 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
     <p>Öğretmenliğimin büyük bölümü, Doğu Anadolu'da, Van'da, kalabalık okullarda ve kalabalık sınıflarda geçti. Farklı okul türlerinde, çoğu zaman sınırlı imkânlarla çalıştım. Buradaki derece ve projelerin çoğu da bu koşullarda üretildi. İki yıldır Ankara Kahramankazan Bilim ve Sanat Merkezi'nde görev yapıyorum.</p>
     <blockquote class="ik-alinti"><p>Bu yol bana şunu öğretti: iyi bir fikir ve kararlı bir emek, imkânların eksik kaldığı yeri tamamlayabilir.</p></blockquote>
     </div></details>
+    <p class="hk-iletisim">Proje iş birliği, atölye ya da sorularınız için: <span class="e-posta" data-k="iletisim" data-a="muhsinengin.com">iletisim [at] muhsinengin.com</span></p>
   </div>
 </details>
 
@@ -833,7 +859,7 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
 <footer>
   <span class="imzali"><me-imza boyut="26" duragan aria-hidden="true"></me-imza>© 2026 Muhsin ENGİN</span>
   <span>Projeler reklamsızdır; öğrenciden ad, e-posta ya da konum istenmez.</span>
-  <a href="#hakkimda" data-grup="hakkimda">Hakkımda</a>
+  <span class="dip-bag"><a href="#hakkimda" data-grup="hakkimda">Hakkımda</a> <span class="e-posta" data-k="iletisim" data-a="muhsinengin.com" data-etiket="İletişim">iletisim [at] muhsinengin.com</span></span>
 </footer>
 
 </div></div>
@@ -841,11 +867,18 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
 /* Geri sayım (PİKRAM'daki sayacın sade sürümü). Tarihler Türkiye saatiyle; her ders yılı başında güncellenir.
    Kaynaklar: TÜBİTAK 2204-A/B çağrı duyuruları (Ekim 2026), MEB 2026-2027 çalışma takvimi.
    LGS ve YKS 2027 tarihlerini MEB ve ÖSYM henüz açıklamadı: geçmiş yıllara dayalı tahmin. */
-/* Başarı listesi: telefonda ilk 4 madde; düğmeye basınca 9'u da görünür ve odak 5. maddeye geçer */
+/* Başarı listesi: telefonda ilk 4 madde; düğmeye basınca 11'i de görünür ve odak 5. maddeye geçer */
 (function () {
   const ul = document.getElementById("basarilar"), d = document.querySelector(".basari-tumu"); if (!ul || !d) return;
   ul.classList.add("kisa"); d.hidden = false;
   d.addEventListener("click", () => { ul.classList.remove("kisa"); d.setAttribute("aria-expanded", "true"); d.hidden = true; const l = ul.children[4]; if (l) l.focus(); });
+})();
+/* E-posta adresi kaynakta düz metin durmaz: parçalardan birleştirilip mailto bağlantısı olur. JS yoksa "iletisim [at] muhsinengin.com" görünür. */
+(function () {
+  document.querySelectorAll(".e-posta[data-k][data-a]").forEach((s) => {
+    const adres = s.dataset.k + "@" + s.dataset.a, a = document.createElement("a");
+    a.href = "mailto:" + adres; a.textContent = s.dataset.etiket || adres; s.replaceWith(a);
+  });
 })();
 (function () { const b = document.getElementById("bugunYazi"); if (b) b.textContent = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" }); })();
 (function () {
