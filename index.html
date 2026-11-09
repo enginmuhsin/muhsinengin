@@ -414,7 +414,7 @@ details.bag-grup:target > summary, details.bag-grup.vurgu > summary { background
 .hakkimda-bag .ik-ok { transition: transform .2s ease-out; }
 .hakkimda-bag:hover .ik-ok, .hakkimda-bag:focus-visible .ik-ok { transform: translateX(4px); }
 @media (max-width: 560px) { .basarilar { grid-template-columns: minmax(0, 1fr); } }
-/* Telefonda ilk 4 madde; kalanı "Tümünü gör (9)" ile açılır. .kisa sınıfını betik ekler: JavaScript yoksa 9 madde görünür. */
+/* Telefonda ilk 4 madde; kalanı "Tümünü gör (11)" ile açılır. .kisa sınıfını betik ekler: JavaScript yoksa 11 madde görünür. */
 .basari-tumu { display: none; }
 @media (max-width: 760px) {
   .basarilar.kisa > li:nth-child(n+5) { display: none; }
@@ -594,8 +594,10 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
       <li><strong>YKS ve LGS</strong> birebir mentörlük · Matematik + Geometri</li>
       <li><strong>Zekâ oyunu</strong> tasarımcısı</li>
       <li><strong>Dron</strong> tasarımı ve uygulamaları</li>
+      <li><strong>SASMO</strong> Dünya Finali · Taşkent, Aralık 2026</li>
+      <li><strong>9. Sınıf Matematik</strong> Soru Bankası yazarı (yayına hazırlanıyor)</li>
     </ul>
-    <button type="button" class="basari-tumu" aria-controls="basarilar" aria-expanded="false" hidden><span class="ik-alt">Tümünü gör (9)</span><span class="basari-tumu-ok" aria-hidden="true"></span></button>
+    <button type="button" class="basari-tumu" aria-controls="basarilar" aria-expanded="false" hidden><span class="ik-alt">Tümünü gör (11)</span><span class="basari-tumu-ok" aria-hidden="true"></span></button>
     <a class="hakkimda-bag" href="#hakkimda" data-grup="hakkimda"><span class="ik-alt">Hakkımda</span><span class="ik-ok" aria-hidden="true"></span></a>
     <p class="tanitim-ek tanitim-not">Buradaki araçlar ücretsizdir ve öğrenciden kişisel bilgi istemez.</p>
   </div>
@@ -861,7 +863,7 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
 /* Geri sayım (PİKRAM'daki sayacın sade sürümü). Tarihler Türkiye saatiyle; her ders yılı başında güncellenir.
    Kaynaklar: TÜBİTAK 2204-A/B çağrı duyuruları (Ekim 2026), MEB 2026-2027 çalışma takvimi.
    LGS ve YKS 2027 tarihlerini MEB ve ÖSYM henüz açıklamadı: geçmiş yıllara dayalı tahmin. */
-/* Başarı listesi: telefonda ilk 4 madde; düğmeye basınca 9'u da görünür ve odak 5. maddeye geçer */
+/* Başarı listesi: telefonda ilk 4 madde; düğmeye basınca 11'i de görünür ve odak 5. maddeye geçer */
 (function () {
   const ul = document.getElementById("basarilar"), d = document.querySelector(".basari-tumu"); if (!ul || !d) return;
   ul.classList.add("kisa"); d.hidden = false;
