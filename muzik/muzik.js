@@ -32,23 +32,25 @@
   var VARSAYILAN_ACIK = TEMA !== 'odak';
   var KEY = TEMA === 'odak' ? 'site-muzik-odak' : 'site-muzik';
 
-  var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, nbuf = null;
+  var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, yukleniyor = false, nbuf = null;
+  /* ---------------- süreler (saniye): bütün açılış ve kapanışlar buradan ---------------- */
+  var SURE = { acilis: 1.2, devam: 0.8, kapanis: 0.6, cikis: 0.25 };
   /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
   var DOSYA_SEVIYE = { uzay: 0.42, muhendislik: 0.36, odak: 0.4 };
   var dosyaUrl = null; try { dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
-  var dosyaTampon = null, dosyaKaynak = null, dosyaKazanc = null, dosyaDurum = 'yok';   // yok | iniyor | hazir | hata
+  var dosyaTampon = null, dosyaSinir = null, dosyaSozu = null, dosyaKaynak = null, dosyaKazanc = null, dosyaBas = null;
   var mod = null;                                                    // 'dosya' | 'sentez'
-  function dosyaYukle() {
-    if (dosyaDurum !== 'yok' || !dosyaUrl || !window.fetch) return Promise.resolve(dosyaTampon);
-    dosyaDurum = 'iniyor';
-    var bitti = false;
-    return new Promise(function (coz) {
-      var zaman = setTimeout(function () { if (!bitti) { bitti = true; dosyaDurum = 'hata'; coz(null); } }, 10000);
-      fetch(dosyaUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
-        .then(function (b) { return new Promise(function (ok, no) { ac.decodeAudioData(b, ok, no); }); })
-        .then(function (t) { if (bitti) return; bitti = true; clearTimeout(zaman); dosyaTampon = t; dosyaDurum = 'hazir'; coz(t); })
-        .catch(function () { if (bitti) return; bitti = true; clearTimeout(zaman); dosyaDurum = 'hata'; coz(null); });
-    });
+  // Dosya bir kez indirilip çözülür. Süre sınırı yok: yavaş bağlantıda inen veri boşa gitmesin.
+  // Yalnız gerçek hata (ağ yok, dosya yok, çözülemedi) olursa null döner ve sentez yedeği çalar.
+  function dosyaHazirla() {
+    if (dosyaTampon) return Promise.resolve(dosyaTampon);
+    if (dosyaSozu) return dosyaSozu;
+    if (!dosyaUrl || !window.fetch || !ac) return Promise.resolve(null);
+    dosyaSozu = fetch(dosyaUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+      .then(function (b) { return new Promise(function (ok, no) { var s = ac.decodeAudioData(b, ok, no); if (s && s.catch) s.catch(no); }); })
+      .then(function (t) { dosyaTampon = t; dosyaSinir = donguSiniri(t); return t; })
+      .catch(function () { dosyaSozu = null; return null; });
+    return dosyaSozu;
   }
   // MP3 kodlayıcısının baştaki/sondaki sessiz dolgusunu döngüden çıkar (yoksa her turda küçük bir boşluk duyulur)
   function donguSiniri(t) {
@@ -57,17 +59,27 @@
     while (son > n - max && Math.abs(d[son]) < 1e-4) son--;
     return [bas / t.sampleRate, (son + 1) / t.sampleRate];
   }
-  function dosyaCal() {
-    var t = ac.currentTime + 0.05, s = ac.createBufferSource(), sinir = donguSiniri(dosyaTampon);
+  // kazancı şu anki değerinden hedefe doğrusal götür
+  function kaydir(g, hedef, sure) { var t = ac.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(hedef, t + sure); }
+  // ofset: döngü içinde başlanacak yer (sn); geçersizse döngü başı
+  function dosyaCal(ofset, sure) {
+    var t = ac.currentTime + 0.03, s = ac.createBufferSource(), sinir = dosyaSinir;
+    if (!(ofset >= sinir[0] && ofset < sinir[1])) ofset = sinir[0];
     s.buffer = dosyaTampon; s.loop = true; s.loopStart = sinir[0]; s.loopEnd = sinir[1];
-    dosyaKazanc = ac.createGain(); dosyaKazanc.gain.setValueAtTime(0, t); dosyaKazanc.gain.linearRampToValueAtTime(DOSYA_SEVIYE[TEMA] || 0.4, t + 3);
-    s.connect(dosyaKazanc); dosyaKazanc.connect(ac.destination); s.start(t, sinir[0]); dosyaKaynak = s;
+    dosyaKazanc = ac.createGain(); dosyaKazanc.gain.setValueAtTime(0, t); dosyaKazanc.gain.linearRampToValueAtTime(DOSYA_SEVIYE[TEMA] || 0.4, t + sure);
+    s.connect(dosyaKazanc); dosyaKazanc.connect(ac.destination); s.start(t, ofset);
+    dosyaKaynak = s; dosyaBas = { t: t, ofset: ofset };
   }
-  function dosyaDurdur() {
+  // döngüdeki şu anki yer (sn): ofset + geçen süre, döngü uzunluğuna göre başa sarılır
+  function dosyaKonum() {
+    if (!dosyaKaynak || !dosyaBas) return null;
+    var a = dosyaSinir[0], b = dosyaSinir[1], k = dosyaBas.ofset + Math.max(0, ac.currentTime - dosyaBas.t);
+    return k < b ? k : a + (k - a) % (b - a);
+  }
+  function dosyaDurdur(sure) {
     if (!dosyaKaynak) return;
-    var t = ac.currentTime, s = dosyaKaynak, g = dosyaKazanc; dosyaKaynak = null;
-    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0, t + 1.5);
-    setTimeout(function () { try { s.stop(); } catch (e) { /* zaten durdu */ } }, 1600);
+    var s = dosyaKaynak; kaydir(dosyaKazanc, 0, sure); dosyaKaynak = null; dosyaBas = null;
+    setTimeout(function () { try { s.stop(); } catch (e) { /* zaten durdu */ } }, sure * 1000 + 100);
   }
   var S = {};                                                   // temanın zaman sayaçları
 
@@ -77,11 +89,17 @@
   function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
 
   /* ---------------- ortak ses düzeni: çıkış, sıkıştırıcı, yankı, sağ-sol gecikme ---------------- */
-  function kur(c) {
-    if (out) return true;
+  // yalnız ses bağlamı (kayıtlı müzik için yeterli)
+  function baglam(c) {
+    if (ac) return true;
     var K = window.AudioContext || window.webkitAudioContext;
     try { ac = c || (K ? new K() : null); } catch (e) { ac = null; }
-    if (!ac) return false;
+    return !!ac;
+  }
+  // sentez düzeni: yalnız dosya inemezse kurulur (yavaş telefonda ~1,1 sn sürüyor; kayıtlı müzik bunu kullanmaz)
+  function kur(c) {
+    if (out) return true;
+    if (!baglam(c)) return false;
     out = ac.createGain(); out.gain.value = 0;
     var comp = ac.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 3;
     var son = comp;
@@ -260,33 +278,39 @@
     try { var b = ac.createBuffer(1, 1, 22050), s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0); } catch (e) { /* sessizce geç */ }
     if (ac.state !== 'running' && ac.resume) ac.resume().catch(function () {});
   }
-  function sentezBaslat() {
+  function sentezBaslat(sure) {
+    if (!kur()) { running = false; return; }
     mod = 'sentez';
     var t = ac.currentTime + 0.1;
     T.basla(t);
-    out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(T.seviye, t + 5);
+    out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(T.seviye, t + sure);
     T.planla(t + 1.5); timer = setInterval(tik, 250);
   }
-  function baslat() {
+  // secenek.konum: döngüde başlanacak yer (sn), secenek.sure: açılış süresi
+  function baslat(secenek) {
+    secenek = secenek || {};
     if (running) { if (ac && ac.state !== 'running') kilidiAc(); return; }
-    if (!kur()) return;
+    if (!baglam()) return;
     kilidiAc();
-    running = true;
-    davetiGizle(); arayuz();
-    if (dosyaTampon) { mod = 'dosya'; dosyaCal(); return; }
-    dosyaYukle().then(function (t) {
+    running = true; yukleniyor = true;
+    davetYukleniyor(); arayuz(); duyur('Müzik yükleniyor');
+    dosyaHazirla().then(function (t) {
       if (!running || mod) return;                    // bu arada kapatıldıysa ya da zaten başladıysa
-      if (t) { mod = 'dosya'; dosyaCal(); } else sentezBaslat();
+      var sure = secenek.sure || SURE.acilis;
+      if (t) { mod = 'dosya'; dosyaCal(secenek.konum, sure); } else sentezBaslat(sure);
+      yukleniyor = false;
+      davetiGizle(); arayuz(); duyur(running ? 'Müzik çalıyor' : '');
     });
   }
-  function durdur() {
+  function durdur(sure) {
     if (!running) return;
-    running = false; clearInterval(timer); timer = null;
-    if (mod === 'dosya') dosyaDurdur();
+    sure = sure || SURE.kapanis;
+    running = false; yukleniyor = false; clearInterval(timer); timer = null;
+    if (mod === 'dosya') dosyaDurdur(sure);
+    if (mod === 'sentez' && out) kaydir(out, 0, sure);
     mod = null;
-    var t = ac.currentTime; out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(0, t + 1.5);
-    setTimeout(function () { if (!running && ac && ac.suspend) ac.suspend(); }, 1700);
-    arayuz();
+    setTimeout(function () { if (!running && ac && ac.suspend) ac.suspend(); }, sure * 1000 + 200);
+    davetiGizle(); arayuz(); duyur('Müzik kapatıldı');
   }
 
   /* ---------------- arayüz: düğme, davet ---------------- */
@@ -307,26 +331,44 @@
       '.sm-davet span:last-child{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em}.sm-davet:hover span:last-child{text-decoration-thickness:2px}' +
       '.sm-davet .not{color:var(--kirmizi,#c8323b)}.sm-davet:focus-visible{outline:3px solid var(--kirmizi,#c8323b);outline-offset:3px}' +
       '.sm-davet.gor{opacity:1;transform:translate(-50%,0)}.sm-davet .not{font-size:18px;animation:sm-not 1.6s ease-in-out infinite}@keyframes sm-not{50%{transform:translateY(-3px) rotate(-8deg)}}' +
-      '@media (prefers-reduced-motion:reduce){.caliyor .eq i,.sm-davet .not{animation:none}.caliyor .eq i{height:9px}}';
+      /* yükleniyor: çubuklar yavaş ve soluk kıpırdar */
+      '.yukleniyor .eq i{opacity:.7;animation:sm-eq 2.4s ease-in-out infinite}.yukleniyor .eq i:nth-child(2){animation-delay:-.8s}.yukleniyor .eq i:nth-child(3){animation-delay:-1.6s}' +
+      '.sm-gizli{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}' +
+      '@media (prefers-reduced-motion:reduce){.caliyor .eq i,.yukleniyor .eq i,.sm-davet .not{animation:none}.caliyor .eq i{height:9px}}';
     document.head.appendChild(st);
   }
+  // ekran okuyucuya kısa durum bildirimi (görünmez canlı bölge)
+  var canli = null;
+  function duyur(metin) {
+    if (!canli) { canli = document.createElement('p'); canli.className = 'sm-gizli'; canli.setAttribute('role', 'status'); canli.setAttribute('aria-live', 'polite'); document.body.appendChild(canli); }
+    canli.textContent = metin;
+  }
+  // aria-pressed = müzik şu an açık mı (çalıyor ya da yükleniyor); aria-busy = yükleniyor
   function arayuz() {
     if (!dugme) return;
-    var on = acik();
-    dugme.setAttribute('aria-pressed', String(on));
-    dugme.classList.toggle('caliyor', running);
-    var y = dugme.querySelector('.muzik-yazi'); if (y) y.textContent = on ? 'Müzik' : 'Müzik kapalı';
-    dugme.title = on ? (running ? 'Müzik çalıyor. Kapatmak için tıkla.' : 'Müzik açık: sayfaya ilk dokunuşta başlar.') : 'Müzik kapalı. Açmak için tıkla.';
+    dugme.setAttribute('aria-pressed', String(running));
+    dugme.setAttribute('aria-busy', String(yukleniyor));
+    dugme.classList.toggle('caliyor', running && !yukleniyor);
+    dugme.classList.toggle('yukleniyor', yukleniyor);
+    var y = dugme.querySelector('.muzik-yazi'); if (y) y.textContent = yukleniyor ? 'Yükleniyor' : (running || acik()) ? 'Müzik' : 'Müzik kapalı';
+    dugme.title = yukleniyor ? 'Müzik yükleniyor.' : running ? 'Müzik çalıyor. Kapatmak için tıkla.' : 'Müzik kapalı. Açmak için tıkla.';
   }
+  var davetZamani = null;
   function davetGoster() {
     if (davet || running || !acik()) return;
     davet = document.createElement('button'); davet.type = 'button'; davet.className = 'sm-davet';
     davet.innerHTML = '<span class="not" aria-hidden="true">♪</span><span>Müziği açmak için dokun</span>';
     document.body.appendChild(davet);
     requestAnimationFrame(function () { requestAnimationFrame(function () { if (davet) davet.classList.add('gor'); }); });
-    setTimeout(davetiGizle, 9000);
+    davetZamani = setTimeout(davetiGizle, 9000);
   }
-  function davetiGizle() { if (!davet) return; var d = davet; davet = null; d.classList.remove('gor'); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 500); }
+  // dokunuştan sonra davet kaybolmaz: ses başlayana kadar "Müzik yükleniyor…" yazar
+  function davetYukleniyor() {
+    if (!davet) return;
+    clearTimeout(davetZamani);
+    davet.lastChild.textContent = 'Müzik yükleniyor…';
+  }
+  function davetiGizle() { clearTimeout(davetZamani); if (!davet) return; var d = davet; davet = null; d.classList.remove('gor'); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 500); }
 
   var OLAYLAR = ['touchend', 'click', 'pointerup', 'keydown'];
   function ilkDokunus(e) {
@@ -346,7 +388,8 @@
     }
     dugme.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (acik() && running) { kaydet(false); durdur(); }
+      if (yukleniyor) { kilidiAc(); duyur('Müzik yükleniyor'); return; }   // bekleme sırasındaki basış müziği kapatmaz
+      if (running) { kaydet(false); durdur(); }
       else { kaydet(true); baslat(); }
     });
     arayuz();
