@@ -462,6 +462,10 @@ body > .sm-davet.gor { transform: none; }
 .hk-bolum[open] > summary .hk-ok { transform: rotate(-90deg); background: var(--kirmizi); }
 .hk-ic { padding: var(--b1) 0 var(--b3); }
 @media (prefers-reduced-motion: no-preference) { .hk-bolum[open] > .hk-ic { animation: hakkimdaAc .3s cubic-bezier(.16, 1, .3, 1); } }
+/* Alt bölüm içi madde listesi: vitrindeki başarı listesinin cetvel dili, tek sütun */
+.hk-liste { list-style: none; margin: 0 0 var(--b2); padding: 0; border-top: var(--kalem-kalin) solid var(--metin); }
+.hk-liste li { padding: 7px 0 6px; border-bottom: var(--kalem-ince) solid var(--cetvel); line-height: 1.5; text-wrap: pretty; }
+.hk-liste strong { font-weight: 700; color: var(--murekkep); }
 .hakkimda-ic a { color: var(--murekkep); text-decoration-thickness: from-font; text-underline-offset: 3px; }
 /* Vaka: kalemle ayrılmış blok; üstte ve altta mürekkep çizgi, solda ince kırmızı kalem çizgisi */
 .vaka { position: relative; margin: var(--b3) 0; padding: var(--b2) 0 var(--b1) var(--b3); border-top: var(--kalem-kalin) solid var(--murekkep); border-bottom: var(--kalem-kalin) solid var(--murekkep); }
@@ -637,7 +641,15 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
     </article>
     </div></details>
     <details class="hk-bolum"><summary><h3>Yarışmalar ve olimpiyatlar</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
-    <p>Bilim Olimpiyatları Matematik Takım Koordinatörlüğü yürüttüm. Öğrencilerimle ulusal ve uluslararası matematik ve geometri yarışmalarında madalyalar ve katılım ödülleri kazandık.</p>
+    <p>Bilim Olimpiyatları Matematik Takım Koordinatörlüğü yürüttüm. Öğrencilerimle ulusal ve uluslararası pek çok matematik yarışmasında dereceler kazandık:</p>
+    <ul class="hk-liste" role="list">
+      <li><strong>SASMO</strong> (Singapore and Asian Schools Math Olympiad): gümüş ve bronz madalyalar. Olimpiyat takımımız, Aralık 2026'da Özbekistan'ın başkenti Taşkent'te düzenlenecek dünya finaline katılma hakkı kazandı.</li>
+      <li><strong>UAMO</strong> (Ulusal Antalya Matematik Olimpiyatı): bölge ikinciliği, final hakkı ve mansiyon ödülü.</li>
+      <li><strong>UGEMO</strong> (Ulusal Genç Matematikçiler Olimpiyatı): bölge birinciliği ve final hakkı.</li>
+      <li><strong>Kanguru Matematik</strong>: Ankara birinciliği ve Türkiye finali.</li>
+      <li><strong>TÜBİTAK Bilim Olimpiyatları</strong>: Türkiye'nin en zorlu olimpiyat kulvarına her yıl azimle öğrenci hazırlıyor ve iki aşamalı sınava katılımlarını sağlıyorum.</li>
+    </ul>
+    <p>UAMO'da danışman öğretmen olarak özel onur belgesiyle ödüllendirildim.</p>
     </div></details>
     <details class="hk-bolum"><summary><h3>Zekâ oyunu tasarımı</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
     <p>Zekâ oyunları tasarlıyorum; bir kısmı yayımlandı, bir kısmı geliştirme ve test aşamasında. Benim için iyi bir zekâ oyunu, kuralları birkaç cümlede anlatılan ama ardında derin bir matematik yapısı taşıyan oyundur. Bu oyunlardan biri olan <a href="medar/">MEDAR</a>, altıgen bir tahta üzerinde oynanan bir strateji oyunu; web sürümünü öğrencilerim çevrim içi oynayabiliyor.</p>
