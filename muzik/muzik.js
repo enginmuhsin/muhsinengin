@@ -13,8 +13,8 @@
    Temalar:
      uzay        Ana sayfa. Belgesel / uzay bilim kurgusu: geniş akorlar, dip sesi, yıldız çanları, ostinato, kalp atışı, kabarma.
      muhendislik Dron ve PID sayfaları. "Uçuş": nabız gibi atan bas, yumuşak davul, arpej, rüzgâr süpürmesi, radar sinyali.
-     odak        Teşhis Defteri. Sakin lo-fi çalışma müziği: elektrik piyano, yumuşak bas, fırça davul, plak cızırtısı.
-                 Ders çalışırken dikkat dağıtmasın diye bu temada müzik kendiliğinden açık gelmez; düğmeyle açılır.
+     odak        Zekâ Oyunları ve Teşhis Defteri. Sakin lo-fi çalışma müziği: elektrik piyano, yumuşak bas, fırça davul, plak cızırtısı.
+                 Zekâ Oyunları'nda yalnız önceki sayfada müzik çalıyorsa sürer; Teşhis'te yalnız düğmeyle açılır.
 
    Düğme: sayfada id="muzikDugme" varsa o kullanılır; yoksa sol altta küçük bir düğme eklenir.
 
@@ -22,15 +22,30 @@
    ziyaretçi dokunmadan ses çalmasını engeller. Telefonda yalnızca gerçek bir "dokunup bırakma"
    (touchend / click) ya da tuş basımı sayılır; ekrana ilk değme anı (pointerdown) sayılmaz.
    Bu yüzden müzik açıksa ziyaretçinin ilk dokunuşunda yavaşça yükselerek başlar ve
-   sayfa açılınca kısa bir "Müziği aç" daveti görünür.
+   sayfa açılınca kısa bir "Müziği aç" daveti görünür. İlk ziyarette ses asla kendiliğinden başlamaz (WCAG 1.4.2).
+
+   SAYFA GEÇİŞİ: Bağlantıya tıklanınca ses 0,25 sn'de kısılır; parça, döngüdeki yer ve "çalıyordu" bilgisi
+   sessionStorage'a yazılır. Yeni sayfa aynı parçayı kaldığı yerden 0,8 sn'de açar; parça farklıysa baştan 1,2 sn'de.
+   Chrome bunu dokunmadan yapar; Safari ilk dokunuşu bekler ("Müziği sürdürmek için dokun").
+   Ziyaretçi düğmeyle kapattıysa (localStorage 'site-muzik' = '0') hiçbir sayfada kendiliğinden açılmaz.
    ===================================================================== */
 (function () {
   'use strict';
   if (window.SiteMuzik) return;
   var betik = document.currentScript;
   var TEMA = (betik && betik.dataset.tema) || 'uzay';
+  // Tek tercih: '0' = ziyaretçi kapattı (her sayfada ve sonraki ziyaretlerde kapalı), '1' = düğmeyle açtı.
+  var KEY = 'site-muzik';
+  try {                                                             // eski ayrı odak tercihini bir kez taşı
+    var eskiOdak = localStorage.getItem('site-muzik-odak');
+    if (eskiOdak !== null) { if (eskiOdak === '1' && localStorage.getItem(KEY) === null) localStorage.setItem(KEY, '1'); localStorage.removeItem('site-muzik-odak'); }
+  } catch (e) { /* depo yok */ }
+  // uzay ve mühendislik: ilk ziyarette davet + ilk dokunuşta başlar. odak (Zekâ Oyunları): yalnız önceki sayfada çalıyorsa sürer.
   var VARSAYILAN_ACIK = TEMA !== 'odak';
-  var KEY = TEMA === 'odak' ? 'site-muzik-odak' : 'site-muzik';
+  // Teşhis Defteri: müzik yalnız düğmeyle açılır; önceki sayfadan sürmez, davet çıkmaz (öğrenci ders çalışırken).
+  var YALNIZ_DUGME = /\/teshis(\/|$)/.test(location.pathname);
+  // Sayfa geçişi: parça, döngüdeki yer ve "çalıyordu" bilgisi sekmeye özel depoda (sessionStorage) taşınır.
+  var OTURUM = 'site-muzik-oturum', TAZE_MS = 30000;               // 30 sn'den eski bilgi "önceki sayfa" sayılmaz
 
   var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, yukleniyor = false, nbuf = null;
   /* ---------------- süreler (saniye): bütün açılış ve kapanışlar buradan ---------------- */
@@ -83,8 +98,14 @@
   }
   var S = {};                                                   // temanın zaman sayaçları
 
-  function acik() { try { var v = localStorage.getItem(KEY); return v === null ? VARSAYILAN_ACIK : v !== '0'; } catch (e) { return VARSAYILAN_ACIK; } }
+  function kapatildi() { try { return localStorage.getItem(KEY) === '0'; } catch (e) { return false; } }
   function kaydet(v) { try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { /* sessizce geç */ } }
+  function oturumOku() {
+    try { var o = JSON.parse(sessionStorage.getItem(OTURUM)); return o && Date.now() - o.zaman < TAZE_MS ? o : null; } catch (e) { return null; }
+  }
+  function oturumYaz() {
+    try { sessionStorage.setItem(OTURUM, JSON.stringify({ caliyor: running, tema: TEMA, konum: mod === 'dosya' ? dosyaKonum() : null, zaman: Date.now() })); } catch (e) { /* sessizce geç */ }
+  }
   function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
   function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
 
@@ -298,7 +319,7 @@
       if (!running || mod) return;                    // bu arada kapatıldıysa ya da zaten başladıysa
       var sure = secenek.sure || SURE.acilis;
       if (t) { mod = 'dosya'; dosyaCal(secenek.konum, sure); } else sentezBaslat(sure);
-      yukleniyor = false;
+      yukleniyor = false; bekliyor = false; devamSecenek = null;
       davetiGizle(); arayuz(); duyur(running ? 'Müzik çalıyor' : '');
     });
   }
@@ -350,14 +371,14 @@
     dugme.setAttribute('aria-busy', String(yukleniyor));
     dugme.classList.toggle('caliyor', running && !yukleniyor);
     dugme.classList.toggle('yukleniyor', yukleniyor);
-    var y = dugme.querySelector('.muzik-yazi'); if (y) y.textContent = yukleniyor ? 'Yükleniyor' : (running || acik()) ? 'Müzik' : 'Müzik kapalı';
+    var y = dugme.querySelector('.muzik-yazi'); if (y) y.textContent = yukleniyor ? 'Yükleniyor' : (running || bekliyor) ? 'Müzik' : 'Müzik kapalı';
     dugme.title = yukleniyor ? 'Müzik yükleniyor.' : running ? 'Müzik çalıyor. Kapatmak için tıkla.' : 'Müzik kapalı. Açmak için tıkla.';
   }
   var davetZamani = null;
-  function davetGoster() {
-    if (davet || running || !acik()) return;
+  function davetGoster(metin) {
+    if (davet || running || !bekliyor) return;
     davet = document.createElement('button'); davet.type = 'button'; davet.className = 'sm-davet';
-    davet.innerHTML = '<span class="not" aria-hidden="true">♪</span><span>Müziği açmak için dokun</span>';
+    davet.innerHTML = '<span class="not" aria-hidden="true">♪</span><span>' + (metin || 'Müziği açmak için dokun') + '</span>';
     document.body.appendChild(davet);
     requestAnimationFrame(function () { requestAnimationFrame(function () { if (davet) davet.classList.add('gor'); }); });
     davetZamani = setTimeout(davetiGizle, 9000);
@@ -370,12 +391,42 @@
   }
   function davetiGizle() { clearTimeout(davetZamani); if (!davet) return; var d = davet; davet = null; d.classList.remove('gor'); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 500); }
 
+  /* ---------------- ilk dokunuş ve sayfalar arası devam ---------------- */
+  // bekliyor: bu sayfada müzik ilk dokunuşta başlayacak (davet ya da önceki sayfadan devam); devamSecenek: kaldığı yer
+  var bekliyor = false, devamSecenek = null;
   var OLAYLAR = ['touchend', 'click', 'pointerup', 'keydown'];
   function ilkDokunus(e) {
     if (dugme && e && dugme.contains(e.target)) return;      // düğmenin kendi işi var
-    if (!acik()) return;
-    baslat();
-    if (ac && ac.state === 'running') OLAYLAR.forEach(function (o) { document.removeEventListener(o, ilkDokunus, true); });
+    if (!bekliyor || kapatildi()) return;
+    baslat(devamSecenek);
+    if (ac && ac.state === 'running') { bekliyor = false; OLAYLAR.forEach(function (o) { document.removeEventListener(o, ilkDokunus, true); }); }
+  }
+  // Önceki sayfada müzik çalıyordu: dosya dokunuştan önce indirilip çözülür. Chrome aynı sitedeki geçişte
+  // dokunmadan çalmaya izin verir: müzik hemen, kaldığı yerden sürer. Safari izin vermez: ilk dokunuşta sürer.
+  function devamEt(o) {
+    var ayni = o.tema === TEMA && typeof o.konum === 'number';
+    devamSecenek = { konum: ayni ? o.konum : null, sure: ayni ? SURE.devam : SURE.acilis };
+    if (!baglam()) return;
+    dosyaHazirla();
+    if (ac.state === 'running') { baslat(devamSecenek); return; }
+    if (ac.resume) ac.resume().then(function () { if (ac.state === 'running' && bekliyor && !kapatildi()) baslat(devamSecenek); }, function () {});
+    setTimeout(function () { if (!running) davetGoster('Müziği sürdürmek için dokun'); }, 400);
+  }
+  // Bağlantıya tıklanınca ses 0,25 sn'de kısılır; gezinme bunu beklemez. Gezinme olmazsa 1,5 sn sonra ses geri gelir.
+  var geriZamani = null;
+  function kazanc() { return mod === 'dosya' ? dosyaKazanc : mod === 'sentez' ? out : null; }
+  function seviye() { return mod === 'dosya' ? (DOSYA_SEVIYE[TEMA] || 0.4) : T.seviye; }
+  function geriAc() { var g = kazanc(); if (running && g) kaydir(g, seviye(), SURE.devam); }
+  function bagTiklandi(e) {
+    if (!running || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
+    if (u.origin !== location.origin || (u.pathname === location.pathname && u.search === location.search)) return;   // dış site ya da aynı sayfa
+    oturumYaz();
+    var g = kazanc(); if (!g) return;
+    kaydir(g, 0, SURE.cikis);
+    clearTimeout(geriZamani); geriZamani = setTimeout(geriAc, 1500);
   }
   function bagla() {
     stilEkle();
@@ -390,11 +441,19 @@
       e.stopPropagation();
       if (yukleniyor) { kilidiAc(); duyur('Müzik yükleniyor'); return; }   // bekleme sırasındaki basış müziği kapatmaz
       if (running) { kaydet(false); durdur(); }
-      else { kaydet(true); baslat(); }
+      else { kaydet(true); baslat(devamSecenek); }
     });
+    var onceki = oturumOku();
+    var devam = !YALNIZ_DUGME && !kapatildi() && !!(onceki && onceki.caliyor);
+    var davetli = !YALNIZ_DUGME && !kapatildi() && !devam && VARSAYILAN_ACIK;
+    bekliyor = devam || davetli;
     arayuz();
-    OLAYLAR.forEach(function (o) { document.addEventListener(o, ilkDokunus, true); });
-    if (acik()) setTimeout(davetGoster, 1200);
+    if (bekliyor) OLAYLAR.forEach(function (o) { document.addEventListener(o, ilkDokunus, true); });
+    if (devam) devamEt(onceki);
+    else if (davetli) setTimeout(davetGoster, 1200);
+    document.addEventListener('click', bagTiklandi);
+    window.addEventListener('pagehide', oturumYaz);
+    window.addEventListener('pageshow', function (e) { if (e.persisted && running && ac) { if (ac.resume) ac.resume(); geriAc(); } });   // geri düğmesiyle dönüş
     document.addEventListener('visibilitychange', function () {
       if (!ac || !running) return;
       if (document.hidden) { if (ac.suspend) ac.suspend(); }
