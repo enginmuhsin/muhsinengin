@@ -51,7 +51,8 @@
   /* ---------------- süreler (saniye): bütün açılış ve kapanışlar buradan ---------------- */
   var SURE = { acilis: 1.2, devam: 0.8, kapanis: 0.6, cikis: 0.25 };
   /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
-  var DOSYA_SEVIYE = { uzay: 0.42, muhendislik: 0.36, odak: 0.4 };
+  // Düzeyler ölçümle eşitlendi: her döngünün RMS'i (uzay 0,1014 · mühendislik 0,1118 · odak 0,1013) × düzey = 0,0411 (−27,7 dBFS)
+  var DOSYA_SEVIYE = { uzay: 0.406, muhendislik: 0.368, odak: 0.406 };
   var dosyaUrl = null; try { dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
   var dosyaTampon = null, dosyaSinir = null, dosyaSozu = null, dosyaKaynak = null, dosyaKazanc = null, dosyaBas = null;
   var mod = null;                                                    // 'dosya' | 'sentez'
@@ -355,7 +356,8 @@
       /* yükleniyor: çubuklar yavaş ve soluk kıpırdar */
       '.yukleniyor .eq i{opacity:.7;animation:sm-eq 2.4s ease-in-out infinite}.yukleniyor .eq i:nth-child(2){animation-delay:-.8s}.yukleniyor .eq i:nth-child(3){animation-delay:-1.6s}' +
       '.sm-gizli{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}' +
-      '@media (prefers-reduced-motion:reduce){.caliyor .eq i,.yukleniyor .eq i,.sm-davet .not{animation:none}.caliyor .eq i{height:9px}}';
+      /* hareketi azalt: animasyon yok; davet kaymadan, yalnız soluklaşarak görünür (sayfanın kendi konum kuralı da kapsanır) */
+      '@media (prefers-reduced-motion:reduce){.caliyor .eq i,.yukleniyor .eq i,.sm-davet .not{animation:none}.caliyor .eq i{height:9px}.sm-davet,body>.sm-davet{transition:opacity .2s}}';
     document.head.appendChild(st);
   }
   // ekran okuyucuya kısa durum bildirimi (görünmez canlı bölge)
