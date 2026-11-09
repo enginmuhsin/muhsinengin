@@ -448,7 +448,7 @@ body > .sm-davet.gor { transform: none; }
 .hakkimda-ic { max-width: 66ch; padding: var(--b3) 0 var(--b2); }
 .hakkimda-ic p { margin: 0 0 var(--b2); text-wrap: pretty; }
 .hakkimda-giris { font-size: 1.125rem; }
-/* Yedi alt bölüm: her biri ayrı katlanır satır, varsayılan kapalı. Cetvel çizgisiyle ayrılır; işaret el çizimi ok (kapalı: aşağı, açık: yukarı, kırmızı). */
+/* Sekiz alt bölüm: her biri ayrı katlanır satır, varsayılan kapalı. Cetvel çizgisiyle ayrılır; işaret el çizimi ok (kapalı: aşağı, açık: yukarı, kırmızı). */
 .hk-bolum { border-bottom: var(--kalem-ince) solid var(--cetvel); }
 .hakkimda-giris + .hk-bolum { border-top: var(--kalem-ince) solid var(--cetvel); }
 .hk-bolum > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: var(--b2); min-height: 48px; padding: var(--b1) 0; }
@@ -466,6 +466,10 @@ body > .sm-davet.gor { transform: none; }
 .hk-liste { list-style: none; margin: 0 0 var(--b2); padding: 0; border-top: var(--kalem-kalin) solid var(--metin); }
 .hk-liste li { padding: 7px 0 6px; border-bottom: var(--kalem-ince) solid var(--cetvel); line-height: 1.5; text-wrap: pretty; }
 .hk-liste strong { font-weight: 700; color: var(--murekkep); }
+/* Kitap kapağı: küçük, sağa yaslı; ince cetvel çerçeve, gölge ve yuvarlama yok */
+.kitap-kapak { float: right; width: 120px; height: auto; margin: 4px 0 var(--b2) var(--b3); border: var(--kalem-ince) solid var(--cetvel); }
+.hk-ic::after { content: ""; display: block; clear: both; }
+@media (max-width: 400px) { .kitap-kapak { width: 96px; margin-left: var(--b2); } }
 .hakkimda-ic a { color: var(--murekkep); text-decoration-thickness: from-font; text-underline-offset: 3px; }
 /* Vaka: kalemle ayrılmış blok; üstte ve altta mürekkep çizgi, solda ince kırmızı kalem çizgisi */
 .vaka { position: relative; margin: var(--b3) 0; padding: var(--b2) 0 var(--b1) var(--b3); border-top: var(--kalem-kalin) solid var(--murekkep); border-bottom: var(--kalem-kalin) solid var(--murekkep); }
@@ -650,6 +654,10 @@ footer a { color: var(--murekkep); text-underline-offset: 3px; }
       <li><strong>TÜBİTAK Bilim Olimpiyatları</strong>: Türkiye'nin en zorlu olimpiyat kulvarına her yıl azimle öğrenci hazırlıyor ve iki aşamalı sınava katılımlarını sağlıyorum.</li>
     </ul>
     <p>UAMO'da danışman öğretmen olarak özel onur belgesiyle ödüllendirildim.</p>
+    </div></details>
+    <details class="hk-bolum"><summary><h3>Kitaplar</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
+    <img class="kitap-kapak" src="ortak/soru-bankasi-kapak.webp" width="120" height="170" loading="lazy" decoding="async" alt="9. Sınıf Matematik Yeni Nesil Soru Bankası kapağı">
+    <p>Matematik kitapları yazıyorum. Türkiye Yüzyılı Maarif Modeli 9. sınıf matematik öğretim programına uygun "9. Sınıf Matematik Yeni Nesil Soru Bankası" büyük ölçüde tamamlandı ve yayına hazırlanıyor: 7 tema, 65 test ve 780 soru. Sorular görselli ve bağlam temelli; her bölümün ilk testi adım adım çözümlü ve her soru programdaki öğrenme çıktılarıyla birebir eşleştirildi.</p>
     </div></details>
     <details class="hk-bolum"><summary><h3>Zekâ oyunu tasarımı</h3><span class="hk-ok" aria-hidden="true"></span></summary><div class="hk-ic">
     <p>Zekâ oyunları tasarlıyorum; bir kısmı yayımlandı, bir kısmı geliştirme ve test aşamasında. Benim için iyi bir zekâ oyunu, kuralları birkaç cümlede anlatılan ama ardında derin bir matematik yapısı taşıyan oyundur. Bu oyunlardan biri olan <a href="medar/">MEDAR</a>, altıgen bir tahta üzerinde oynanan bir strateji oyunu; web sürümünü öğrencilerim çevrim içi oynayabiliyor.</p>
