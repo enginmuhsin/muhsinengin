@@ -24,8 +24,10 @@
    Bu yüzden müzik açıksa ziyaretçinin ilk dokunuşunda yavaşça yükselerek başlar ve
    sayfa açılınca kısa bir "Müziği aç" daveti görünür. İlk ziyarette ses asla kendiliğinden başlamaz (WCAG 1.4.2).
 
-   SAYFA GEÇİŞİ: Bağlantıya tıklanınca ses 0,25 sn'de kısılır; parça, döngüdeki yer ve "çalıyordu" bilgisi
-   sessionStorage'a yazılır. Yeni sayfa aynı parçayı kaldığı yerden 0,8 sn'de açar; parça farklıysa baştan 1,2 sn'de.
+   SAYFA GEÇİŞİ: Bağlantıya tıklanınca ses 0,6 sn'de kısılır, gezinme o kadar bekletilir. "Çalıyordu" bilgisi ve her
+   parçanın (uzay, muhendislik, odak) ayrı ayrı kaldığı yer sessionStorage'a yazılır. Yeni sayfada parça bu sekmede
+   daha önce çaldıysa kendi kaldığı yerden, ilk kez çalıyorsa baştan başlar; ikisi de 2,5 sn'lik yavaş yükselişle.
+   Süreler dosyanın başındaki SURE sabitinde.
    Chrome bunu dokunmadan yapar; Safari ilk dokunuşu bekler ("Müziği sürdürmek için dokun").
    Ziyaretçi düğmeyle kapattıysa (localStorage 'site-muzik' = '0') hiçbir sayfada kendiliğinden açılmaz.
    ===================================================================== */
@@ -44,12 +46,18 @@
   var VARSAYILAN_ACIK = TEMA !== 'odak';
   // Teşhis Defteri: müzik yalnız düğmeyle açılır; önceki sayfadan sürmez, davet çıkmaz (öğrenci ders çalışırken).
   var YALNIZ_DUGME = /\/teshis(\/|$)/.test(location.pathname);
-  // Sayfa geçişi: parça, döngüdeki yer ve "çalıyordu" bilgisi sekmeye özel depoda (sessionStorage) taşınır.
-  var OTURUM = 'site-muzik-oturum', TAZE_MS = 30000;               // 30 sn'den eski bilgi "önceki sayfa" sayılmaz
+  /* ---------------- SABİTLER: süreler (saniye) ve sayfa geçişi ----------------
+     acilis  : ilk açılış (davet ya da düğme)
+     gecis   : yeni sayfada açılış; aynı parça kaldığı yerden, farklı parça baştan, ikisi de bu yavaş yükselişle
+     kapanis : düğmeyle kapatma
+     cikis   : bağlantıya tıklanınca kısılma; gezinme bu süre kadar bekletilir */
+  var SURE = { acilis: 1.2, gecis: 2.5, kapanis: 0.6, cikis: 0.6 };
+  // sessionStorage: "çalıyordu" bilgisi + her parçanın ayrı ayrı kaldığı yer (uzay, muhendislik, odak)
+  var OTURUM = 'site-muzik-oturum';
+  var TAZE_MS = 30000;                                             // 30 sn'den eski "çalıyordu" bilgisi "önceki sayfa" sayılmaz
+  var GERI_MS = 1500;                                              // gezinme gerçekleşmezse ses bu kadar sonra geri gelir
 
   var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, yukleniyor = false, nbuf = null;
-  /* ---------------- süreler (saniye): bütün açılış ve kapanışlar buradan ---------------- */
-  var SURE = { acilis: 1.2, devam: 0.8, kapanis: 0.6, cikis: 0.25 };
   /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
   // Düzeyler ölçümle eşitlendi: her döngünün RMS'i (uzay 0,1014 · mühendislik 0,1118 · odak 0,1013) × düzey = 0,0411 (−27,7 dBFS)
   var DOSYA_SEVIYE = { uzay: 0.406, muhendislik: 0.368, odak: 0.406 };
@@ -76,13 +84,25 @@
     return [bas / t.sampleRate, (son + 1) / t.sampleRate];
   }
   // kazancı şu anki değerinden hedefe doğrusal götür
-  function kaydir(g, hedef, sure) { var t = ac.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(hedef, t + sure); }
+  // Kazancı şu anki değerinden hedefe eğriyle götür. Yükselişte v = a + (b − a)·x² (başta çok yavaş),
+  // inişte v = b + (a − b)·(1 − x)² (önce hızlı, sona doğru yumuşak); x = 0…1, 64 nokta.
+  function egri(a, b) {
+    var n = 64, e = new Float32Array(n);
+    for (var i = 0; i < n; i++) { var x = i / (n - 1); e[i] = b >= a ? a + (b - a) * x * x : b + (a - b) * (1 - x) * (1 - x); }
+    return e;
+  }
+  function kaydir(g, hedef, sure, t) {
+    t = t || ac.currentTime; var a = g.gain.value;
+    g.gain.cancelScheduledValues(t);
+    try { g.gain.setValueCurveAtTime(egri(a, hedef), t, sure); }
+    catch (e) { g.gain.setValueAtTime(a, t); g.gain.linearRampToValueAtTime(hedef, t + sure); }
+  }
   // ofset: döngü içinde başlanacak yer (sn); geçersizse döngü başı
   function dosyaCal(ofset, sure) {
     var t = ac.currentTime + 0.03, s = ac.createBufferSource(), sinir = dosyaSinir;
     if (!(ofset >= sinir[0] && ofset < sinir[1])) ofset = sinir[0];
     s.buffer = dosyaTampon; s.loop = true; s.loopStart = sinir[0]; s.loopEnd = sinir[1];
-    dosyaKazanc = ac.createGain(); dosyaKazanc.gain.setValueAtTime(0, t); dosyaKazanc.gain.linearRampToValueAtTime(DOSYA_SEVIYE[TEMA] || 0.4, t + sure);
+    dosyaKazanc = ac.createGain(); dosyaKazanc.gain.value = 0; kaydir(dosyaKazanc, DOSYA_SEVIYE[TEMA] || 0.4, sure, t);
     s.connect(dosyaKazanc); dosyaKazanc.connect(ac.destination); s.start(t, ofset);
     dosyaKaynak = s; dosyaBas = { t: t, ofset: ofset };
   }
@@ -101,11 +121,15 @@
 
   function kapatildi() { try { return localStorage.getItem(KEY) === '0'; } catch (e) { return false; } }
   function kaydet(v) { try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { /* sessizce geç */ } }
-  function oturumOku() {
-    try { var o = JSON.parse(sessionStorage.getItem(OTURUM)); return o && Date.now() - o.zaman < TAZE_MS ? o : null; } catch (e) { return null; }
-  }
+  // Oturum kaydı: { caliyor, zaman, konumlar: { uzay: sn, muhendislik: sn, odak: sn } }
+  function oturumHam() { try { return JSON.parse(sessionStorage.getItem(OTURUM)) || {}; } catch (e) { return {}; } }
+  function oncekiCaliyordu() { var o = oturumHam(); return !!o.caliyor && Date.now() - (o.zaman || 0) < TAZE_MS; }
+  // bu parçanın bu sekmede en son kaldığı yer (yoksa null: ilk kez çalınıyor, baştan başlar)
+  function kayitliKonum() { var k = (oturumHam().konumlar || {})[TEMA]; return typeof k === 'number' ? k : null; }
   function oturumYaz() {
-    try { sessionStorage.setItem(OTURUM, JSON.stringify({ caliyor: running, tema: TEMA, konum: mod === 'dosya' ? dosyaKonum() : null, zaman: Date.now() })); } catch (e) { /* sessizce geç */ }
+    var o = oturumHam(), konumlar = o.konumlar || {};
+    if (mod === 'dosya') { var k = dosyaKonum(); if (k !== null) konumlar[TEMA] = k; }   // öbür parçaların yeri korunur
+    try { sessionStorage.setItem(OTURUM, JSON.stringify({ caliyor: running, zaman: Date.now(), konumlar: konumlar })); } catch (e) { /* sessizce geç */ }
   }
   function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
   function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -308,7 +332,7 @@
     out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(T.seviye, t + sure);
     T.planla(t + 1.5); timer = setInterval(tik, 250);
   }
-  // secenek.konum: döngüde başlanacak yer (sn), secenek.sure: açılış süresi
+  // secenek.sure: açılış süresi. Parça bu sekmede daha önce çaldıysa kaldığı yerden, yoksa baştan başlar.
   function baslat(secenek) {
     secenek = secenek || {};
     if (running) { if (ac && ac.state !== 'running') kilidiAc(); return; }
@@ -319,7 +343,7 @@
     dosyaHazirla().then(function (t) {
       if (!running || mod) return;                    // bu arada kapatıldıysa ya da zaten başladıysa
       var sure = secenek.sure || SURE.acilis;
-      if (t) { mod = 'dosya'; dosyaCal(secenek.konum, sure); } else sentezBaslat(sure);
+      if (t) { mod = 'dosya'; dosyaCal(kayitliKonum(), sure); } else sentezBaslat(sure);
       yukleniyor = false; bekliyor = false; devamSecenek = null;
       davetiGizle(); arayuz(); duyur(running ? 'Müzik çalıyor' : '');
     });
@@ -327,6 +351,7 @@
   function durdur(sure) {
     if (!running) return;
     sure = sure || SURE.kapanis;
+    oturumYaz();                                       // parçanın kaldığı yer saklansın
     running = false; yukleniyor = false; clearInterval(timer); timer = null;
     if (mod === 'dosya') dosyaDurdur(sure);
     if (mod === 'sentez' && out) kaydir(out, 0, sure);
@@ -404,31 +429,35 @@
     if (ac && ac.state === 'running') { bekliyor = false; OLAYLAR.forEach(function (o) { document.removeEventListener(o, ilkDokunus, true); }); }
   }
   // Önceki sayfada müzik çalıyordu: dosya dokunuştan önce indirilip çözülür. Chrome aynı sitedeki geçişte
-  // dokunmadan çalmaya izin verir: müzik hemen, kaldığı yerden sürer. Safari izin vermez: ilk dokunuşta sürer.
-  function devamEt(o) {
-    var ayni = o.tema === TEMA && typeof o.konum === 'number';
-    devamSecenek = { konum: ayni ? o.konum : null, sure: ayni ? SURE.devam : SURE.acilis };
+  // dokunmadan çalmaya izin verir: müzik hemen sürer. Safari izin vermez: ilk dokunuşta sürer.
+  // Parça bu sekmede daha önce çaldıysa kendi kaldığı yerden, ilk kez çalıyorsa baştan; ikisi de SURE.gecis ile yükselir.
+  function devamEt() {
+    devamSecenek = { sure: SURE.gecis };
     if (!baglam()) return;
     dosyaHazirla();
     if (ac.state === 'running') { baslat(devamSecenek); return; }
     if (ac.resume) ac.resume().then(function () { if (ac.state === 'running' && bekliyor && !kapatildi()) baslat(devamSecenek); }, function () {});
     setTimeout(function () { if (!running) davetGoster('Müziği sürdürmek için dokun'); }, 400);
   }
-  // Bağlantıya tıklanınca ses 0,25 sn'de kısılır; gezinme bunu beklemez. Gezinme olmazsa 1,5 sn sonra ses geri gelir.
-  var geriZamani = null;
+  // Bağlantıya tıklanınca ses SURE.cikis (0,6 sn) içinde kısılır; gezinme bu süre kadar bekletilip sonra yapılır.
+  // Gezinme gerçekleşmezse (indirme bağlantısı vb.) GERI_MS sonra ses geri gelir.
+  var geriZamani = null, gidiliyor = false;
   function kazanc() { return mod === 'dosya' ? dosyaKazanc : mod === 'sentez' ? out : null; }
   function seviye() { return mod === 'dosya' ? (DOSYA_SEVIYE[TEMA] || 0.4) : T.seviye; }
-  function geriAc() { var g = kazanc(); if (running && g) kaydir(g, seviye(), SURE.devam); }
+  function geriAc() { gidiliyor = false; var g = kazanc(); if (running && g) kaydir(g, seviye(), SURE.gecis); }
   function bagTiklandi(e) {
     if (!running || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
     var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
     if (u.origin !== location.origin || (u.pathname === location.pathname && u.search === location.search)) return;   // dış site ya da aynı sayfa
-    oturumYaz();
-    var g = kazanc(); if (!g) return;
+    var g = kazanc(); if (!g) return;                 // müzik henüz yükleniyor: bekletmeden geç
+    e.preventDefault();
+    if (gidiliyor) return;                            // çift tıklama
+    gidiliyor = true;
     kaydir(g, 0, SURE.cikis);
-    clearTimeout(geriZamani); geriZamani = setTimeout(geriAc, 1500);
+    setTimeout(function () { oturumYaz(); location.href = u.href; }, SURE.cikis * 1000);
+    clearTimeout(geriZamani); geriZamani = setTimeout(geriAc, SURE.cikis * 1000 + GERI_MS);
   }
   function bagla() {
     stilEkle();
@@ -445,13 +474,12 @@
       if (running) { kaydet(false); durdur(); }
       else { kaydet(true); baslat(devamSecenek); }
     });
-    var onceki = oturumOku();
-    var devam = !YALNIZ_DUGME && !kapatildi() && !!(onceki && onceki.caliyor);
+    var devam = !YALNIZ_DUGME && !kapatildi() && oncekiCaliyordu();
     var davetli = !YALNIZ_DUGME && !kapatildi() && !devam && VARSAYILAN_ACIK;
     bekliyor = devam || davetli;
     arayuz();
     if (bekliyor) OLAYLAR.forEach(function (o) { document.addEventListener(o, ilkDokunus, true); });
-    if (devam) devamEt(onceki);
+    if (devam) devamEt();
     else if (davetli) setTimeout(davetGoster, 1200);
     document.addEventListener('click', bagTiklandi);
     window.addEventListener('pagehide', oturumYaz);
