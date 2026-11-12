@@ -40,6 +40,9 @@ jobs:
           done
           exit $hata
 
+      - name: Saf modül testleri (Şifre Dairesi)
+        run: node --test testler/kriptoloji/*.test.mjs
+
   dis-baglantilar:
     name: Dış bağlantılar (haftalık)
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
