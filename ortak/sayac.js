@@ -4,7 +4,11 @@
    "bugün geldi" diye bir kez işaretlenir; kim olduğu yazılmaz, yalnızca çentik atılır.
 
    • Her sayfa (sekme) ayrı sayılır; ayrıca o gün siteye gelen toplam farklı ziyaretçi tutulur.
-   • Tarayıcıya yalnızca "bugün bu sayfada sayıldım" notu bırakılır (localStorage). IP, ad, çerez yok.
+   • Alt alanlar da aynı betiği kullanır: https://muhsinengin.com/ortak/sayac.js
+     (masterclass., sekmeolcer., ders.). Kayıtta önlerine ad eklenir: "masterclass:/geometri/".
+   • Tarayıcıya yalnızca "bugün bu sayfada sayıldım" notu bırakılır. Kim olduğu, IP adresi tutulmaz.
+     "Bugün siteye geldi" notu bütün alt alanlarda ortak bir çerezde durur (aynı kişi masterclass'a
+     da girse toplamda 1 kalır).
    • Botlar, otomatik tarayıcılar, önizleme açılışları ve yerel dosya/localhost sayılmaz.
    • Rapor: muhsinengin.com/sayac/ (gizli panel, giriş ister). Orada "bu cihazı sayma" düğmesi var.
    • Veri Supabase'te: sayac/kurulum.sql
@@ -19,13 +23,15 @@
     if (location.protocol !== 'https:' || !/(^|\.)muhsinengin\.com$/.test(h)) return;
     if (navigator.webdriver) return;
     if (/bot|crawl|spider|slurp|preview|headless|lighthouse|facebookexternalhit|whatsapp|telegram/i.test(navigator.userAgent || '')) return;
+    if (/(?:^|;\s*)sayac_haric=1/.test(document.cookie)) return;
     if (localStorage.getItem('sayac:haric') === '1') return;
   } catch (e) { return; }
 
   function sayfaYolu() {
     var p = (location.pathname || '/').toLowerCase().replace(/\/index\.html$/, '/').replace(/\/{2,}/g, '/');
     if (!/\.html$/.test(p) && p.slice(-1) !== '/') p += '/';
-    return p;
+    var alt = location.hostname.toLowerCase().replace(/^www\./, '').replace(/\.?muhsinengin\.com$/, '');
+    return alt ? alt + ':' + p : p;
   }
 
   function bugun() {
@@ -51,9 +57,11 @@
     var tekil = true, siteTekil = true;
     try {
       tekil = !localStorage.getItem(kSayfa);
-      siteTekil = !localStorage.getItem(kSite);
+      var cerez = document.cookie.match(/(?:^|;\s*)sayac_site=([^;]+)/);
+      siteTekil = !(cerez && cerez[1] === gun) && !localStorage.getItem(kSite);
       localStorage.setItem(kSayfa, '1');
       localStorage.setItem(kSite, '1');
+      document.cookie = 'sayac_site=' + gun + '; domain=.muhsinengin.com; path=/; max-age=172800; SameSite=Lax; Secure';
       eskileriTemizle(gun);
     } catch (e) { /* depo kapalıysa her açılış tekil sayılır; sorun değil */ }
 

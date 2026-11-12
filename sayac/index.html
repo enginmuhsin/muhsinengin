@@ -87,7 +87,7 @@
 
     <section class="kutu">
       <h2>Sekmelere göre</h2>
-      <p class="not">Seçili aralıkta. "Ziyaretçi" her sekmede ayrı sayılır: ana sayfayı ve MEDAR'ı açan biri iki satırda da 1'dir.</p>
+      <p class="not">Seçili aralıkta, alt alanlar (masterclass., sekmeolcer., ders.) dahil. "Ziyaretçi" her sekmede ayrı sayılır: ana sayfayı ve MEDAR'ı açan biri iki satırda da 1'dir. Üstteki toplamda ise bütün alt alanlar birlikte 1 sayılır.</p>
       <table>
         <thead><tr><th>Sekme</th><th class="s">Ziyaretçi</th><th class="s">Açılış</th></tr></thead>
         <tbody id="tablo"></tbody>
@@ -111,8 +111,18 @@
     '/zeka-oyunlari/go/': 'Go', '/zeka-oyunlari/hex/': 'Hex', '/zeka-oyunlari/gizli-kod/': 'Gizli Kod',
     '/zeka-oyunlari/sudoku/': 'Sudoku', '/zeka-oyunlari/mastermind/': 'Mastermind', '/dron/': 'Dron Hangarı',
     '/dron/fpv.html': 'FPV Rehberi', '/dron-lab/': 'Dron · Tasarım Laboratuvarı', '/dron-ucus/': 'Dron · Uçuş Simülatörü',
-    '/fpv-yaris/': 'FPV Yarış Gözlüğü', '/pid-oyunu/': 'PID Ayar Oyunu', '/sayac/': 'Bu panel'
+    '/fpv-yaris/': 'FPV Yarış Gözlüğü', '/pid-oyunu/': 'PID Ayar Oyunu', '/sayac/': 'Bu panel',
+    'masterclass:/': 'Master Class', 'masterclass:/geometri/': 'Master Class · Geometri', 'masterclass:/hafta/': 'Master Class · Haftanın Soruları',
+    'masterclass:/kitap/': 'Master Class · Kitap', 'masterclass:/bilsem/': 'Master Class · BİLSEM', 'masterclass:/studyo/': 'Master Class · Stüdyo',
+    'masterclass:/ogretmen/': 'Master Class · Öğretmen', 'masterclass:/fonksiyon-yarisi.html': 'Master Class · Fonksiyon Yarışı',
+    'sekmeolcer:/': 'SekmeÖlçer', 'ders:/': 'Birebir Ders'
   };
+  var ALT_AD = { masterclass: 'Master Class', sekmeolcer: 'SekmeÖlçer', ders: 'Birebir Ders' };
+  function sekmeAdi(k) {
+    if (ADLAR[k]) return ADLAR[k];
+    var m = /^([a-z0-9-]+):(.*)$/.exec(k);
+    return m ? (ALT_AD[m[1]] || m[1]) + ' · ' + m[2] : k;
+  }
   var sayi = function (n) { return Math.round(n).toLocaleString('tr-TR'); };
 
   function gunStr(d) { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(d); }
@@ -125,15 +135,15 @@
 
   // ---- "Bu cihazı sayma" ----
   function haricGuncelle() {
-    var h = false; try { h = localStorage.getItem('sayac:haric') === '1'; } catch (e) {}
+    var h = /(?:^|;\s*)sayac_haric=1/.test(document.cookie);
     $('haricDugme').textContent = h ? 'Bu cihaz sayılmıyor ✓' : 'Bu cihazı sayma';
     $('haricDugme').setAttribute('aria-pressed', h ? 'true' : 'false');
   }
   $('haricDugme').onclick = function () {
-    try {
-      if (localStorage.getItem('sayac:haric') === '1') localStorage.removeItem('sayac:haric');
-      else localStorage.setItem('sayac:haric', '1');
-    } catch (e) {}
+    // Ortak çerez: muhsinengin.com ve bütün alt alanlarında (masterclass., ders. ...) geçerli, 5 yıl.
+    var h = /(?:^|;\s*)sayac_haric=1/.test(document.cookie), alan = /muhsinengin\.com$/.test(location.hostname) ? '; domain=.muhsinengin.com' : '';
+    document.cookie = 'sayac_haric=' + (h ? '0; max-age=0' : '1; max-age=157680000') + alan + '; path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+    try { localStorage.removeItem('sayac:haric'); } catch (e) {}
     haricGuncelle();
   };
 
@@ -199,8 +209,8 @@
       .sort(function (a, b) { return b.t - a.t || b.g - a.g; });
     var enCok = satirlar.length ? satirlar[0].t : 1;
     $('tablo').innerHTML = satirlar.length ? satirlar.map(function (s) {
-      var ad = ADLAR[s.yol] || s.yol;
-      return '<tr><td>' + esc(ad) + (ADLAR[s.yol] ? ' <span class="yol">' + esc(s.yol) + '</span>' : '') +
+      var ad = sekmeAdi(s.yol), adres = s.yol.replace(/^([a-z0-9-]+):/, '$1.');
+      return '<tr><td>' + esc(ad) + ' <span class="yol">' + esc(adres) + '</span>' +
         '<div class="cubuk" style="width:' + Math.max(2, 100 * s.t / Math.max(1, enCok)) + '%"></div></td>' +
         '<td class="s">' + sayi(s.t) + '</td><td class="s">' + sayi(s.g) + '</td></tr>';
     }).join('') : '<tr><td colspan="3" class="not">Bu aralıkta henüz kayıt yok.</td></tr>';

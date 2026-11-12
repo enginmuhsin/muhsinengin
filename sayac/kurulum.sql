@@ -41,8 +41,9 @@ as $$
 declare
   bugun date := (now() at time zone 'Europe/Istanbul')::date;
 begin
-  -- Yalnızca düzgün sayfa yolları kabul edilir: /, /teshis/, /zeka-oyunlari/go/ ...
-  if p_sayfa is null or length(p_sayfa) > 80 or p_sayfa !~ '^/([a-z0-9-]+/)*([a-z0-9-]+\.html)?$' then
+  -- Yalnızca düzgün sayfa yolları kabul edilir: /, /teshis/, /zeka-oyunlari/go/,
+  -- alt alanlarda önünde adıyla: masterclass:/, masterclass:/geometri/, ders:/ ...
+  if p_sayfa is null or length(p_sayfa) > 80 or p_sayfa !~ '^([a-z0-9-]+:)?/([a-z0-9-]+/)*([a-z0-9-]+\.html)?$' then
     return;
   end if;
 
