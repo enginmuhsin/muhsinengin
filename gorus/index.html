@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bu sayfa yalnız görüş formunu Supabase'teki tek bir fonksiyona gönderir (gorus/kurulum.sql). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; worker-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/gorus_gonder https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Görüş ve öneriler · Muhsin ENGİN</title>
+  <meta name="description" content="muhsinengin.com hakkında görüşünü, önerini ya da bulduğun bir hatayı yaz. Ad ve e-posta istenmez.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Görüş ve öneriler">
+  <meta property="og:description" content="Siteyle ilgili görüşünü, önerini ya da bulduğun bir hatayı yaz.">
+  <meta property="og:url" content="https://muhsinengin.com/gorus/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../simge.svg" type="image/svg+xml">
+  <script src="../tema.js"></script>
+  <script src="../ortak/ana-sayfa.js" defer></script>
+  <link rel="stylesheet" href="../ortak/tokenlar.css">
+  <link rel="stylesheet" href="gorus.css">
+  <script src="../ortak/sayac.js" defer></script>
+  <script src="gorus.js" defer></script>
+</head>
+<body>
+  <main id="ana">
+    <ana-sayfa-dugmesi class="eve"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+    <p class="kunye">Öneri kutusu</p>
+    <h1>Görüş ve <span class="ik-alt">öneriler</span></h1>
+    <p class="giris">Siteyi kullanırken aklına gelen her şey değerli: beğendiğin bir oyun, anlamadığın bir yer, bulduğun bir hata ya da “şu da olsa” dediğin bir fikir. Mesajını yalnız site sahibi okur; yayımlanmaz.</p>
+
+    <form id="form" novalidate>
+      <fieldset class="secici" id="rolSec">
+        <legend>Sen kimsin? <span class="zorunlu">zorunlu</span></legend>
+        <button type="button" data-rol="ogrenci" aria-pressed="false">Öğrenci</button>
+        <button type="button" data-rol="ogretmen" aria-pressed="false">Öğretmen</button>
+        <button type="button" data-rol="veli" aria-pressed="false">Veli</button>
+        <button type="button" data-rol="diger" aria-pressed="false">Diğer</button>
+      </fieldset>
+
+      <fieldset class="secici puan" id="puanSec">
+        <legend>Bu sayfaya kaç puan verirsin? <span class="istege">isteğe bağlı</span></legend>
+        <button type="button" data-puan="1" aria-pressed="false" aria-label="1 puan">1</button>
+        <button type="button" data-puan="2" aria-pressed="false" aria-label="2 puan">2</button>
+        <button type="button" data-puan="3" aria-pressed="false" aria-label="3 puan">3</button>
+        <button type="button" data-puan="4" aria-pressed="false" aria-label="4 puan">4</button>
+        <button type="button" data-puan="5" aria-pressed="false" aria-label="5 puan">5</button>
+      </fieldset>
+
+      <label class="alan" for="sayfa">Hangi sayfa hakkında?</label>
+      <select id="sayfa">
+        <option value="">Genel olarak site</option>
+        <option value="/">Ana sayfa</option>
+        <option value="/kriptoloji/">Şifre Dairesi (kriptoloji)</option>
+        <option value="/zeka-oyunlari/">Zekâ Oyunları</option>
+        <option value="/medar/">MEDAR</option>
+        <option value="/dron/">Dron Hangarı</option>
+        <option value="/teshis/">YKS Teşhis Defteri</option>
+      </select>
+
+      <label class="alan" for="mesaj">Mesajın <span class="zorunlu">zorunlu</span></label>
+      <textarea id="mesaj" rows="6" maxlength="1500" required aria-describedby="mesajNot sayacYazi"></textarea>
+      <p class="kucuk" id="mesajNot"><strong>Adını, okulunu, telefonunu ya da e-postanı yazma.</strong> Bu kutu tamamen isimsizdir.</p>
+      <p class="kucuk sayac-yazi" id="sayacYazi" aria-live="polite">0 / 1500</p>
+
+      <!-- Botlar için tuzak alan: insanlar görmez, doldurulursa gönderilmez. -->
+      <div class="tuzak" aria-hidden="true"><label>Web sitesi <input id="web" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+      <button class="gonder" type="submit" id="gonder">Gönder</button>
+      <p class="geri-bildirim" id="sonuc" role="status" aria-live="polite"></p>
+    </form>
+
+    <section class="tesekkur" id="tesekkur" hidden aria-live="polite">
+      <p class="damga" aria-hidden="true">ALINDI</p>
+      <h2 tabindex="-1">Teşekkürler!</h2>
+      <p>Görüşün kutuya düştü. Hepsini tek tek okuyorum.</p>
+      <p><a href="./" id="yeniden">Bir görüş daha yaz</a> · <a href="../" id="geriDon">Ana sayfaya dön</a></p>
+    </section>
+
+    <details class="aciklama">
+      <summary>Gönderdiğimde ne kaydedilir?</summary>
+      <ul>
+        <li><strong>Kaydedilen:</strong> seçtiğin rol, puan (verdiysen), sayfa adı, mesajın ve gönderim zamanı.</li>
+        <li><strong>Kaydedilmeyen:</strong> adın, e-postan, IP adresin, cihaz bilgin. Çerez ya da tarayıcı deposu kullanılmaz.</li>
+        <li>Mesajlar yayımlanmaz; yalnız site sahibi okur. 400 günden eski mesajlar kendiliğinden silinir.</li>
+        <li>Yanlışlıkla kişisel bir bilgi yazdıysan, site sahibi o mesajı silebilir.</li>
+      </ul>
+    </details>
+  </main>
+</body>
+</html>

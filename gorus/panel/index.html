@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Görüş kutusu · muhsinengin.com</title>
+<script src="../../tema.js"></script>
+<link rel="stylesheet" href="../../ortak/tokenlar.css">
+<script src="../../ortak/ana-sayfa.js" defer></script>
+<style>
+  body { margin: 0; font-family: var(--yazi); background: var(--kagit); color: var(--metin); }
+  main { max-width: 980px; margin: 0 auto; padding: 28px 18px 60px; }
+  h1 { font-family: var(--baslik); font-size: 1.7rem; margin: 0 0 4px; color: var(--murekkep); }
+  .alt { color: var(--kursun); margin: 0 0 22px; }
+  .kutu { border: var(--kalem) solid var(--cetvel); border-radius: var(--yaricap); padding: 18px; margin-bottom: 18px; background: var(--kart); }
+  label { display: block; font-weight: 700; font-size: .9rem; margin: 10px 0 4px; }
+  input { font: inherit; width: 100%; max-width: 340px; box-sizing: border-box; padding: 9px 11px; border: var(--kalem) solid var(--cetvel); border-radius: 10px; background: var(--kagit); color: var(--metin); }
+  button { font: inherit; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: var(--kalem) solid var(--murekkep); background: var(--murekkep); color: var(--kagit); cursor: pointer; }
+  button.ikincil { background: transparent; color: var(--murekkep); }
+  button[aria-pressed="true"] { background: var(--murekkep); color: var(--kagit); }
+  .satir { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .hata { color: var(--kirmizi); font-weight: 700; min-height: 1.4em; }
+  .tasler { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .tas { border: var(--kalem) solid var(--cetvel); border-radius: var(--yaricap); padding: 14px 16px; background: var(--kart); }
+  .tas b { display: block; font-family: var(--baslik); font-size: 2rem; line-height: 1.1; color: var(--metin); font-variant-numeric: tabular-nums; }
+  .tas span { color: var(--kursun); font-size: .9rem; }
+  .tas small { display: block; color: var(--kursun); font-size: .8rem; margin-top: 2px; }
+  h2 { font-family: var(--baslik); font-size: 1.15rem; margin: 0 0 4px; }
+  .not { color: var(--kursun); font-size: .85rem; margin: 0 0 12px; }
+  .grafik { position: relative; }
+  .grafik svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grafik text { fill: var(--kursun); font-size: 11px; font-family: var(--yazi); }
+  .ipucu { position: absolute; pointer-events: none; background: var(--metin); color: var(--kagit); padding: 6px 9px; border-radius: 8px; font-size: .82rem; white-space: nowrap; transform: translate(-50%, -110%); opacity: 0; transition: opacity .1s; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: var(--kalem-ince) solid var(--cetvel); }
+  th { font-size: .82rem; color: var(--kursun); font-weight: 700; }
+  td.s, th.s { text-align: right; }
+  .yol { color: var(--kursun); font-size: .8rem; font-family: var(--mono); }
+  .cubuk { height: 6px; border-radius: 3px; background: var(--murekkep); opacity: .8; margin-top: 4px; }
+  .eve { display: inline-flex; margin-bottom: 16px; }
+  [hidden] { display: none !important; }
+</style>
+<style>
+  .gorus { border-bottom: var(--kalem-ince) solid var(--cetvel); padding: 12px 0; }
+  .gorus.okunmamis { border-left: 4px solid var(--kirmizi); padding-left: 12px; }
+  .ust { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .85rem; color: var(--kursun); }
+  .ust b { color: var(--metin); }
+  .mesaj { white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0 8px; font-size: 1.02rem; }
+  .islem { display: flex; gap: 8px; }
+  .islem button { font-size: .85rem; padding: 5px 10px; }
+  .bos { color: var(--kursun); }
+</style>
+</head>
+<body>
+<main>
+  <ana-sayfa-dugmesi class="eve"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+  <h1>Görüş kutusu</h1>
+  <p class="alt">Gizli panel. Sitede herhangi bir yerden bağlantı verilmez. Giriş, sayaç paneliyle aynıdır.</p>
+
+  <section class="kutu" id="girisKutu" hidden>
+    <h2>Giriş</h2>
+    <p class="not">Teşhis Defteri'ndeki öğretmen hesabınla gir.</p>
+    <form id="giris">
+      <label for="eposta">E-posta</label>
+      <input id="eposta" type="email" autocomplete="username" required>
+      <label for="sifre">Şifre</label>
+      <input id="sifre" type="password" autocomplete="current-password" required>
+      <p class="hata" id="girisHata"></p>
+      <button type="submit">Giriş yap</button>
+    </form>
+  </section>
+
+  <section id="panel" hidden>
+    <div class="satir" style="margin-bottom:14px">
+      <button class="ikincil filtre" data-filtre="okunmamis" aria-pressed="true">Okunmamış</button>
+      <button class="ikincil filtre" data-filtre="hepsi" aria-pressed="false">Hepsi</button>
+      <button class="ikincil" id="yenile">Yenile</button>
+      <button class="ikincil" id="cikis">Çıkış</button>
+    </div>
+    <p class="hata" id="panelHata"></p>
+    <div class="tasler" id="tasler"></div>
+    <section class="kutu"><div id="liste"></div></section>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>
