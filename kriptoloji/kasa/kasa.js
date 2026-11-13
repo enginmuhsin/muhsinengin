@@ -9,6 +9,7 @@ import { gorevBagla } from '../bilesenler/gorev.js';
 import { seviyeBaslat } from '../bilesenler/seviye.js';
 import { sunumBaslat } from '../bilesenler/sunum.js';
 import { baglantilariGuncelle } from '../bilesenler/durum.js';
+import { cal } from '../bilesenler/ses.js';
 
 const $ = (s) => document.querySelector(s);
 const NS = 'http://www.w3.org/2000/svg';
@@ -35,10 +36,10 @@ function seciciDoldur(kap, liste, secili, sec) {
   }
 }
 const kilitKap = $('#kilitSec'), saldirganKap = $('#saldirganSec');
-seciciDoldur(kilitKap, KILITLER, kilit, (x) => { kilit = x; ciz(); });
+seciciDoldur(kilitKap, KILITLER, kilit, (x) => { kilit = x; ciz(); cal('surgu'); });   // kilit değişince sürgüler sürülür
 function saldirganlariCiz() {
   const liste = saldirganlar.map((s) => ({ ...s, aciklamaKisa: '≈ ' + bilimsel(s.hiz) + ' deneme/sn' }));
-  seciciDoldur(saldirganKap, liste, saldirgan, (x) => { saldirgan = saldirganlar.find((s) => s.id === x.id); ciz(); });
+  seciciDoldur(saldirganKap, liste, saldirgan, (x) => { saldirgan = saldirganlar.find((s) => s.id === x.id); ciz(); cal('tik'); });
 }
 saldirganlariCiz();
 
@@ -110,13 +111,15 @@ function yilSayaci(s) {
   const kutu = $('#sayacKutu'), pencere = $('#yilSayac'), damga = $('#sayacDamga');
   kutu.hidden = false; damga.hidden = true;
   const son = Number(s.bulunan);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { pencere.textContent = son; damga.hidden = false; return Promise.resolve(); }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { pencere.textContent = son; damga.hidden = false; cal('acildi'); return Promise.resolve(); }
   const sure = Math.min(1600, 300 + s.deneme * 12), t0 = performance.now();
   return new Promise((bitti) => {
     const adim = (t) => {
       const o = Math.min(1, (t - t0) / sure);
-      pencere.textContent = 1900 + Math.round((son - 1900) * (1 - (1 - o) ** 2));
-      if (o < 1) requestAnimationFrame(adim); else { damga.hidden = false; bitti(); }
+      const yil = 1900 + Math.round((son - 1900) * (1 - (1 - o) ** 2));
+      if (String(yil) !== pencere.textContent) cal('tik');      // şifre çarkı gibi her yılda bir tık
+      pencere.textContent = yil;
+      if (o < 1) requestAnimationFrame(adim); else { damga.hidden = false; cal('acildi'); bitti(); }
     };
     requestAnimationFrame(adim);
   });

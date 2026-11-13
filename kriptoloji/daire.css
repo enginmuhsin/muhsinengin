@@ -132,6 +132,20 @@ html:not([data-seviye="uzman"]) [data-uzman] { display: none !important; }
 .geri-bildirim { min-height: 1.6em; margin-top: .5rem; font-weight: 600; }
 .geri-bildirim.olumlu { color: var(--yesil); }
 .geri-bildirim.olumsuz { color: var(--kirmizi); }
+/* Yanlış cevap: yanıp sönen "TEKRAR DENE" etiketi + sarsılan kutu (bilesenler/gorev.js → geriBildir) */
+.tekrar-etiket { display: inline-block; margin-right: .15rem; padding: .1rem .5rem; border-radius: 4px; background: var(--kirmizi); color: var(--kagit);
+  font: 800 .78rem/1.5 var(--baslik, inherit); letter-spacing: .06em; text-transform: uppercase; vertical-align: .08em; }
+.tekrar-etiket.yanip-son { animation: yanipSon .45s steps(1, end) 4; }
+@keyframes yanipSon { 0% { opacity: 1; } 50% { opacity: .15; } }
+.sarsil { animation: sarsil .42s cubic-bezier(.36, .07, .19, .97) both; }
+@keyframes sarsil { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-7px); } 40%, 60% { transform: translateX(7px); } }
+.alan input.yanlis-girdi { border-color: var(--kirmizi); box-shadow: 0 0 0 3px color-mix(in srgb, var(--kirmizi) 25%, transparent); }
+@media (prefers-reduced-motion: reduce) {
+  .tekrar-etiket.yanip-son, .sarsil { animation: none; }
+}
+/* Efekt sesleri düğmesi (bilesenler/ses.js ekler) */
+.efekt-dugme svg { flex: none; }
+.efekt-dugme[aria-pressed="true"] .ses-carpi, .efekt-dugme[aria-pressed="false"] .ses-dalga { display: none; }
 details.ipucu { margin-top: .6rem; }
 details.ipucu summary { cursor: pointer; min-height: var(--optik-hedef); display: inline-flex; align-items: center; font: italic 500 1rem/1.3 var(--serif); color: var(--kirmizi); }
 
