@@ -440,3 +440,26 @@ html:not([data-seviye="uzman"]) .olcu dt[data-uzman] + dd { display: none; }
 .arsiv-kagidi { letter-spacing: .08em; font-weight: 600; max-width: 46rem; }
 .arsiv-parca { margin-top: .9rem; padding: .5rem .8rem; max-width: 64ch; border: var(--kalem-ince) dashed var(--kirmizi); }
 .arsiv-etiket { display: inline-block; margin-right: .4rem; font: 600 .75rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--kirmizi); }
+
+/* =====================================================================
+   14) CANLI AYRINTILAR (hafif; "hareketi azalt"ta durgun)
+   ===================================================================== */
+/* Sezar: harf yolu */
+.yol-cizgi { stroke: var(--kirmizi); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 5; }
+.yol-nokta { fill: var(--kirmizi); }
+.cark-harf.secili { font-size: 24px; text-decoration: underline; }
+.ic-harf.secili { fill: var(--kirmizi); }
+/* Kasa: yıl sayacı */
+.sayac-kutu { position: relative; display: inline-flex; align-items: center; gap: 1rem; margin: .8rem 0 .2rem; padding: .5rem 1rem; border: var(--kalem-kalin) solid var(--pirinc); border-radius: 8px; background: var(--kraft); }
+.sayac-kutu[hidden] { display: none; }
+.sayac-etiket { font: 600 .75rem/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sayac-pencere { min-width: 4.2ch; padding: .1rem .4rem; font: 700 clamp(2rem, 6vw, 3rem)/1 var(--mono); color: var(--metin); background: var(--kagit); border: var(--kalem) solid var(--metin); border-radius: 4px; font-variant-numeric: tabular-nums; text-align: center; }
+.sayac-damga { padding: .15rem .5rem; font: 800 1.3rem/1 var(--baslik); letter-spacing: .08em; color: var(--damga); border: 3px double var(--damga); border-radius: 5px; transform: rotate(-8deg); animation: damgaVur .3s cubic-bezier(.2, .9, .3, 1.4) both; }
+@media (prefers-reduced-motion: reduce) { .sayac-damga { animation: none; } }
+/* Mürekkep: büyüteç */
+.gorsel-cift figure, .gorsel-dortlu figure { position: relative; }
+.tuval:not(.duzlem) { cursor: crosshair; touch-action: pan-y; }
+.buyutec { position: absolute; z-index: 5; display: grid; gap: .25rem; justify-items: center; pointer-events: none; padding: .35rem; background: var(--kagit); border: var(--kalem-kalin) solid var(--metin); border-radius: 8px; }
+.buyutec[hidden] { display: none; }
+.buyutec canvas { width: 112px; height: 112px; image-rendering: pixelated; border-radius: 4px; }
+.buyutec-yazi { font: 600 .72rem/1.3 var(--mono); white-space: nowrap; color: var(--metin); }

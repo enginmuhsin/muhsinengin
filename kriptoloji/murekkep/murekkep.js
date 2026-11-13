@@ -225,6 +225,38 @@ $('#jpegDugme').addEventListener('click', () => {
   }, 'image/jpeg', 0.92);
 });
 
+/* ---------- Büyüteç: görselin üstünde gezdir, pikselleri ve en düşük bitlerini gör ---------- */
+function buyutecBagla(tuval) {
+  const fig = tuval.closest('figure');
+  const mercek = document.createElement('div');
+  mercek.className = 'buyutec'; mercek.hidden = true; mercek.setAttribute('aria-hidden', 'true');
+  mercek.innerHTML = '<canvas width="112" height="112"></canvas><span class="buyutec-yazi"></span>';
+  fig.appendChild(mercek);
+  const mc = mercek.querySelector('canvas').getContext('2d'), yazi = mercek.querySelector('.buyutec-yazi');
+  mc.imageSmoothingEnabled = false;
+  const goster = (e) => {
+    const r = tuval.getBoundingClientRect();
+    if (!tuval.width || !r.width) return;
+    const px = Math.floor((e.clientX - r.left) / r.width * tuval.width), py = Math.floor((e.clientY - r.top) / r.height * tuval.height);
+    if (px < 0 || py < 0 || px >= tuval.width || py >= tuval.height) { mercek.hidden = true; return; }
+    mc.clearRect(0, 0, 112, 112);
+    mc.drawImage(tuval, px - 3, py - 3, 7, 7, 0, 0, 112, 112);   // 7 × 7 piksel, 16 kat büyük
+    mc.strokeStyle = '#c62828'; mc.lineWidth = 2; mc.strokeRect(48, 48, 16, 16);
+    const [R, G, B] = baglam(tuval).getImageData(px, py, 1, 1).data;
+    yazi.textContent = `R ${R} · G ${G} · B ${B}  |  son bitler ${R & 1}${G & 1}${B & 1}`;
+    const fr = fig.getBoundingClientRect();
+    let x = e.clientX - fr.left + 16, y = e.clientY - fr.top - 150;
+    if (x + 150 > fr.width) x -= 182;
+    mercek.style.left = Math.max(0, x) + 'px'; mercek.style.top = Math.max(0, y) + 'px';
+    mercek.hidden = false;
+  };
+  tuval.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons) goster(e); });
+  tuval.addEventListener('pointerdown', goster);
+  tuval.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') mercek.hidden = true; });
+  document.addEventListener('pointerdown', (e) => { if (e.target !== tuval) mercek.hidden = true; });
+}
+['#cozTuval', '#onceTuval', '#sonraTuval', '#jpegTuval'].forEach((id) => buyutecBagla($(id)));
+
 /* ---------- Görevler ---------- */
 const bolum = (bit) => document.querySelector(`[data-dosya="${bit}"]`);
 const PAROLA_OZETI = '8dd5af750a3ff12d1fcc428321ffb836b4df0f1e5946874eddeb01b20c0a7586';   // parolanın SHA-256 özeti; parolanın kendisi sayfada yazılı değil

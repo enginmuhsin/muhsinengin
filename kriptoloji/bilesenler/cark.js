@@ -5,7 +5,8 @@
    • Dış disk DÖNER: şifreli harfler (kırmızı kalem). Fare, parmak ya da klavye okları.
    • Dönüş dilime oturur (snap). Kaydırma k canlı bildirilir.
    Okuma: üstteki işaretin altında iç diskte A varsa, dış diskte onun karşısındaki harf A'nın şifresidir.
-   cizCark(svg, { etkilesimli }) → { k(), kAyarla(k), dinle(f) }
+   cizCark(svg, { etkilesimli }) → { k(), kAyarla(k), dinle(f), vurgula(i) }
+   vurgula(i): iç diskteki i. harften dış diskteki karşılığına kırmızı bir yol çizer (-1 → temizle).
    ===================================================================== */
 import { BUYUK, N, mod } from '../cekirdek/turkce-alfabe.js';
 
@@ -56,7 +57,20 @@ export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () =
   const kAlt = el('text', { x: MERKEZ, y: MERKEZ + 26, class: 'cark-k-alt', 'text-anchor': 'middle' }, svg);
   kAlt.textContent = 'kaydırma';
 
-  let k = mod(baslangic, N), aci = -k * DILIM;
+  const yolKatman = el('g', { class: 'cark-yol' }, svg);   // dönmeyen katman: harf yolu
+  let k = mod(baslangic, N), aci = -k * DILIM, secili = -1;
+  function vurguCiz() {
+    yolKatman.innerHTML = '';
+    ic.querySelectorAll('.ic-harf').forEach((t) => t.classList.toggle('secili', Number(t.dataset.i) === secili));
+    dis.querySelectorAll('.dis-harf').forEach((t) => t.classList.toggle('secili', secili >= 0 && Number(t.dataset.i) === mod(secili + k, N)));
+    if (secili < 0) return;
+    const a = secili * DILIM;
+    const [x1, y1] = kutup(108, a), [x2, y2] = kutup(188, a);
+    el('line', { x1, y1, x2, y2, class: 'yol-cizgi' }, yolKatman);
+    const [ox, oy] = kutup(100, a);
+    el('circle', { cx: ox, cy: oy, r: 4, class: 'yol-nokta' }, yolKatman);
+  }
+  function vurgula(i) { secili = i; vurguCiz(); }
   const dinleyiciler = new Set();
 
   function ciz(animasyon) {
@@ -67,6 +81,7 @@ export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () =
     svg.setAttribute('aria-valuetext', `Kaydırma ${k}: A harfi ${BUYUK[k]} olur.`);
     dis.querySelectorAll('.dis-harf').forEach((t) => t.classList.toggle('tepede', Number(t.dataset.i) === k));
     ic.querySelectorAll('.ic-harf').forEach((t) => t.classList.toggle('tepede', Number(t.dataset.i) === 0));
+    vurguCiz();
   }
   function kAyarla(yeni, animasyon = true) {
     const eski = k;
@@ -122,7 +137,7 @@ export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () =
       dis.style.transition = 'none';
       dis.style.transform = `rotate(${aci}deg)`;
       const yeniK = mod(Math.round(-aci / DILIM), N);
-      if (yeniK !== k) { k = yeniK; kYazi.textContent = 'k = ' + k; dis.querySelectorAll('.dis-harf').forEach((t) => t.classList.toggle('tepede', Number(t.dataset.i) === k)); tik(); dinleyiciler.forEach((f) => f(k)); }
+      if (yeniK !== k) { k = yeniK; kYazi.textContent = 'k = ' + k; dis.querySelectorAll('.dis-harf').forEach((t) => t.classList.toggle('tepede', Number(t.dataset.i) === k)); vurguCiz(); tik(); dinleyiciler.forEach((f) => f(k)); }
     });
     const birak = () => {
       if (!surukle) return;
@@ -135,7 +150,7 @@ export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () =
   }
 
   ciz(false);
-  return { k: () => k, kAyarla, dinle: (f) => { dinleyiciler.add(f); return () => dinleyiciler.delete(f); } };
+  return { k: () => k, kAyarla, vurgula, dinle: (f) => { dinleyiciler.add(f); return () => dinleyiciler.delete(f); } };
 }
 
 /** Föy için kesilecek iki ayrı disk (siyah-beyaz). svg: boş <svg>; tur: 'dis' | 'ic' */

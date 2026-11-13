@@ -95,6 +95,11 @@
       <h2 id="olcBaslik">Gerçek ölçüm: doğum yılı kasası</h2>
       <p class="ozet">Daire rastgele bir doğum yılı seçti ve kasaya yalnız onun <strong>özetini</strong> (SHA-256) yazdı; yılın kendisini bilmiyoruz. Senin cihazın 1900'den 2025'e her yılın özetini hesaplayıp karşılaştıracak. Bu bir tahmin değil, ölçüm.</p>
       <div class="dugme-satir"><button class="dugme birincil" type="button" id="olcBasla">Kasayı kır ve hızımı ölç</button></div>
+      <div class="sayac-kutu" id="sayacKutu" hidden aria-hidden="true">
+        <span class="sayac-etiket">denenen yıl</span>
+        <span class="sayac-pencere" id="yilSayac">1900</span>
+        <span class="sayac-damga" id="sayacDamga" hidden>AÇILDI</span>
+      </div>
       <div class="olcum-sonuc" aria-live="polite">
         <p id="olcDurum" class="kucuk"></p>
         <p class="hedef-ozet mono" id="olcHedef" hidden></p>
