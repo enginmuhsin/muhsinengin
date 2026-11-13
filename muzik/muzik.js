@@ -14,6 +14,9 @@
      uzay        Ana sayfa. Belgesel / uzay bilim kurgusu: geniş akorlar, dip sesi, yıldız çanları, ostinato, kalp atışı, kabarma.
      muhendislik Dron ve PID sayfaları. "Uçuş": nabız gibi atan bas, yumuşak davul, arpej, rüzgâr süpürmesi, radar sinyali.
      odak        Zekâ Oyunları ve Teşhis Defteri. Sakin lo-fi çalışma müziği: elektrik piyano, yumuşak bas, fırça davul, plak cızırtısı.
+     dedektif    Şifre Dairesi (kriptoloji). Özgün, sinsi bir casus cazı: parmak şıklatma, adım adım yürüyen kontrbas,
+                 fırçalı davul, boğuk saksofon ve vibrafon. Dosyası yok: her nota tarayıcıda üretilir (internetsiz de çalar).
+                 Odak gibi yalnız düğmeyle açılır ya da önceki sayfada çalıyorsa sürer.
                  Zekâ Oyunları'nda yalnız önceki sayfada müzik çalıyorsa sürer; Teşhis'te yalnız düğmeyle açılır.
 
    Düğme: sayfada id="muzikDugme" varsa o kullanılır; yoksa sol altta küçük bir düğme eklenir.
@@ -43,7 +46,7 @@
     if (eskiOdak !== null) { if (eskiOdak === '1' && localStorage.getItem(KEY) === null) localStorage.setItem(KEY, '1'); localStorage.removeItem('site-muzik-odak'); }
   } catch (e) { /* depo yok */ }
   // uzay ve mühendislik: ilk ziyarette davet + ilk dokunuşta başlar. odak (Zekâ Oyunları): yalnız önceki sayfada çalıyorsa sürer.
-  var VARSAYILAN_ACIK = TEMA !== 'odak';
+  var VARSAYILAN_ACIK = TEMA !== 'odak' && TEMA !== 'dedektif';
   // Teşhis Defteri: müzik yalnız düğmeyle açılır; önceki sayfadan sürmez, davet çıkmaz (öğrenci ders çalışırken).
   var YALNIZ_DUGME = /\/teshis(\/|$)/.test(location.pathname);
   /* ---------------- SABİTLER: süreler (saniye) ve sayfa geçişi ----------------
@@ -61,7 +64,8 @@
   /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
   // Düzeyler ölçümle eşitlendi: her döngünün RMS'i (uzay 0,1014 · mühendislik 0,1118 · odak 0,1013) × düzey = 0,0411 (−27,7 dBFS)
   var DOSYA_SEVIYE = { uzay: 0.406, muhendislik: 0.368, odak: 0.406 };
-  var dosyaUrl = null; try { dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
+  var DOSYASIZ = { dedektif: 1 };                                    // bu temaların kayıtlı dosyası yok: doğrudan sentez (boşuna istek yok)
+  var dosyaUrl = null; try { if (!DOSYASIZ[TEMA]) dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
   var dosyaTampon = null, dosyaSinir = null, dosyaSozu = null, dosyaKaynak = null, dosyaKazanc = null, dosyaBas = null;
   var mod = null;                                                    // 'dosya' | 'sentez'
   // Dosya bir kez indirilip çözülür. Süre sınırı yok: yavaş bağlantıda inen veri boşa gitmesin.
@@ -149,7 +153,7 @@
     out = ac.createGain(); out.gain.value = 0;
     var comp = ac.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 3;
     var son = comp;
-    if (TEMA === 'odak') { var sicak = ac.createBiquadFilter(); sicak.type = 'lowpass'; sicak.frequency.value = 4200; comp.connect(sicak); son = sicak; }
+    if (TEMA === 'odak' || TEMA === 'dedektif') { var sicak = ac.createBiquadFilter(); sicak.type = 'lowpass'; sicak.frequency.value = 4200; comp.connect(sicak); son = sicak; }
     out.connect(comp); son.connect(ac.destination);
     var yankiSn = TEMA === 'uzay' ? 6 : TEMA === 'muhendislik' ? 3.5 : 2.2;
     rev = ac.createConvolver();
@@ -157,9 +161,9 @@
     for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
     rev.buffer = ir; var rg = ac.createGain(); rg.gain.value = TEMA === 'uzay' ? 0.55 : 0.35; rev.connect(rg); rg.connect(out);
     var merge = ac.createChannelMerger(2), fb = ac.createGain(), lp = ac.createBiquadFilter(), dg = ac.createGain(), dlyR = ac.createDelay(2);
-    dlyL = ac.createDelay(2); var dt = TEMA === 'uzay' ? 0.9 : TEMA === 'muhendislik' ? 60 / 112 * 0.75 : 60 / 72 * 0.5;
+    dlyL = ac.createDelay(2); var dt = TEMA === 'uzay' ? 0.9 : TEMA === 'muhendislik' ? 60 / 112 * 0.75 : TEMA === 'dedektif' ? 60 / 100 * 0.75 : 60 / 72 * 0.5;
     dlyL.delayTime.value = dt; dlyR.delayTime.value = dt;
-    fb.gain.value = 0.4; lp.type = 'lowpass'; lp.frequency.value = 2400; dg.gain.value = TEMA === 'odak' ? 0.25 : 0.45;
+    fb.gain.value = 0.4; lp.type = 'lowpass'; lp.frequency.value = 2400; dg.gain.value = TEMA === 'odak' ? 0.25 : TEMA === 'dedektif' ? 0.18 : 0.45;
     dlyL.connect(dlyR); dlyR.connect(lp); lp.connect(fb); fb.connect(dlyL);
     dlyL.connect(merge, 0, 0); dlyR.connect(merge, 0, 1); merge.connect(dg); dg.connect(out); dg.connect(rev);
     var n = ac.sampleRate; nbuf = ac.createBuffer(1, n, n); var nd = nbuf.getChannelData(0); for (var j = 0; j < n; j++) nd[j] = Math.random() * 2 - 1;
@@ -280,8 +284,100 @@
         }
         while (S.crack < u) { hisirti(S.crack, 0.012 + Math.random() * 0.02, 'highpass', 3000, 0.008); S.crack += 0.05 + Math.random() * 0.35; }
       }
+    },
+    /* ---- DEDEKTİF: Şifre Dairesi (Re minör, 100 vuruş/dk, sallantılı sekizlikler) ----
+       Bu sayfa için yazılmış özgün bir casus cazı; bilinen bir filmin ya da çizgi filmin ezgisi değildir.
+       8 ölçülük döngü: Dm7 | Dm7 | B♭7 | A7♭9 | Dm7 | Gm7 | E♭7 | A7♭9. Dört turda katmanlar değişir:
+       0. tur giriş (kontrbas, parmak şıklatma, fırça), 1. tur + saksofon ezgisi, 2. tur vibrafon ezgiyi
+       çalar ve "parmak ucu" bas adımları girer, 3. tur saksofon ve vibrafon akorları birlikte. */
+    dedektif: {
+      seviye: 0.52, BPM: 100,
+      AKOR: [[38, [60, 65, 69, 74]], [38, [60, 65, 69, 74]], [34, [62, 65, 68, 70]], [33, [61, 64, 67, 70]],
+             [38, [60, 65, 69, 74]], [31, [62, 65, 67, 70]], [39, [61, 63, 67, 70]], [33, [61, 64, 67, 70]]],
+      // [sekizlik sırası (0–63), MIDI nota, süre (sekizlik)]
+      EZGI: [[3, 57, 1], [4, 62, 1], [5, 65, 1], [6, 69, 2], [10, 67, 1], [11, 65, 1], [12, 62, 3],
+             [19, 65, 1], [20, 68, 1], [21, 65, 1], [22, 62, 2], [26, 64, 1], [27, 67, 1], [28, 70, 1], [29, 69, 3],
+             [35, 74, 1], [36, 72, 1], [37, 69, 1], [38, 72, 2], [43, 70, 1], [44, 67, 1], [45, 62, 1], [46, 65, 2],
+             [50, 67, 1], [51, 70, 1], [52, 73, 1], [53, 70, 1], [54, 67, 2], [58, 64, 1], [59, 65, 1], [60, 67, 1], [61, 69, 3]],
+      basla: function (t) {
+        S.step = 0; S.t8 = t;
+        if (!this.harita) { var h = this.harita = {}; this.EZGI.forEach(function (e) { h[e[0]] = e; }); }
+      },
+      planla: function (u) {
+        var T = this, s8 = 60 / T.BPM / 2;
+        while (S.t8 < u) {
+          var i = S.step, b = i % 8, olcu = Math.floor(i / 8) % 8, tur = Math.floor(i / 64) % 4;
+          var ch = T.AKOR[olcu], sonraki = T.AKOR[(olcu + 1) % 8][0];
+          var t = S.t8 + (i % 2 ? s8 * 0.34 : 0);                       // sallantı (swing): ara sekizlik biraz geç
+          // kontrbas: kök, aşağıdan beşli, oktav, beşli, bir sonraki köke yarım ses yaklaşma
+          if (b === 0) kontrbas(t, ch[0], s8 * 1.7, 0.16);
+          else if (b === 3) kontrbas(t, ch[0] + 7, s8 * 0.8, 0.11);
+          else if (b === 4) kontrbas(t, ch[0] + 12, s8 * 1.5, 0.13);
+          else if (b === 6) kontrbas(t, ch[0] + 7, s8 * 0.9, 0.11);
+          else if (b === 7) kontrbas(t, sonraki + 1, s8 * 0.8, 0.1);
+          // ritim: 2. ve 4. vuruşta parmak şıklatma + fırça, zil (ride) "ding, ding-ga, ding"
+          if (b === 2 || b === 6) { parmak(t, 0.2, b === 2 ? 0.35 : 0.45); hisirti(t, 0.035, 'bandpass', 2600, 0.2); }
+          if (b === 0 || b === 2 || b === 3 || b === 4 || b === 6 || b === 7) hisirti(t, b % 2 ? 0.012 : 0.02, 'highpass', 7500, b % 2 ? 0.08 : 0.16);
+          // ezgi
+          var e = T.harita[i % 64];
+          if (e && (tur === 1 || tur === 3)) saksofon(t, e[1], s8 * (e[2] === 1 ? 0.75 : e[2] * 0.95), 0.11);
+          if (e && tur === 2) vibrafon(t, [e[1] + 12], 0.07, 1.2);
+          // vibrafon akorları ve parmak ucu adımlar
+          if (tur >= 1 && b === 3 && olcu % 2 === 0) vibrafon(t, ch[1], tur === 3 ? 0.03 : 0.022, 1.6);
+          if (tur === 0 && olcu === 7 && b === 5) vibrafon(t, ch[1], 0.03, 2);
+          if (tur === 2 && (olcu === 0 || olcu === 4) && b >= 4) parmakUcu(t, 50 + [0, 3, 5, 6][b - 4], 0.06);
+          S.step++; S.t8 += s8;
+        }
+      }
     }
   };
+  // dedektif: parmakla çekilen kontrbas (kısa vuruş + yumuşak sönüm; üst oktav küçük hoparlörde duyulsun diye)
+  function kontrbas(t, m, d, v) {
+    var f = ac.createBiquadFilter(), g = ac.createGain(); f.type = 'lowpass'; f.Q.value = 2;
+    f.frequency.setValueAtTime(1100, t); f.frequency.exponentialRampToValueAtTime(380, t + 0.12);
+    f.connect(g); g.connect(out); g.connect(rev);
+    osc('triangle', mtof(m), t, t + d + 0.1, f); osc('sine', mtof(m), t, t + d + 0.1, g);
+    var o2 = ac.createGain(); o2.gain.value = 0.25; o2.connect(f); osc('sawtooth', mtof(m + 12), t, t + d + 0.1, o2);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(v * 0.35, t + 0.18); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  }
+  // dedektif: parmak şıklatma (kısa, parlak gürültü patlaması), hafif sağda
+  function parmak(t, v, p) {
+    var f = ac.createBiquadFilter(), g = ac.createGain(); f.type = 'bandpass'; f.frequency.value = 2300; f.Q.value = 1.6;
+    f.connect(g); pan(g, p).connect(out); g.connect(rev); gurultu(t, t + 0.07, f);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+  }
+  // dedektif: boğuk (sürdinli) saksofon: iki testere, bant süzgeci, geç başlayan titreşim (vibrato)
+  function saksofon(t, m, d, v) {
+    var bp = ac.createBiquadFilter(), lp = ac.createBiquadFilter(), g = ac.createGain(), lfo = ac.createOscillator(), lg = ac.createGain();
+    bp.type = 'bandpass'; bp.frequency.value = 1150; bp.Q.value = 0.9; lp.type = 'lowpass'; lp.frequency.value = 2600;
+    bp.connect(lp); lp.connect(g); pan(g, -0.2).connect(out); g.connect(rev); g.connect(dlyL);
+    lfo.frequency.value = 5.2; lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(d > 0.4 ? 14 : 0, t + Math.min(d, 0.5)); lfo.connect(lg);
+    [-5, 5].forEach(function (dt) { var o = osc('sawtooth', mtof(m), t, t + d + 0.12, bp, dt); lg.connect(o.detune); });
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.035);
+    g.gain.setValueAtTime(v, t + Math.max(0.04, d - 0.06)); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.1);
+    lfo.start(t); lfo.stop(t + d + 0.12);
+  }
+  // dedektif: vibrafon (temel ton + 4 kat kısmi, dönen pervane titreşimi)
+  function vibrafon(t, notalar, v, kuyruk) {
+    var g = ac.createGain(), tr = ac.createGain(), lfo = ac.createOscillator(), lg = ac.createGain();
+    lfo.frequency.value = 5.5; lg.gain.value = 0.35; lfo.connect(lg); lg.connect(tr.gain); tr.gain.value = 0.65;
+    g.connect(tr); pan(tr, 0.3).connect(out); tr.connect(rev); tr.connect(dlyL);
+    notalar.forEach(function (m, k) {
+      var tt = t + k * 0.012;
+      osc('sine', mtof(m), tt, tt + kuyruk + 0.1, g);
+      var ust = ac.createGain(); ust.gain.setValueAtTime(0.18, tt); ust.gain.exponentialRampToValueAtTime(0.001, tt + 0.25); ust.connect(g);
+      osc('sine', mtof(m) * 4, tt, tt + 0.3, ust);
+    });
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + kuyruk);
+    lfo.start(t); lfo.stop(t + kuyruk + 0.15);
+  }
+  // dedektif: "parmak ucu" adımlar: kısa, boğuk, alçak kare dalga
+  function parmakUcu(t, m, v) {
+    var f = ac.createBiquadFilter(), g = ac.createGain(); f.type = 'lowpass'; f.frequency.value = 900; f.connect(g); g.connect(out); g.connect(rev);
+    osc('square', mtof(m), t, t + 0.16, f);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+  }
   // uzay: her dördüncü turda filtresi yavaşça açılan büyük akor
   function kabarma(t, c, AK) {
     var f = ac.createBiquadFilter(), g = ac.createGain(); f.type = 'lowpass'; f.Q.value = 1.5;
