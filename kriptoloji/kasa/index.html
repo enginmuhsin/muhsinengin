@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; media-src 'self'; worker-src 'self'; manifest-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Kasa Soygunu · Şifre Dairesi</title>
+  <meta name="description" content="Kilit türünü ve saldırganı seç, cihazının saniyede kaç deneme yaptığını gerçekten ölç. Entropi, kaba kuvvet ve neden uzun kelime dizileri güçlüdür.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Kasa Soygunu · Şifre Dairesi">
+  <meta property="og:description" content="Anahtarlık ne kadar büyükse soygun o kadar uzun sürer. Cihazının hızını ölç.">
+  <meta property="og:url" content="https://muhsinengin.com/kriptoloji/kasa/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <script src="../../ortak/ana-sayfa.js" defer></script>
+  <script src="../../muzik/muzik.js" data-tema="odak" defer></script>
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../../ortak/matematik.css">
+  <script src="../../ortak/sayac.js" data-depo="yok" defer></script>
+  <script type="module" src="kasa.mjs"></script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Şifre Dairesi">
+      <ana-sayfa-dugmesi class="logo"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+      <span class="mc-sayfa" aria-hidden="true">Kasa Soygunu</span>
+      <button class="menu-dugme" type="button" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../" data-daire>Lobi</a>
+        <a class="nav-link" href="../sezar/" data-daire>Sezar Çarkı</a>
+        <a class="nav-link" href="./" aria-current="page" data-daire>Kasa Soygunu</a>
+        <a class="nav-link" href="#gorevler">Görevler</a>
+        <a class="nav-link" href="#ogretmen-notu">Öğretmen notu</a>
+      </div>
+      <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
+    </nav>
+  </header>
+
+  <p id="duyuru" class="sr-only" aria-live="polite"></p>
+
+  <main id="ana">
+    <section class="oda-giris" data-adim aria-labelledby="baslik">
+      <p class="kunye">Dosya no. <b>200</b> · Şube 2 · Kasa Soygunu</p>
+      <h1 id="baslik">Kasa <span class="ik-alt">Soygunu</span></h1>
+      <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Entropi, bir anahtarlıktaki anahtar sayısı gibidir. Hırsız anahtarları tek tek dener; anahtarlık ne kadar büyükse soygun o kadar uzun sürer.</p>
+      <p class="kucuk">Bu odada şifre yazılacak bir kutu <strong>yok</strong>: kendi şifreni hiçbir yere yazma. Kilitler hazır örneklerden seçilir.</p>
+      <fieldset class="secici" data-seviye-secici>
+        <legend>Seviye</legend>
+        <button type="button" data-seviye="cirak" aria-pressed="true">Çırak <small>ortaokul</small></button>
+        <button type="button" data-seviye="uzman" aria-pressed="false">Uzman <small>lise · entropi formülü</small></button>
+      </fieldset>
+    </section>
+
+    <section class="dosya" id="simulasyon" data-adim aria-labelledby="simBaslik">
+      <span class="dosya-sekme">Atölye</span>
+      <h2 id="simBaslik">Kilidi ve hırsızı seç</h2>
+      <div class="kasa-duzen">
+        <div>
+          <fieldset class="secici dikey" id="kilitSec"><legend>Kilit türü</legend></fieldset>
+          <fieldset class="secici dikey" id="saldirganSec"><legend>Saldırgan <span class="varsayim">hızlar varsayımdır</span></legend></fieldset>
+          <p class="kucuk" id="saldirganAciklama"></p>
+        </div>
+        <div class="kasa-sonuc">
+          <svg class="kasa-cizim" id="kasaCizim" viewBox="0 0 240 220" role="img" aria-labelledby="kasaBaslik"><title id="kasaBaslik">Kasa</title></svg>
+          <dl class="olcu" aria-live="polite">
+            <dt>Olası anahtar</dt><dd id="sUzay"></dd>
+            <dt data-uzman>Entropi</dt><dd data-uzman id="sBit"></dd>
+            <dt>Hepsini denemek</dt><dd id="sTum"></dd>
+            <dt>Ortalama</dt><dd id="sOrt"></dd>
+          </dl>
+        </div>
+      </div>
+      <figure class="zaman">
+        <svg id="zamanCizgisi" viewBox="0 0 1000 120" role="img" aria-labelledby="zamanBaslik"><title id="zamanBaslik">Zaman çizgisi</title></svg>
+        <figcaption class="kucuk">Logaritmik zaman çizgisi: her küçük çentik bir öncekinin 10 katıdır. Kırmızı işaret, seçtiğin kilidin tamamen denenme süresi.</figcaption>
+      </figure>
+      <div data-uzman class="formul-satir">
+        <p><strong>Formül.</strong> L tane sembolün her biri N olasılıktan <em>rastgele ve bağımsız</em> seçilirse:</p>
+        <p class="formul-buyuk">H = L · log₂(N) bit</p>
+        <p class="kucuk">Her 1 bit, anahtarlığı iki katına çıkarır. 10 bit ≈ 1000 kat, 20 bit ≈ 1 milyon kat. Formül yalnız rastgele seçimde geçerlidir: insanın “seçtiği” şifrenin entropisi çok daha düşüktür.</p>
+      </div>
+    </section>
+
+    <section class="dosya" id="olcum" data-adim aria-labelledby="olcBaslik">
+      <span class="dosya-sekme">Laboratuvar</span>
+      <h2 id="olcBaslik">Gerçek ölçüm: doğum yılı kasası</h2>
+      <p class="ozet">Daire rastgele bir doğum yılı seçti ve kasaya yalnız onun <strong>özetini</strong> (SHA-256) yazdı; yılın kendisini bilmiyoruz. Senin cihazın 1900'den 2025'e her yılın özetini hesaplayıp karşılaştıracak. Bu bir tahmin değil, ölçüm.</p>
+      <div class="dugme-satir"><button class="dugme birincil" type="button" id="olcBasla">Kasayı kır ve hızımı ölç</button></div>
+      <div class="olcum-sonuc" aria-live="polite">
+        <p id="olcDurum" class="kucuk"></p>
+        <p class="hedef-ozet mono" id="olcHedef" hidden></p>
+        <p class="olcum-buyuk" id="olcSonuc" hidden></p>
+      </div>
+      <p class="kucuk">Ölçüm bu tarayıcıda JavaScript ile yapılır; hiçbir yere gönderilmez. Özel yazılım ve ekran kartı kullanan bir saldırgan bundan binlerce kat hızlı olabilir. Ölçülen hız, yukarıdaki saldırgan listesine “Senin cihazın” olarak eklenir.</p>
+    </section>
+
+    <section class="gorevler" id="gorevler" aria-label="Dosya görevleri">
+      <section class="dosya damga-yeri" data-dosya="8" data-adim aria-labelledby="g8">
+        <span class="dosya-sekme">Dosya <b>201</b> · Çırak</span>
+        <h3 id="g8">En zayıf kilit</h3>
+        <p>Hangi kilit en çabuk açılır?</p>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">3 haneli rakam kilidi</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Doğum yılı</button>
+          <button type="button" data-secenek="c" aria-pressed="false">4 haneli PIN</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="9" data-adim aria-labelledby="g9">
+        <span class="dosya-sekme">Dosya <b>202</b> · Çırak</span>
+        <h3 id="g9">Cihazının hızı</h3>
+        <p>Laboratuvardaki ölçümü çalıştır. Kasa <strong>kaçıncı denemede</strong> açıldı?</p>
+        <div class="cevap-satir"><label class="alan">Deneme sayısı<input type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="10" data-adim aria-labelledby="g10">
+        <span class="dosya-sekme">Dosya <b>203</b> · Çırak</span>
+        <h3 id="g10">Ekran kartlı hırsız</h3>
+        <p>Saldırgan olarak “Çevrim dışı, hızlı özet + GPU” seç. Bu kilitlerden hangisi <strong>bir yıldan uzun</strong> dayanır?</p>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">4 haneli PIN</button>
+          <button type="button" data-secenek="b" aria-pressed="false">8 küçük Türkçe harf</button>
+          <button type="button" data-secenek="c" aria-pressed="false">8 harf + 1 sembol</button>
+          <button type="button" data-secenek="d" aria-pressed="false">5 rastgele kelime</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="11" data-adim data-uzman aria-labelledby="g11">
+        <span class="dosya-sekme">Dosya <b>204</b> · Uzman</span>
+        <h3 id="g11">Entropi hesabı</h3>
+        <p>8 küçük Türkçe harf rastgele seçiliyor. H = L · log₂(N) ile entropi kaç bit? (log₂ 29 ≈ 4,858; bir ondalıkla yaz.)</p>
+        <div class="cevap-satir"><label class="alan">Bit<input type="text" inputmode="decimal" autocomplete="off" maxlength="8"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="12" data-adim data-uzman aria-labelledby="g12">
+        <span class="dosya-sekme">Dosya <b>205</b> · Uzman</span>
+        <h3 id="g12">Yavaş anahtar türetme</h3>
+        <p>Bir site, şifre özetini bilerek yavaş hesaplıyor: saldırganın hızı 10¹⁰'dan 10⁴ deneme/saniyeye düşüyor. Bu yavaşlatma, şifreye kaç bitlik ek güç kazandırmış gibi olur? (Tam sayıya yuvarla.)</p>
+        <div class="cevap-satir"><label class="alan">Bit<input type="text" inputmode="decimal" autocomplete="off" maxlength="8"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <details class="ipucu"><summary>İpucu</summary><p>Hız 10⁶ kat düştü. 2 üzeri kaç, yaklaşık 10⁶ eder? (2¹⁰ ≈ 10³)</p></details>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="13" data-adim data-uzman aria-labelledby="g13">
+        <span class="dosya-sekme">Dosya <b>206</b> · Uzman</span>
+        <h3 id="g13">Ortalama süre</h3>
+        <p>5 rastgele kelimelik bir kilidin <em>bütün</em> olasılıklarını denemek ekran kartlı hırsıza yaklaşık 90 yıl sürüyor. Hırsız <strong>ortalama</strong> kaç yılda bulur?</p>
+        <div class="cevap-satir"><label class="alan">Yıl<input type="text" inputmode="decimal" autocomplete="off" maxlength="6"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri kapanis" data-dosya="14" data-adim aria-labelledby="g14">
+        <span class="dosya-sekme">Dosya <b>207</b> · Kapanış</span>
+        <h3 id="g14">Bir kelime eklemek mi, bir sembol eklemek mi kasayı daha çok güçlendirir? Neden?</h3>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">Sembol; çünkü semboller tahmin edilmesi zor karakterlerdir.</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Kelime; çünkü 7776 kelimeden biri, anahtarlığı 32 sembolden birine göre çok daha fazla katlar.</button>
+          <button type="button" data-secenek="c" aria-pressed="false">İkisi aynıdır; ikisi de şifreyi bir birim uzatır.</button>
+          <button type="button" data-secenek="d" aria-pressed="false">Sembol; çünkü sembol eklenen şifre kırılamaz.</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <div class="sonraki-oda" data-cozumle>
+          <p><strong>Anahtar Atölyesi yakında.</strong> Hatırlaması kolay tek bir sırdan, her site için ayrı ve güçlü bir şifre üretmek mümkün mü? Bir sonraki fazda, kendi sayfasında ve sıkı güvenlik kurallarıyla bunu deneyeceğiz.</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="dosya" id="proje-kapisi" data-adim data-uzman aria-labelledby="pkBaslik">
+      <span class="dosya-sekme">Proje Kapısı</span>
+      <h2 id="pkBaslik">Proje Kapısı</h2>
+      <p>Bu şubenin açık uçlu araştırma soruları öğretmen onayından geçtikten sonra burada yayımlanacak.</p>
+    </section>
+
+    <section class="dosya" id="ogretmen-notu" data-adim aria-labelledby="onBaslik">
+      <span class="dosya-sekme">Öğretmen notu</span>
+      <h2 id="onBaslik">Öğretmen notu</h2>
+      <dl class="ogretmen-not">
+        <dt>Süre ve düzey</dt>
+        <dd>Çırak: 40 dk, ortaokul (6–8). Uzman: 40 dk ek, lise. Kapanış sorusu 5 dk.</dd>
+        <dt>Malzemeler</dt>
+        <dd>Öğrenci başına bir cihaz ya da akıllı tahta. Bilgisayarsız sınıf için <a href="foy.html" data-daire>yazdırılabilir föy</a>; isteyen öğretmen 5 zarla kelime seçme etkinliği yapabilir (6⁵ = 7776).</dd>
+        <dt>Öğrenme hedefleri</dt>
+        <dd><ul>
+          <li>Öğrenci, bir kilidin olası anahtar sayısını çarpma ilkesiyle hesaplayabilir.</li>
+          <li>Öğrenci, aynı kilidin farklı saldırganlara karşı dayanma süresini karşılaştırabilir.</li>
+          <li>Öğrenci, bir kelime eklemenin bir sembol eklemekten neden daha çok güç kattığını açıklayabilir.</li>
+          <li data-uzman>Öğrenci, H = L · log₂(N) formülüyle entropiyi hesaplayıp sonucu süreye çevirebilir.</li>
+          <li data-uzman>Öğrenci, yavaş anahtar türetmenin etkisini bit cinsinden ifade edebilir.</li>
+        </ul></dd>
+        <dt>Sık görülen kavram yanılgıları</dt>
+        <dd><ul>
+          <li><strong>“Uzun bir sayı güçlü şifredir.”</strong> 8 haneli bir sayı 10⁸ olasılıktır, yani yaklaşık 26,6 bit; ekran kartlı hırsıza anında açılır. Uzunluk kadar her hanenin kaç olasılıktan seçildiği de önemlidir.</li>
+          <li><strong>“Sembol eklemek şifreyi kırılamaz yapar.”</strong> Dosya 207'yi tahtada hesaplayın: bir sembol ≈ 5 bit, bir kelime ≈ 12,9 bit. Ayrıca insanlar sembolü genelde sona ve tahmin edilebilir biçimde ekler.</li>
+          <li><strong>“Doğum yılım gizli, kimse bilmez.”</strong> Yalnız 126 olasılık var ve yıl çoğu zaman sosyal medyada görünür. Laboratuvardaki ölçüm bunu saniyenin altında gösterir.</li>
+          <li><strong>Hesap yalnız rastgele seçimde geçerli.</strong> “ankara1923” gibi bir şifre 10 karakter olsa da sözlük ve tarih listeleriyle çok daha az denemede bulunur.</li>
+        </ul></dd>
+        <dt>Farklılaştırma</dt>
+        <dd>Desteğe ihtiyacı olanlar: yalnız 3 haneli kilit, doğum yılı ve PIN ile çarpma ilkesini kursun. Hızlı bitirenler: Uzman seviyesinde “6 rastgele kelime” seçip 1 kelimenin kaç bit eklediğini hesaplasın.</dd>
+        <dt>Hız varsayımları</dt>
+        <dd>Saldırgan hızları (10, 10⁴, 10¹⁰ deneme/saniye) ders için yuvarlanmış örnek değerlerdir; gerçek hız donanıma ve özet yöntemine göre çok değişir. Sayfadaki tek gerçek ölçüm, laboratuvar bölümündekidir.</dd>
+        <dt>MEB kazanım eşlemesi</dt>
+        <dd>Henüz eşlenmedi. Kazanım kodları uydurulmaz; öğretmen kontrolünden sonra eklenecek.</dd>
+        <dt>Sunum modu</dt>
+        <dd><a href="./?sunum=1" data-daire data-sunum-sabit>Bu odayı sunum modunda aç</a>.</dd>
+      </dl>
+    </section>
+
+    <nav class="oda-alt dugme-satir" aria-label="Daire içi">
+      <a class="dugme" href="../" data-daire>Lobiye dön</a>
+      <a class="dugme" href="foy.html" data-daire>Yazdırılabilir föy</a>
+    </nav>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Şifre Dairesi · Şube 2 · Bütün kilitler ve örnekler kurgusaldır. Bu sayfada şifre yazılacak bir alan yoktur.</p>
+  </footer>
+</body>
+</html>
