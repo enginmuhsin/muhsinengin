@@ -97,6 +97,7 @@ h2 span::before{content:"";position:absolute;inset:-.3em -.45em;background:var(-
 .ozellik small{color:var(--soluk);font-size:11px}
 .yorum{margin:10px 0 0;font-size:13.5px;line-height:1.45}
 .yorum.iyi b{color:var(--iyi)}.yorum.dikkat b{color:var(--dikkat)}.yorum.kotu b{color:var(--kotu)}
+.gercek-uyari{margin:6px 0 4px;padding-left:18px;color:var(--kotu)}.gercek-uyari li{margin:3px 0}
 .gorevler{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--b3);counter-reset:gorev;border-top:var(--kalem) solid var(--cizgi)}
 .gorev-k{counter-increment:gorev;display:grid;grid-template-columns:var(--optik-cap) minmax(0,1fr);column-gap:10px;row-gap:2px;align-content:start;text-align:left;
   min-height:var(--optik-hedef);background:none;border:0;border-bottom:var(--kalem-ince) solid var(--cizgi);border-radius:0;padding:var(--b2) 0}
@@ -2462,7 +2463,8 @@ function menuOnizle() {
   if (!tb) { tb = document.createElement('p'); tb.id = 'tipBilgi'; tb.className = 'tip-bilgi'; $('ozellik').after(tb); }
   tb.innerHTML = `<b>${f.tip.ad}</b> · ${f.tip.ozet}`;
   const d = degerlendir(t, f);
-  $('yorum').className = 'yorum ' + d.sinif; $('yorum').innerHTML = `<b>${d.baslik}</b> ${d.metin}`;
+  $('yorum').className = 'yorum ' + d.sinif; $('yorum').innerHTML = `<b>${d.baslik}</b> ${d.metin}`
+    + (d.gercekDisi ? '<ul class="gercek-uyari">' + d.uyarilar.filter((x) => x.tur === 'kotu').map((x) => `<li>${x.metin}</li>`).join('') + '</ul><small>Yine de uçurabilirsin; ama bu bir oyun dronu olur, gerçek bir dron değil.</small>' : '');
   $('basla').disabled = !f.ucabilir;
   $('baslaHata').textContent = f.ucabilir ? '' : 'Bu tasarım havalanamaz: hover gazı %100\'ü aşıyor. Laboratuvarda tasarımı değiştir.';
   const q = Object.keys(SABLONLAR.yaris5).filter((k) => k !== 'ad').map((k) => `${k}=${t[k]}`).join('&');
@@ -2473,7 +2475,7 @@ function menuKur() {
   $('sablonlar').innerHTML = Object.entries(SABLONLAR).map(([k, v]) => `<button class="cip" data-sablon="${k}" aria-pressed="${k === ayar.sablon}">${v.ad}</button>`).join('');
   $('sablonlar').addEventListener('click', (e) => {
     const b = e.target.closest('[data-sablon]'); if (!b) return;
-    ayar.sablon = b.dataset.sablon; ayar.tasarim = { ...SABLONLAR[ayar.sablon] };
+    ayar.sablon = b.dataset.sablon; ayar.tasarim = ayar.sablon === 'lab' && labTasarim ? { ...labTasarim } : { ...SABLONLAR[ayar.sablon] };
     $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', c === b)); $('labHata').textContent = ''; menuOnizle();
   });
   $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' || k === 'pist' ? `<small class="rek" data-rek="${k}"></small>` : ''}</button>`).join('');
@@ -2507,6 +2509,7 @@ function pidBilgiYaz() {
     : ayar.denge === 'pid' ? `Senin dengeleyicin uçuracak: Kp <b>${tr(k.kp, 2)}</b> · Ki <b>${tr(k.ki, 2)}</b> · Kd <b>${tr(k.kd, 2)}</b>. Sönüm azsa dron sallanır, çok azsa devrilir.`
     : `PID oyunundaki ayarın hazır (Kp ${tr(k.kp, 2)} · Ki ${tr(k.ki, 2)} · Kd ${tr(k.kd, 2)}). Seçersen dronu o uçurur.`;
 }
+let labTasarim = null;   // laboratuvardan gelen son tasarım
 function labYukle() {
   const metin = $('labLink').value.trim();
   const hash = metin.includes('#') ? metin.slice(metin.indexOf('#') + 1) : metin;
@@ -2514,10 +2517,13 @@ function labYukle() {
   const t = { ...SABLONLAR.yaris5, ad: 'Laboratuvar tasarımı' };
   let sayi = 0;
   for (const k of Object.keys(t)) { if (k === 'ad' || !p.has(k)) continue; const v = parseFloat(p.get(k)); if (Number.isFinite(v)) { t[k] = v; sayi++; } }
-  if (sayi < 5) { $('labHata').textContent = 'Bu linkte tasarım bulunamadı. Laboratuvarda "Linki kopyala" ile aldığın adresi yapıştır.'; return; }
-  $('labHata').textContent = `Laboratuvar tasarımı yüklendi (${sayi} değer).`; $('labHata').style.color = 'var(--iyi)';
-  ayar.sablon = 'lab'; ayar.tasarim = t;
-  $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', 'false'));
+  if (sayi < 5) { $('labHata').textContent = 'Bu linkte tasarım bulunamadı. Laboratuvarda "Linki kopyala" ile aldığın adresi yapıştır.'; $('labHata').style.color = ''; return; }
+  $('labHata').textContent = `Senin tasarımın yüklendi (${sayi} değer) ve seçildi. Aşağıdaki "Başla" ile uçur.`; $('labHata').style.color = 'var(--iyi)';
+  labTasarim = t; ayar.sablon = 'lab'; ayar.tasarim = { ...t };
+  // şablonların yanında seçili "Senin tasarımın" düğmesi: tasarımın geldiği gözle görülsün
+  let cip = $('sablonlar').querySelector('[data-sablon="lab"]');
+  if (!cip) { cip = document.createElement('button'); cip.className = 'cip'; cip.dataset.sablon = 'lab'; cip.textContent = '★ Senin tasarımın'; $('sablonlar').append(cip); }
+  $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', c === cip));
   menuOnizle();
 }
 
@@ -2529,6 +2535,8 @@ addEventListener('resize', boyutla);
 menuKur(); boyutla();
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 if (location.hash.includes('kv=')) { $('labLink').value = location.hash; labYukle(); }
+// sayfa açıkken adres çubuğuna yeni bir laboratuvar linki yapıştırılırsa da yükle (uçuş sırasında değil)
+addEventListener('hashchange', () => { if (durum === 'menu' && location.hash.includes('kv=')) { $('labLink').value = location.hash; labYukle(); } });
 zamanUygula(); menuOnizle(); requestAnimationFrame(dongu);
 </script>
 </body>

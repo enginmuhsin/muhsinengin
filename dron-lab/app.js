@@ -232,7 +232,7 @@
         uzun: ['Uzun menzil gövdesi', `${c}" pervane`, 'GPS direği ve uzun antenler'],
         yaris: ['Yarış (FPV) gövdesi', `${c}" pervane`, 'açık karbon gövde, aksiyon kamerası'],
       }[Dron3D.dronTipi(tasarim)];
-      tipKutu.innerHTML = `<b>${TIP[0]}</b> · çünkü ${TIP[1]}: ${TIP[2]}. Uçuş Simülatörü'nde bu tip kendi karakteriyle uçar.`;
+      tipKutu.innerHTML = `<b>${TIP[0]}</b> · çünkü ${TIP[1]}: ${TIP[2]}. <a class="sime-git" href="../dron-ucus/index.html">Bu tasarımı Uçuş Simülatörü'nde uçur →</a> Orada bu tip kendi karakteriyle uçar.`;
     }
     onizleme.ucus(!!s.ucabilir);
     onizleme.hiz(s.ucabilir ? .45 + 1.4 * Math.min(1, s.hoverGaz) : .25);
