@@ -2,7 +2,7 @@
    Sayfa: önce ağ, yoksa önbellek. Diğer dosyalar: önbellekten hemen, arkada güncelle.
    Bir dosya değişince SURUM'u bir artır. Başka sitelere giden istekler (ziyaretçi sayacı) hiç ele alınmaz.
    NOT: İleride gelecek Anahtar Atölyesi (şifre üretici) bu klasörün DIŞINDA durmalı; bu çalışan ona karışmasın. */
-const SURUM = 'kripto-v8';
+const SURUM = 'kripto-v9';
 const DOSYALAR = ['./', 'index.html', 'daire.css', 'lobi.js',
   'cekirdek/turkce-alfabe.js', 'cekirdek/sezar.js', 'cekirdek/dosyalar.js', 'cekirdek/kayit-kodu.js',
   'sezar/', 'ogretmen/', 'ogretmen/index.html', 'ogretmen/ogretmen.js', 'murekkep/', 'murekkep/index.html', 'murekkep/murekkep.js', 'murekkep/foy.html', 'murekkep/foy.js', 'murekkep/ornekler/kek.png', 'murekkep/ornekler/kek-mektup.png', 'cekirdek/steg.js', 'kasa/', 'kasa/index.html', 'kasa/kasa.js', 'kasa/foy.html', 'kasa/foy.js', 'cekirdek/entropi.js', 'cekirdek/kaba-kuvvet.js', 'sezar/index.html', 'sezar/sezar.js', 'sezar/foy.html', 'sezar/foy.js', 'foy.css',

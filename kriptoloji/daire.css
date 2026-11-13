@@ -463,3 +463,25 @@ html:not([data-seviye="uzman"]) .olcu dt[data-uzman] + dd { display: none; }
 .buyutec[hidden] { display: none; }
 .buyutec canvas { width: 112px; height: 112px; image-rendering: pixelated; border-radius: 4px; }
 .buyutec-yazi { font: 600 .72rem/1.3 var(--mono); white-space: nowrap; color: var(--metin); }
+
+/* =====================================================================
+   15) TARİHTEN BİR DOSYA
+   ===================================================================== */
+.tarih-dosyasi { background: color-mix(in srgb, var(--kraft) 55%, transparent); padding: 1.3rem 1.2rem 1rem; }
+.tarih-duzen { display: grid; gap: 18px 32px; align-items: start; }
+@media (min-width: 820px) { .tarih-duzen { grid-template-columns: 240px minmax(0, 1fr); } }
+.tarih-cizim { display: grid; justify-items: center; gap: .3rem; }
+.tarih-cizim svg { width: 100%; max-width: 240px; height: auto; }
+.tarih-yil { font: 700 1.9rem/1 var(--mono); color: var(--kirmizi); letter-spacing: .04em; }
+.tarih-cizim .ci { fill: none; stroke: var(--metin); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tarih-cizim .ci.ince { stroke-width: 1.3; }
+.tarih-cizim .ck { fill: none; stroke: var(--kirmizi); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tarih-cizim .ck.ince { stroke-width: 1.5; }
+.t-harf { font: 600 26px var(--serif); fill: var(--murekkep); }
+.t-harf.k { fill: var(--kirmizi); }
+.t-kucuk { font: 600 12px var(--mono); fill: var(--muted); letter-spacing: .06em; }
+.tarih-dosyasi h2 { margin-top: 0; }
+.tarih-dosyasi p { max-width: 68ch; }
+.tarih-bag { padding-top: .5rem; border-top: var(--kalem-ince) dashed var(--pirinc); }
+.tarih-etiket { display: inline-block; margin-right: .4rem; font: 600 .75rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--kirmizi); }
+.tarih-kaynak { font-size: .85rem; color: var(--muted); }
