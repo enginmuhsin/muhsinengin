@@ -4,7 +4,7 @@
    şifreli metinle karşılaştırılır. (Sayfa kaynağına bakan cevabı göremez.)
    ===================================================================== */
 import { sezar, sezarCoz, kabaKuvvet } from '../cekirdek/sezar.js';
-import { yabanciHarfler, buyukHarf, mod } from '../cekirdek/turkce-alfabe.js';
+import { yabanciHarfler, buyukHarf, mod, sira, normalle } from '../cekirdek/turkce-alfabe.js';
 import { cizCark } from '../bilesenler/cark.js';
 import { gorevBagla, sadele } from '../bilesenler/gorev.js';
 import { seviyeBaslat } from '../bilesenler/seviye.js';
@@ -34,8 +34,10 @@ function guncelle() {
   yabanciNot.hidden = yab.length === 0;
   if (yab.length) yabanciNot.textContent = yab.join(', ') + ' Türk alfabesinde yok; bu harfler olduğu gibi bırakıldı.';
 }
-acik.addEventListener('input', () => { sonYazilan = 'acik'; guncelle(); });
-sifreli.addEventListener('input', () => { sonYazilan = 'sifreli'; guncelle(); });
+/** Son yazılan alfabe harfinin çarktaki yolunu göster (iç disk = açık harf). */
+function sonHarf(metin) { const h = [...normalle(metin)].reverse().find((c) => sira(c) >= 0); return h ? sira(h) : -1; }
+acik.addEventListener('input', () => { sonYazilan = 'acik'; guncelle(); cark.vurgula(sonHarf(acik.value)); });
+sifreli.addEventListener('input', () => { sonYazilan = 'sifreli'; guncelle(); const j = sonHarf(sifreli.value); cark.vurgula(j < 0 ? -1 : mod(j - cark.k(), 29)); });
 cark.dinle(guncelle);
 $('#kEksi').addEventListener('click', () => cark.kAyarla(cark.k() - 1));
 $('#kArti').addEventListener('click', () => cark.kAyarla(cark.k() + 1));

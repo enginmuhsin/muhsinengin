@@ -55,7 +55,7 @@ export function baglantilariGuncelle() {
       if (d && !a.hasAttribute('data-' + p + '-sabit')) hedef.searchParams.set(p, d); else if (!a.hasAttribute('data-' + p + '-sabit')) hedef.searchParams.delete(p);
     }
     hedef.hash = maske ? 'k=' + kodUret(maske) : '';
-    a.href = hedef.href.replace(/#$/, '');
+    a.setAttribute('href', hedef.href.replace(/#$/, ''));   // SVG <a> için de çalışır
   });
 }
 

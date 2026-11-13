@@ -107,11 +107,29 @@ Evrakları kimseye göstermeyin.</p>
       </div>
     </section>
 
+    <section class="dosya tarih-dosyasi" id="tarih-lobi" data-adim aria-labelledby="tarih-lobi-b">
+      <span class="dosya-sekme">Tarihten bir dosya</span>
+      <div class="tarih-duzen">
+        <div class="tarih-cizim" aria-hidden="true"><span class="tarih-yil">1928</span><svg viewBox="0 0 220 140"><g class="ci"><path d="M20 30 h180 M20 110 h180"/></g><text class="t-harf" x="30" y="82">A B C Ç</text><text class="t-harf k" x="128" y="82">… Z</text><path class="ck" d="M30 96 q85 26 170 0"/><text class="t-kucuk" x="110" y="132" text-anchor="middle">29 harf · 29 asal</text></svg></div>
+        <div>
+          <h2 id="tarih-lobi-b">Neden 29 harf?</h2>
+          <p>Bugün kullandığımız alfabe, 1 Kasım 1928'de kabul edilen <strong>1353 sayılı kanunla</strong> yürürlüğe girdi. Kanuna göre Türk alfabesi <strong>29 harften</strong> oluşur. Türk Dil Kurumu'nun bir yazısına göre harf sayısı bu geçişle 33'ten 29'a indi ve her sese bir harf düştü.</p>
+          <p>Kriptografi açısından şanslıyız: <strong>29 bir asal sayı</strong>. Bu yüzden alfabemizde "harfi bir sayıyla çarp" fikri her çarpanla çalışır. İngiliz alfabesinin 26 harfi asal değildir; orada çarpanların yarısından fazlası işe yaramaz.</p>
+          <p class="tarih-bag"><span class="tarih-etiket">Bu odayla bağı</span> Bütün odalardaki hesaplar "mod 29" ile yapılır. Sezar Çarkı odasındaki "Neden 29?" dosyası bu şansın hesabını yapar.</p>
+          <p class="tarih-kaynak">Kaynak: <a href="https://tdk.gov.tr/wp-content/uploads/2012/12/20121114.pdf" target="_blank" rel="noopener">TDK, Türk Dili dergisi</a> · <a href="https://en.wikipedia.org/wiki/Turkish_alphabet_reform" target="_blank" rel="noopener">Vikipedi: Turkish alphabet reform</a></p>
+        </div>
+      </div>
+    </section>
+
     <!-- 3) Şubeler -->
     <section class="dosya" id="subeler" data-adim aria-labelledby="subeBaslik">
       <span class="dosya-sekme">Kat planı</span>
       <h2 id="subeBaslik">Şubeler</h2>
       <p class="ozet">Her şubede önce bir benzetme, sonra bir simülasyon, ardından dosya görevleri ve tek bir kapanış sorusu var. Kapanış sorusunu doğru cevaplayınca şubenin dosyası kapanır.</p>
+      <figure class="kat-plani">
+        <svg id="katPlani" viewBox="0 0 900 680" role="group" aria-labelledby="planBaslik"><title id="planBaslik">Şifre Dairesi kat planı: odaya girmek için üstüne dokun</title></svg>
+        <figcaption class="kucuk">Kat planı: bir odaya girmek için üstüne dokun. Kapanış dosyası çözülen odaya damga basılır. Telefonda planı sağa kaydırabilirsin.</figcaption>
+      </figure>
       <ol class="subeler">
         <li data-oda="sezar">
           <h3><a class="oda-bag" href="sezar/" data-daire>Sezar Çarkı</a></h3>
@@ -164,6 +182,21 @@ Evrakları kimseye göstermeyin.</p>
         <p data-uzman><strong>Neden 31?</strong> 31 asal bir sayı. Tek bir karakter Δ kadar değişirse toplam w·Δ kadar değişir. 31 asal olduğu ve w ile Δ 31'e bölünmediği için w·Δ de 31'e bölünemez, yani hata <em>her zaman</em> yakalanır. Yan yana iki karakterin yer değiştirmesi de aynı nedenle kaçmaz.</p>
         <p class="durust-not">Bu kod yazım hatasını yakalar ama sahteciliği engellemez. Sahteciliği engellemek için dijital imza gerekir. Onu ileride Hash odasında göreceğiz.</p>
       </details>
+    </section>
+
+    <!-- 4b) Dairenin sırrı -->
+    <section class="dosya damga-yeri" id="arsiv-notu" data-adim aria-labelledby="arsivBaslik">
+      <span class="dosya-sekme">Arşiv · <b>gizli</b></span>
+      <h2 id="arsivBaslik">Arşivden düşen not</h2>
+      <p class="ozet">Kilitli arşivin kapısının altından bir not kaymış. Sezar ile şifrelenmiş; anahtarı kimse bilmiyor. Ama üç şubenin kapanış dosyalarında anahtarın birer parçası saklı.</p>
+      <p class="not-kagidi arsiv-kagidi" id="arsivSifreli">KDFUI KNTYOT. ETDKOKVU BOKYKD: PDÖVKAE KAKYUJU, KPUA, IURÖAÖDÖ IÖ ÖAURZK KGCYİÖEU. UÇĞMĞ: ÖA ETV RÖNÖA ŞKDP FUPDÖİU ÖYÖ IÖDUD.</p>
+      <div class="cevap-satir">
+        <label class="alan">Anahtar (k)<input id="arsivK" type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label>
+        <button class="dugme" type="button" id="arsivDene">Kilidi dene</button>
+      </div>
+      <p class="geri-bildirim" id="arsivSonuc" aria-live="polite"></p>
+      <details class="ipucu"><summary>Parçaları bulamadın mı?</summary><p>Bir kod kırıcı anahtarı beklemez. Sezar'da yalnız 28 anahtar olduğunu hatırla.</p></details>
+      <div class="mektup" id="arsivAcik" hidden><p class="mektup-baslik">Not çözüldü, arşiv açıldı:</p><p class="mektup-govde" id="arsivMetin"></p></div>
     </section>
 
     <!-- 5) Gizlilik + öğretmen kapısı -->

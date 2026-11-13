@@ -73,7 +73,7 @@
         <button class="dugme birincil" type="button" id="cozOrnek">Mektubu çıkar</button>
         <label class="dugme yalin dosya-sec">Başka bir PNG aç<input type="file" id="cozDosya" accept="image/png,image/*" class="sr-only"></label>
       </div>
-      <p class="kucuk">Açtığın görsel yalnız bu tarayıcıda işlenir; hiçbir yere gönderilmez.</p>
+      <p class="kucuk">Büyüteç: fareyi görselin üstünde gezdir (telefonda dokun); piksellerin değerlerini ve en düşük bitlerini görürsün. Açtığın görsel yalnız bu tarayıcıda işlenir; hiçbir yere gönderilmez.</p>
       <div class="mektup" id="cozSonuc" aria-live="polite" hidden></div>
     </section>
 
@@ -121,6 +121,20 @@
         <figure><canvas id="jpegDuzlem" class="tuval duzlem" role="img" aria-label="JPEG hâlinin bit düzlemi"></canvas><figcaption>JPEG · bit düzlemi</figcaption></figure>
       </div>
       <p class="geri-bildirim" id="jpegSonuc" aria-live="polite"></p>
+    </section>
+
+    <section class="dosya tarih-dosyasi" id="tarih-murekkep" data-adim aria-labelledby="tarih-murekkep-b">
+      <span class="dosya-sekme">Tarihten bir dosya</span>
+      <div class="tarih-duzen">
+        <div class="tarih-cizim" aria-hidden="true"><span class="tarih-yil">MÖ 499</span><svg viewBox="0 0 220 140"><path class="ci" d="M50 120 v-40 q0 -50 45 -50 q45 0 45 50 v40"/><path class="ck" d="M72 64 h46 M72 76 h34 M72 88 h40"/><path class="ci ince" d="M58 52 q37 -34 74 0"/><rect class="ci" x="160" y="44" width="46" height="62" rx="3"/><rect class="ci ince" x="166" y="50" width="34" height="50" rx="2"/><path class="ck ince" d="M172 64 h22 M172 74 h16"/></svg></div>
+        <div>
+          <h2 id="tarih-murekkep-b">Saçın altındaki mesaj, balmumunun altındaki tahta</h2>
+          <p>Tarihçi <strong>Herodot</strong>'a göre, bugün Aydın'da kalıntıları bulunan <strong>Milet</strong> kentinin eski tiranı Histiaios, Pers sarayında alıkonmuşken bir mesaj göndermek istedi. Yollar tutulmuştu. En güvendiği adamın başını kazıttı, mesajı kafa derisine işletti ve <strong>saçının uzamasını bekledi</strong>. Haberci yolda hiçbir şey taşımıyor gibiydi; Milet'te başı yeniden kazındı ve mesaj okundu.</p>
+          <p>Herodot'un anlattığı bir başka hikâyede Demaratos, ahşap bir yazı tabletinin <strong>balmumunu kazıyıp</strong> uyarısını tahtaya yazdı, sonra üstünü yeniden balmumuyla kapladı. Tablet boş göründü. Sparta'da kimse anlamadı; tableti kazımayı öneren, Kraliçe <strong>Gorgo</strong> oldu.</p>
+          <p class="tarih-bag"><span class="tarih-etiket">Bu odayla bağı</span> İki hikâyede de mesaj şifrelenmemiş, <strong>saklanmıştır</strong>: yöntemi bilen herkes okur. Kekin içindeki mektup gibi.</p>
+          <p class="tarih-kaynak">Kaynak: <a href="https://cts.perseids.org/read/greekLit/tlg0016/tlg001/perseus-eng2/5.35.1-5.35.4" target="_blank" rel="noopener">Herodot, Tarih 5.35</a> · <a href="https://lexundria.com/hdt/7.239/mcly" target="_blank" rel="noopener">Herodot, Tarih 7.239</a></p>
+        </div>
+      </div>
     </section>
 
     <section class="gorevler" id="gorevler" aria-label="Dosya görevleri">
@@ -189,6 +203,7 @@
           <button type="button" data-secenek="d" aria-pressed="false">Okuyamaz; çünkü fark en fazla 1'dir.</button>
         </fieldset>
         <p class="geri-bildirim" aria-live="polite"></p>
+              <p class="arsiv-parca" data-cozumle><span class="arsiv-etiket">Arşiv parçası</span> Arşiv anahtarının 3. parçası: anahtar <strong>asal</strong> ve <strong>11 değil</strong>. Üç parçayı birleştir, lobideki arşiv notunu çöz. <a href="../?git=arsiv" class="oda-bag" data-daire>Lobideki nota git</a></p>
       </section>
     </section>
 

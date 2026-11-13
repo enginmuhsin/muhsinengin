@@ -104,6 +104,23 @@ function ciz() {
 ciz();
 
 /* ---------- Gerçek ölçüm ---------- */
+/** Kasa çok hızlı açılır (milisaniyeler); öğrenci görebilsin diye denenen yıllar sayaç gibi yeniden oynatılır.
+    "Hareketi azalt" açıksa doğrudan sonuç gösterilir. */
+function yilSayaci(s) {
+  const kutu = $('#sayacKutu'), pencere = $('#yilSayac'), damga = $('#sayacDamga');
+  kutu.hidden = false; damga.hidden = true;
+  const son = Number(s.bulunan);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { pencere.textContent = son; damga.hidden = false; return Promise.resolve(); }
+  const sure = Math.min(1600, 300 + s.deneme * 12), t0 = performance.now();
+  return new Promise((bitti) => {
+    const adim = (t) => {
+      const o = Math.min(1, (t - t0) / sure);
+      pencere.textContent = 1900 + Math.round((son - 1900) * (1 - (1 - o) ** 2));
+      if (o < 1) requestAnimationFrame(adim); else { damga.hidden = false; bitti(); }
+    };
+    requestAnimationFrame(adim);
+  });
+}
 const olcBasla = $('#olcBasla'), olcDurum = $('#olcDurum'), olcHedef = $('#olcHedef'), olcSonuc = $('#olcSonuc');
 olcBasla.addEventListener('click', async () => {
   if (!(globalThis.crypto && crypto.subtle)) {
@@ -118,6 +135,7 @@ olcBasla.addEventListener('click', async () => {
   olcHedef.textContent = 'Kasadaki özet: ' + kasa.hedef.slice(0, 32) + '…';
   olcDurum.textContent = '2/3 · 1900\'den başlayarak her yılın özeti hesaplanıyor…';
   const s = await kasayiKir(kasa, { ilerleme: (d, y) => { olcDurum.textContent = '2/3 · Denenen: ' + y + ' (' + d + '. deneme)'; } });
+  await yilSayaci(s);
   olcDurum.textContent = '3/3 · Cihazının hızı bir saniye boyunca ölçülüyor…';
   const hiz = await hizOlc(1000);
   olculenHiz = hiz;
