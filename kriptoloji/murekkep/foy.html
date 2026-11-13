@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>Föy · Görünmez Mürekkep · Şifre Dairesi</title>
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <link rel="stylesheet" href="../../ortak/tokenlar.css">
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../foy.css">
+  <script type="module" src="foy.mjs"></script>
+</head>
+<body class="foy">
+  <div class="yazdirma foy-ust">
+    <a class="dugme yalin" href="./" data-daire>← Görünmez Mürekkep</a>
+    <button class="dugme" type="button" id="yazdir">Yazdır ya da PDF olarak kaydet</button>
+    <p class="kucuk">Kâğıt A4, “Arka plan grafikleri” kapalı. Cevap anahtarı ayrı sayfadadır.</p>
+  </div>
+
+  <article class="sayfa" aria-labelledby="f1">
+    <header class="foy-baslik">
+      <p class="kunye">Şifre Dairesi · Şube 3 · Dosya 300</p>
+      <h1 id="f1">Görünmez Mürekkep · Tek mi, çift mi?</h1>
+      <p>Ad Soyad: ______________________ &nbsp; Sınıf: ______ &nbsp; Tarih: __________</p>
+    </header>
+    <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Steganografi, mektubu bir kekin içine saklamak gibidir. Kriptografi ise mektubu kimsenin okuyamayacağı bir dile çevirmektir.</p>
+    <p><strong>Kural.</strong> Bir görseldeki her renk değeri 0 ile 255 arasında bir sayıdır. Gizli mesajda <strong>çift sayı 0</strong>, <strong>tek sayı 1</strong> demektir. Bir sayıyı en fazla 1 artırıp azaltarak tek ya da çift yapabilirsin; göz bu farkı görmez.</p>
+    <p><strong>Harf tablosu</strong> (8 bit = 1 harf): <span class="mono" id="harfTablo"></span></p>
+    <ol class="foy-gorevler">
+      <li><strong>Gizli mektubu oku.</strong> Aşağıdaki 24 renk değeri, üç harflik bir kelime saklıyor. Her sayının altına 0 (çift) ya da 1 (tek) yaz, 8'erli grupla, tablodan harfi bul.
+        <table class="foy-tablo piksel-foy" id="okuTablo"></table>
+        <p>Kelime: ______________</p></li>
+      <li><strong>Sen gizle.</strong> <strong>S</strong> harfi = <span class="mono">01010011</span>. Aşağıdaki 8 sayıyı, her biri en fazla 1 değişecek biçimde, bu bitleri saklayacak hâle getir.
+        <table class="foy-tablo piksel-foy" id="gizleTablo"></table></li>
+      <li><strong>Kapanış.</strong> Gizlediğin mesajı biri bulursa okuyabilir mi? Bunu nasıl önlersin?<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+    </ol>
+  </article>
+
+  <article class="sayfa" aria-labelledby="f2">
+    <h2 id="f2">Uzman (lise)</h2>
+    <ol class="foy-gorevler" start="4">
+      <li>800 × 600 piksellik bir görsel kaç bit saklayabilir? Kaç bayt? (Her pikselde R, G, B; her kanaldan 1 bit.)<p class="cizgi-alan"></p></li>
+      <li>200 = <span class="mono">11001000</span>₂. En düşük bite 1 yazılırsa yeni değer? Neden göz farkı görmez?<p class="cizgi-alan"></p></li>
+      <li>Bir mesajı JPEG olarak kaydedince neden kaybolur? PNG neden korur?<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+      <li>“Ş” harfi UTF-8'de <span class="mono">11000101 10011110</span> olarak 2 bayt tutar. 40 karakterlik Türkçe bir mesaj en çok kaç bit gerektirir? (Her karakter en çok 2 bayt; başlık 32 bit.)<p class="cizgi-alan"></p></li>
+    </ol>
+  </article>
+
+  <article class="sayfa cevap-sayfasi" aria-labelledby="f3">
+    <h2 id="f3">Cevap anahtarı (öğretmen için)</h2>
+    <ol class="foy-gorevler" id="cevaplar"></ol>
+  </article>
+</body>
+</html>

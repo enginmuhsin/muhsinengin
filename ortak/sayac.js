@@ -12,19 +12,24 @@
    • Botlar, otomatik tarayıcılar, önizleme açılışları ve yerel dosya/localhost sayılmaz.
    • Rapor: muhsinengin.com/sayac/ (gizli panel, giriş ister). Orada "bu cihazı sayma" düğmesi var.
    • Veri Supabase'te: sayac/kurulum.sql
+   • DEPSUZ MOD: <script src="…/sayac.js" data-depo="yok" defer> yazılırsa tarayıcıya hiçbir not
+     bırakılmaz (çerez yok, localStorage yok, okuma da yok). Yalnızca görüntülenme sayılır; "tekil"
+     sayılmaz ve "bu cihazı sayma" o sayfalarda geçmez. Şifre Dairesi (/kriptoloji/) bunu kullanır.
    ===================================================================== */
 (function () {
   'use strict';
   var URL_ = 'https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir';
   var ANAHTAR = 'sb_publishable_jzoa489kAPGEComqCF2JSQ_N8gjKPjC'; // herkese açık anahtar; güvenlik veritabanında
+  var betik = document.currentScript;
+  var DEPSUZ = !!(betik && betik.getAttribute('data-depo') === 'yok');
 
   try {
     var h = location.hostname;
     if (location.protocol !== 'https:' || !/(^|\.)muhsinengin\.com$/.test(h)) return;
     if (navigator.webdriver) return;
     if (/bot|crawl|spider|slurp|preview|headless|lighthouse|facebookexternalhit|whatsapp|telegram/i.test(navigator.userAgent || '')) return;
-    if (/(?:^|;\s*)sayac_haric=1/.test(document.cookie)) return;
-    if (localStorage.getItem('sayac:haric') === '1') return;
+    if (!DEPSUZ && /(?:^|;\s*)sayac_haric=1/.test(document.cookie)) return;
+    if (!DEPSUZ && localStorage.getItem('sayac:haric') === '1') return;
   } catch (e) { return; }
 
   function sayfaYolu() {
@@ -55,7 +60,8 @@
     var gun = bugun(), sayfa = sayfaYolu();
     var kSayfa = 'sayac:g:' + gun + ':' + sayfa, kSite = 'sayac:g:' + gun + ':__site__';
     var tekil = true, siteTekil = true;
-    try {
+    if (DEPSUZ) { tekil = false; siteTekil = false; }
+    else try {
       tekil = !localStorage.getItem(kSayfa);
       var cerez = document.cookie.match(/(?:^|;\s*)sayac_site=([^;]+)/);
       siteTekil = !(cerez && cerez[1] === gun) && !localStorage.getItem(kSite);

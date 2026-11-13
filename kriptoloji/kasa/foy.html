@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>Föy · Kasa Soygunu · Şifre Dairesi</title>
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <link rel="stylesheet" href="../../ortak/tokenlar.css">
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../foy.css">
+  <script type="module" src="foy.mjs"></script>
+</head>
+<body class="foy">
+  <div class="yazdirma foy-ust">
+    <a class="dugme yalin" href="./" data-daire>← Kasa Soygunu</a>
+    <button class="dugme" type="button" id="yazdir">Yazdır ya da PDF olarak kaydet</button>
+    <p class="kucuk">Kâğıt A4, “Arka plan grafikleri” kapalı. Cevap anahtarı ayrı sayfadadır.</p>
+  </div>
+
+  <article class="sayfa" aria-labelledby="f1">
+    <header class="foy-baslik">
+      <p class="kunye">Şifre Dairesi · Şube 2 · Dosya 200</p>
+      <h1 id="f1">Kasa Soygunu · Hesap föyü</h1>
+      <p>Ad Soyad: ______________________ &nbsp; Sınıf: ______ &nbsp; Tarih: __________</p>
+    </header>
+    <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Entropi, bir anahtarlıktaki anahtar sayısı gibidir. Hırsız anahtarları tek tek dener; anahtarlık ne kadar büyükse soygun o kadar uzun sürer.</p>
+    <p><strong>Çarpma ilkesi:</strong> Her hane 10 rakamdan biriyse, 3 haneli kilitte 10 · 10 · 10 = 1000 olasılık vardır.</p>
+    <table class="foy-tablo">
+      <thead><tr><th>Kilit</th><th>Olasılık sayısı</th><th>Saniyede 10 000 deneme ile hepsini denemek</th></tr></thead>
+      <tbody>
+        <tr><td>3 haneli rakam kilidi</td><td></td><td></td></tr>
+        <tr><td>Doğum yılı (1900–2025)</td><td></td><td></td></tr>
+        <tr><td>4 haneli PIN</td><td></td><td></td></tr>
+        <tr><td>8 küçük Türkçe harf (29 harf)</td><td></td><td></td></tr>
+        <tr><td>5 rastgele kelime (7776 kelime)</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <ol class="foy-gorevler">
+      <li>Hangi kilit en zayıf? Neden “gizli” olması onu güçlü yapmaz?<p class="cizgi-alan"></p></li>
+      <li><strong>Zar etkinliği.</strong> 5 zar at ve sayıları yan yana yaz (ör. 3-1-6-6-2). Kaç farklı sonuç olabilir? 6⁵ = ______. Bu sayı, kelime listesinin uzunluğudur: her zar dizisi bir kelimeye karşılık gelir.<p class="cizgi-alan"></p></li>
+      <li><strong>Kapanış.</strong> Bir kelime eklemek mi, bir sembol eklemek mi kasayı daha çok güçlendirir? Neden? (Sembol: 32 seçenek.)<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+    </ol>
+  </article>
+
+  <article class="sayfa" aria-labelledby="f2">
+    <h2 id="f2">Uzman (lise)</h2>
+    <p class="formul-buyuk">H = L · log₂(N) bit</p>
+    <p class="kucuk">log₂ 10 ≈ 3,322 · log₂ 29 ≈ 4,858 · log₂ 126 ≈ 6,977 · log₂ 7776 ≈ 12,925 · log₂ 32 = 5</p>
+    <ol class="foy-gorevler" start="4">
+      <li>Tablodaki her kilidin entropisini bit olarak hesapla.<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+      <li>Hız 10¹⁰'dan 10⁴ deneme/saniyeye düşerse bu kaç bitlik ek güç gibidir?<p class="cizgi-alan"></p></li>
+      <li>Bütün olasılıkları denemek 90 yıl sürüyorsa ortalama süre nedir? Neden?<p class="cizgi-alan"></p></li>
+      <li>“ankara1923” 10 karakterlik bir şifre. Formül neden bu şifrenin gücünü olduğundan yüksek gösterir?<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+    </ol>
+    <p class="kucuk">Not: Hızlar ders için seçilmiş örnek değerlerdir; gerçek hız donanıma göre değişir.</p>
+  </article>
+
+  <article class="sayfa cevap-sayfasi" aria-labelledby="f3">
+    <h2 id="f3">Cevap anahtarı (öğretmen için)</h2>
+    <table class="foy-tablo" id="cevapTablo"><thead><tr><th>Kilit</th><th>Olasılık</th><th>Entropi</th><th>10⁴/sn</th><th>10¹⁰/sn</th></tr></thead><tbody></tbody></table>
+    <ol class="foy-gorevler" id="cevaplar"></ol>
+  </article>
+</body>
+</html>

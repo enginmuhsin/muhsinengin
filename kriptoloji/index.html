@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Güvenlik kuralı (CSP): yalnız kendi sunucumuz + ziyaretçi sayacının tek adresi. Ayrıntı: docs/kriptoloji/asama-0-rapor.md -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; media-src 'self'; worker-src 'self'; manifest-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Şifre Dairesi · Kriptoloji</title>
+  <meta name="description" content="Şifre Dairesi: Sezar çarkı, kasa soygunu ve görünmez mürekkep odalarıyla oynayarak kriptoloji öğren. Ortaokul ve lise; akıllı tahtada sunum modu.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Şifre Dairesi · Kriptoloji">
+  <meta property="og:description" content="Daireye stajyer olarak gir; her oda bir şube, her görev bir dosya.">
+  <meta property="og:url" content="https://muhsinengin.com/kriptoloji/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../simge.svg" type="image/svg+xml">
+  <script src="../tema.js"></script>
+  <script src="../ortak/ana-sayfa.js" defer></script>
+  <script src="../muzik/muzik.js" data-tema="odak" defer></script>
+  <link rel="stylesheet" href="../ortak/tokenlar.css">
+  <link rel="stylesheet" href="daire.css">
+  <link rel="stylesheet" href="../ortak/matematik.css">
+  <script src="../ortak/sayac.js" data-depo="yok" defer></script>
+  <script type="module" src="lobi.mjs"></script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Şifre Dairesi">
+      <ana-sayfa-dugmesi class="logo"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+      <span class="mc-sayfa" aria-hidden="true">Şifre Dairesi</span>
+      <button class="menu-dugme" type="button" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+      <div class="nav-linkler">
+        <a class="nav-link" href="./" aria-current="page" data-daire>Lobi</a>
+        <a class="nav-link" href="sezar/" data-daire>Sezar Çarkı</a>
+        <a class="nav-link" href="kasa/" data-daire>Kasa Soygunu</a>
+        <a class="nav-link" href="murekkep/" data-daire>Görünmez Mürekkep</a>
+        <a class="nav-link" href="ogretmen/" data-daire>Öğretmen Masası</a>
+      </div>
+      <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
+    </nav>
+  </header>
+
+  <p id="duyuru" class="sr-only" aria-live="polite"></p>
+
+  <main id="ana">
+    <!-- 1) Giriş -->
+    <section class="giris" data-adim aria-labelledby="baslik">
+      <div>
+        <p class="kunye">Dosya no. <b>000</b> · Birim: Lobi · Gizlilik: öğretim</p>
+        <h1 id="baslik">Şifre <span class="ik-alt">Dairesi</span></h1>
+        <p class="alt">Daireye bugün <strong>stajyer</strong> olarak giriyorsun. Burası bir şifre bürosu: her oda bir şube, her görev bir <strong>dosya</strong>. Dosyayı çözünce üstüne kırmızı damga basılır, çözdükçe rütben yükselir.</p>
+        <fieldset class="secici" data-seviye-secici>
+          <legend>Seviyeni seç</legend>
+          <button type="button" data-seviye="cirak" aria-pressed="true">Çırak <small>ortaokul</small></button>
+          <button type="button" data-seviye="uzman" aria-pressed="false">Uzman <small>lise · formül ve ispat</small></button>
+        </fieldset>
+        <div class="dugme-satir">
+          <a class="dugme birincil" href="#giris-dosyasi">İlk dosyayı aç</a>
+          <a class="dugme" href="sezar/" data-daire>Şube 1: Sezar Çarkı</a>
+          <a class="dugme" href="#kayit">Kayıt kodum var</a>
+        </div>
+      </div>
+      <div class="mühür-kutu">
+        <svg class="muhur" id="muhur" viewBox="0 0 300 300" role="img" aria-labelledby="muhurBaslik">
+          <title id="muhurBaslik">Sicil mührü</title>
+          <defs><path id="muhurYay" d="M150 150 m-112 0 a112 112 0 1 1 224 0 a112 112 0 1 1 -224 0"/></defs>
+          <circle class="cizgi" cx="150" cy="150" r="138" stroke-width="2.5"/>
+          <circle class="cizgi" cx="150" cy="150" r="131" stroke-width="1"/>
+          <circle class="cizgi" cx="150" cy="150" r="95" stroke-width="1.5"/>
+          <g id="muhurCentik" class="cizgi" stroke-width="1.2"></g>
+          <text class="muhur-yazi"><textPath href="#muhurYay" startOffset="0">ŞİFRE DAİRESİ · SİCİL KAYDI · MOD 29 ·</textPath></text>
+          <text class="muhur-rutbe" id="muhurRutbe" x="150" y="152" text-anchor="middle">Stajyer</text>
+          <text class="muhur-sayi" id="muhurSayi" x="150" y="182" text-anchor="middle">0 / 22 DOSYA</text>
+        </svg>
+        <p>Halkadaki 29 çentik, Türk alfabesinin 29 harfi.</p>
+      </div>
+    </section>
+
+    <!-- 2) Giriş dosyası (bit 0) -->
+    <section class="dosya damga-yeri" id="giris-dosyasi" data-adim data-dosya="0" aria-labelledby="girisBaslik">
+      <span class="dosya-sekme">Dosya <b>000-A</b></span>
+      <h2 id="girisBaslik">Kapıdaki not</h2>
+      <p class="ozet">Kapı görevlisi sana bir not uzatıyor: “İçeri girmek için parola gerekir. Parola bu notun içinde saklı.” Not sıradan bir duyuru gibi görünüyor.</p>
+      <p class="not-kagidi" lang="tr">Şube müdürü bugün geç gelecek.
+İkinci kattaki dolap kilitli kalsın.
+Formları akşama kadar teslim edin.
+Raporlar mavi klasörde duruyor.
+Evrakları kimseye göstermeyin.</p>
+      <div class="cevap-satir">
+        <label class="alan">Parola
+          <input id="parola" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" inputmode="text">
+        </label>
+        <button class="dugme" type="button" id="parolaDene">Kontrol et</button>
+      </div>
+      <p class="geri-bildirim" id="parolaSonuc" aria-live="polite"></p>
+      <details class="ipucu"><summary>İpucu ister misin?</summary><p>Satırları yukarıdan aşağı okuma; her satırın <strong>ilk harfine</strong> bak.</p></details>
+      <div data-cevap class="kucuk"><p><strong>Cevap:</strong> ŞİFRE. Her satırın ilk harfi alt alta okununca parola çıkar.</p></div>
+      <div data-uzman>
+        <h3>Uzman notu: gizlemek, şifrelemek değildir</h3>
+        <p>Bu yönteme <strong>akrostiş</strong> denir. Mesaj harfleri değiştirilmeden <em>saklanmıştır</em>; yöntemi bilen herkes okur. Mesajı saklamaya <strong>steganografi</strong>, okunamaz hâle getirmeye <strong>kriptografi</strong> denir. Oda 3'te (Görünmez Mürekkep) bir görselin piksellerine mesaj saklayacak, sonra iki yöntemi birlikte kullanacaksın.</p>
+      </div>
+    </section>
+
+    <!-- 3) Şubeler -->
+    <section class="dosya" id="subeler" data-adim aria-labelledby="subeBaslik">
+      <span class="dosya-sekme">Kat planı</span>
+      <h2 id="subeBaslik">Şubeler</h2>
+      <p class="ozet">Her şubede önce bir benzetme, sonra bir simülasyon, ardından dosya görevleri ve tek bir kapanış sorusu var. Kapanış sorusunu doğru cevaplayınca şubenin dosyası kapanır.</p>
+      <ol class="subeler">
+        <li data-oda="sezar">
+          <h3><a class="oda-bag" href="sezar/" data-daire>Sezar Çarkı</a></h3>
+          <p>İç içe iki çark, 29 harf. Çarkı çevir, mesajı şifrele; anahtarı bilmeden 28 denemede kır.</p>
+          <span class="durum"><span data-sayac></span></span>
+        </li>
+        <li data-oda="kasa">
+          <h3><a class="oda-bag" href="kasa/" data-daire>Kasa Soygunu</a></h3>
+          <p>Kilit türünü seç, saldırganı seç; cihazının saniyede kaç deneme yaptığını gerçekten ölç.</p>
+          <span class="durum"><span data-sayac></span></span>
+        </li>
+        <li data-oda="murekkep">
+          <h3><a class="oda-bag" href="murekkep/" data-daire>Görünmez Mürekkep</a></h3>
+          <p>Mesajı bir görselin piksellerine sakla. Göz fark etmez ama bit düzleminde “kar” gibi belirir.</p>
+          <span class="durum"><span data-sayac></span></span>
+        </li>
+      </ol>
+
+      <h3 class="ara-baslik">Rütbeler</h3>
+      <ol class="basamaklar" id="basamaklar"></ol>
+    </section>
+
+    <!-- 4) Kayıt kodu -->
+    <section class="dosya" id="kayit" data-adim aria-labelledby="kayitBaslik">
+      <span class="dosya-sekme">Sicil</span>
+      <h2 id="kayitBaslik">Kayıt kodu</h2>
+      <p class="ozet">Daire senin hakkında hiçbir şey kaydetmez. İlerlemeni saklamak istersen bir <strong>kayıt kodu</strong> al ve bir yere yaz. Sonra kodu buraya girince damgaların ve rütben geri gelir.</p>
+      <div class="dugme-satir">
+        <button class="dugme" type="button" id="kodAl">Kodumu göster</button>
+        <button class="dugme yalin" type="button" id="kodKopyala" hidden>Kopyala</button>
+      </div>
+      <p><output class="kod-goster" id="kodCikti" aria-live="polite"></output></p>
+      <div class="cevap-satir">
+        <label class="alan">Kodunu gir
+          <input id="kodGirdi" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="KRT-XXXXX-X">
+        </label>
+        <button class="dugme" type="button" id="kodYukle">Kodu yükle</button>
+      </div>
+      <p class="geri-bildirim" id="kodSonuc" aria-live="polite"></p>
+
+      <details class="mat-kutu">
+        <summary>Bu kod nasıl çalışıyor?</summary>
+        <p>Kodun son karakteri bir <strong>kontrol karakteridir</strong>. Diğer beş karakterden hesaplanır, tıpkı TC kimlik numaranın son iki hanesinin önceki hanelerden hesaplanması ya da bir kitabın ISBN numarasının son hanesi gibi. Bir harfi yanlış yazarsan hesap tutmaz ve daire bunu hemen fark eder.</p>
+        <ol>
+          <li>Koddaki her karakterin bir sırası var: <code>2 3 4 5 6 7 8 9 A B C D E F G H J K M N P Q R S T U V W X Y Z</code>, yani 0'dan 30'a kadar <strong>31 karakter</strong>. Karışabilen <code>0 O 1 I L</code> hiç yok.</li>
+          <li>Beş veri karakterinin sırası 1, 2, 3, 4, 5 ile çarpılıp toplanır.</li>
+          <li>Toplamın 31'e bölümünden kalan, kontrol karakterinin sırasıdır.</li>
+        </ol>
+        <p class="hesap">KRT-6JTJ6-8 → 6=4, J=16, T=24, J=16, 6=4<br>1·4 + 2·16 + 3·24 + 4·16 + 5·4 = 192<br>192 = 6·31 + 6 → kalan 6 → sıra 6'daki karakter: 8 ✓</p>
+        <p data-uzman><strong>Neden 31?</strong> 31 asal bir sayı. Tek bir karakter Δ kadar değişirse toplam w·Δ kadar değişir. 31 asal olduğu ve w ile Δ 31'e bölünmediği için w·Δ de 31'e bölünemez, yani hata <em>her zaman</em> yakalanır. Yan yana iki karakterin yer değiştirmesi de aynı nedenle kaçmaz.</p>
+        <p class="durust-not">Bu kod yazım hatasını yakalar ama sahteciliği engellemez. Sahteciliği engellemek için dijital imza gerekir. Onu ileride Hash odasında göreceğiz.</p>
+      </details>
+    </section>
+
+    <!-- 5) Gizlilik + öğretmen kapısı -->
+    <section class="dosya iki-not" id="ogretmen" data-adim aria-label="Gizlilik ve öğretmen kapısı">
+      <span class="dosya-sekme">Kapı</span>
+      <div>
+        <h2>Gizlilik</h2>
+        <p><strong>Bu bölüm yazdıklarını kaydetmez ve hiçbir yere göndermez. Sadece sayfanın kaç kez ziyaret edildiği sayılır.</strong></p>
+        <p class="kucuk">İlerlemen yalnızca adres çubuğunun <code>#</code> işaretinden sonraki kısmında durur. O kısım sunucuya hiç gönderilmez. Sitenin genelinde olduğu gibi tema ve müzik tercihin bu tarayıcıda hatırlanır.</p>
+      </div>
+      <div>
+        <h2>Öğretmen kapısı</h2>
+        <p><a class="oda-bag" href="ogretmen/" data-daire>Öğretmen Masası</a>: hazır ders akışları (ortaokul 40 dk, lise 80 dk, atölye 2 × 40 dk), yazdırılabilir föyler, kayıt kodu okuyucu ve akıllı tahta için sunum modu.</p>
+        <p class="kucuk">Sunum modunu şimdiden deneyebilirsin: büyük yazı, adım adım ilerleme (ok tuşları), cevapları gizle/göster, süre sayacı ve takım puanları.</p>
+        <div class="dugme-satir">
+          <a class="dugme" href="./?sunum=1" data-daire data-sunum-sabit>Lobiyi sunum modunda aç</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Şifre Dairesi · muhsinengin.com · Bütün mesajlar ve kişiler kurgusaldır.</p>
+  </footer>
+</body>
+</html>
