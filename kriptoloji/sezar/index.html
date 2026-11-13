@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; media-src 'self'; worker-src 'self'; manifest-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Sezar Çarkı · Şifre Dairesi</title>
+  <meta name="description" content="Türk alfabesinin 29 harfiyle Sezar şifresi: çarkı çevir, mesaj şifrele, 28 anahtarın hepsini deneyerek kır. Mod 29 ve afin şifreye ilk adım.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Sezar Çarkı · Şifre Dairesi">
+  <meta property="og:description" content="Çarkı çevir, mesajı şifrele; anahtarı bilmeden 28 denemede kır.">
+  <meta property="og:url" content="https://muhsinengin.com/kriptoloji/sezar/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <script src="../../ortak/ana-sayfa.js" defer></script>
+  <script src="../../muzik/muzik.js" data-tema="odak" defer></script>
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../../ortak/matematik.css">
+  <script src="../../ortak/sayac.js" data-depo="yok" defer></script>
+  <script type="module" src="sezar.mjs"></script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Şifre Dairesi">
+      <ana-sayfa-dugmesi class="logo"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+      <span class="mc-sayfa" aria-hidden="true">Sezar Çarkı</span>
+      <button class="menu-dugme" type="button" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../" data-daire>Lobi</a>
+        <a class="nav-link" href="./" aria-current="page" data-daire>Sezar Çarkı</a>
+        <a class="nav-link" href="#gorevler">Görevler</a>
+        <a class="nav-link" href="#ogretmen-notu">Öğretmen notu</a>
+      </div>
+      <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
+    </nav>
+  </header>
+
+  <p id="duyuru" class="sr-only" aria-live="polite"></p>
+
+  <main id="ana">
+    <!-- 1) Giriş + benzetme -->
+    <section class="oda-giris" data-adim aria-labelledby="baslik">
+      <p class="kunye">Dosya no. <b>100</b> · Şube 1 · Sezar Çarkı</p>
+      <h1 id="baslik">Sezar <span class="ik-alt">Çarkı</span></h1>
+      <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Sezar şifresi, harflerin bir dönme dolapta yer değiştirmesi gibidir: herkes aynı sayıda koltuk kayar. Sona gelen başa döner; Z'den sonra yine A gelir.</p>
+      <fieldset class="secici" data-seviye-secici>
+        <legend>Seviye</legend>
+        <button type="button" data-seviye="cirak" aria-pressed="true">Çırak <small>ortaokul</small></button>
+        <button type="button" data-seviye="uzman" aria-pressed="false">Uzman <small>lise · formül ve kaba kuvvet</small></button>
+      </fieldset>
+    </section>
+
+    <!-- 2) Simülasyon -->
+    <section class="dosya" id="simulasyon" data-adim aria-labelledby="simBaslik">
+      <span class="dosya-sekme">Atölye</span>
+      <h2 id="simBaslik">Çarkı çevir</h2>
+      <p class="ozet">İçteki mavi harfler <strong>açık metin</strong>, dıştaki kırmızı harfler <strong>şifreli metin</strong>. Dış diski parmağınla ya da fareyle çevir; klavyede çarkı seçip ok tuşlarını kullan. Üstteki pencerede A'nın neye dönüştüğünü görürsün.</p>
+      <div class="sim-duzen">
+        <div class="cark-kutu">
+          <svg class="cark" id="cark" aria-describedby="carkAciklama"></svg>
+          <p id="carkAciklama" class="sr-only">Sol ve sağ ok tuşları kaydırmayı bir azaltır ya da artırır. Home tuşu sıfıra döndürür.</p>
+          <div class="dugme-satir cark-dugmeler">
+            <button class="kucuk-d" type="button" id="kEksi" aria-label="Kaydırmayı bir azalt">−1</button>
+            <output class="k-buyuk" id="kGoster" aria-live="polite">k = 3</output>
+            <button class="kucuk-d" type="button" id="kArti" aria-label="Kaydırmayı bir artır">+1</button>
+            <button class="dugme yalin" type="button" id="tikSes" aria-pressed="false">Tık sesi: kapalı</button>
+          </div>
+        </div>
+        <div class="metin-kutu">
+          <label class="alan genis">Açık metin
+            <textarea id="acik" rows="3" maxlength="2000" spellcheck="false">MERHABA</textarea>
+          </label>
+          <div class="ok-satir" aria-hidden="true"><span class="ik-ok"></span> şifrele · <span class="ok-ters ik-ok"></span> çöz</div>
+          <label class="alan genis">Şifreli metin
+            <textarea id="sifreli" rows="3" maxlength="2000" spellcheck="false"></textarea>
+          </label>
+          <p class="kucuk" id="yabanciNot" hidden></p>
+          <p class="kucuk">İki kutuya da yazabilirsin: biri değişince öbürü çarka göre güncellenir. Boşluk, rakam ve noktalama değişmeden geçer.</p>
+        </div>
+      </div>
+      <div data-uzman class="formul-satir">
+        <p><strong>Formül.</strong> Harflerin sırası A = 0, B = 1, …, Z = 28 olsun. Anahtar k ile</p>
+        <p class="formul-buyuk">E(x) = (x + k) mod 29 &nbsp;&nbsp;·&nbsp;&nbsp; D(x) = (x − k) mod 29</p>
+        <p class="kucuk">“mod 29”, 29'a bölümden kalandır: Y = 27, k = 3 için 27 + 3 = 30 ve 30 mod 29 = 1, yani B. Dönme dolabın başa sarması tam olarak budur.</p>
+      </div>
+    </section>
+
+    <!-- 3) Görevler -->
+    <section class="gorevler" id="gorevler" aria-label="Dosya görevleri">
+
+      <section class="dosya damga-yeri" data-dosya="1" data-adim aria-labelledby="g1">
+        <span class="dosya-sekme">Dosya <b>101</b> · Çırak</span>
+        <h3 id="g1">Daireden gelen mesaj</h3>
+        <p>Merkezden bir telsiz mesajı geldi. Anahtar: <strong>k = 5</strong>. Çarkı 5'e getir ve mesajı çöz.</p>
+        <p class="not-kagidi" id="m1"></p>
+        <div class="cevap-satir"><label class="alan">Çözdüğün mesaj<input type="text" autocomplete="off" spellcheck="false" maxlength="80"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <details class="ipucu"><summary>İpucu</summary><p>Şifreli kutuya mesajı yapıştır; çark 5'teyken açık kutuda çözüm belirir. Ya da her harfi 5 sıra geri say.</p></details>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="2" data-adim aria-labelledby="g2">
+        <span class="dosya-sekme">Dosya <b>102</b> · Çırak</span>
+        <h3 id="g2">Kayıp anahtar</h3>
+        <p>Bu mesajın anahtarı kaybolmuş. Çarkı çevirerek anlamlı bir cümle çıkana kadar dene. <strong>Anahtar kaç?</strong></p>
+        <p class="not-kagidi" id="m2"></p>
+        <div class="cevap-satir"><label class="alan">Anahtar (k)<input type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <details class="ipucu"><summary>İpucu</summary><p>Mesajı şifreli kutuya koy, çarkı birer birer çevir ve açık kutuya bak. En fazla 28 deneme yeter.</p></details>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="3" data-adim aria-labelledby="g3">
+        <span class="dosya-sekme">Dosya <b>103</b> · Çırak</span>
+        <h3 id="g3">Arkadaşına şifreli not</h3>
+        <p>Çarkı <strong>k = 7</strong>'ye getir ve <strong>KALEM</strong> kelimesini şifrele. Sonucu yaz.</p>
+        <div class="cevap-satir"><label class="alan">Şifreli kelime<input type="text" autocomplete="off" spellcheck="false" maxlength="20"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <p class="kucuk">Sonra kendi mesajını şifrele, anahtarı yalnız arkadaşına söyle ve ona çözdür. Yazdığın hiçbir şey bir yere gönderilmez.</p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="4" data-adim data-uzman aria-labelledby="g4">
+        <span class="dosya-sekme">Dosya <b>104</b> · Uzman</span>
+        <h3 id="g4">Formül defteri</h3>
+        <p>Ş harfinin sırası 22. <strong>k = 10</strong> ile E(x) = (x + k) mod 29 formülünü uygula. Ş hangi harfe dönüşür?</p>
+        <div class="cevap-satir"><label class="alan">Harf<input type="text" autocomplete="off" spellcheck="false" maxlength="3"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <details class="ipucu"><summary>İpucu</summary><p>22 + 10 = 32. 32'nin 29'a bölümünden kalan kaç? O sıradaki harfi alfabeden bul (A = 0).</p></details>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="5" data-adim data-uzman aria-labelledby="g5">
+        <span class="dosya-sekme">Dosya <b>105</b> · Uzman</span>
+        <h3 id="g5">Kaba kuvvet tablosu</h3>
+        <p>Bir casus bu mesajı ele geçirdi ama anahtarı bilmiyor. Bilmesine gerek de yok: <strong>28 anahtarın hepsini</strong> dener. Tabloyu aç ve anlamlı olan satırı seç.</p>
+        <p class="not-kagidi" id="m5"></p>
+        <div class="dugme-satir"><button class="dugme" type="button" id="tabloAc" aria-expanded="false" aria-controls="kabaTablo">28 anahtarın hepsini dene</button></div>
+        <div id="kabaTablo" class="kaba-tablo" hidden>
+          <p class="kucuk">Anlamlı satırı seç:</p>
+          <ol class="kaba-liste secici" data-secenekler></ol>
+        </div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <p class="kucuk">Sonuç: Sezar şifresinde denenecek yalnız <strong>28 anahtar</strong> var. Bir insan bunları birkaç dakikada, bir bilgisayar bir göz kırpmasından kısa sürede dener. Anahtarı gizli tutmak yetmez; <strong>anahtar uzayı</strong> da büyük olmalı.</p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="6" data-adim data-uzman aria-labelledby="g6">
+        <span class="dosya-sekme">Dosya <b>106</b> · Uzman</span>
+        <h3 id="g6">Neden 29?</h3>
+        <p>Sezar'ı güçlendirmenin bir yolu, harfi kaydırmadan önce bir sayıyla <strong>çarpmak</strong>: E(x) = (a·x + b) mod 29. Buna <strong>afin şifre</strong> denir. Ama çarpan a, çözülebilir olmalıdır: farklı harfler farklı harflere gitmeli.</p>
+        <p><strong>Mod 29'da 1'den 28'e kadar kaç tane a çarpanı kullanılabilir?</strong></p>
+        <fieldset class="secici dikey" data-secenekler>
+          <legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">12</button>
+          <button type="button" data-secenek="b" aria-pressed="false">14</button>
+          <button type="button" data-secenek="c" aria-pressed="false">28</button>
+          <button type="button" data-secenek="d" aria-pressed="false">29</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+        <div class="sonraki-oda" data-cozumle>
+          <p><strong>Bölümün imza fikri.</strong> 29 asal bir sayı. Bu yüzden 1'den 28'e her a sayısının mod 29'da bir tersi vardır ve hepsi geçerli çarpandır: <strong>28 × 29 = 812</strong> anahtar. İngiliz alfabesinde (mod 26) yalnız 26 ile ortak böleni olmayan 12 çarpan geçer: <strong>12 × 26 = 312</strong> anahtar. Türk alfabesinin asal uzunluğu, afin şifreye bir avantaj sağlar.</p>
+          <p class="ik-not">Afin odası yakında; orada bu tersleri birlikte bulacağız.</p>
+        </div>
+      </section>
+
+      <section class="dosya damga-yeri kapanis" data-dosya="7" data-adim aria-labelledby="g7">
+        <span class="dosya-sekme">Dosya <b>107</b> · Kapanış</span>
+        <h3 id="g7">Bir casus 28 anahtarın hepsini denerse ne olur?</h3>
+        <fieldset class="secici dikey" data-secenekler>
+          <legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">Hiçbir şey bulamaz, çünkü anahtar gizlidir.</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Mesajı mutlaka bulur; denenecek anahtar az olduğu için gizli anahtar mesajı korumaz.</button>
+          <button type="button" data-secenek="c" aria-pressed="false">Yalnızca bir bilgisayarı varsa bulabilir.</button>
+          <button type="button" data-secenek="d" aria-pressed="false">Mesajı bulur ama hangi satırın doğru olduğunu asla anlayamaz.</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <!-- 4) Proje Kapısı (Uzman) -->
+    <section class="dosya" id="proje-kapisi" data-adim data-uzman aria-labelledby="pkBaslik">
+      <span class="dosya-sekme">Proje Kapısı</span>
+      <h2 id="pkBaslik">Proje Kapısı</h2>
+      <p>Bu şubenin açık uçlu araştırma soruları öğretmen onayından geçtikten sonra burada yayımlanacak.</p>
+    </section>
+
+    <!-- 5) Öğretmen notu -->
+    <section class="dosya" id="ogretmen-notu" data-adim aria-labelledby="onBaslik">
+      <span class="dosya-sekme">Öğretmen notu</span>
+      <h2 id="onBaslik">Öğretmen notu</h2>
+      <dl class="ogretmen-not">
+        <dt>Süre ve düzey</dt>
+        <dd>Çırak: 40 dk, ortaokul (5–8). Uzman: 40 dk ek, lise. Kapanış sorusu 5 dk.</dd>
+        <dt>Malzemeler</dt>
+        <dd>Akıllı tahta ya da öğrenci başına bir cihaz. Bilgisayarsız sınıf için <a href="foy.html" data-daire>yazdırılabilir föy</a>: makasla kesilip ataşla birleştirilen kâğıt çark.</dd>
+        <dt>Öğrenme hedefleri</dt>
+        <dd><ul>
+          <li>Öğrenci, verilen bir anahtarla Sezar şifresiyle şifreleme ve çözme yapabilir.</li>
+          <li>Öğrenci, anahtarı bilinmeyen bir Sezar mesajını bütün anahtarları deneyerek çözebilir.</li>
+          <li>Öğrenci, Sezar şifresinin neden zayıf olduğunu anahtar sayısıyla açıklayabilir.</li>
+          <li data-uzman>Öğrenci, E(x) = (x + k) mod 29 ifadesini bir harfe uygulayabilir ve başa sarmayı mod işlemiyle açıklayabilir.</li>
+          <li data-uzman>Öğrenci, 29'un asal olmasının afin şifredeki çarpan sayısını nasıl etkilediğini açıklayabilir.</li>
+        </ul></dd>
+        <dt>Sık görülen kavram yanılgıları</dt>
+        <dd><ul>
+          <li><strong>“Şifreyi kimse göremiyorsa güvenlidir.”</strong> Dosya 105'teki tabloyu birlikte açın: 28 satırın birinde mesaj açıkça okunur. Güvenlik, anahtarın gizliliğinden çok anahtar sayısına bağlıdır.</li>
+          <li><strong>“Kodlama ile şifreleme aynı şeydir.”</strong> Mors ya da ASCII bir <em>kodlamadır</em>: herkes aynı tabloyu kullanır, anahtar yoktur. Şifrelemede anahtarı bilmeyen okuyamaz. Tahtaya iki sütun açıp örnekleri öğrencilere yerleştirtin.</li>
+          <li><strong>“Z'den sonra harf yok, şifre biter.”</strong> Çarkta Z'nin hemen yanında A olduğunu gösterin; dönme dolap benzetmesine dönün.</li>
+        </ul></dd>
+        <dt>Farklılaştırma</dt>
+        <dd>Desteğe ihtiyacı olanlar: kâğıt çarkla, yalnız k = 1 ve k = 3 ile başlasın. Hızlı bitirenler: Uzman seviyesine geçsin ya da kaba kuvveti hızlandırmak için en sık harfleri (A, E) arama fikrini tartışsın; bu, ileride gelecek Frekans Analizi odasına köprüdür.</dd>
+        <dt>MEB kazanım eşlemesi</dt>
+        <dd>Henüz eşlenmedi. Kazanım kodları uydurulmaz; öğretmen kontrolünden sonra eklenecek.</dd>
+        <dt>Sunum modu</dt>
+        <dd><a href="./?sunum=1" data-daire data-sunum-sabit>Bu odayı sunum modunda aç</a>: ok tuşlarıyla adım adım ilerler, cevaplar gizlenir, süre ve takım puanı tutulur.</dd>
+      </dl>
+    </section>
+
+    <nav class="oda-alt dugme-satir" aria-label="Daire içi">
+      <a class="dugme" href="../" data-daire>Lobiye dön</a>
+      <a class="dugme" href="foy.html" data-daire>Yazdırılabilir föy</a>
+    </nav>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Şifre Dairesi · Şube 1 · Bütün mesajlar ve kişiler kurgusaldır. Yazdıkların bu sayfadan çıkmaz.</p>
+  </footer>
+</body>
+</html>
