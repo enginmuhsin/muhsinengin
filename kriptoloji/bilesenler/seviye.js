@@ -1,11 +1,11 @@
 /* =====================================================================
-   SEVİYE — kriptoloji/bilesenler/seviye.mjs
+   SEVİYE — kriptoloji/bilesenler/seviye.js
    Çırak (ortaokul) / Uzman (lise). Simülasyon aynı; Uzman'da [data-uzman] öğeleri görünür.
    Seviye adreste tutulur: ?seviye=uzman  (depo API'si yok)
    Kullanım: <fieldset class="secici" data-seviye-secici> içinde
              <button data-seviye="cirak"> ve <button data-seviye="uzman">
    ===================================================================== */
-import { baglantilariGuncelle } from './durum.mjs';
+import { baglantilariGuncelle } from './durum.js';
 
 export function seviye() {
   return new URLSearchParams(location.search).get('seviye') === 'uzman' ? 'uzman' : 'cirak';

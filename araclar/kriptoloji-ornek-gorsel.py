@@ -5,7 +5,7 @@ Görseller bu betikle ÇİZİLİR (dış kaynak yok, lisans sorunu yok):
   kriptoloji/murekkep/ornekler/kek-mektup.png  dairenin gizli mektubu (Dosya 301)
 
 Düz renkler ve kenar yumuşatma olmadan çizilir: böylece "bit düzlemi" sakin görünür ve
-gizlenen mesaj orada kar gibi belirir. Gizleme biçimi kriptoloji/cekirdek/steg.mjs ile aynıdır.
+gizlenen mesaj orada kar gibi belirir. Gizleme biçimi kriptoloji/cekirdek/steg.js ile aynıdır.
 Çalıştır: python araclar/kriptoloji-ornek-gorsel.py   (Pillow gerekir: pip install pillow)
 """
 from pathlib import Path

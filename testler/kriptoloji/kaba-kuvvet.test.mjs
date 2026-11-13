@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ozet, yilKasasi, kasayiKir, hizOlc, rastgeleTam } from '../../kriptoloji/cekirdek/kaba-kuvvet.mjs';
+import { ozet, yilKasasi, kasayiKir, hizOlc, rastgeleTam } from '../../kriptoloji/cekirdek/kaba-kuvvet.js';
 
 test('SHA-256 özeti: bilinen değer ve 64 hex karakter', async () => {
   const o = await ozet('1987');

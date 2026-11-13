@@ -4,10 +4,10 @@
 
 | Parça | Dosya |
 | --- | --- |
-| Entropi ve süre hesapları | `kriptoloji/cekirdek/entropi.mjs` |
-| Gerçek SHA-256 kaba kuvveti ve hız ölçümü | `kriptoloji/cekirdek/kaba-kuvvet.mjs` |
-| Oda sayfası | `kriptoloji/kasa/index.html`, `kasa.mjs` |
-| Föy (hesap tablosu, zar etkinliği, cevap anahtarı) | `kriptoloji/kasa/foy.html`, `foy.mjs` |
+| Entropi ve süre hesapları | `kriptoloji/cekirdek/entropi.js` |
+| Gerçek SHA-256 kaba kuvveti ve hız ölçümü | `kriptoloji/cekirdek/kaba-kuvvet.js` |
+| Oda sayfası | `kriptoloji/kasa/index.html`, `kasa.js` |
+| Föy (hesap tablosu, zar etkinliği, cevap anahtarı) | `kriptoloji/kasa/foy.html`, `foy.js` |
 | Testler | `testler/kriptoloji/entropi.test.mjs`, `kaba-kuvvet.test.mjs` |
 
 7 dosya: 201–203 Çırak, 204–206 Uzman, 207 kapanış. Kapanışta "Anahtar Atölyesi yakında" köprüsü açılır.
@@ -16,7 +16,7 @@
 
 **1. Şifre yazılacak kutu yok.** İnsanlar "şifrem ne kadar güçlü?" diye gerçek şifrelerini yazma eğilimindedir. Sayfa hiçbir şey göndermese bile bu, yanlış bir alışkanlık öğretir. Bu yüzden kilitler hazır listeden seçiliyor. Sayfadaki yazı kutuları yalnız sayı cevapları (deneme sayısı, bit, yıl) içindir.
 
-**2. Tablo elle yazılmadı.** Brief'teki tablonun her hücresi (126 → 7,0 bit, 29⁸ → 50 saniye, 7776⁵ → 90 yıl…) `entropi.mjs` ile hesaplanıyor. Testler bu değerleri brief'le karşılaştırıyor. Föydeki cevap anahtarı da aynı fonksiyonlardan üretiliyor; sayfa ile föy hiçbir zaman birbirini tutmaz hâle gelemez.
+**2. Tablo elle yazılmadı.** Brief'teki tablonun her hücresi (126 → 7,0 bit, 29⁸ → 50 saniye, 7776⁵ → 90 yıl…) `entropi.js` ile hesaplanıyor. Testler bu değerleri brief'le karşılaştırıyor. Föydeki cevap anahtarı da aynı fonksiyonlardan üretiliyor; sayfa ile föy hiçbir zaman birbirini tutmaz hâle gelemez.
 
 **3. Yakalanan küçük bir hata.** İlk sürümde olasılık sayısını 2^(bit) ile geri hesaplıyordum. 4 haneli PIN için bu 9999,9999… verdi ve "≈ 1 saniye" yerine "1 saniyeden kısa" yazdı. Bilgisayarlar ondalık sayıları tam saklayamaz; doğrudan N^L hesaplamak bu sorunu ortadan kaldırdı. Testler bu hatayı yazar yazmaz yakaladı.
 

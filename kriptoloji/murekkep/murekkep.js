@@ -1,17 +1,17 @@
 /* =====================================================================
-   ODA 3 · GÖRÜNMEZ MÜREKKEP — kriptoloji/murekkep/murekkep.mjs
+   ODA 3 · GÖRÜNMEZ MÜREKKEP — kriptoloji/murekkep/murekkep.js
    Görseller yalnız bu tarayıcıda, <canvas> üzerinde işlenir. Ağ isteği yok, depo yok.
-   Gizleme/çözme cekirdek/steg.mjs ile yapılır (saf, test edilmiş).
+   Gizleme/çözme cekirdek/steg.js ile yapılır (saf, test edilmiş).
    ===================================================================== */
-import { metinGizle, metinCoz, bitDuzlemi, kapasiteBayt, kapasiteBit, enBuyukFark, degisenKanal, ikili, KapasiteHatasi } from '../cekirdek/steg.mjs';
-import { sezar } from '../cekirdek/sezar.mjs';
-import { buyukHarf } from '../cekirdek/turkce-alfabe.mjs';
-import { sayiYaz } from '../cekirdek/entropi.mjs';
-import { ozet } from '../cekirdek/kaba-kuvvet.mjs';
-import { gorevBagla } from '../bilesenler/gorev.mjs';
-import { seviyeBaslat } from '../bilesenler/seviye.mjs';
-import { sunumBaslat } from '../bilesenler/sunum.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { metinGizle, metinCoz, bitDuzlemi, kapasiteBayt, kapasiteBit, enBuyukFark, degisenKanal, ikili, KapasiteHatasi } from '../cekirdek/steg.js';
+import { sezar } from '../cekirdek/sezar.js';
+import { buyukHarf } from '../cekirdek/turkce-alfabe.js';
+import { sayiYaz } from '../cekirdek/entropi.js';
+import { ozet } from '../cekirdek/kaba-kuvvet.js';
+import { gorevBagla } from '../bilesenler/gorev.js';
+import { seviyeBaslat } from '../bilesenler/seviye.js';
+import { sunumBaslat } from '../bilesenler/sunum.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const $ = (s) => document.querySelector(s);
 const ENBUYUK = 1200;   // eski bilgisayarlar için: daha büyük görseller küçültülür

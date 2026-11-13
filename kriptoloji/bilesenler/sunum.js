@@ -1,5 +1,5 @@
 /* =====================================================================
-   SUNUM MODU — kriptoloji/bilesenler/sunum.mjs
+   SUNUM MODU — kriptoloji/bilesenler/sunum.js
    ?sunum=1 ile açılır (akıllı tahta için):
    • büyük yazı (daire.css → html.sunum)
    • adım adım ilerleme: [data-adim] öğeleri tek tek gösterilir; → / ← / PageDown / PageUp / boşluk

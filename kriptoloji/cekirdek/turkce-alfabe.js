@@ -1,5 +1,5 @@
 /* =====================================================================
-   TÜRK ALFABESİ — kriptoloji/cekirdek/turkce-alfabe.mjs
+   TÜRK ALFABESİ — kriptoloji/cekirdek/turkce-alfabe.js
    Şifre Dairesi'nin bütün odaları bu modülü kullanır. Saf fonksiyonlar; DOM'a dokunmaz.
    Test: node --test testler/kriptoloji/
 

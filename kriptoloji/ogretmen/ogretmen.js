@@ -1,7 +1,7 @@
 /* Öğretmen Masası: bağlantılar ilerleme/seviye taşır; kayıt kodu okuyucu (bellekte, gönderilmez). */
-import { kodCoz, hataMetni } from '../cekirdek/kayit-kodu.mjs';
-import { DOSYALAR, ODALAR, RUTBELER, rutbeSirasi, sayim } from '../cekirdek/dosyalar.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { kodCoz, hataMetni } from '../cekirdek/kayit-kodu.js';
+import { DOSYALAR, ODALAR, RUTBELER, rutbeSirasi, sayim } from '../cekirdek/dosyalar.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const $ = (s) => document.querySelector(s);
 const NO = { lobi: '000-A' };

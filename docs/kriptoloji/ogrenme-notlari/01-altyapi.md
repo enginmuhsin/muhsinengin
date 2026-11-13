@@ -4,13 +4,13 @@
 
 | Parça | Dosya | Görevi |
 | --- | --- | --- |
-| Türk alfabesi | `kriptoloji/cekirdek/turkce-alfabe.mjs` | 29 harf, İ/ı dönüşümü, NFC, mod |
-| Sezar | `kriptoloji/cekirdek/sezar.mjs` | E(x) = (x + k) mod 29, kaba kuvvet tablosu |
-| Dosya sicili | `kriptoloji/cekirdek/dosyalar.mjs` | 22 dosya, bit numaraları, rütbe eşikleri |
-| Kayıt kodu | `kriptoloji/cekirdek/kayit-kodu.mjs` | KRT-XXXXX-C, mod 31 kontrol karakteri |
+| Türk alfabesi | `kriptoloji/cekirdek/turkce-alfabe.js` | 29 harf, İ/ı dönüşümü, NFC, mod |
+| Sezar | `kriptoloji/cekirdek/sezar.js` | E(x) = (x + k) mod 29, kaba kuvvet tablosu |
+| Dosya sicili | `kriptoloji/cekirdek/dosyalar.js` | 22 dosya, bit numaraları, rütbe eşikleri |
+| Kayıt kodu | `kriptoloji/cekirdek/kayit-kodu.js` | KRT-XXXXX-C, mod 31 kontrol karakteri |
 | Ortak bileşenler | `kriptoloji/bilesenler/` | ilerleme (bellek + `#`), seviye, sunum modu, damga |
 | Görünüm | `kriptoloji/daire.css` | İki Kalem diline "oda kaplaması" |
-| Lobi | `kriptoloji/index.html`, `lobi.mjs` | giriş dosyası (akrostiş), mühür, şubeler, kayıt kodu |
+| Lobi | `kriptoloji/index.html`, `lobi.js` | giriş dosyası (akrostiş), mühür, şubeler, kayıt kodu |
 | Çevrimdışı | `kriptoloji/sw.js` | bir kez açılınca internetsiz çalışır |
 | Testler | `testler/kriptoloji/*.test.mjs` | 16 test; GitHub her push'ta çalıştırır |
 | Sayaç | `ortak/sayac.js` | yeni "depsuz mod" (`data-depo="yok"`) |

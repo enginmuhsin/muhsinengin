@@ -1,8 +1,8 @@
 /* Sezar föyü: kâğıt diskler, görev mesajları ve ayrı sayfada cevap anahtarı. */
-import { sezarCoz, sezar } from '../cekirdek/sezar.mjs';
-import { BUYUK } from '../cekirdek/turkce-alfabe.mjs';
-import { cizKagitDisk } from '../bilesenler/cark.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { sezarCoz, sezar } from '../cekirdek/sezar.js';
+import { BUYUK } from '../cekirdek/turkce-alfabe.js';
+import { cizKagitDisk } from '../bilesenler/cark.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const M1 = { sifreli: 'FAJBS VEEZ BĞZI EÜYNCHI FAPAYEPMR', k: 5 };
 const M2 = { sifreli: 'UGEGBRİYNYŞY UİBSÇS İLSU', k: 11 };

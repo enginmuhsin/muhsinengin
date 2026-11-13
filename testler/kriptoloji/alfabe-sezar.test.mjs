@@ -1,8 +1,8 @@
 // Çalıştır: node --test testler/kriptoloji/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { BUYUK, KUCUK, N, sira, normalle, buyukHarf, kucukHarf, mod, yabanciHarfler } from '../../kriptoloji/cekirdek/turkce-alfabe.mjs';
-import { sezar, sezarCoz, kabaKuvvet, anahtarNormal } from '../../kriptoloji/cekirdek/sezar.mjs';
+import { BUYUK, KUCUK, N, sira, normalle, buyukHarf, kucukHarf, mod, yabanciHarfler } from '../../kriptoloji/cekirdek/turkce-alfabe.js';
+import { sezar, sezarCoz, kabaKuvvet, anahtarNormal } from '../../kriptoloji/cekirdek/sezar.js';
 
 test('alfabe: 29 harf, doğru sıra', () => {
   assert.equal(N, 29);

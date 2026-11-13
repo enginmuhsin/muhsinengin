@@ -1,7 +1,7 @@
 // Brief bölüm 7'deki tablo kodla yeniden hesaplanır.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KILITLER, bit, uzay, entropi, tumSure, ortalamaSure, sureYaz, bilimsel, sayiYaz } from '../../kriptoloji/cekirdek/entropi.mjs';
+import { KILITLER, bit, uzay, entropi, tumSure, ortalamaSure, sureYaz, bilimsel, sayiYaz } from '../../kriptoloji/cekirdek/entropi.js';
 
 const k = (id) => KILITLER.find((x) => x.id === id);
 const yakin = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} ≈ ${b}`);

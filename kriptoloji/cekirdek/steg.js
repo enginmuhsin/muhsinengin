@@ -1,5 +1,5 @@
 /* =====================================================================
-   STEGANOGRAFİ (LSB) — kriptoloji/cekirdek/steg.mjs
+   STEGANOGRAFİ (LSB) — kriptoloji/cekirdek/steg.js
    Saf fonksiyonlar: RGBA piksel dizisi (Uint8ClampedArray / Uint8Array) üzerinde çalışır, DOM'a dokunmaz.
 
    Biçim:
