@@ -14,7 +14,10 @@ export function sunumBaslat() {
   if (!sunumAcikMi()) return;
   const kok = document.documentElement;
   kok.classList.add('sunum');
-  const adimlar = [...document.querySelectorAll('[data-adim]')];
+  const tumAdimlar = [...document.querySelectorAll('[data-adim]')];
+  // Çırak seviyesinde Uzman adımları atlanır (seviye sunum sırasında değişebilir)
+  const gorunur = () => tumAdimlar.filter((a) => kok.dataset.seviye === 'uzman' || !a.closest('[data-uzman]'));
+  let adimlar = gorunur();
   let i = 0;
 
   const cubuk = document.createElement('div');
@@ -35,6 +38,10 @@ export function sunumBaslat() {
 
   const adimNo = cubuk.querySelector('.adim-no');
   function goster(n) {
+    const simdiki = adimlar[i];
+    adimlar = gorunur();
+    if (simdiki && adimlar.includes(simdiki) && n === i) n = adimlar.indexOf(simdiki);
+    tumAdimlar.forEach((a) => a.classList.remove('etkin-adim'));
     if (!adimlar.length) { adimNo.textContent = ''; return; }
     i = Math.max(0, Math.min(adimlar.length - 1, n));
     adimlar.forEach((a, j) => a.classList.toggle('etkin-adim', j === i));
@@ -51,6 +58,7 @@ export function sunumBaslat() {
     if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); goster(i - 1); }
   });
   goster(0);
+  document.querySelectorAll('[data-seviye-secici] button').forEach((b) => b.addEventListener('click', () => setTimeout(() => goster(i), 0)));
 
   // Cevaplar
   const cevapDugme = cubuk.querySelector('[data-cevaplar]');
