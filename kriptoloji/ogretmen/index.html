@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; media-src 'self'; worker-src 'self'; manifest-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Öğretmen Masası · Şifre Dairesi</title>
+  <meta name="description" content="Şifre Dairesi için hazır ders akışları: ortaokul 40 dakika, lise 80 dakika, atölye 2×40. Sunum modu, yazdırılabilir föyler ve bilgisayarsız alternatifler.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Öğretmen Masası · Şifre Dairesi">
+  <meta property="og:description" content="Hazır ders akışları, föyler ve akıllı tahta için sunum modu.">
+  <meta property="og:url" content="https://muhsinengin.com/kriptoloji/ogretmen/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <script src="../../ortak/ana-sayfa.js" defer></script>
+  <script src="../../muzik/muzik.js" data-tema="odak" defer></script>
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../../ortak/matematik.css">
+  <script src="../../ortak/sayac.js" data-depo="yok" defer></script>
+  <script type="module" src="ogretmen.mjs"></script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Şifre Dairesi">
+      <ana-sayfa-dugmesi class="logo"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+      <span class="mc-sayfa" aria-hidden="true">Öğretmen Masası</span>
+      <button class="menu-dugme" type="button" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../" data-daire>Lobi</a>
+        <a class="nav-link" href="../sezar/" data-daire>Sezar Çarkı</a>
+        <a class="nav-link" href="../kasa/" data-daire>Kasa Soygunu</a>
+        <a class="nav-link" href="../murekkep/" data-daire>Görünmez Mürekkep</a>
+        <a class="nav-link" href="./" aria-current="page" data-daire>Öğretmen Masası</a>
+      </div>
+      <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
+    </nav>
+  </header>
+
+  <p id="duyuru" class="sr-only" aria-live="polite"></p>
+
+  <main id="ana">
+    <section class="oda-giris" aria-labelledby="baslik">
+      <p class="kunye">Dosya no. <b>900</b> · Öğretmen Masası</p>
+      <h1 id="baslik">Öğretmen <span class="ik-alt">Masası</span></h1>
+      <p class="alt">Şifre Dairesi'ni derste ve atölyede kullanmak için hazır akışlar. Her akışta sunum modu bağlantıları, föyler, dakika dakika plan ve bilgisayarsız bir seçenek var.</p>
+      <ul class="hizli-bilgi">
+        <li><strong>Hesap yok, kayıt yok.</strong> Öğrenci verisi saklanmaz; ilerleme bir kayıt koduyla taşınır.</li>
+        <li><strong>İnternet kesilirse.</strong> Bölüm bir kez açıldıktan sonra bu cihazda internetsiz çalışır. Dersten önce lobiyi ve kullanacağın odaları bir kez aç.</li>
+        <li><strong>Seviye.</strong> <code>?seviye=uzman</code> eklenmiş bağlantı lise katmanını (formül, ek görev, Proje Kapısı) açar.</li>
+      </ul>
+    </section>
+
+    <section class="dosya" id="akislar" aria-labelledby="akisBaslik">
+      <span class="dosya-sekme">Ders akışları</span>
+      <h2 id="akisBaslik">Hazır ders akışları</h2>
+
+      <article class="akis" aria-labelledby="a1">
+        <h3 id="a1"><span class="akis-no">1</span> Ortaokul · 40 dakika · Sezar Çarkı</h3>
+        <p class="kucuk">Hedef: Öğrenci, Sezar şifresiyle şifreleyip çözebilir ve 28 anahtarın neden az olduğunu açıklayabilir.</p>
+        <table class="plan">
+          <thead><tr><th scope="col">Dakika</th><th scope="col">Etkinlik</th><th scope="col">Nerede</th></tr></thead>
+          <tbody>
+            <tr><td>0–5</td><td>Lobideki kapı notunu birlikte çözün (akrostiş): “gizlemek” ile “şifrelemek” farkına ilk dokunuş.</td><td><a href="../?sunum=1" data-daire data-sunum-sabit>Lobi · sunum</a></td></tr>
+            <tr><td>5–12</td><td>Dönme dolap benzetmesi; çarkı tahtada çevirin, MERHABA'yı k = 3 ile şifreleyin.</td><td rowspan="3"><a href="../sezar/?sunum=1" data-daire data-sunum-sabit>Sezar · sunum</a></td></tr>
+            <tr><td>12–30</td><td>Dosya 101–103: takımlar hâlinde; puan tablosunu kullanın.</td></tr>
+            <tr><td>30–37</td><td>Kapanış sorusu (Dosya 107): önce tahmin, sonra Dosya 105 tablosunu gösterin.</td></tr>
+            <tr><td>37–40</td><td>Öğrenciler kayıt kodunu deftere yazar.</td><td><a href="../#kayit" data-daire>Lobi · kayıt</a></td></tr>
+          </tbody>
+        </table>
+        <p class="akis-baglar"><a class="dugme" href="../sezar/?sunum=1" data-daire data-sunum-sabit>Sunumu aç</a> <a class="dugme yalin" href="../sezar/foy.html" data-daire>Föy</a></p>
+        <p class="kagit"><strong>Bilgisayarsız:</strong> Föyün 1. sayfasındaki kâğıt çarkı kestirin (makas, ataş). Görevler 2. sayfada, cevap anahtarı 3. sayfada.</p>
+      </article>
+
+      <article class="akis" aria-labelledby="a2">
+        <h3 id="a2"><span class="akis-no">2</span> Lise · 80 dakika · Sezar (Uzman) + Kasa Soygunu + Proje Kapısı</h3>
+        <p class="kucuk">Hedef: Öğrenci, mod 29 ile Sezar formülünü uygular, entropiyi H = L · log₂(N) ile hesaplar ve sonucu süreye çevirir.</p>
+        <table class="plan">
+          <thead><tr><th scope="col">Dakika</th><th scope="col">Etkinlik</th><th scope="col">Nerede</th></tr></thead>
+          <tbody>
+            <tr><td>0–10</td><td>Çark ve formül: E(x) = (x + k) mod 29; Y + 3 neden B olur?</td><td rowspan="2"><a href="../sezar/?seviye=uzman&amp;sunum=1" data-daire data-sunum-sabit data-seviye-sabit>Sezar · Uzman · sunum</a></td></tr>
+            <tr><td>10–30</td><td>Dosya 104–107; “Neden 29?” tartışması (812'ye karşı 312 anahtar).</td></tr>
+            <tr><td>30–40</td><td>Laboratuvar: doğum yılı kasasını herkes kendi cihazında kırar; hızları tahtada karşılaştırın.</td><td rowspan="3"><a href="../kasa/?seviye=uzman&amp;sunum=1" data-daire data-sunum-sabit data-seviye-sabit>Kasa · Uzman · sunum</a></td></tr>
+            <tr><td>40–60</td><td>Kilit ve saldırgan karşılaştırması; Dosya 204–206.</td></tr>
+            <tr><td>60–70</td><td>Kapanış: kelime mi sembol mü? (Dosya 207)</td></tr>
+            <tr><td>70–80</td><td>Proje Kapısı: soru seçimi ve grup kurma (onaylı sorular yayımlanınca).</td><td>Oda sayfaları</td></tr>
+          </tbody>
+        </table>
+        <p class="akis-baglar"><a class="dugme" href="../sezar/?seviye=uzman&amp;sunum=1" data-daire data-sunum-sabit data-seviye-sabit>Sezar sunumu</a> <a class="dugme" href="../kasa/?seviye=uzman&amp;sunum=1" data-daire data-sunum-sabit data-seviye-sabit>Kasa sunumu</a> <a class="dugme yalin" href="../sezar/foy.html" data-daire>Sezar föyü</a> <a class="dugme yalin" href="../kasa/foy.html" data-daire>Kasa föyü</a></p>
+        <p class="kagit"><strong>Bilgisayarsız:</strong> Kasa föyündeki tabloyu hesap makinesiyle doldurun; log₂ değerleri föyde verilmiştir. Laboratuvar yerine 5 zarla kelime seçme etkinliği (6⁵ = 7776).</p>
+      </article>
+
+      <article class="akis" aria-labelledby="a3">
+        <h3 id="a3"><span class="akis-no">3</span> Atölye · 2 × 40 dakika · Üç odanın zinciri</h3>
+        <p class="kucuk">Hedef: Öğrenci şifrelemeyi, anahtar uzayını ve gizlemeyi birbirine bağlar: “Sezar ile şifrele, kekin içine gizle; bulan ne görür?”</p>
+        <table class="plan">
+          <thead><tr><th scope="col">Dakika</th><th scope="col">Etkinlik</th><th scope="col">Nerede</th></tr></thead>
+          <tbody>
+            <tr><td colspan="3" class="ders-ayrac">1. ders</td></tr>
+            <tr><td>0–20</td><td>Sezar Çarkı: Dosya 101–103 ve kapanış.</td><td><a href="../sezar/?sunum=1" data-daire data-sunum-sabit>Sezar · sunum</a></td></tr>
+            <tr><td>20–40</td><td>Kasa Soygunu: laboratuvar + Dosya 201–203 + kapanış.</td><td><a href="../kasa/?sunum=1" data-daire data-sunum-sabit>Kasa · sunum</a></td></tr>
+            <tr><td colspan="3" class="ders-ayrac">2. ders</td></tr>
+            <tr><td>0–15</td><td>Kekteki mektup: çöz, bit düzlemine bak.</td><td rowspan="3"><a href="../murekkep/?sunum=1" data-daire data-sunum-sabit>Mürekkep · sunum</a></td></tr>
+            <tr><td>15–30</td><td>Her takım bir mesajı önce Sezar'la şifreler, sonra gizler; PNG'yi başka takıma verir. Karşı takım hem bulur hem kırar.</td></tr>
+            <tr><td>30–35</td><td>JPEG deneyi ve kapanış (Dosya 307).</td></tr>
+            <tr><td>35–40</td><td>Kayıt kodları; rütbe töreni (Kod Kırıcı, Analist).</td><td><a href="../#kayit" data-daire>Lobi · kayıt</a></td></tr>
+          </tbody>
+        </table>
+        <p class="akis-baglar"><a class="dugme" href="../?sunum=1" data-daire data-sunum-sabit>Lobiden başla</a> <a class="dugme yalin" href="../sezar/foy.html" data-daire>Sezar föyü</a> <a class="dugme yalin" href="../kasa/foy.html" data-daire>Kasa föyü</a> <a class="dugme yalin" href="../murekkep/foy.html" data-daire>Mürekkep föyü</a></p>
+        <p class="kagit"><strong>Bilgisayarsız:</strong> Üç föy sırayla. Zincir etkinliği kâğıtta: takım bir kelimeyi kâğıt çarkla şifreler, “tek mi çift mi” tablosuyla sayılara gizler, karşı takıma verir.</p>
+      </article>
+    </section>
+
+    <section class="dosya" id="sunum" aria-labelledby="sunumBaslik">
+      <span class="dosya-sekme">Sunum modu</span>
+      <h2 id="sunumBaslik">Sunum modu nasıl çalışır?</h2>
+      <p>Herhangi bir oda adresinin sonuna <code>?sunum=1</code> eklenir (yukarıdaki bağlantılar bunu kendiliğinden yapar).</p>
+      <dl class="ogretmen-not">
+        <dt>Büyük yazı</dt><dd>Akıllı tahtada arkadan okunacak boyuta büyür.</dd>
+        <dt>Adım adım</dt><dd>→, boşluk ya da PageDown sonraki bölüm; ← ya da PageUp önceki bölüm. Akıllı tahtada alt çubuktaki “Sonraki” düğmesine dokun. Çırak'ta Uzman bölümleri atlanır.</dd>
+        <dt>Cevaplar</dt><dd>Cevap bulunan bölümlerde “Cevapları göster” ile açılır; varsayılan olarak gizlidir.</dd>
+        <dt>Süre</dt><dd>Başlat / Durdur / Sıfırla. Etkinlik süresini tahtada gösterir.</dd>
+        <dt>Takım puanları</dt><dd>2–4 takım, + ve − düğmeleriyle. Puanlar yalnız açık sekmede tutulur; sayfa kapanınca silinir.</dd>
+      </dl>
+    </section>
+
+    <section class="dosya" id="kod-okuyucu" aria-labelledby="kodBaslik">
+      <span class="dosya-sekme">Kod okuyucu</span>
+      <h2 id="kodBaslik">Öğrencinin kayıt kodunu oku</h2>
+      <p class="ozet">Öğrencinin defterine yazdığı kodu gir; hangi dosyaları çözdüğünü gör. Kod hiçbir yere gönderilmez ve saklanmaz.</p>
+      <div class="cevap-satir">
+        <label class="alan">Kayıt kodu<input id="okuKod" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="KRT-XXXXX-X"></label>
+        <button class="dugme" type="button" id="okuDugme">Oku</button>
+      </div>
+      <p class="geri-bildirim" id="okuSonuc" aria-live="polite"></p>
+      <div id="okuTablo" hidden></div>
+      <p class="durust-not">Kod yazım hatasını yakalar ama sahteciliği engellemez: formülü bilen bir öğrenci geçerli bir kod üretebilir. Kodu not vermek için değil, kaldığı yerden devam etmek için kullanın.</p>
+    </section>
+
+    <section class="dosya" id="veli" aria-labelledby="veliBaslik">
+      <span class="dosya-sekme">Veli ve idare için</span>
+      <h2 id="veliBaslik">Gizlilik özeti</h2>
+      <ul class="hizli-bilgi">
+        <li>Bölüm, öğrencinin yazdığı hiçbir şeyi (mesaj, görsel, kod) kaydetmez ve göndermez. Görseller yalnız öğrencinin tarayıcısında işlenir.</li>
+        <li>Çerez, yerel depolama ya da hesap kullanılmaz. Yalnız sayfanın kaç kez açıldığı sayılır; kim olduğu sayılmaz.</li>
+        <li>Kasa Soygunu'nda şifre yazılacak bir alan yoktur; örnekler kurgusaldır.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Şifre Dairesi · Öğretmen Masası · Ders akışları öneridir; sınıfınıza göre uyarlayın.</p>
+  </footer>
+</body>
+</html>
