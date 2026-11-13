@@ -33,5 +33,5 @@ En düşük bit, bir fiyat etiketindeki **kuruş hanesi** gibidir. 200,00 TL ile
 1. `http://localhost:8000/kriptoloji/murekkep/` aç, "Mektubu çıkar" düğmesine bas. Bit düzleminde en üstte ince bir kar şeridi var mı?
 2. "Bir sayfalık mektup gizle" düğmesine bas ve dört görseli karşılaştır: üstteki iki resim aynı, alttaki iki bit düzlemi çok farklı.
 3. "JPEG'e çevir ve çöz" düğmesine bas. Bit düzleminde ne oldu?
-4. Kendi çizdiğin bir resme mesaj gizle, PNG'yi indir, telefonuna gönder ve telefondan "Başka bir PNG aç" ile çöz. Sonra aynı resmi WhatsApp'tan gönderip dene: WhatsApp resmi JPEG'e çevirdiği için mesaj kaybolur.
+4. Kendi çizdiğin bir resme mesaj gizle, PNG'yi indir, telefonuna gönder ve telefondan "Başka bir PNG aç" ile çöz. Sonra aynı resmi WhatsApp ile "fotoğraf" olarak gönderip dene: WhatsApp fotoğrafları genellikle sıkıştırdığı için mesaj büyük olasılıkla kaybolur ("belge" olarak gönderilirse korunur).
 5. Testler: `node --test testler/kriptoloji/*.test.mjs`.
