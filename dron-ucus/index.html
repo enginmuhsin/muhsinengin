@@ -169,6 +169,16 @@ kbd{font-family:var(--f-govde);background:rgba(255,255,255,.08);border:1px solid
 #kolSol{left:calc(22px + env(safe-area-inset-left,0px))}#kolSag{right:calc(22px + env(safe-area-inset-right,0px))}
 .kol i{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:rgba(238,243,250,.85);box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .kol small{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--soluk)}
+.kol.csc{border-color:var(--itki);box-shadow:0 0 0 3px rgba(255,176,74,.35)}
+/* akıllı tahta: iki kol yan yana, tek öğrenci iki eliyle yetişir; ortadaki tutamaçla tahtada sağa sola taşınır */
+#kolTasi{display:none}
+body.bitisik #kolSol{left:calc(var(--kx,50vw) - 178px);right:auto}
+body.bitisik #kolSag{left:calc(var(--kx,50vw) + 28px);right:auto}
+body.bitisik #kolTasi{display:flex;position:absolute;left:var(--kx,50vw);bottom:calc(68px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  width:44px;height:60px;align-items:center;justify-content:center;flex-direction:column;gap:2px;background:var(--gece);border:1px solid var(--cizgi);
+  color:var(--soluk);font-size:18px;line-height:1;pointer-events:auto;touch-action:none;cursor:grab;user-select:none}
+body.bitisik #kolTasi small{font-size:9px;letter-spacing:.04em}
+#bOto{border-color:var(--itki)!important}
 body.dokun #fizikP{display:none}
 body.dokun #telem{bottom:auto;top:calc(58px + env(safe-area-inset-top,0px));min-width:0;font-size:11.5px;padding:8px 11px}
 body.dokun #gazG{top:38%}
@@ -294,8 +304,10 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
         <kbd>F</kbd><span>Tam ekran (akıllı tahta için)</span>
         <kbd>R</kbd><span>Görevi baştan başlat</span>
         <kbd>Esc</kbd><span>Menüye dön</span>
+        <kbd>T</kbd><span>Otomatik kalkış: motorlar çalışır, dron 2 m'ye çıkar ve hover gazında asılı kalıp komut bekler. Havadayken T otomatik iniş yapar.</span>
+        <kbd>Kol komutu</kbd><span>Gerçek kumandalardaki gibi: iki kolu birden içe-aşağı (sol kol sağ alta, sağ kol sol alta) yarım saniye tut → otomatik kalkış. Gamepad'de de çalışır.</span>
         <kbd>Gamepad</kbd><span>Mode 2: sol kol gaz + dönüş, sağ kol eğim</span>
-        <kbd>Dokunmatik</kbd><span>Ekranda iki kol çıkar</span>
+        <kbd>Dokunmatik</kbd><span>Ekranda iki kol çıkar. Akıllı tahtada <b>Kollar: bitişik</b> seç: iki kol yan yana gelir, tek öğrenci iki eliyle yetişir; ortadaki ⇔ tutamaçla kumandayı durduğun yere sürükle.</span>
       </div>
     </details>
     <p class="alt-not">Fizik: Dron Tasarım Laboratuvarı'nın <code>hesap.js</code> dosyası, değiştirilmeden. Sonuçlar basitleştirilmiş modellere dayanan tahminlerdir. <a id="labaGit" href="../dron-lab/index.html" target="_blank" rel="noopener">Bu tasarımı Laboratuvar'da aç ↗</a></p>
@@ -309,7 +321,9 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
     <div class="ilerleme"><span>Süre <b id="gSure" class="num">0,0 s</b></span><span id="gEk"></span></div>
   </div>
   <div class="dugmeler">
+    <button id="bOto" type="button" title="Otomatik kalkış: 2 m'ye çıkar ve orada asılı bekler (T tuşu ya da iki kolu içe-aşağı indir)">Oto kalkış</button>
     <button id="bKamera" type="button">Kamera: Takip</button>
+    <button id="bKol" type="button" hidden title="Ayrık: kollar ekranın iki ucunda (telefon, iki kişilik takım). Bitişik: kollar yan yana, tek öğrenci kullanır; ortadaki tutamaçla taşınır.">Kollar: ayrık</button>
     <button id="bFizik" type="button" hidden>Fizik</button>
     <button id="bSes" type="button">Ses: açık</button>
     <button id="bTam" type="button" hidden>Tam ekran</button>
@@ -347,6 +361,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   </div>
   <div class="kol" id="kolSol" hidden><i></i><small>gaz · dönüş</small></div>
   <div class="kol" id="kolSag" hidden><i></i><small>eğim</small></div>
+  <div id="kolTasi" role="slider" aria-label="Kumandayı sağa sola taşı" title="Sürükle: kumandayı tahtada durduğun yere getir">⇔<small>taşı</small></div>
 </div>
 
 <div id="sonuc" hidden>
@@ -1384,6 +1399,7 @@ addEventListener('keydown', (e) => {
   if (durum === 'menu' && e.code === 'Enter') { e.preventDefault(); baslat(); }
   if (durum === 'ucus') {
     if (e.code === 'KeyC') kameraDegis();
+    if (e.code === 'KeyT') otoDugme();
     if (e.code === 'KeyF') tamEkran();
     if (e.code === 'KeyR') baslat();
     if (e.code === 'Escape') menuyeDon();
@@ -1408,23 +1424,45 @@ function kolKur(id, sabitY) {
     const d = Math.hypot(dx, dy); if (d > R) { dx *= R / d; dy *= R / d; }
     k.x = dx / R; k.y = -dy / R; top.style.transform = `translate(${dx}px,${dy}px)`;
   };
-  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); k.aktif = true; guncelle(e); });
+  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); k.aktif = true; k.kilit = false; k.t0 = performance.now(); guncelle(e); });
   el.addEventListener('pointermove', (e) => { if (k.aktif) guncelle(e); });
   const birak = () => {
-    k.aktif = false; k.x = 0;
+    k.aktif = false; k.kilit = false; k.x = 0;
     if (!k.sabitY()) k.y = 0;
     top.style.transform = `translate(0px,${-k.y * R}px)`;
   };
   el.addEventListener('pointerup', birak); el.addEventListener('pointercancel', birak);
-  k.sifirla = () => { k.x = 0; k.y = k.sabitY() ? -1 : 0; top.style.transform = `translate(0px,${-k.y * R}px)`; };
+  k.sifirla = () => { k.kilit = false; k.x = 0; k.y = k.sabitY() ? -1 : 0; top.style.transform = `translate(0px,${-k.y * R}px)`; };
   kollar[id] = k;
 }
 kolKur('kolSol', () => ayar.mod === 'normal');
 kolKur('kolSag', () => false);
+// kumanda düzeni: ayrık (telefon, iki kişilik takım) ya da bitişik (akıllı tahtada tek öğrenci)
+const KOL_ANAHTAR = 'ucus-kol-duzeni';
+const kolAyar = oku(KOL_ANAHTAR) || { secildi: false, bitisik: false, kx: 0.5 };
+function kolDuzenUygula() {
+  // seçim yapılmadıysa geniş dokunmatik ekranı (akıllı tahta) bitişik başlat
+  if (!kolAyar.secildi) kolAyar.bitisik = innerWidth >= 1400;
+  const bit = dokunmatik && kolAyar.bitisik;
+  document.body.classList.toggle('bitisik', bit);
+  const kx = sinirla(kolAyar.kx * innerWidth, 190, innerWidth - 190);
+  $('hud').style.setProperty('--kx', kx + 'px');
+  $('bKol').textContent = kolAyar.bitisik ? 'Kollar: bitişik' : 'Kollar: ayrık';
+}
+$('bKol').addEventListener('click', () => { kolAyar.secildi = true; kolAyar.bitisik = !kolAyar.bitisik; yaz(KOL_ANAHTAR, kolAyar); kolDuzenUygula(); bildir(kolAyar.bitisik ? 'Kollar yan yana: ⇔ ile taşı' : 'Kollar ekranın iki ucunda', 1500); });
+{
+  const t = $('kolTasi'); let sur = false;
+  t.addEventListener('pointerdown', (e) => { t.setPointerCapture(e.pointerId); sur = true; });
+  t.addEventListener('pointermove', (e) => { if (!sur) return; kolAyar.kx = e.clientX / innerWidth; kolDuzenUygula(); });
+  const bitir = () => { if (!sur) return; sur = false; kolAyar.secildi = true; yaz(KOL_ANAHTAR, kolAyar); };
+  t.addEventListener('pointerup', bitir); t.addEventListener('pointercancel', bitir);
+  addEventListener('resize', kolDuzenUygula);
+}
 let dokunmatik = matchMedia('(pointer: coarse)').matches;
 function dokunmatikAyarla() {
   document.body.classList.toggle('dokun', dokunmatik);
-  $('kolSol').hidden = $('kolSag').hidden = !dokunmatik; $('bFizik').hidden = !dokunmatik;
+  $('kolSol').hidden = $('kolSag').hidden = !dokunmatik; $('bFizik').hidden = !dokunmatik; $('bKol').hidden = !dokunmatik;
+  kolDuzenUygula();
 }
 addEventListener('touchstart', () => { if (!dokunmatik) { dokunmatik = true; dokunmatikAyarla(); } }, { passive: true });
 dokunmatikAyarla();
@@ -1441,27 +1479,104 @@ function girdiOku(dt) {
   girdi.pitch = yumusak.pitch; girdi.roll = yumusak.roll; girdi.yaw = yumusak.yaw; girdi.tirman = yumusak.tirman;
   if (ayar.mod === 'normal') girdi.gaz = sinirla(girdi.gaz + c * dt * 0.45, 0, 1);
 
+  const o = uc && uc.oto;
+  let mudahale = !!(o && c !== 0);   // otomatik uçuşta pilot dikey komut verirse kontrol ona geçer
   // gamepad (Mode 2)
   const gp = navigator.getGamepads ? [...navigator.getGamepads()].find((g) => g && g.connected) : null;
+  let gpCsc = false;
   if (gp && gp.axes.length >= 4) {
     const ol = (v) => (Math.abs(v) < 0.07 ? 0 : v);
     const a = gp.axes.map(ol);
-    if (a.some((v) => v !== 0)) {
+    // kol komutu (CSC): iki kol birden aşağı ve içe (ya da dışa)
+    gpCsc = a[1] > 0.6 && a[3] > 0.6 && Math.abs(a[0]) > 0.6 && Math.abs(a[2]) > 0.6 && Math.sign(a[0]) !== Math.sign(a[2]);
+    if (o && o.gpKilit && a.every((v) => Math.abs(v) < 0.3)) o.gpKilit = false;   // komuttan sonra kollar bırakıldı
+    if (a.some((v) => v !== 0) && !(o && o.gpKilit)) {
+      const gpGaz = sinirla((-gp.axes[1] + 1) / 2, 0, 1);
       girdi.yaw = a[0]; girdi.roll = a[2]; girdi.pitch = -a[3];
-      if (ayar.mod === 'normal') girdi.gaz = sinirla((-gp.axes[1] + 1) / 2, 0, 1); else girdi.tirman = -a[1];
+      if (ayar.mod === 'normal') { girdi.gaz = gpGaz; if (o && Math.abs(gpGaz - uc.gazK) < 0.06) mudahale = true; }   // gaz kolu hover'ı yakaladı
+      else { girdi.tirman = -a[1]; if (o && Math.abs(a[1]) > 0.15) mudahale = true; }
     }
   }
   // dokunmatik
+  let dokCsc = false;
   if (dokunmatik) {
     const L = kollar.kolSol, R = kollar.kolSag;
-    if (L.aktif || L.y !== 0 || L.x !== 0) {
+    dokCsc = L.aktif && R.aktif && L.y < -0.55 && R.y < -0.55 && Math.abs(L.x) > 0.55 && Math.abs(R.x) > 0.55 && Math.sign(L.x) !== Math.sign(R.x);
+    ['kolSol', 'kolSag'].forEach((id) => $(id).classList.toggle('csc', dokCsc));
+    if (!L.kilit && (L.aktif || L.y !== 0 || L.x !== 0)) {
       girdi.yaw = L.x;
       if (ayar.mod === 'normal') girdi.gaz = (L.y + 1) / 2; else girdi.tirman = L.y;
+      if (o && L.aktif) mudahale = mudahale || (ayar.mod === 'normal' ? Math.abs(L.y - (2 * uc.gazK - 1)) > 0.12 : Math.abs(L.y) > 0.15);
     }
-    if (R.aktif || R.x || R.y) { girdi.roll = R.x; girdi.pitch = R.y; }
+    if (!R.kilit && (R.aktif || R.x || R.y)) { girdi.roll = R.x; girdi.pitch = R.y; }
   }
+  // kol komutu yarım saniye tutulursa: motorları çalıştır ve otomatik kalk
+  // komut tutulurken kollar dronu yerde döndürmesin / gaz vermesin (gerçekte motorlar o an kapalıdır)
+  if ((gpCsc || dokCsc) && uc && uc.yerde && !uc.oto) { girdi.yaw = girdi.roll = girdi.pitch = girdi.tirman = 0; if (ayar.mod === 'normal') girdi.gaz = 0; }
+  cscSure = (gpCsc || dokCsc) && uc && uc.yerde && !uc.oto && !uc.dustu ? cscSure + dt : 0;
+  if (cscSure > 0.1 && cscSure - dt <= 0.1) bildir('Kol komutu: motorlar çalışıyor…', 700);
+  if (cscSure > 0.5) { cscSure = 0; otoKalkis(); }
+  if (uc && uc.oto) otoGirdi(mudahale);
   if (gorevD) ek(gorevD.tip, 'girdi', gorevD, dt);
   if (gorevD && gorevD.bekle) { girdi.roll = girdi.pitch = girdi.yaw = girdi.tirman = 0; if (ayar.mod === 'normal') girdi.gaz = 0; }
+}
+
+/* ---------- otomatik kalkış / iniş (gerçek dronlardaki "auto takeoff / RTH iniş" gibi) ----------
+   Fazlar: arm (motorlar rölantide döner) → kalkis (2 m'ye tırmanır) → tut (hover gazında irtifa sabit, komut bekler)
+   ya da inis (yavaşlayarak alçalır, yere değince motorlar durur). Pilot dikey komut verince kontrol ona geçer. */
+let cscSure = 0;
+const OTO_IRTIFA = 2;
+function otoKalkis() {
+  const u = uc; if (!u || !u.yerde || u.dustu || u.oto || (gorevD && gorevD.bekle)) return;
+  u.oto = { faz: 'arm', t: 0, hedefY: u.poz.y + OTO_IRTIFA, gpKilit: true };
+  // komutu veren kollar bırakılana kadar dronu yönlendirmesin
+  kollar.kolSol.kilit = kollar.kolSol.aktif; kollar.kolSag.kilit = kollar.kolSag.aktif;
+  bildir('Motorlar çalıştı · otomatik kalkış', 1400);
+}
+function otoInis() {
+  const u = uc; if (!u || u.yerde || u.dustu) return;
+  u.oto = { faz: 'inis', t: 0, gpKilit: false };
+  bildir('Otomatik iniş', 1200);
+}
+function otoDugme() {
+  if (durum !== 'ucus' || !uc) return;
+  if (uc.oto && uc.oto.faz === 'inis') { otoBirak('İniş iptal · hover'); return; }
+  if (uc.yerde) otoKalkis(); else otoInis();
+}
+function otoBirak(mesaj) {
+  const u = uc; if (!u || !u.oto) return;
+  if (ayar.mod === 'normal') girdi.gaz = u.gazK;   // devirde gaz sıçramasın
+  u.oto = null; bildir(mesaj || 'Kontrol sende', 1100);
+}
+function otoGirdi(mudahale) {
+  const u = uc, o = u.oto;
+  if (o.faz === 'arm' || o.faz === 'kalkis') { girdi.roll = girdi.pitch = girdi.yaw = 0; girdi.tirman = 0; }
+  if ((o.faz === 'tut' || o.faz === 'inis') && mudahale) return otoBirak();
+  if (ayar.mod === 'normal') {
+    // gaz kolunu da hover konumuna getir: pilot elini koyduğunda gaz kaldığı yerden devam eder
+    girdi.gaz = u.gazK;
+    const L = kollar.kolSol;
+    if (!L.aktif) { L.y = 2 * u.gazK - 1; L.x = 0; $('kolSol').querySelector('i').style.transform = `translate(0px,${-L.y * 46}px)`; }
+  } else if (o.faz !== 'tut') girdi.tirman = 0;
+}
+// fizik adımında: irtifa denetleyicisi (kolay moddaki dikey hız PI'si, hedef hız irtifa hatasından gelir)
+function otoGaz(dt, egim, Tmaks) {
+  const u = uc, f = fz, o = u.oto; o.t += dt;
+  if (o.faz === 'arm') { u.gazK = 0.15; u.integ = 0; if (o.t > 0.9) o.faz = 'kalkis'; return; }   // rölanti: pervaneler döner, dron kalkmaz
+  let vz;
+  if (o.faz === 'inis') {
+    if (u.yerde) { u.oto = null; u.gazK = 0; u.integ = 0; if (ayar.mod === 'normal') girdi.gaz = 0; bildir('İndi · motorlar durdu', 1400); return; }
+    const h = u.poz.y - (zeminY(u.poz.x, u.poz.z, u.poz.y - f.ayak) + f.ayak);
+    vz = -sinirla(0.3 + 0.45 * h, 0.3, 1.5);   // yere yaklaştıkça yavaşla
+  } else {
+    const e = o.hedefY - u.poz.y;
+    vz = sinirla(1.6 * e, -1, 1.2);
+    if (o.faz === 'kalkis' && Math.abs(e) < 0.12 && Math.abs(u.hiz.y) < 0.25) { o.faz = 'tut'; bildir(`${OTO_IRTIFA} m · hover: komut bekleniyor`, 1800); }
+  }
+  const hata = vz - u.hiz.y;
+  u.integ = sinirla(u.integ + hata * dt, -3, 3);
+  const Tist = f.m * (G + 4 * hata + 1.6 * u.integ) / Math.max(Math.cos(egim), 0.5);
+  u.gazK = Math.sqrt(sinirla(Tist / Math.max(Tmaks, 1e-6), 0, 1));
 }
 
 /* =====================================================================
@@ -1598,7 +1713,7 @@ function baslat() {
   uc.pid = ayar.denge === 'pid' ? pidKazanc() : null;
   if (g.tip === 'pist' && g.rekor && g.rekor.iz) g.hayalet = hayaletYap();
   girdi.gaz = 0; for (const k in yumusak) yumusak[k] = 0;
-  kollar.kolSol.sifirla(); kollar.kolSag.sifirla();
+  kollar.kolSol.sifirla(); kollar.kolSag.sifirla(); cscSure = 0;
   durum = 'ucus';
   $('menu').hidden = true; $('sonuc').hidden = true; $('hud').hidden = false; $('uyari').hidden = true;
   $('gAd').textContent = [GOREVLER[g.tip].ad, ayar.kumanda === 'akro' ? 'Akro' : '', uc.pid ? 'PID' : ''].filter(Boolean).join(' · ');
@@ -1608,7 +1723,7 @@ function baslat() {
   hoverIzKonum();
   sesBaslat();
   kameraAni = true;
-  if (g.tip !== 'tunel' && !EK[g.tip]) bildir(ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç', 1600);
+  if (g.tip !== 'tunel' && !EK[g.tip]) bildir(dokunmatik ? 'İki kolu içe-aşağı indir: otomatik kalkış' : (ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç') + ' · T: otomatik kalkış', 2000);
   ek(g.tip, 'basla', g);
   zamanUygula(g.tip === 'kurtarma');
   if (geceAcik) setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
@@ -1710,7 +1825,8 @@ function fizikAdim(dt) {
   const egim = Math.acos(Math.cos(u.roll) * Math.cos(u.pitch));
 
   // --- gaz: kolay modda dikey hız denetleyicisi (PI) ---
-  if (ayar.mod === 'kolay') {
+  if (u.oto && !u.dustu) otoGaz(dt, egim, Tmaks);
+  else if (ayar.mod === 'kolay') {
     if (u.yerde && girdi.tirman <= 0.05) { u.gazK = 0; u.integ = 0; }
     else {
       const vzHedef = girdi.tirman >= 0 ? girdi.tirman * 3 : girdi.tirman * 2;
@@ -2272,6 +2388,7 @@ function hudGuncelle(dt) {
   $('gazDolu').style.height = (u.gaz * 100) + '%';
   $('gazKomut').style.bottom = (u.gazK * 100) + '%';
   $('gazYazi').textContent = '%' + Math.round(u.gaz * 100);
+  $('bOto').textContent = u.oto ? ({ arm: 'Motorlar…', kalkis: 'Kalkıyor…', tut: 'Hover · bekliyor', inis: 'İniyor… (iptal)' })[u.oto.faz] : u.yerde ? 'Oto kalkış' : 'Oto iniş';
   const olc = Math.max(Tmaks, W) * 1.05, gf = (N) => tr(N / G * 1000, 0) + ' g';
   $('cT').style.width = (u.T / olc * 100) + '%'; $('vT').textContent = gf(u.T);
   $('cTd').style.width = (u.T * Math.cos(egim) / olc * 100) + '%'; $('vTd').textContent = gf(u.T * Math.cos(egim));
@@ -2497,6 +2614,7 @@ function menuKur() {
   $('sTekrar').addEventListener('click', baslat); $('sMenu').addEventListener('click', menuyeDon);
   $('bMenu').addEventListener('click', menuyeDon); $('bKamera').addEventListener('click', kameraDegis);
   $('bFizik').addEventListener('click', () => document.body.classList.toggle('fizikAcik'));
+  $('bOto').addEventListener('click', otoDugme);
   $('bSes').addEventListener('click', () => { sesAcik = !sesAcik; $('bSes').textContent = 'Ses: ' + (sesAcik ? 'açık' : 'kapalı'); if (sesAcik) sesBaslat(); else sesSus(); });
 }
 function pidBilgiYaz() {
