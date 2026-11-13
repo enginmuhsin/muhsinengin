@@ -3,7 +3,8 @@
    Giriş dosyası (akrostiş), sicil mührü, şube sayaçları, rütbeler, kayıt kodu.
    Ağ isteği yok, depo yok: her şey bellekte (bilesenler/durum.js).
    ===================================================================== */
-import { buyukHarf } from './cekirdek/turkce-alfabe.js';
+import { buyukHarf, mod } from './cekirdek/turkce-alfabe.js';
+import { sezarCoz } from './cekirdek/sezar.js';
 import { DOSYALAR, ODALAR, RUTBELER, BIT_SAYISI, rutbeSirasi, sayim } from './cekirdek/dosyalar.js';
 import { kodCoz, hataMetni } from './cekirdek/kayit-kodu.js';
 import { coz, cozulduMu, dinle, kod, maskeKoy, maskeAl, baglantilariGuncelle } from './bilesenler/durum.js';
@@ -172,9 +173,42 @@ function kodYukle() {
 $('#kodYukle').addEventListener('click', kodYukle);
 kodGirdi.addEventListener('keydown', (e) => { if (e.key === 'Enter') kodYukle(); });
 
+/* ---------- Dairenin sırrı: arşiv notu ----------
+   Not sayfada yalnız şifreli hâliyle durur; anahtar doğruysa çarkla aynı modülle çözülür.
+   Anahtarın parçaları: Sezar (> 10), Kasa (tek ve < 15), Mürekkep (asal ve 11 değil) → 13. */
+const ARSIV_K = 13;
+function arsivDene() {
+  const g = $('#arsivK').value.trim(), sonuc = $('#arsivSonuc');
+  const k = Number(g);
+  sonuc.className = 'geri-bildirim';
+  if (!g || !Number.isInteger(k)) { sonuc.textContent = 'Anahtar bir tam sayı olmalı.'; return; }
+  if (mod(k, 29) !== ARSIV_K) {
+    const deneme = sezarCoz($('#arsivSifreli').textContent, k).slice(0, 28);
+    sonuc.textContent = 'Kilit açılmadı. Bu anahtarla not şöyle başlıyor: “' + deneme + '…” Anlamlı mı?';
+    sonuc.classList.add('olumsuz');
+    return;
+  }
+  sonuc.textContent = 'Klik! Anahtar ' + ARSIV_K + '. Arşivin kapısı açıldı.';
+  sonuc.classList.add('olumlu');
+  $('#arsivMetin').textContent = sezarCoz($('#arsivSifreli').textContent, ARSIV_K);
+  $('#arsivAcik').hidden = false;
+  damgala($('#arsiv-notu'));
+  arsivAcik = true;
+  planCiz(maskeAl());
+}
+$('#arsivDene').addEventListener('click', arsivDene);
+$('#arsivK').addEventListener('keydown', (e) => { if (e.key === 'Enter') arsivDene(); });
+
 seviyeBaslat();
 sunumBaslat();
 baglantilariGuncelle();
+
+// Odadan "Lobideki nota git" ile gelindiyse arşiv notuna kaydır (?git=arsiv; ilerleme # içinde kalır)
+if (new URLSearchParams(location.search).get('git') === 'arsiv') {
+  // adresi sayfa geçiş efekti bittikten sonra temizle (efekt sırasında adres değişirse tarayıcı efekti iptal eder)
+  setTimeout(() => { const u = new URL(location.href); u.searchParams.delete('git'); history.replaceState(history.state, '', u.href); }, 700);
+  requestAnimationFrame(() => { $('#arsiv-notu').scrollIntoView({ block: 'start' }); $('#arsivK').focus({ preventScroll: true }); });
+}
 
 /* ---------- Çevrimdışı çalışma: bir kez yüklenince internetsiz açılır ---------- */
 if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('sw.js').catch(() => {});

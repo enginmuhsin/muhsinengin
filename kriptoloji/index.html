@@ -170,6 +170,21 @@ Evrakları kimseye göstermeyin.</p>
       </details>
     </section>
 
+    <!-- 4b) Dairenin sırrı -->
+    <section class="dosya damga-yeri" id="arsiv-notu" data-adim aria-labelledby="arsivBaslik">
+      <span class="dosya-sekme">Arşiv · <b>gizli</b></span>
+      <h2 id="arsivBaslik">Arşivden düşen not</h2>
+      <p class="ozet">Kilitli arşivin kapısının altından bir not kaymış. Sezar ile şifrelenmiş; anahtarı kimse bilmiyor. Ama üç şubenin kapanış dosyalarında anahtarın birer parçası saklı.</p>
+      <p class="not-kagidi arsiv-kagidi" id="arsivSifreli">KDFUI KNTYOT. ETDKOKVU BOKYKD: PDÖVKAE KAKYUJU, KPUA, IURÖAÖDÖ IÖ ÖAURZK KGCYİÖEU. UÇĞMĞ: ÖA ETV RÖNÖA ŞKDP FUPDÖİU ÖYÖ IÖDUD.</p>
+      <div class="cevap-satir">
+        <label class="alan">Anahtar (k)<input id="arsivK" type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label>
+        <button class="dugme" type="button" id="arsivDene">Kilidi dene</button>
+      </div>
+      <p class="geri-bildirim" id="arsivSonuc" aria-live="polite"></p>
+      <details class="ipucu"><summary>Parçaları bulamadın mı?</summary><p>Bir kod kırıcı anahtarı beklemez. Sezar'da yalnız 28 anahtar olduğunu hatırla.</p></details>
+      <div class="mektup" id="arsivAcik" hidden><p class="mektup-baslik">Not çözüldü, arşiv açıldı:</p><p class="mektup-govde" id="arsivMetin"></p></div>
+    </section>
+
     <!-- 5) Gizlilik + öğretmen kapısı -->
     <section class="dosya iki-not" id="ogretmen" data-adim aria-label="Gizlilik ve öğretmen kapısı">
       <span class="dosya-sekme">Kapı</span>

@@ -435,3 +435,8 @@ html:not([data-seviye="uzman"]) .olcu dt[data-uzman] + dd { display: none; }
 .basamaklar li.yeni .rozet { animation: rozetVur .5s cubic-bezier(.2, .9, .3, 1.4) both; }
 @keyframes rozetVur { 0% { transform: scale(1.6) rotate(-14deg); opacity: 0; } 70% { transform: scale(.94) rotate(3deg); opacity: 1; } 100% { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .basamaklar li.yeni .rozet { animation: none; } }
+
+/* Dairenin sırrı */
+.arsiv-kagidi { letter-spacing: .08em; font-weight: 600; max-width: 46rem; }
+.arsiv-parca { margin-top: .9rem; padding: .5rem .8rem; max-width: 64ch; border: var(--kalem-ince) dashed var(--kirmizi); }
+.arsiv-etiket { display: inline-block; margin-right: .4rem; font: 600 .75rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--kirmizi); }
