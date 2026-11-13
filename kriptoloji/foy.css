@@ -31,3 +31,6 @@ body.foy { background: var(--bg); background-image: none; }
 .foy-tablo th { font-weight: 700; background: #f2f2f2; }
 .foy-tablo tbody td:empty { height: 9mm; }
 .sayfa .formul-buyuk { color: #111; }
+.piksel-foy td { text-align: center; font: 600 .95rem/1 var(--mono); width: 12.5%; }
+.piksel-foy tr:nth-child(even) td { height: 8mm; }
+.piksel-foy tr:nth-child(odd):not(:first-child) td { border-top: 2px solid #111; }
