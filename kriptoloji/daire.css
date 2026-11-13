@@ -1,7 +1,8 @@
-@import url("../ortak/tokenlar.css");
 /* =====================================================================
    ŞİFRE DAİRESİ — kriptoloji/daire.css
    Sitenin "İki Kalem" dilinin (ortak/tokenlar.css) üstüne bir ODA KAPLAMASI.
+   tokenlar.css her sayfada <link> ile ÖNCE yüklenir (@import ile değil: sayfa geçiş efektinin
+   @view-transition kuralı ancak böyle zamanında görülür).
    1) Temel + üst çubuk: dron/style.css'teki ortak kısmın kopyası (değişirse buraya da taşı).
    2) Daire: dosya sekmesi, damga, rütbe mührü, optik seçici, sunum modu.
    Yeni renk yok; kraft ve pirinç, var olan turuncu ve kâğıt tonlarının karışımıdır.
