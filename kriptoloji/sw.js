@@ -2,10 +2,10 @@
    Sayfa: önce ağ, yoksa önbellek. Diğer dosyalar: önbellekten hemen, arkada güncelle.
    Bir dosya değişince SURUM'u bir artır. Başka sitelere giden istekler (ziyaretçi sayacı) hiç ele alınmaz.
    NOT: İleride gelecek Anahtar Atölyesi (şifre üretici) bu klasörün DIŞINDA durmalı; bu çalışan ona karışmasın. */
-const SURUM = 'kripto-v3';
+const SURUM = 'kripto-v4';
 const DOSYALAR = ['./', 'index.html', 'daire.css', 'lobi.mjs',
   'cekirdek/turkce-alfabe.mjs', 'cekirdek/sezar.mjs', 'cekirdek/dosyalar.mjs', 'cekirdek/kayit-kodu.mjs',
-  'sezar/', 'kasa/', 'kasa/index.html', 'kasa/kasa.mjs', 'kasa/foy.html', 'kasa/foy.mjs', 'cekirdek/entropi.mjs', 'cekirdek/kaba-kuvvet.mjs', 'sezar/index.html', 'sezar/sezar.mjs', 'sezar/foy.html', 'sezar/foy.mjs', 'foy.css',
+  'sezar/', 'murekkep/', 'murekkep/index.html', 'murekkep/murekkep.mjs', 'murekkep/foy.html', 'murekkep/foy.mjs', 'murekkep/ornekler/kek.png', 'murekkep/ornekler/kek-mektup.png', 'cekirdek/steg.mjs', 'kasa/', 'kasa/index.html', 'kasa/kasa.mjs', 'kasa/foy.html', 'kasa/foy.mjs', 'cekirdek/entropi.mjs', 'cekirdek/kaba-kuvvet.mjs', 'sezar/index.html', 'sezar/sezar.mjs', 'sezar/foy.html', 'sezar/foy.mjs', 'foy.css',
   'bilesenler/cark.mjs', 'bilesenler/gorev.mjs', 'bilesenler/durum.mjs', 'bilesenler/seviye.mjs', 'bilesenler/sunum.mjs', 'bilesenler/damga.mjs',
   '../ortak/tokenlar.css', '../ortak/matematik.css', '../ortak/ana-sayfa.js', '../ortak/sayac.js', '../tema.js', '../muzik/muzik.js', '../simge.svg',
   "../fonts/bricolage-grotesque-latin-700-normal.woff2","../fonts/bricolage-grotesque-latin-800-normal.woff2","../fonts/bricolage-grotesque-latin-ext-700-normal.woff2","../fonts/bricolage-grotesque-latin-ext-800-normal.woff2","../fonts/fraunces-latin-500-italic.woff2","../fonts/fraunces-latin-600-normal.woff2","../fonts/fraunces-latin-ext-500-italic.woff2","../fonts/fraunces-latin-ext-600-normal.woff2","../fonts/onest-latin-400-normal.woff2","../fonts/onest-latin-700-normal.woff2","../fonts/onest-latin-ext-400-normal.woff2","../fonts/onest-latin-ext-700-normal.woff2"];
