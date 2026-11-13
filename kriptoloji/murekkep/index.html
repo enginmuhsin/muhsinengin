@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; media-src 'self'; worker-src 'self'; manifest-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Görünmez Mürekkep · Şifre Dairesi</title>
+  <meta name="description" content="Steganografi: bir mesajı görselin piksellerine sakla. Göz fark etmez ama bit düzleminde kar gibi belirir. Her şey tarayıcında olur, hiçbir şey gönderilmez.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Görünmez Mürekkep · Şifre Dairesi">
+  <meta property="og:description" content="Mektubu bir kekin içine sakla: piksellerin en düşük bitlerine gizlenen mesaj.">
+  <meta property="og:url" content="https://muhsinengin.com/kriptoloji/murekkep/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <script src="../../ortak/ana-sayfa.js" defer></script>
+  <script src="../../muzik/muzik.js" data-tema="odak" defer></script>
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../../ortak/matematik.css">
+  <script src="../../ortak/sayac.js" data-depo="yok" defer></script>
+  <script type="module" src="murekkep.mjs"></script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe atla</a>
+
+  <header class="ust-cubuk">
+    <nav aria-label="Şifre Dairesi">
+      <ana-sayfa-dugmesi class="logo"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+      <span class="mc-sayfa" aria-hidden="true">Görünmez Mürekkep</span>
+      <button class="menu-dugme" type="button" data-menu-dugme aria-expanded="false" aria-label="Menü"><span class="mc-hamburger" aria-hidden="true"><i></i><i></i><i></i></span><span class="mc-yazi">Menü</span></button>
+      <div class="nav-linkler">
+        <a class="nav-link" href="../" data-daire>Lobi</a>
+        <a class="nav-link" href="../sezar/" data-daire>Sezar Çarkı</a>
+        <a class="nav-link" href="../kasa/" data-daire>Kasa Soygunu</a>
+        <a class="nav-link" href="./" aria-current="page" data-daire>Görünmez Mürekkep</a>
+        <a class="nav-link" href="#ogretmen-notu">Öğretmen notu</a>
+      </div>
+      <button class="tema-dugme muzik-sekme" id="muzikDugme" type="button" aria-pressed="true" aria-label="Müzik"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span> <span class="muzik-yazi">Müzik</span></button>
+      <button class="tema-dugme" id="temaDugme" type="button" aria-label="Tema"><span class="tema-ikon" aria-hidden="true">◐</span> <span class="tema-yazi">Otomatik</span></button>
+    </nav>
+  </header>
+
+  <p id="duyuru" class="sr-only" aria-live="polite"></p>
+
+  <main id="ana">
+    <section class="oda-giris" data-adim aria-labelledby="baslik">
+      <p class="kunye">Dosya no. <b>300</b> · Şube 3 · Görünmez Mürekkep</p>
+      <h1 id="baslik">Görünmez <span class="ik-alt">Mürekkep</span></h1>
+      <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Steganografi, mektubu bir kekin içine saklamak gibidir. Kriptografi ise mektubu kimsenin okuyamayacağı bir dile çevirmektir. İkisi birlikte kullanılabilir.</p>
+      <p class="uyari" id="tuvalUyari" role="alert" hidden></p>
+      <fieldset class="secici" data-seviye-secici>
+        <legend>Seviye</legend>
+        <button type="button" data-seviye="cirak" aria-pressed="true">Çırak <small>ortaokul</small></button>
+        <button type="button" data-seviye="uzman" aria-pressed="false">Uzman <small>lise · ikili sayılar ve kapasite</small></button>
+      </fieldset>
+    </section>
+
+    <!-- Atölye 1: çöz -->
+    <section class="dosya" id="coz" data-adim aria-labelledby="cozBaslik">
+      <span class="dosya-sekme">Atölye · çöz</span>
+      <h2 id="cozBaslik">Daireden bir kek geldi</h2>
+      <p class="ozet">Görünüşte sıradan bir kek resmi. Ama daire, piksellerin içine bir mektup sakladı. Gözünle fark edebilir misin? Sonra makineye okut.</p>
+      <div class="gorsel-cift">
+        <figure><canvas id="cozTuval" class="tuval" width="480" height="320" role="img" aria-label="Dairenin gönderdiği kek görseli"></canvas><figcaption>Gelen görsel</figcaption></figure>
+        <figure><canvas id="cozDuzlem" class="tuval duzlem" width="480" height="320" role="img" aria-label="Gelen görselin bit düzlemi"></canvas><figcaption>Bit düzlemi <span class="kucuk">(her pikselin en düşük bitleri)</span></figcaption></figure>
+      </div>
+      <div class="dugme-satir">
+        <button class="dugme birincil" type="button" id="cozOrnek">Mektubu çıkar</button>
+        <label class="dugme yalin dosya-sec">Başka bir PNG aç<input type="file" id="cozDosya" accept="image/png,image/*" class="sr-only"></label>
+      </div>
+      <p class="kucuk">Açtığın görsel yalnız bu tarayıcıda işlenir; hiçbir yere gönderilmez.</p>
+      <div class="mektup" id="cozSonuc" aria-live="polite" hidden></div>
+    </section>
+
+    <!-- Atölye 2: gizle -->
+    <section class="dosya" id="gizle" data-adim aria-labelledby="gizleBaslik">
+      <span class="dosya-sekme">Atölye · gizle</span>
+      <h2 id="gizleBaslik">Kendi mektubunu sakla</h2>
+      <div class="dugme-satir">
+        <button class="dugme yalin" type="button" id="kekSec">Temiz kek görselini kullan</button>
+        <label class="dugme yalin dosya-sec">Kendi görselimi seç<input type="file" id="gizleDosya" accept="image/*" class="sr-only"></label>
+      </div>
+      <label class="alan genis">Mesajın
+        <textarea id="mesaj" rows="3" maxlength="60000" spellcheck="false">Yarın teneffüste kütüphanede buluşalım.</textarea>
+      </label>
+      <p class="kucuk" id="kapasite" aria-live="polite"></p>
+      <div data-uzman class="cevap-satir">
+        <label class="alan">Önce Sezar ile şifrele (k)<input type="text" id="gizleK" inputmode="numeric" maxlength="3" placeholder="boş = şifreleme yok"></label>
+      </div>
+      <div class="dugme-satir">
+        <button class="dugme birincil" type="button" id="gizleDugme">Mesajı gizle</button>
+        <button class="dugme yalin" type="button" id="uzunMektup">Bir sayfalık mektup gizle</button>
+        <a class="dugme" id="indir" download="gizli-mesaj.png" hidden>PNG olarak indir</a>
+      </div>
+      <p class="geri-bildirim" id="gizleSonuc" aria-live="polite"></p>
+      <div class="gorsel-dortlu">
+        <figure><canvas id="onceTuval" class="tuval" role="img" aria-label="Gizlemeden önceki görsel"></canvas><figcaption>Önce</figcaption></figure>
+        <figure><canvas id="sonraTuval" class="tuval" role="img" aria-label="Mesaj gizlendikten sonraki görsel"></canvas><figcaption>Sonra <span class="kucuk">(farkı görebiliyor musun?)</span></figcaption></figure>
+        <figure><canvas id="onceDuzlem" class="tuval duzlem" role="img" aria-label="Önceki görselin bit düzlemi"></canvas><figcaption>Önce · bit düzlemi</figcaption></figure>
+        <figure><canvas id="sonraDuzlem" class="tuval duzlem" role="img" aria-label="Sonraki görselin bit düzlemi"></canvas><figcaption>Sonra · bit düzlemi <span class="kucuk">(mesaj “kar” gibi belirir)</span></figcaption></figure>
+      </div>
+      <h3 class="ara-baslik">Yakından bak: ilk 4 piksel</h3>
+      <div class="piksel-tablo-kap"><table class="piksel-tablo" id="pikselTablo"><caption class="sr-only">İlk dört pikselin gizlemeden önceki ve sonraki kanal değerleri</caption></table></div>
+      <p class="kucuk">Her kanal 0–255 arası bir sayıdır. Mesaj yalnız <strong>en sağdaki biti</strong> değiştirir, yani değer en fazla 1 artar ya da azalır. 200 ile 201 arasındaki renk farkını göz ayırt edemez.</p>
+      <div data-uzman class="formul-satir">
+        <p><strong>Kapasite.</strong> Her pikselde R, G, B olmak üzere 3 kanal, her kanaldan 1 bit:</p>
+        <p class="formul-buyuk">kapasite = G × Y × 3 bit</p>
+        <p class="kucuk">İlk 32 bit mesajın uzunluğunu söyleyen başlıktır. Türkçe harfler UTF-8'de 2 bayt tutar: “ş” = 11000101 10011111.</p>
+      </div>
+
+      <h3 class="ara-baslik">JPEG deneyi</h3>
+      <p>Mesajı gizledikten sonra görseli JPEG'e çevir ve yeniden çözmeyi dene.</p>
+      <div class="dugme-satir"><button class="dugme" type="button" id="jpegDugme" disabled>JPEG'e çevir ve çöz</button></div>
+      <div class="gorsel-cift" id="jpegKap" hidden>
+        <figure><canvas id="jpegTuval" class="tuval" role="img" aria-label="JPEG'e çevrilmiş görsel"></canvas><figcaption>JPEG hâli</figcaption></figure>
+        <figure><canvas id="jpegDuzlem" class="tuval duzlem" role="img" aria-label="JPEG hâlinin bit düzlemi"></canvas><figcaption>JPEG · bit düzlemi</figcaption></figure>
+      </div>
+      <p class="geri-bildirim" id="jpegSonuc" aria-live="polite"></p>
+    </section>
+
+    <section class="gorevler" id="gorevler" aria-label="Dosya görevleri">
+      <section class="dosya damga-yeri" data-dosya="15" data-adim aria-labelledby="g15">
+        <span class="dosya-sekme">Dosya <b>301</b> · Çırak</span>
+        <h3 id="g15">Görseldeki gizli mesaj</h3>
+        <p>Dairenin kekindeki mektubu çıkar. Mektuptaki parola ne?</p>
+        <div class="cevap-satir"><label class="alan">Parola<input type="text" autocomplete="off" spellcheck="false" maxlength="30"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="16" data-adim aria-labelledby="g16">
+        <span class="dosya-sekme">Dosya <b>302</b> · Çırak</span>
+        <h3 id="g16">Kendi mesajını gizle</h3>
+        <p>Atölyede kendi mesajını gizle. Daire, gizlediğin mesajı görselden geri okuyup karşılaştırır; aynıysa dosya kapanır. Sonra PNG'yi indir ve arkadaşına çözdür.</p>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="17" data-adim aria-labelledby="g17">
+        <span class="dosya-sekme">Dosya <b>303</b> · Çırak</span>
+        <h3 id="g17">JPEG deneyi: ne oldu, neden?</h3>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">Mesaj aynen çıktı; JPEG de PNG gibi saklar.</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Mesaj bozuldu; JPEG dosyayı küçültürken pikselleri yaklaşık saklar ve en düşük bitleri değiştirir.</button>
+          <button type="button" data-secenek="c" aria-pressed="false">Mesaj bozuldu; çünkü JPEG mesajı şifreledi.</button>
+          <button type="button" data-secenek="d" aria-pressed="false">Görsel bozuldu, gözle görülür biçimde değişti.</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="18" data-adim data-uzman aria-labelledby="g18">
+        <span class="dosya-sekme">Dosya <b>304</b> · Uzman</span>
+        <h3 id="g18">Kapasite hesabı</h3>
+        <p>800 × 600 piksellik bir görsel, başlık dahil toplam kaç bit saklayabilir?</p>
+        <div class="cevap-satir"><label class="alan">Bit<input type="text" inputmode="numeric" autocomplete="off" maxlength="12"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="19" data-adim data-uzman aria-labelledby="g19">
+        <span class="dosya-sekme">Dosya <b>305</b> · Uzman</span>
+        <h3 id="g19">Bir bitlik fark</h3>
+        <p>Bir pikselin kırmızı değeri 200, yani ikili sistemde <code>11001000</code>. En düşük bite 1 yazılırsa yeni değer kaç olur?</p>
+        <div class="cevap-satir"><label class="alan">Yeni değer<input type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label><button class="dugme" type="button" data-kontrol>Kontrol et</button></div>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri" data-dosya="20" data-adim data-uzman aria-labelledby="g20">
+        <span class="dosya-sekme">Dosya <b>306</b> · Uzman</span>
+        <h3 id="g20">İki katmanlı koruma</h3>
+        <p>Mesajı önce Sezar ile şifreleyip sonra görsele gizlersen (atölyedeki “k” kutusu), görseli ele geçiren biri ne elde eder?</p>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">Hiçbir şey; iki katman mesajı kırılamaz yapar.</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Anlamsız harfler; ama Sezar zayıf olduğu için 28 denemede asıl mesaja ulaşır.</button>
+          <button type="button" data-secenek="c" aria-pressed="false">Doğrudan asıl mesajı; şifreleme gizlemeden sonra kaybolur.</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+
+      <section class="dosya damga-yeri kapanis" data-dosya="21" data-adim aria-labelledby="g21">
+        <span class="dosya-sekme">Dosya <b>307</b> · Kapanış</span>
+        <h3 id="g21">Gizlediğin mesajı biri bulursa okuyabilir mi? Bunu nasıl önlersin?</h3>
+        <fieldset class="secici dikey" data-secenekler><legend class="sr-only">Seçenekler</legend>
+          <button type="button" data-secenek="a" aria-pressed="false">Okuyamaz; görünmeyen mesaj zaten şifrelidir.</button>
+          <button type="button" data-secenek="b" aria-pressed="false">Okuyabilir; yöntemi bilen herkes en düşük bitleri okur. Önce güçlü bir şifreyle şifreleyip sonra gizlemek gerekir.</button>
+          <button type="button" data-secenek="c" aria-pressed="false">Okuyabilir; bunu önlemenin tek yolu daha büyük bir görsel seçmektir.</button>
+          <button type="button" data-secenek="d" aria-pressed="false">Okuyamaz; çünkü fark en fazla 1'dir.</button>
+        </fieldset>
+        <p class="geri-bildirim" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <section class="dosya" id="proje-kapisi" data-adim data-uzman aria-labelledby="pkBaslik">
+      <span class="dosya-sekme">Proje Kapısı</span>
+      <h2 id="pkBaslik">Proje Kapısı</h2>
+      <p>Bu şubenin açık uçlu araştırma soruları öğretmen onayından geçtikten sonra burada yayımlanacak.</p>
+    </section>
+
+    <section class="dosya" id="ogretmen-notu" data-adim aria-labelledby="onBaslik">
+      <span class="dosya-sekme">Öğretmen notu</span>
+      <h2 id="onBaslik">Öğretmen notu</h2>
+      <dl class="ogretmen-not">
+        <dt>Süre ve düzey</dt>
+        <dd>Çırak: 40 dk, ortaokul (6–8). Uzman: 40 dk ek, lise. Kapanış sorusu 5 dk.</dd>
+        <dt>Malzemeler</dt>
+        <dd>Öğrenci başına bir cihaz ya da akıllı tahta. Bilgisayarsız sınıf için <a href="foy.html" data-daire>yazdırılabilir föy</a>: kareli kâğıtta “piksel” renkleri üzerinden elle mesaj gizleme.</dd>
+        <dt>Öğrenme hedefleri</dt>
+        <dd><ul>
+          <li>Öğrenci, steganografi ile kriptografi arasındaki farkı bir örnekle açıklayabilir.</li>
+          <li>Öğrenci, bir görsele mesaj gizleyip başka bir görselden mesaj çıkarabilir.</li>
+          <li>Öğrenci, JPEG'e çevirmenin gizli mesajı neden bozduğunu açıklayabilir.</li>
+          <li data-uzman>Öğrenci, bir görselin kapasitesini G × Y × 3 bit ile hesaplayabilir.</li>
+          <li data-uzman>Öğrenci, en düşük bitin değişmesinin değeri en fazla 1 değiştirdiğini ikili sayılarla gösterebilir.</li>
+        </ul></dd>
+        <dt>Sık görülen kavram yanılgıları</dt>
+        <dd><ul>
+          <li><strong>“Gizli mesaj görünmüyorsa şifrelenmiştir.”</strong> Atölyede mektubu çıkarın: hiçbir anahtar gerekmeden okunuyor. Saklamak ile okunamaz yapmak ayrı işlerdir; Dosya 306'da ikisini birleştirin.</li>
+          <li><strong>“Fotoğraf her biçimde aynı kalır.”</strong> JPEG deneyini tahtada yapın: göze aynı görünen görselin bit düzlemi tamamen değişir.</li>
+          <li><strong>“Bit düzlemindeki kar mesajın kendisidir.”</strong> Kar, mesajın bitleridir ama okunabilir yazı değildir; okumak için bitlerin sırası ve uzunluk başlığı bilinmelidir.</li>
+        </ul></dd>
+        <dt>Farklılaştırma</dt>
+        <dd>Desteğe ihtiyacı olanlar: önce föydeki kâğıt etkinlik, sonra hazır kek görseli. Hızlı bitirenler: kendi çizimlerini kullanıp fotoğraf ile düz renkli çizimin bit düzlemlerini karşılaştırsın (fotoğrafta kar neden zaten vardır?).</dd>
+        <dt>Görseller</dt>
+        <dd>Kek görselleri bu bölüm için çizildi (<code>araclar/kriptoloji-ornek-gorsel.py</code>); dış kaynak ve lisans gerektirmez.</dd>
+        <dt>Tarayıcı notu</dt>
+        <dd>Bazı tarayıcılar (parmak izi korumalı Firefox, Brave) tuval piksellerini bilerek az miktarda değiştirir. Sayfa açılışta bunu sınar ve gerekirse uyarır; o tarayıcıda gizleme ve çözme güvenilir çalışmaz.</dd>
+        <dt>MEB kazanım eşlemesi</dt>
+        <dd>Henüz eşlenmedi. Kazanım kodları uydurulmaz; öğretmen kontrolünden sonra eklenecek.</dd>
+        <dt>Sunum modu</dt>
+        <dd><a href="./?sunum=1" data-daire data-sunum-sabit>Bu odayı sunum modunda aç</a>.</dd>
+      </dl>
+    </section>
+
+    <nav class="oda-alt dugme-satir" aria-label="Daire içi">
+      <a class="dugme" href="../" data-daire>Lobiye dön</a>
+      <a class="dugme" href="foy.html" data-daire>Yazdırılabilir föy</a>
+    </nav>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Şifre Dairesi · Şube 3 · Bütün mesajlar kurgusaldır. Seçtiğin görseller ve yazdığın mesajlar bu sayfadan çıkmaz.</p>
+  </footer>
+</body>
+</html>

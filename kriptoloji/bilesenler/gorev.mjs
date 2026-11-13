@@ -3,7 +3,7 @@
    Bir dosya bölümünü (section.dosya[data-dosya]) cevap kontrolüne bağlar:
    • Metin cevabı:  .cevap-satir içinde input + [data-kontrol] düğmesi
    • Optik seçenek: .secici[data-secenekler] içinde button[data-secenek]
-   kontrol(girdi) → { dogru: bool, mesaj: 'geri bildirim' }
+   kontrol(girdi) → { dogru: bool, mesaj: 'geri bildirim' }  (ya da bunu veren bir Promise)
    Doğruysa dosya çözülür (durum.mjs) ve ÇÖZÜLDÜ damgası basılır.
    ===================================================================== */
 import { coz, cozulduMu, dinle } from './durum.mjs';
@@ -19,6 +19,8 @@ export function gorevBagla(bolum, kontrol) {
   const bit = Number(bolum.dataset.dosya);
   const sonuc = bolum.querySelector('.geri-bildirim');
   const bildir = (s) => {
+    if (s && typeof s.then === 'function') { s.then(bildir); return; }
+    if (!s) return;
     sonuc.className = 'geri-bildirim ' + (s.dogru ? 'olumlu' : 'olumsuz');
     sonuc.textContent = s.mesaj;
     if (s.dogru && !cozulduMu(bit)) { damgala(bolum); coz(bit); }
