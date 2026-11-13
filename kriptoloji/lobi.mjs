@@ -116,4 +116,4 @@ sunumBaslat();
 baglantilariGuncelle();
 
 /* ---------- Çevrimdışı çalışma: bir kez yüklenince internetsiz açılır ---------- */
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('sw.js').catch(() => {});

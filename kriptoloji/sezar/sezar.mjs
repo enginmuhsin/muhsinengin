@@ -121,4 +121,4 @@ gorevBagla(bolum(7), (s) => ({
 seviyeBaslat();
 sunumBaslat();
 baglantilariGuncelle();
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {});
+if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {});
