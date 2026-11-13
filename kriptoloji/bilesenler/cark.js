@@ -8,6 +8,7 @@
    cizCark(svg, { etkilesimli }) → { k(), kAyarla(k), dinle(f), vurgula(i) }
    vurgula(i): iç diskteki i. harften dış diskteki karşılığına kırmızı bir yol çizer (-1 → temizle).
    ===================================================================== */
+import { cal } from './ses.js';
 import { BUYUK, N, mod } from '../cekirdek/turkce-alfabe.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -37,7 +38,7 @@ function halka(g, r1, r2, sinif) {
   }
 }
 
-export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () => false } = {}) {
+export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () => true } = {}) {
   svg.setAttribute('viewBox', '0 0 400 400');
   svg.innerHTML = '';
   const dis = el('g', { class: 'cark-dis' }, svg);
@@ -93,18 +94,8 @@ export function cizCark(svg, { etkilesimli = true, baslangic = 0, tikSesi = () =
     if (k !== eski) { tik(); dinleyiciler.forEach((f) => f(k)); }
   }
 
-  // İsteğe bağlı "tık" sesi (varsayılan kapalı). Ses tarayıcıda üretilir, dosya indirilmez.
-  let ses;
-  function tik() {
-    if (!tikSesi()) return;
-    try {
-      ses = ses || new (window.AudioContext || window.webkitAudioContext)();
-      const o = ses.createOscillator(), g = ses.createGain(), t = ses.currentTime;
-      o.type = 'square'; o.frequency.value = 1800;
-      g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
-      o.connect(g).connect(ses.destination); o.start(t); o.stop(t + 0.035);
-    } catch { /* ses yoksa sessiz devam */ }
-  }
+  // Mandal tıkırtısı: yalnız etkileşimli çarkta (föydeki kâğıt disk sessizdir). Ses ve aç/kapa ses.js'te.
+  function tik() { if (etkilesimli && tikSesi()) cal('tik'); }
 
   if (etkilesimli) {
     svg.setAttribute('role', 'slider');

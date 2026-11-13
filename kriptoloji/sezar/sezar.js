@@ -20,8 +20,7 @@ const M3 = { acik: 'KALEM', k: 7 };
 const M5 = { sifreli: 'ÇPİP JBÜIUİB ŞGÇ ÖPOAÜ', k: 19 };
 
 /* ---------- Simülasyon ---------- */
-let tikAcik = false;
-const cark = cizCark($('#cark'), { baslangic: 3, tikSesi: () => tikAcik });
+const cark = cizCark($('#cark'), { baslangic: 3 });
 const acik = $('#acik'), sifreli = $('#sifreli'), kGoster = $('#kGoster'), yabanciNot = $('#yabanciNot');
 let sonYazilan = 'acik';
 
@@ -41,12 +40,6 @@ sifreli.addEventListener('input', () => { sonYazilan = 'sifreli'; guncelle(); co
 cark.dinle(guncelle);
 $('#kEksi').addEventListener('click', () => cark.kAyarla(cark.k() - 1));
 $('#kArti').addEventListener('click', () => cark.kAyarla(cark.k() + 1));
-const tikD = $('#tikSes');
-tikD.addEventListener('click', () => {
-  tikAcik = !tikAcik;
-  tikD.setAttribute('aria-pressed', String(tikAcik));
-  tikD.textContent = 'Tık sesi: ' + (tikAcik ? 'açık' : 'kapalı');
-});
 guncelle();
 
 /* ---------- Görevler ---------- */

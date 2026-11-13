@@ -11,6 +11,8 @@ import { coz, cozulduMu, dinle, kod, maskeKoy, maskeAl, baglantilariGuncelle } f
 import { seviyeBaslat } from './bilesenler/seviye.js';
 import { sunumBaslat } from './bilesenler/sunum.js';
 import { damgala } from './bilesenler/damga.js';
+import { geriBildir } from './bilesenler/gorev.js';
+import { cal } from './bilesenler/ses.js';
 import { odaSimgesi, rozet } from './bilesenler/cizimler.js';
 
 const $ = (s) => document.querySelector(s);
@@ -135,15 +137,12 @@ function parolaDene() {
   parolaSonuc.className = 'geri-bildirim';
   if (!g) { parolaSonuc.textContent = 'Önce bir parola yaz.'; return; }
   if (g === 'ŞİFRE') {
-    parolaSonuc.textContent = 'Doğru! Kapı açıldı. Her satırın ilk harfi: Ş-İ-F-R-E.';
-    parolaSonuc.classList.add('olumlu');
+    geriBildir(parolaSonuc, { dogru: true, mesaj: 'Doğru! Kapı açıldı. Her satırın ilk harfi: Ş-İ-F-R-E.' }, { girdi: parola });
     if (!cozulduMu(0)) { damgala($('#giris-dosyasi')); coz(0); }
   } else if (g.replace(/Ş/g, 'S').replace(/[İ]/g, 'I') === 'SIFRE') {
-    parolaSonuc.textContent = 'Çok yaklaştın. Türk alfabesinde Ş ve İ ayrı harflerdir; notun ilk harflerine yeniden bak.';
-    parolaSonuc.classList.add('olumsuz');
+    geriBildir(parolaSonuc, { dogru: false, mesaj: 'Çok yaklaştın. Türk alfabesinde Ş ve İ ayrı harflerdir; notun ilk harflerine yeniden bak.' }, { girdi: parola });
   } else {
-    parolaSonuc.textContent = 'Kapı açılmadı. Notu bir kez daha oku; parola göz önünde ama dikkat çekmiyor.';
-    parolaSonuc.classList.add('olumsuz');
+    geriBildir(parolaSonuc, { dogru: false, mesaj: 'Kapı açılmadı. Notu bir kez daha oku; parola göz önünde ama dikkat çekmiyor.' }, { girdi: parola });
   }
 }
 $('#parolaDene').addEventListener('click', parolaDene);
@@ -164,11 +163,10 @@ kopyala.addEventListener('click', async () => {
 function kodYukle() {
   const s = kodCoz(kodGirdi.value);
   kodSonuc.className = 'geri-bildirim';
-  if (!s.tamam) { kodSonuc.textContent = hataMetni(s); kodSonuc.classList.add('olumsuz'); return; }
+  if (!s.tamam) { geriBildir(kodSonuc, { dogru: false, mesaj: hataMetni(s) }, { girdi: kodGirdi }); return; }
   maskeKoy(s.maske);
   const n = sayim(s.maske).toplam;
-  kodSonuc.textContent = 'Hoş geldin! Sicilin yüklendi: ' + n + ' dosya, rütben ' + RUTBELER[rutbeSirasi(s.maske)].ad + '.';
-  kodSonuc.classList.add('olumlu');
+  geriBildir(kodSonuc, { dogru: true, mesaj: 'Hoş geldin! Sicilin yüklendi: ' + n + ' dosya, rütben ' + RUTBELER[rutbeSirasi(s.maske)].ad + '.' }, { girdi: kodGirdi });
 }
 $('#kodYukle').addEventListener('click', kodYukle);
 kodGirdi.addEventListener('keydown', (e) => { if (e.key === 'Enter') kodYukle(); });
@@ -184,12 +182,11 @@ function arsivDene() {
   if (!g || !Number.isInteger(k)) { sonuc.textContent = 'Anahtar bir tam sayı olmalı.'; return; }
   if (mod(k, 29) !== ARSIV_K) {
     const deneme = sezarCoz($('#arsivSifreli').textContent, k).slice(0, 28);
-    sonuc.textContent = 'Kilit açılmadı. Bu anahtarla not şöyle başlıyor: “' + deneme + '…” Anlamlı mı?';
-    sonuc.classList.add('olumsuz');
+    geriBildir(sonuc, { dogru: false, mesaj: 'Kilit açılmadı. Bu anahtarla not şöyle başlıyor: “' + deneme + '…” Anlamlı mı?' }, { girdi: $('#arsivK') });
     return;
   }
-  sonuc.textContent = 'Klik! Anahtar ' + ARSIV_K + '. Arşivin kapısı açıldı.';
-  sonuc.classList.add('olumlu');
+  geriBildir(sonuc, { dogru: true, mesaj: 'Klik! Anahtar ' + ARSIV_K + '. Arşivin kapısı açıldı.' }, { girdi: $('#arsivK') });
+  setTimeout(() => cal('acildi'), 350);
   $('#arsivMetin').textContent = sezarCoz($('#arsivSifreli').textContent, ARSIV_K);
   $('#arsivAcik').hidden = false;
   damgala($('#arsiv-notu'));
