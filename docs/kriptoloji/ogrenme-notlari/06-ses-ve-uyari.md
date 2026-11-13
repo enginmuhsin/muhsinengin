@@ -25,10 +25,19 @@ Bu yüzden indirilecek dosya yok, internet olmadan da çalışıyor.
 - `kriptoloji/daire.css`: `.tekrar-etiket`, `.sarsil`, `.yanlis-girdi`
 - `kriptoloji/sw.js`: çevrimdışı önbellek sürümü `kripto-v11`
 
-## Dedektif müziği
-Şifre Dairesi sayfaları artık sitenin genel lo-fi müziği yerine kendi temasını çalıyor: **dedektif**. Bu, bu sayfalar için yazılmış özgün bir casus cazı; bilinen bir filmin ya da çizgi filmin ezgisi değil, çünkü onların ezgileri telifli.
-- Re minör, dakikada 100 vuruş, "sallantılı" (swing) sekizlikler. 8 ölçülük döngü yaklaşık 19 saniye sürüyor.
-- Dört turda katmanlar değişiyor: önce kontrbas, parmak şıklatma ve fırça; sonra boğuk saksofon ezgiyi çalıyor; sonra vibrafon ezgiyi devralıyor ve "parmak ucu" bas adımları giriyor; en sonda saksofonla vibrafon akorları birlikte çalıyor.
-- Dosyası yok: her nota tarayıcıda üretiliyor (`muzik/muzik.js` → `TEMALAR.dedektif`). Hiçbir şey indirilmiyor, internetsiz de çalıyor.
-- Ses düzeyi sitedeki öbür müziklerle eşitlendi (RMS ≈ 0,04).
-- Odak teması gibi yalnız **Müzik** düğmesiyle açılıyor; önceki sayfada çalıyorsa sayfalar arasında sürüyor. Sınıfta kendiliğinden ses çıkmıyor.
+## Şifre Dairesi müzikleri
+Abdullah'ın Pixabay'den seçtiği iki parça Şifre Dairesi'nin müziği oldu (Pixabay İçerik Lisansı; kaynak gösterme zorunlu değil, `muzik/muzik.js` başında yine de yazılı):
+
+| Tema | Parça | Sayfalar | Döngü |
+|---|---|---|---|
+| `casus` | "Spy" (freesound_community) | Lobi, Kasa Soygunu | 25,26 sn = 152 vuruş/dk'da 16 ölçü |
+| `dedektif` | "Spy Game" (freesound_community) | Sezar Çarkı, Görünmez Mürekkep, Öğretmen Masası | 50,37 sn |
+
+**Dikişsiz döngü nasıl yapıldı? (benzetme)** Bir parçayı döngüye almak, bir şeridin iki ucunu birbirine yapıştırmaya benzer. Yanlış yerden keserseniz her turda "tık" diye bir atlama duyulur.
+- *Spy* zaten döngü olarak bestelenmiş. Vuruşları ölçüp ölçü uzunluğunu bulduk: 4 ölçü 6,316 sn, 16 ölçü 25,263 sn. Tam ölçü çizgisinden kestik. Son notanın taşan yankısını başa ekledik, tıpkı şeridin ucundaki boyanın öbür uca taşması gibi.
+- *Spy Game* uzun bir parça. Bilgisayara "parçanın hangi anı, başıyla aynı sesleri çıkarıyor?" diye ses tayfıyla aratıldı; cevap 50,37 sn sonrası oldu. O noktadan kesip çeyrek saniyelik bir çapraz geçişle başa bağladık.
+- Ses düzeyleri, sitedeki öbür müziklerle aynı ortalama güçte (−27,7 dBFS) duyulacak şekilde ayarlandı.
+
+**Davranış:** Müzik yalnız **Müzik** düğmesiyle açılıyor; açıksa sayfalar arasında sürüyor. Her parça kendi kaldığı yerden devam ediyor. Örneğin Lobi'den Sezar'a geçince casus kısılıyor ve dedektif başlıyor; Kasa'ya geçince casus kaldığı yerden devam ediyor.
+
+**İnternet yoksa:** Dosya inemezse yerine tarayıcıda üretilen yedek dedektif müziği çalar: parmak şıklatma, kontrbas, saksofon ve vibrafon (`TEMALAR.dedektif`).

@@ -7,6 +7,8 @@
      uzay        "Piano Background" — atlasaudio
      muhendislik "Technology" — nastelbom
      odak        "Study Lofi Music" — Alex Morgan
+     casus       "Spy" — freesound_community (Pixabay)
+     dedektif    "Spy Game" — freesound_community (Pixabay)
 
    Kullanım (sayfanın <head> kısmına):
      <script src="/muzik/muzik.js" data-tema="uzay" defer></script>
@@ -14,9 +16,10 @@
      uzay        Ana sayfa. Belgesel / uzay bilim kurgusu: geniş akorlar, dip sesi, yıldız çanları, ostinato, kalp atışı, kabarma.
      muhendislik Dron ve PID sayfaları. "Uçuş": nabız gibi atan bas, yumuşak davul, arpej, rüzgâr süpürmesi, radar sinyali.
      odak        Zekâ Oyunları ve Teşhis Defteri. Sakin lo-fi çalışma müziği: elektrik piyano, yumuşak bas, fırça davul, plak cızırtısı.
-     dedektif    Şifre Dairesi (kriptoloji). Özgün, sinsi bir casus cazı: parmak şıklatma, adım adım yürüyen kontrbas,
-                 fırçalı davul, boğuk saksofon ve vibrafon. Dosyası yok: her nota tarayıcıda üretilir (internetsiz de çalar).
-                 Odak gibi yalnız düğmeyle açılır ya da önceki sayfada çalıyorsa sürer.
+     casus       Şifre Dairesi: Lobi ve Kasa Soygunu. Hareketli casus cazı (152 vuruş/dk, 16 ölçülük 25 sn'lik döngü).
+     dedektif    Şifre Dairesi: Sezar Çarkı, Görünmez Mürekkep, Öğretmen Masası. Daha sakin dedektif müziği (50 sn'lik döngü).
+                 İkisi de odak gibi yalnız düğmeyle açılır ya da önceki sayfada çalıyorsa sürer. Dosya inemezse
+                 (internet yok) ikisinin yerine de aynı sentez yedeği çalar: parmak şıklatma, kontrbas, saksofon, vibrafon.
                  Zekâ Oyunları'nda yalnız önceki sayfada müzik çalıyorsa sürer; Teşhis'te yalnız düğmeyle açılır.
 
    Düğme: sayfada id="muzikDugme" varsa o kullanılır; yoksa sol altta küçük bir düğme eklenir.
@@ -46,7 +49,9 @@
     if (eskiOdak !== null) { if (eskiOdak === '1' && localStorage.getItem(KEY) === null) localStorage.setItem(KEY, '1'); localStorage.removeItem('site-muzik-odak'); }
   } catch (e) { /* depo yok */ }
   // uzay ve mühendislik: ilk ziyarette davet + ilk dokunuşta başlar. odak (Zekâ Oyunları): yalnız önceki sayfada çalıyorsa sürer.
-  var VARSAYILAN_ACIK = TEMA !== 'odak' && TEMA !== 'dedektif';
+  var VARSAYILAN_ACIK = TEMA !== 'odak' && TEMA !== 'dedektif' && TEMA !== 'casus';
+  // casus temasının ayrı sentezi yok: yedekte dedektif sentezi çalar
+  var SENTEZ = TEMA === 'casus' ? 'dedektif' : TEMA;
   // Teşhis Defteri: müzik yalnız düğmeyle açılır; önceki sayfadan sürmez, davet çıkmaz (öğrenci ders çalışırken).
   var YALNIZ_DUGME = /\/teshis(\/|$)/.test(location.pathname);
   /* ---------------- SABİTLER: süreler (saniye) ve sayfa geçişi ----------------
@@ -63,8 +68,9 @@
   var ac = null, out = null, rev = null, dlyL = null, timer = null, running = false, yukleniyor = false, nbuf = null;
   /* ---------------- kayıtlı müzik döngüsü (dosya) ---------------- */
   // Düzeyler ölçümle eşitlendi: her döngünün RMS'i (uzay 0,1014 · mühendislik 0,1118 · odak 0,1013) × düzey = 0,0411 (−27,7 dBFS)
-  var DOSYA_SEVIYE = { uzay: 0.406, muhendislik: 0.368, odak: 0.406 };
-  var DOSYASIZ = { dedektif: 1 };                                    // bu temaların kayıtlı dosyası yok: doğrudan sentez (boşuna istek yok)
+  // casus (Spy) RMS 0,1617 → 0,254 · dedektif (Spy Game, dosyada ×3 yükseltildi) → ölçüme göre aşağıda
+  var DOSYA_SEVIYE = { uzay: 0.406, muhendislik: 0.368, odak: 0.406, casus: 0.254, dedektif: 0.40 };
+  var DOSYASIZ = {};                                                 // kayıtlı dosyası olmayan temalar buraya: doğrudan sentez (boşuna istek yok)
   var dosyaUrl = null; try { if (!DOSYASIZ[TEMA]) dosyaUrl = new URL(TEMA + '.mp3', (betik && betik.src) || location.href).href; } catch (e) { dosyaUrl = null; }
   var dosyaTampon = null, dosyaSinir = null, dosyaSozu = null, dosyaKaynak = null, dosyaKazanc = null, dosyaBas = null;
   var mod = null;                                                    // 'dosya' | 'sentez'
@@ -153,7 +159,7 @@
     out = ac.createGain(); out.gain.value = 0;
     var comp = ac.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 3;
     var son = comp;
-    if (TEMA === 'odak' || TEMA === 'dedektif') { var sicak = ac.createBiquadFilter(); sicak.type = 'lowpass'; sicak.frequency.value = 4200; comp.connect(sicak); son = sicak; }
+    if (SENTEZ === 'odak' || SENTEZ === 'dedektif') { var sicak = ac.createBiquadFilter(); sicak.type = 'lowpass'; sicak.frequency.value = 4200; comp.connect(sicak); son = sicak; }
     out.connect(comp); son.connect(ac.destination);
     var yankiSn = TEMA === 'uzay' ? 6 : TEMA === 'muhendislik' ? 3.5 : 2.2;
     rev = ac.createConvolver();
@@ -161,9 +167,9 @@
     for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
     rev.buffer = ir; var rg = ac.createGain(); rg.gain.value = TEMA === 'uzay' ? 0.55 : 0.35; rev.connect(rg); rg.connect(out);
     var merge = ac.createChannelMerger(2), fb = ac.createGain(), lp = ac.createBiquadFilter(), dg = ac.createGain(), dlyR = ac.createDelay(2);
-    dlyL = ac.createDelay(2); var dt = TEMA === 'uzay' ? 0.9 : TEMA === 'muhendislik' ? 60 / 112 * 0.75 : TEMA === 'dedektif' ? 60 / 100 * 0.75 : 60 / 72 * 0.5;
+    dlyL = ac.createDelay(2); var dt = TEMA === 'uzay' ? 0.9 : TEMA === 'muhendislik' ? 60 / 112 * 0.75 : SENTEZ === 'dedektif' ? 60 / 100 * 0.75 : 60 / 72 * 0.5;
     dlyL.delayTime.value = dt; dlyR.delayTime.value = dt;
-    fb.gain.value = 0.4; lp.type = 'lowpass'; lp.frequency.value = 2400; dg.gain.value = TEMA === 'odak' ? 0.25 : TEMA === 'dedektif' ? 0.18 : 0.45;
+    fb.gain.value = 0.4; lp.type = 'lowpass'; lp.frequency.value = 2400; dg.gain.value = TEMA === 'odak' ? 0.25 : SENTEZ === 'dedektif' ? 0.18 : 0.45;
     dlyL.connect(dlyR); dlyR.connect(lp); lp.connect(fb); fb.connect(dlyL);
     dlyL.connect(merge, 0, 0); dlyR.connect(merge, 0, 1); merge.connect(dg); dg.connect(out); dg.connect(rev);
     var n = ac.sampleRate; nbuf = ac.createBuffer(1, n, n); var nd = nbuf.getChannelData(0); for (var j = 0; j < n; j++) nd[j] = Math.random() * 2 - 1;
@@ -410,7 +416,7 @@
   }
   function bas(t, m, d, v) { var f = ac.createBiquadFilter(), g = ac.createGain(); f.type = 'lowpass'; f.frequency.value = 500; f.connect(g); g.connect(out); osc('sine', mtof(m), t, t + d + 0.1, g); osc('triangle', mtof(m), t, t + d + 0.1, f); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02); g.gain.exponentialRampToValueAtTime(v * 0.5, t + d * 0.6); g.gain.exponentialRampToValueAtTime(0.0001, t + d); }
 
-  var T = TEMALAR[TEMA] || TEMALAR.uzay;
+  var T = TEMALAR[SENTEZ] || TEMALAR.uzay;
   function tik() { if (running) T.planla(ac.currentTime + 1.5); }
 
   /* ---------------- başlat / durdur ---------------- */
