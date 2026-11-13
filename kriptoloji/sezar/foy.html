@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>Föy · Sezar Çarkı · Şifre Dairesi</title>
+  <link rel="icon" href="../../simge.svg" type="image/svg+xml">
+  <script src="../../tema.js"></script>
+  <link rel="stylesheet" href="../daire.css">
+  <link rel="stylesheet" href="../foy.css">
+  <script type="module" src="foy.mjs"></script>
+</head>
+<body class="foy">
+  <div class="yazdirma foy-ust">
+    <a class="dugme yalin" href="./" data-daire>← Sezar Çarkı</a>
+    <button class="dugme" type="button" id="yazdir">Yazdır ya da PDF olarak kaydet</button>
+    <p class="kucuk">Yazdırma penceresinde “Hedef: PDF olarak kaydet”, kâğıt A4, “Arka plan grafikleri” kapalı seç. Cevap anahtarı ayrı sayfadadır.</p>
+  </div>
+
+  <article class="sayfa" aria-labelledby="f1">
+    <header class="foy-baslik">
+      <p class="kunye">Şifre Dairesi · Şube 1 · Dosya 100</p>
+      <h1 id="f1">Sezar Çarkı · Kâğıt çark</h1>
+      <p>Ad Soyad: ______________________ &nbsp; Sınıf: ______ &nbsp; Tarih: __________</p>
+    </header>
+    <p><strong>Yapım:</strong> İki diski kesikli çizgiden kes. Küçük diski büyüğün ortasına koy, merkezlerinden bir ataşla ya da raptiyeyle tuttur. Dış diski çevirince iç diskteki her harfin karşısına onun şifresi gelir.</p>
+    <div class="diskler">
+      <svg id="diskDis" class="kagit-disk" role="img" aria-label="Kesilecek dış disk"></svg>
+      <svg id="diskIc" class="kagit-disk kucuk-disk" role="img" aria-label="Kesilecek iç disk"></svg>
+    </div>
+    <p class="benzetme"><span class="benzetme-etiket">Benzetme</span> Sezar şifresi, harflerin bir dönme dolapta yer değiştirmesi gibidir: herkes aynı sayıda koltuk kayar. Sona gelen başa döner.</p>
+  </article>
+
+  <article class="sayfa" aria-labelledby="f2">
+    <h2 id="f2">Dosya görevleri</h2>
+    <ol class="foy-gorevler">
+      <li><strong>Daireden gelen mesaj</strong> (k = 5). Çöz:<p class="foy-mesaj" id="fm1"></p><p class="cizgi-alan"></p></li>
+      <li><strong>Kayıp anahtar.</strong> Anahtarı bul ve mesajı çöz:<p class="foy-mesaj" id="fm2"></p><p>k = ______ &nbsp; Mesaj: ______________________________</p></li>
+      <li><strong>Arkadaşına şifreli not.</strong> k = 7 ile <strong>KALEM</strong> kelimesini şifrele: ______________</li>
+      <li><strong>Kendi mesajın.</strong> Kısa bir mesaj yaz, bir anahtar seç, şifrele. Şifreli hâlini arkadaşına ver, anahtarı kulağına söyle.<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+      <li><strong>Kapanış sorusu.</strong> Bir casus 28 anahtarın hepsini denerse ne olur? Neden?<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+    </ol>
+    <h3>Uzman (lise)</h3>
+    <ol class="foy-gorevler" start="6">
+      <li>E(x) = (x + k) mod 29. Ş = 22 ve k = 10 için E(Ş) = ______ → harf: ______</li>
+      <li>Aşağıdaki mesajı anahtarı bilmeden çöz. Kaç deneme yaptın? <p class="foy-mesaj" id="fm5"></p><p class="cizgi-alan"></p></li>
+      <li>Afin şifre E(x) = (a·x + b) mod 29'da a için kaç seçenek vardır? Mod 26'da kaç? Fark neden?<p class="cizgi-alan"></p><p class="cizgi-alan"></p></li>
+    </ol>
+    <p class="kucuk">Türk alfabesi (A = 0): <span id="fAlfabe" class="mono"></span></p>
+  </article>
+
+  <article class="sayfa cevap-sayfasi" aria-labelledby="f3">
+    <h2 id="f3">Cevap anahtarı (öğretmen için)</h2>
+    <ol class="foy-gorevler" id="cevaplar"></ol>
+  </article>
+</body>
+</html>

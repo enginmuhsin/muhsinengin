@@ -1,0 +1,28 @@
+/* Şifre Dairesi föyleri: ekranda kâğıt önizlemesi, baskıda A4 siyah-beyaz. */
+body.foy { background: var(--bg); background-image: none; }
+.foy-ust { max-width: 210mm; margin: 0 auto; padding: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+.sayfa { max-width: 210mm; margin: 0 auto 24px; padding: 14mm 16mm; background: #fff; color: #111; border: 1px solid var(--cetvel); }
+.sayfa .kunye { color: #555; }
+.sayfa h1 { font: 600 1.7rem/1.2 var(--serif); }
+.sayfa h2 { font: 600 1.35rem/1.2 var(--serif); }
+.sayfa .benzetme-etiket, .sayfa .kucuk { color: #555; }
+.diskler { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6mm; margin: 4mm 0; }
+.kagit-disk { width: 108mm; height: 108mm; }
+.kagit-disk.kucuk-disk { width: 81mm; height: 81mm; }   /* 300/400 × 108 mm: dış diskle aynı ölçek */
+.kagit-disk .cark-cizgi { stroke: #111; }
+.kagit-disk .cark-harf { fill: #111; font-size: 19px; }
+.kagit-disk .cark-isaret { fill: #111; }
+.kes-cizgi { fill: none; stroke: #111; stroke-width: 1.2; stroke-dasharray: 6 4; }
+.foy-k { font: 600 10px var(--mono); fill: #555; letter-spacing: .08em; }
+.foy-gorevler { padding-left: 1.3rem; }
+.foy-gorevler > li { margin: 0 0 6mm; line-height: 1.7; }
+.foy-mesaj { font: 600 1.05rem/1.6 var(--mono); letter-spacing: .06em; margin: 1mm 0; }
+.cizgi-alan { height: 9mm; margin: 0; border-bottom: 1px solid #999; }
+.sayfa .benzetme { border-left-color: #777; }
+@media print {
+  @page { size: A4; margin: 0; }
+  body.foy { background: #fff !important; }
+  .sayfa { max-width: none; margin: 0; border: 0; padding: 14mm 16mm; break-after: page; }
+  .sayfa:last-child { break-after: auto; }
+  .cevap-sayfasi { break-before: page; }
+}
