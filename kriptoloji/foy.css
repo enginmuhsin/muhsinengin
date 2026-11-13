@@ -26,3 +26,8 @@ body.foy { background: var(--bg); background-image: none; }
   .sayfa:last-child { break-after: auto; }
   .cevap-sayfasi { break-before: page; }
 }
+.foy-tablo { width: 100%; border-collapse: collapse; margin: 4mm 0; font-size: .92rem; }
+.foy-tablo th, .foy-tablo td { border: 1px solid #777; padding: 2.2mm 2.5mm; text-align: left; vertical-align: top; }
+.foy-tablo th { font-weight: 700; background: #f2f2f2; }
+.foy-tablo tbody td:empty { height: 9mm; }
+.sayfa .formul-buyuk { color: #111; }
