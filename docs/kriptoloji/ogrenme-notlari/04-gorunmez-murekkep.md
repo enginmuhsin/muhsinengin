@@ -4,10 +4,10 @@
 
 | Parça | Dosya |
 | --- | --- |
-| LSB steganografi çekirdeği | `kriptoloji/cekirdek/steg.mjs` |
-| Oda sayfası (çöz, gizle, bit düzlemi, piksel tablosu, JPEG deneyi) | `kriptoloji/murekkep/index.html`, `murekkep.mjs` |
+| LSB steganografi çekirdeği | `kriptoloji/cekirdek/steg.js` |
+| Oda sayfası (çöz, gizle, bit düzlemi, piksel tablosu, JPEG deneyi) | `kriptoloji/murekkep/index.html`, `murekkep.js` |
 | Örnek görseller (kek) ve üretici betik | `kriptoloji/murekkep/ornekler/*.png`, `araclar/kriptoloji-ornek-gorsel.py` |
-| Föy: "tek mi, çift mi?" kâğıt etkinliği | `kriptoloji/murekkep/foy.html`, `foy.mjs` |
+| Föy: "tek mi, çift mi?" kâğıt etkinliği | `kriptoloji/murekkep/foy.html`, `foy.js` |
 | Testler | `testler/kriptoloji/steg.test.mjs` |
 
 7 dosya: 301–303 Çırak, 304–306 Uzman, 307 kapanış. Böylece Faz 1'in 22 dosyasının hepsi yerinde.

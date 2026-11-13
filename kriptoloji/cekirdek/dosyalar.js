@@ -1,5 +1,5 @@
 /* =====================================================================
-   DOSYA SİCİLİ — kriptoloji/cekirdek/dosyalar.mjs
+   DOSYA SİCİLİ — kriptoloji/cekirdek/dosyalar.js
    Faz 1'deki bütün dosyalar (görevler) ve kayıt kodundaki bit sıraları.
    KURAL: Bir dosyanın bit numarası yayından sonra ASLA değişmez (eski kodlar bozulur).
    Yeni dosya eklenecekse sona eklenir; sığmazsa kayıt kodu sürümü artırılır.

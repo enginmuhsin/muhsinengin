@@ -1,14 +1,14 @@
 /* =====================================================================
-   ODA 2 · KASA SOYGUNU — kriptoloji/kasa/kasa.mjs
+   ODA 2 · KASA SOYGUNU — kriptoloji/kasa/kasa.js
    Serbest şifre alanı YOK: kilitler hazır listeden seçilir.
-   Bütün sayılar cekirdek/entropi.mjs ile hesaplanır; tek gerçek ölçüm Web Crypto SHA-256'dır.
+   Bütün sayılar cekirdek/entropi.js ile hesaplanır; tek gerçek ölçüm Web Crypto SHA-256'dır.
    ===================================================================== */
-import { KILITLER, SALDIRGANLAR, bit, uzay, tumSure, ortalamaSure, sureYaz, sayiYaz, bilimsel, OLCEK } from '../cekirdek/entropi.mjs';
-import { yilKasasi, kasayiKir, hizOlc } from '../cekirdek/kaba-kuvvet.mjs';
-import { gorevBagla } from '../bilesenler/gorev.mjs';
-import { seviyeBaslat } from '../bilesenler/seviye.mjs';
-import { sunumBaslat } from '../bilesenler/sunum.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { KILITLER, SALDIRGANLAR, bit, uzay, tumSure, ortalamaSure, sureYaz, sayiYaz, bilimsel, OLCEK } from '../cekirdek/entropi.js';
+import { yilKasasi, kasayiKir, hizOlc } from '../cekirdek/kaba-kuvvet.js';
+import { gorevBagla } from '../bilesenler/gorev.js';
+import { seviyeBaslat } from '../bilesenler/seviye.js';
+import { sunumBaslat } from '../bilesenler/sunum.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const $ = (s) => document.querySelector(s);
 const NS = 'http://www.w3.org/2000/svg';

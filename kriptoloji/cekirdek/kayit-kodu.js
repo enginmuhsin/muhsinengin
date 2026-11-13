@@ -1,5 +1,5 @@
 /* =====================================================================
-   KAYIT KODU — kriptoloji/cekirdek/kayit-kodu.mjs
+   KAYIT KODU — kriptoloji/cekirdek/kayit-kodu.js
    Biçim: KRT-XXXXX-C  (5 veri karakteri + 1 kontrol karakteri)
 
    ALFABE (31 karakter): 2 3 4 5 6 7 8 9 A B C D E F G H J K M N P Q R S T U V W X Y Z
@@ -15,7 +15,7 @@
        31'e bölünmez.
      • Sahteciliği ENGELLEMEZ: formülü bilen herkes geçerli kod üretebilir. Bunun için dijital imza gerekir.
    ===================================================================== */
-import { BIT_SAYISI } from './dosyalar.mjs';
+import { BIT_SAYISI } from './dosyalar.js';
 
 export const ALFABE = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 export const TABAN = 31;

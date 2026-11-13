@@ -4,7 +4,7 @@
 
 | Parça | Dosya |
 | --- | --- |
-| Öğretmen Masası (3 ders akışı, sunum modu rehberi, kod okuyucu, veli/idare için gizlilik özeti) | `kriptoloji/ogretmen/index.html`, `ogretmen.mjs` |
+| Öğretmen Masası (3 ders akışı, sunum modu rehberi, kod okuyucu, veli/idare için gizlilik özeti) | `kriptoloji/ogretmen/index.html`, `ogretmen.js` |
 | Ortak gezinme: Lobi · 3 oda · Öğretmen Masası | bütün oda sayfaları |
 | Çevrimdışı önbellek `kripto-v5` (57 dosya) | `kriptoloji/sw.js` |
 

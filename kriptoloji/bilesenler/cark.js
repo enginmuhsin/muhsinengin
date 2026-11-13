@@ -1,5 +1,5 @@
 /* =====================================================================
-   SEZAR ÇARKI — kriptoloji/bilesenler/cark.mjs
+   SEZAR ÇARKI — kriptoloji/bilesenler/cark.js
    İç içe iki disk, her birinde 29 dilim (Türk alfabesi).
    • İç disk SABİT: açık harfler (mavi mürekkep).
    • Dış disk DÖNER: şifreli harfler (kırmızı kalem). Fare, parmak ya da klavye okları.
@@ -7,7 +7,7 @@
    Okuma: üstteki işaretin altında iç diskte A varsa, dış diskte onun karşısındaki harf A'nın şifresidir.
    cizCark(svg, { etkilesimli }) → { k(), kAyarla(k), dinle(f) }
    ===================================================================== */
-import { BUYUK, N, mod } from '../cekirdek/turkce-alfabe.mjs';
+import { BUYUK, N, mod } from '../cekirdek/turkce-alfabe.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const DILIM = 360 / N;

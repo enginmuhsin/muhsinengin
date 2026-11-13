@@ -1,5 +1,5 @@
 /* =====================================================================
-   DAMGA — kriptoloji/bilesenler/damga.mjs
+   DAMGA — kriptoloji/bilesenler/damga.js
    Çözülen dosyaya kırmızı "ÇÖZÜLDÜ" damgası. Animasyon CSS'te (daire.css → .damga);
    "hareketi azalt" açıksa animasyonsuz basılır.
    ===================================================================== */

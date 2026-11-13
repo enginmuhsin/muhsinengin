@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ALFABE, kodUret, kodCoz, kontrolDegeri, hataMetni } from '../../kriptoloji/cekirdek/kayit-kodu.mjs';
-import { DOSYALAR, BIT_SAYISI, rutbeSirasi, sayim } from '../../kriptoloji/cekirdek/dosyalar.mjs';
+import { ALFABE, kodUret, kodCoz, kontrolDegeri, hataMetni } from '../../kriptoloji/cekirdek/kayit-kodu.js';
+import { DOSYALAR, BIT_SAYISI, rutbeSirasi, sayim } from '../../kriptoloji/cekirdek/dosyalar.js';
 
 test('alfabe: 31 karakter, karışabilenler yok', () => {
   assert.equal(ALFABE.length, 31);

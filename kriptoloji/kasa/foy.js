@@ -1,6 +1,6 @@
-/* Kasa föyü: cevap tablosu cekirdek/entropi.mjs ile üretilir (elle yazılmaz). */
-import { KILITLER, bit, uzay, tumSure, sureYaz, sayiYaz, bilimsel } from '../cekirdek/entropi.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+/* Kasa föyü: cevap tablosu cekirdek/entropi.js ile üretilir (elle yazılmaz). */
+import { KILITLER, bit, uzay, tumSure, sureYaz, sayiYaz, bilimsel } from '../cekirdek/entropi.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const tb = document.querySelector('#cevapTablo tbody');
 for (const id of ['rakam3', 'yil', 'pin4', 'harf8', 'kelime5']) {

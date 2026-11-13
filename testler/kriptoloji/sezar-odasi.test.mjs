@@ -3,10 +3,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { sezarCoz, sezar } from '../../kriptoloji/cekirdek/sezar.mjs';
+import { sezarCoz, sezar } from '../../kriptoloji/cekirdek/sezar.js';
 
-const oda = readFileSync(new URL('../../kriptoloji/sezar/sezar.mjs', import.meta.url), 'utf8');
-const foy = readFileSync(new URL('../../kriptoloji/sezar/foy.mjs', import.meta.url), 'utf8');
+const oda = readFileSync(new URL('../../kriptoloji/sezar/sezar.js', import.meta.url), 'utf8');
+const foy = readFileSync(new URL('../../kriptoloji/sezar/foy.js', import.meta.url), 'utf8');
 const veri = (kaynak, ad) => {
   const m = new RegExp(`const ${ad} = \\{ sifreli: '([^']+)', k: (\\d+) \\}`).exec(kaynak);
   return { sifreli: m[1], k: Number(m[2]) };

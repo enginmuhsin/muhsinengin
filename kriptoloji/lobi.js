@@ -1,15 +1,15 @@
 /* =====================================================================
-   LOBİ — kriptoloji/lobi.mjs
+   LOBİ — kriptoloji/lobi.js
    Giriş dosyası (akrostiş), sicil mührü, şube sayaçları, rütbeler, kayıt kodu.
-   Ağ isteği yok, depo yok: her şey bellekte (bilesenler/durum.mjs).
+   Ağ isteği yok, depo yok: her şey bellekte (bilesenler/durum.js).
    ===================================================================== */
-import { buyukHarf } from './cekirdek/turkce-alfabe.mjs';
-import { DOSYALAR, ODALAR, RUTBELER, BIT_SAYISI, rutbeSirasi, sayim } from './cekirdek/dosyalar.mjs';
-import { kodCoz, hataMetni } from './cekirdek/kayit-kodu.mjs';
-import { coz, cozulduMu, dinle, kod, maskeKoy, maskeAl, baglantilariGuncelle } from './bilesenler/durum.mjs';
-import { seviyeBaslat } from './bilesenler/seviye.mjs';
-import { sunumBaslat } from './bilesenler/sunum.mjs';
-import { damgala } from './bilesenler/damga.mjs';
+import { buyukHarf } from './cekirdek/turkce-alfabe.js';
+import { DOSYALAR, ODALAR, RUTBELER, BIT_SAYISI, rutbeSirasi, sayim } from './cekirdek/dosyalar.js';
+import { kodCoz, hataMetni } from './cekirdek/kayit-kodu.js';
+import { coz, cozulduMu, dinle, kod, maskeKoy, maskeAl, baglantilariGuncelle } from './bilesenler/durum.js';
+import { seviyeBaslat } from './bilesenler/seviye.js';
+import { sunumBaslat } from './bilesenler/sunum.js';
+import { damgala } from './bilesenler/damga.js';
 
 const $ = (s) => document.querySelector(s);
 

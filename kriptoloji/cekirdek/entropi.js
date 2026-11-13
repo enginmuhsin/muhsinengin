@@ -1,5 +1,5 @@
 /* =====================================================================
-   ENTROPİ — kriptoloji/cekirdek/entropi.mjs
+   ENTROPİ — kriptoloji/cekirdek/entropi.js
    H = L · log₂(N)   (L sembol, her biri N olasılıktan rastgele ve bağımsız seçilirse)
    Bütün hesaplar burada; sayfadaki tablo ELLE yazılmaz, bu fonksiyonlarla üretilir.
    Büyük sayılar için log₂ kullanılır: 7776⁵ ≈ 2,8·10¹⁹ Number'a sığar ama tam değil; süre ve bit için yeterli.

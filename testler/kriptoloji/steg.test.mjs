@@ -1,7 +1,7 @@
 // Brief bölüm 8: gidiş-dönüş, boş mesaj, kapasiteyi aşan mesaj.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { kapasiteBit, kapasiteBayt, baytGizle, baytCoz, metinGizle, metinCoz, bitDuzlemi, enBuyukFark, degisenKanal, ikili, KapasiteHatasi } from '../../kriptoloji/cekirdek/steg.mjs';
+import { kapasiteBit, kapasiteBayt, baytGizle, baytCoz, metinGizle, metinCoz, bitDuzlemi, enBuyukFark, degisenKanal, ikili, KapasiteHatasi } from '../../kriptoloji/cekirdek/steg.js';
 
 function gorsel(g, y, tohum = 7) {
   const p = new Uint8ClampedArray(g * y * 4);

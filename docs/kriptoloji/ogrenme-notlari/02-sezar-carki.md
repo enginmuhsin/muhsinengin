@@ -4,10 +4,10 @@
 
 | Parça | Dosya |
 | --- | --- |
-| Oda sayfası | `kriptoloji/sezar/index.html`, `sezar.mjs` |
-| Çark bileşeni (SVG, sürükleme, klavye, tık sesi) | `kriptoloji/bilesenler/cark.mjs` |
-| Görev bağlayıcı (cevap kontrolü + damga) | `kriptoloji/bilesenler/gorev.mjs` |
-| Yazdırılabilir föy (kâğıt çark + cevap anahtarı) | `kriptoloji/sezar/foy.html`, `foy.mjs`, `kriptoloji/foy.css` |
+| Oda sayfası | `kriptoloji/sezar/index.html`, `sezar.js` |
+| Çark bileşeni (SVG, sürükleme, klavye, tık sesi) | `kriptoloji/bilesenler/cark.js` |
+| Görev bağlayıcı (cevap kontrolü + damga) | `kriptoloji/bilesenler/gorev.js` |
+| Yazdırılabilir föy (kâğıt çark + cevap anahtarı) | `kriptoloji/sezar/foy.html`, `foy.js`, `kriptoloji/foy.css` |
 | Görev verisi testleri | `testler/kriptoloji/sezar-odasi.test.mjs` |
 | Proje Kapısı taslağı (yayında değil) | `docs/kriptoloji/proje-kapisi-taslak.md` |
 

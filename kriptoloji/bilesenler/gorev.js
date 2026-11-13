@@ -1,14 +1,14 @@
 /* =====================================================================
-   GÖREV BAĞLAYICI — kriptoloji/bilesenler/gorev.mjs
+   GÖREV BAĞLAYICI — kriptoloji/bilesenler/gorev.js
    Bir dosya bölümünü (section.dosya[data-dosya]) cevap kontrolüne bağlar:
    • Metin cevabı:  .cevap-satir içinde input + [data-kontrol] düğmesi
    • Optik seçenek: .secici[data-secenekler] içinde button[data-secenek]
    kontrol(girdi) → { dogru: bool, mesaj: 'geri bildirim' }  (ya da bunu veren bir Promise)
-   Doğruysa dosya çözülür (durum.mjs) ve ÇÖZÜLDÜ damgası basılır.
+   Doğruysa dosya çözülür (durum.js) ve ÇÖZÜLDÜ damgası basılır.
    ===================================================================== */
-import { coz, cozulduMu, dinle } from './durum.mjs';
-import { damgala } from './damga.mjs';
-import { buyukHarf, normalle } from '../cekirdek/turkce-alfabe.mjs';
+import { coz, cozulduMu, dinle } from './durum.js';
+import { damgala } from './damga.js';
+import { buyukHarf, normalle } from '../cekirdek/turkce-alfabe.js';
 
 /** Karşılaştırma için: Türkçe büyük harf, yalnız harf ve rakamlar, tek boşluk. */
 export function sadele(metin) {

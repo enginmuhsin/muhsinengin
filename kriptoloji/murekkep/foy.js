@@ -1,5 +1,5 @@
 /* Mürekkep föyü: "çift = 0, tek = 1" etkinliği. Sayılar sabit tohumla üretilir: her baskı aynı olur. */
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const bitler = (metin) => [...new TextEncoder().encode(metin)].flatMap((b) => [7, 6, 5, 4, 3, 2, 1, 0].map((i) => (b >> i) & 1));
 let tohum = 2026;

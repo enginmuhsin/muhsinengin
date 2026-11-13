@@ -1,15 +1,15 @@
 /* =====================================================================
-   ODA 1 · SEZAR ÇARKI — kriptoloji/sezar/sezar.mjs
+   ODA 1 · SEZAR ÇARKI — kriptoloji/sezar/sezar.js
    Görev mesajlarının AÇIK hâli bu dosyada yoktur: öğrencinin cevabı şifrelenip
    şifreli metinle karşılaştırılır. (Sayfa kaynağına bakan cevabı göremez.)
    ===================================================================== */
-import { sezar, sezarCoz, kabaKuvvet } from '../cekirdek/sezar.mjs';
-import { yabanciHarfler, buyukHarf, mod } from '../cekirdek/turkce-alfabe.mjs';
-import { cizCark } from '../bilesenler/cark.mjs';
-import { gorevBagla, sadele } from '../bilesenler/gorev.mjs';
-import { seviyeBaslat } from '../bilesenler/seviye.mjs';
-import { sunumBaslat } from '../bilesenler/sunum.mjs';
-import { baglantilariGuncelle } from '../bilesenler/durum.mjs';
+import { sezar, sezarCoz, kabaKuvvet } from '../cekirdek/sezar.js';
+import { yabanciHarfler, buyukHarf, mod } from '../cekirdek/turkce-alfabe.js';
+import { cizCark } from '../bilesenler/cark.js';
+import { gorevBagla, sadele } from '../bilesenler/gorev.js';
+import { seviyeBaslat } from '../bilesenler/seviye.js';
+import { sunumBaslat } from '../bilesenler/sunum.js';
+import { baglantilariGuncelle } from '../bilesenler/durum.js';
 
 const $ = (s, k = document) => k.querySelector(s);
 

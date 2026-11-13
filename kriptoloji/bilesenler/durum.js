@@ -1,11 +1,11 @@
 /* =====================================================================
-   DURUM — kriptoloji/bilesenler/durum.mjs
+   DURUM — kriptoloji/bilesenler/durum.js
    Öğrencinin ilerlemesi (çözülen dosyaların bit maskesi) yalnızca BELLEKTE tutulur.
    Sayfalar arası taşımak için adres çubuğunun # kısmı kullanılır: …/sezar/#k=KRT-6JTJ7-D
    # sonrası tarayıcıdan sunucuya HİÇ gönderilmez; çerez/localStorage gerekmez.
    Seviye (?seviye=uzman) ve sunum (?sunum=1) sorgu kısmında durur; öğretmen link paylaşabilsin diye.
    ===================================================================== */
-import { kodUret, kodCoz } from '../cekirdek/kayit-kodu.mjs';
+import { kodUret, kodCoz } from '../cekirdek/kayit-kodu.js';
 
 let maske = 0;
 const dinleyiciler = new Set();

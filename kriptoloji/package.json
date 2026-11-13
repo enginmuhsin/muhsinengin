@@ -1,0 +1,4 @@
+{
+  "//": "Şifre Dairesi modülleri ES modülüdür (import/export). Node bu klasördeki .js dosyalarını buna göre okur.",
+  "type": "module"
+}

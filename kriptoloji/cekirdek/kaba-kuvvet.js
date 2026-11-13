@@ -1,5 +1,5 @@
 /* =====================================================================
-   GERÇEK KABA KUVVET — kriptoloji/cekirdek/kaba-kuvvet.mjs
+   GERÇEK KABA KUVVET — kriptoloji/cekirdek/kaba-kuvvet.js
    Web Crypto ile SHA-256. Tarayıcıda ve Node'da (globalThis.crypto) aynı çalışır; ağ yok.
    1) Rastgele bir doğum yılı seçilir, yalnız ÖZETİ (hash) tutulur — bir sitenin şifre özetini çaldırması gibi.
    2) 1900–2025 arasındaki her yılın özeti hesaplanıp karşılaştırılır; eşleşen yıl kasanın şifresidir.

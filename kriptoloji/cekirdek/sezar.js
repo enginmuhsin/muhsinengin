@@ -1,8 +1,8 @@
 /* =====================================================================
-   SEZAR ŞİFRESİ — kriptoloji/cekirdek/sezar.mjs
+   SEZAR ŞİFRESİ — kriptoloji/cekirdek/sezar.js
    E(x) = (x + k) mod 29   ·   D(x) = (x − k) mod 29   (Türk alfabesi, 29 harf)
    ===================================================================== */
-import { harfHarfDonustur, N, mod } from './turkce-alfabe.mjs';
+import { harfHarfDonustur, N, mod } from './turkce-alfabe.js';
 
 /** Şifrele: her harf k sıra ileri kayar. k negatif olabilir. */
 export function sezar(metin, k) {
