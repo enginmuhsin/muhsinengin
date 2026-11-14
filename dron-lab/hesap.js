@@ -60,6 +60,11 @@ const SABITLER = {
   // motor o gücü taşıyamaz; gerçek devir hesaplanandan çok düşük kalır.
   // Küçük fırçasız motorlar kısa süreli ~20–30 W/g'a kadar çıkabilir (kaba).
   MOTOR_W_PER_G_MAKS: 30,
+  // Batarya enerji yoğunluğu üst sınırı [Wh/kg]. Dron LiPo paketleri tipik
+  // 130–180 Wh/kg; en iyi lityum hücreler bile ~250–270 Wh/kg civarındadır.
+  // Girilen batarya ağırlığı bu sınırın izin verdiğinden hafifse tasarım
+  // fizik açısından yapılamaz (cömert sınır: 250).
+  BATARYA_MAKS_WH_KG: 250,
   // Çerçeve sınıfına göre takılabilecek en büyük pervane çapı [inç]
   MAKS_PERVANE: { 2: 2.2, 3: 3.1, 5: 5.2, 7: 7.2, 10: 10.5 },
 };
@@ -300,6 +305,14 @@ function degerlendir(t, s) {
   }
 
   const u = [];   // uyarılar: {tur: 'kotu'|'dikkat'|'bilgi', metin}
+  // --- Gerçeklik denetimi: kâğıt üstünde uçan ama yapılamayan tasarımlar ---
+  let gercekDisi = false;
+  const Wh = t.hucre * SABITLER.HUCRE_NOMINAL_V * t.kapasite / 1000;
+  const minBatG = Wh * 1000 / SABITLER.BATARYA_MAKS_WH_KG;
+  if (t.bataryaG < minBatG) {
+    gercekDisi = true;
+    u.push({ tur: 'kotu', metin: `${t.hucre}S ${t.kapasite} mAh bir batarya yaklaşık ${tr(Wh, 0)} Wh enerji taşır. En iyi lityum hücreler bile kilogram başına ~${SABITLER.BATARYA_MAKS_WH_KG} Wh taşıyabilir; bu enerji için en az ~${tr(minBatG, 0)} g batarya gerekir, sen ${t.bataryaG} g girdin. Bu ağırlıkta böyle bir batarya yapılamaz, bu yüzden uçuş süresi ve itki/ağırlık sonuçları GEÇERSİZDİR. Batarya ağırlığını artır ya da kapasiteyi düşür.` });
+  }
   if (s.Imaks > s.Ibatarya) {
     u.push({ tur: 'kotu', metin: `Tam gazda yaklaşık ${tr(s.Imaks, 0)} A çekiliyor; bataryanın sürekli akım sınırı ${tr(s.Ibatarya, 0)} A (kapasite × C). Batarya ısınır, gerilim çöker, ömrü kısalır. Daha yüksek C değeri veya kapasite seç.` });
   }
@@ -321,6 +334,7 @@ function degerlendir(t, s) {
   }
   const wPerG = s.Pel / t.motorG;
   if (wPerG > SABITLER.MOTOR_W_PER_G_MAKS) {
+    gercekDisi = true;
     u.push({ tur: 'kotu', metin: `Her motorun yaklaşık ${tr(s.Pel, 0)} W çekmesi gerekiyor (${tr(wPerG, 0)} W/g). ${t.motorG} g'lık bir motor bunu taşıyamaz: ısınıp yanar ya da bu devre hiç çıkamaz. Bu durumda hesaplanan itki GEÇERSİZDİR. KV'yi düşür, daha küçük pervane ya da daha ağır motor seç.` });
   }
   if (s.Vhucre < 3.3) {
@@ -332,7 +346,11 @@ function degerlendir(t, s) {
   if (t.motorSayisi > 4) {
     u.push({ tur: 'bilgi', metin: `${t.motorSayisi} motorlu tasarımlarda çerçeve genellikle daha büyük ve ağırdır; çerçeve ağırlığını buna göre girdiğinden emin ol.` });
   }
-  return { sinif, baslik, metin, uyarilar: u };
+  if (gercekDisi) {
+    sinif = 'kotu'; baslik = 'Kâğıt üstünde uçuyor, gerçekte yapılamaz.';
+    metin = 'Bazı değerler fizik kurallarıyla bağdaşmıyor (aşağıdaki kırmızı uyarılara bak). Hesap yine de yapıldı ama sonuçlar gerçek bir dronu anlatmıyor.';
+  }
+  return { sinif, baslik, metin, uyarilar: u, gercekDisi };
 }
 
 /* ---------------------------------------------------------------------
