@@ -834,7 +834,7 @@ function zeminY(x, z, y = Infinity) {
     const a = i / 26 * Math.PI * 2, r = 420 + (i % 3) * 30, h = 40 + ((i * 37) % 50);
     const m = new THREE.Mesh(new THREE.ConeGeometry(70 + (i % 4) * 15, h, 5), tepe); m.position.set(Math.cos(a) * r, h / 2 - 2, Math.sin(a) * r); sahne.add(m);
   }
-  // ---------- okul: Muhsin Engin Bilim ve Sanat Merkezi (kurgusal) ----------
+  // ---------- okul: Kahramankazan BİLSEM ----------
   okulYap();
   geceKur();
   kasabaYap();
@@ -912,7 +912,7 @@ function tabelaDokusu() {
     x.strokeStyle = '#ffffff'; x.lineWidth = 6; x.strokeRect(14, 14, 2020, 228);
     x.fillStyle = '#ffffff'; x.textAlign = 'center'; x.textBaseline = 'middle';
     const L = 210, bosluk = 36;   // logo boyu ve yazıya uzaklık (px)
-    const satirlar = [['MUHSİN ENGİN', 92, 104], ['BİLİM ve SANAT MERKEZİ', 182, 82]];
+    const satirlar = [['KAHRAMANKAZAN', 92, 104], ['BİLSEM', 182, 92]];
     // yazı, iki logo ve boşluklar tabelaya sığacak biçimde yazı boyunu ayarla
     let olcek = 1, enGenis = 0;
     for (;;) {
