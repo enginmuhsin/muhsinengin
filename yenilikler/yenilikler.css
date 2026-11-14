@@ -1,0 +1,15 @@
+/* Yenilikler: İki Kalem dili (ortak/tokenlar.css). Liste stilleri ortak/yenilikler.js içinde. */
+* { box-sizing: border-box; }
+body { margin: 0; background-color: var(--kagit); color: var(--metin); font: 16px/1.55 var(--yazi);
+  background-image: linear-gradient(var(--kare-kalin) 1px, transparent 1px), linear-gradient(90deg, var(--kare-kalin) 1px, transparent 1px),
+    linear-gradient(var(--kare) 1px, transparent 1px), linear-gradient(90deg, var(--kare) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
+main { max-width: 760px; margin: 0 auto; padding: 22px 18px 64px; }
+a { color: var(--murekkep); }
+:focus-visible { outline: 3px solid var(--murekkep); outline-offset: 2px; border-radius: 4px; }
+.eve { display: inline-flex; margin-bottom: 14px; }
+.kunye { margin: .4rem 0 .4rem; font: 600 .8rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--kursun); }
+h1 { font: 600 clamp(2rem, 6vw, 2.8rem)/1.1 var(--serif); margin: 0 0 .8rem; }
+.giris { font-size: 1.06rem; max-width: 62ch; }
+#yenilikListesi { margin-top: 1.4rem; border-bottom: 1px solid var(--cetvel); }
+.oner { margin-top: 1.6rem; font-size: 1.02rem; }

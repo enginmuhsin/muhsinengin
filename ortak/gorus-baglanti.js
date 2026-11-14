@@ -19,4 +19,10 @@
   p.appendChild(a);
   var footer = document.querySelector('body > footer, main + footer, footer.alt-bilgi');
   (footer || document.body).appendChild(p);
+
+  // Yenilikler: ana sayfada son duyurular, ilgili sayfalarda tek seferlik "yeni" notu (ortak/yenilikler.js)
+  var y = document.createElement('script');
+  y.src = '/ortak/yenilikler.js';
+  y.defer = true;
+  document.head.appendChild(y);
 })();
