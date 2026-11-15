@@ -384,6 +384,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="kurtarma.js"></script>
 <script src="tasima.js"></script>
 <script src="fener.js"></script>
+<script src="sehir.js"></script>
 
 <script>
 'use strict';
@@ -681,18 +682,11 @@ function kasabaYap() {
   const arabalar = [[-100, 0.4, 0, '#c8372d'], [-91, 0.4, 0, '#e9eef3'], [-58, 0.4, 0, '#2c5aa0'], [-28, 0.4, 0, '#f2b23a'], [-112, -4.4, Math.PI, '#5b6470'], [-66.5, -40, Math.PI / 2, '#2f8a5a']];
   const farM = new THREE.MeshStandardMaterial({ color: '#fffbe8', emissive: '#fff4cf', emissiveIntensity: 0.1 }); farM.userData.gunduz = 0.1; GECE.malz.push([farM, 2.2]);
   const stopM = new THREE.MeshStandardMaterial({ color: '#7a1414', emissive: '#ff2a2a', emissiveIntensity: 0 }); GECE.malz.push([stopM, 1.4]);
-  arabalar.forEach(([x, z, aci, renk]) => {
-    const a = new THREE.Group(); a.position.set(x, 0, z); a.rotation.y = aci; k.add(a);
-    const kasa = new THREE.Mesh(yuvarlakKutu(4.2, 0.75, 1.8, 0.35, 0.12), std(renk, { metalness: 0.5, roughness: 0.35 })); kasa.rotation.y = Math.PI / 2; kasa.position.y = 0.65; a.add(kasa);
-    const kabin = new THREE.Mesh(yuvarlakKutu(2.3, 0.7, 1.6, 0.3, 0.12), std('#20262e', { metalness: 0.3, roughness: 0.15 })); kabin.rotation.y = Math.PI / 2; kabin.position.set(-0.2, 1.3, 0); a.add(kabin);
-    for (const [wx, wz] of [[-1.35, -0.85], [1.35, -0.85], [-1.35, 0.85], [1.35, 0.85]]) { const t = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.24, 14), std('#15171b')); t.rotation.x = Math.PI / 2; t.position.set(wx, 0.34, wz); a.add(t); }
-    for (const wz of [-0.6, 0.6]) {
-      const f = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.16, 0.34), farM); f.position.set(2.1, 0.75, wz); a.add(f);
-      const s = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.14, 0.3), stopM); s.position.set(-2.1, 0.78, wz); a.add(s);
-    }
-    a.traverse((o) => { if (o.isMesh) o.castShadow = true; });
-    const ca = Math.abs(Math.cos(aci)) > 0.5, hx = ca ? 2.15 : 0.95, hz = ca ? 0.95 : 2.15;
-    kutuEkle(x - hx, x + hx, z - hz, z + hz, 0, 1.62, 'araba');
+  // arabalar artık sehir.js'teki gerçekçi modelle (InstancedMesh) çizilir; burada yalnız yerleri ve çarpışma kutuları
+  arabalar.forEach(([x, z, aci, renk], i) => {
+    SEHIR.araba(x, z, aci, renk, ['sedan', 'hatch', 'suv', 'taksi', 'sedan', 'suv'][i % 6]);
+    const ca = Math.abs(Math.cos(aci)) > 0.5, hx = ca ? 2.25 : 0.98, hz = ca ? 0.98 : 2.25;
+    kutuEkle(x - hx, x + hx, z - hz, z + hz, 0, 1.68, 'araba');
   });
 
   // ---------- basketbol sahası ----------
@@ -842,6 +836,7 @@ function zeminY(x, z, y = Infinity) {
     const x = (rnd() - 0.5) * 360, z = (rnd() - 0.5) * 360;
     if (x > -18 && x < 55 && z > -75 && z < 22) continue;   // parkur alanını boş bırak
     if (x > -146 && x < -16 && z > -84 && z < 30) continue;  // okul, kasaba ve spor sahaları
+    if (SEHIR.icinde(x, z, 6)) continue;                       // şehir merkezi
     const s = 0.7 + rnd() * 0.9;
     o.position.set(x, 0.8 * s, z); o.scale.set(s, s, s); o.rotation.y = rnd() * 6; o.updateMatrix(); gov.setMatrixAt(k, o.matrix);
     o.position.y = (1.6 + 1.6) * s; o.updateMatrix(); tac.setMatrixAt(k, o.matrix); agaclar.push({ x, z, s }); k++;
@@ -857,6 +852,7 @@ function zeminY(x, z, y = Infinity) {
   okulYap();
   geceKur();
   kasabaYap();
+  SEHIR.kur();   // okulun kuzeyindeki şehir merkezi (sehir.js)
 }
 
 /* Okul binası: 3 katlı, pencereli cephe, giriş saçağı, isim tabelası, düz çatıda
@@ -2532,7 +2528,7 @@ function hudGuncelle(dt) {
   else if (u.soc < 0.15 && u.soc > 0) m = 'Batarya düşük: hemen in';
   else if (u.bataryaBitti) m = 'Batarya bitti: itki yok';
   else if (Math.hypot(u.poz.x, u.poz.z) > SINIR.ic - 5) m = 'Coğrafi sınır (geofence): gerçek dronlarda olduğu gibi yazılım daha öteye izin vermiyor';
-  else if (Math.hypot(u.poz.x, u.poz.z) > 230) m = 'Görüş mesafesinden çıkıyorsun: geri dön';
+  else if (Math.hypot(u.poz.x, u.poz.z) > 255) m = 'Görüş mesafesinden çıkıyorsun: geri dön';
   uy.hidden = !m; uy.textContent = m;
   // hedef oku
   const ok = $('ok');
@@ -2623,6 +2619,7 @@ function dongu(simdi) {
   }
   geceAdim(performance.now() / 1000);
   FENER.adim(dt);
+  SEHIR.adim(dt, performance.now() / 1000);
   if (gokKure) gokKure.position.copy(kamera.position);       // gökyüzü kubbesi kamerayla gelir: ufkun ötesinde boşluk görünmez
   if (yildizlar) yildizlar.position.copy(kamera.position);
   if (!KURTARMA.ciz()) renderer.render(sahne, kamera);

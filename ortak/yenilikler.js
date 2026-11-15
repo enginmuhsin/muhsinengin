@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'sehir-merkezi', tarih: '2026-11-15', oneri: true,
+      baslik: 'Simülatöre şehir merkezi ve yeni arabalar',
+      metin: 'Okulun kuzeyinde artık bir şehir var: gökdelenler, renkli apartmanlar, dar ara sokaklar, tabelalı dükkânlar, Gençlik Parkı, fıskiyeli meydan, çatısında helikopter pisti olan hastane ve televizyon kulesi. Caddelerde arabalar akıyor; okulun önündeki arabalar da yenilendi. Gece pencereler ve tabelalar yanıyor. Kaybolmadan dönebilecek misin?',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
       id: 'yaris-rakipler', tarih: '2026-11-15',
       baslik: 'FPV yarış pistinde 3 rakip dron',
       metin: 'Pistte artık yalnız değilsin: Çaylak #12, Kaptan #7 ve Usta #1 seninle aynı anda kalkıyor. Virajda ne kadar yattıklarına bak: hız arttıkça yatış açısı da artar (tan φ = v·ω/g). Sonuçta kaçıncı olduğunu görürsün.',
