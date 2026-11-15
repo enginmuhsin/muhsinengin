@@ -47,7 +47,9 @@
   const tarihTohum = () => +bugun().replace(/-/g, '');
 
   /* ---------- saklanma yerleri: kasabanın kendisinden ---------- */
-  let YERLER = null;
+  let YERLER = null, YERLER_S = null;   // kasaba ve şehir merkezi (sehir.js)
+  let sehirModu = false;
+  const yerler = () => sehirModu ? (YERLER_S || (YERLER_S = SEHIR.saklanma())) : (YERLER || (YERLER = yerleriUret()));
   function yerleriUret() {
     const Y = [], kasabada = (x, z) => x > -144 && x < -18 && z > -82 && z < 28;
     const icerde = (x, z, p = 0.3) => KUTULAR.some((k) => x > k.x0 - p && x < k.x1 + p && z > k.z0 - p && z < k.z1 + p);
@@ -217,7 +219,7 @@
   }
 
   /* ---------- seviye paneli ---------- */
-  function rekorAnahtar(sev) { return sev === 'gun' ? 'dronSim.kurtarma.gun.' + bugun() : 'dronSim.kurtarma.' + sev; }
+  function rekorAnahtar(sev, sehir) { const s = (sehir === undefined ? sehirModu : sehir) ? 'sehir.' : ''; return sev === 'gun' ? 'dronSim.kurtarma.' + s + 'gun.' + bugun() : 'dronSim.kurtarma.' + s + sev; }
   function rekorYazi(sev) { const r = getir(rekorAnahtar(sev)); return r ? `${sev === 'gun' ? 'Bugünün en iyisi' : 'Rekor'}: ${say(r.t, 1)} s` : 'Henüz rekor yok'; }
   function panelGoster(g) {
     let p = $('kurtarmaP');
@@ -227,7 +229,7 @@
       p.addEventListener('click', (e) => { const b = e.target.closest('[data-sev]'); if (b) secildi(b.dataset.sev); });
     }
     p.innerHTML = `<h3 id="kurtarmaBaslik">Gece arama-kurtarma: seviye seç</h3>
-      <p>Pamuk akşam kaybolmuş. Kasabanın <b>150'den fazla</b> köşesinden birinde saklanıyor ve her uçuşta yeri değişiyor. İniş fenerinle ara, miyavına kulak ver, komşu ihbarlarının <b style="color:#ffd23f">sarı çemberine</b> bak.</p>
+      <p>Pamuk akşam kaybolmuş. ${sehirModu ? 'Şehir merkezinin' : 'Kasabanın'} <b>${yerler().length}</b> köşesinden birinde saklanıyor ve her uçuşta yeri değişiyor. İniş fenerinle ara, miyavına kulak ver, komşu ihbarlarının <b style="color:#ffd23f">sarı çemberine</b> bak.</p>
       <div class="kurtar-sev">${Object.entries(SEVIYE).map(([k, s], i) => `<button class="dg" data-sev="${k}"><b>${i + 1}. ${s.ad}</b><small>${s.not}</small><small class="rek">${rekorYazi(k)}</small></button>`).join('')}</div>
       <p class="ek-not"><b>Termal kamera:</b> G tuşu ya da üstteki Termal düğmesi. Sıcak cisimler beyaz görünür; pilden ${TERMAL_W} W ek güç çeker. <b>Sessiz yaklaş:</b> gazı kıstıkça pervane gürültüsü azalır.</p>
       <p class="ek-not"><b>Fener:</b> Q/E sağa-sola, Z/X aşağı-yukarı, N demeti daraltır (uzağa vurur), M genişletir, B odak, 0 ortalar. Dokunmatikte sağdaki FENER paneli.</p>`;
@@ -249,12 +251,11 @@
   /* ---------- görev ---------- */
   function basla(g, sev) {
     const S = SEVIYE[sev];
-    if (!YERLER) YERLER = yerleriUret();
     sicaklar.length = 0;
     g.sev = sev; g.S = S; g.rnd = S.gun ? tohumlu(tarihTohum()) : Math.random;
     const r = g.rnd;
     // gizli yer (araba altı, ağaç, çatı) mı açık yer mi?
-    const gizliler = YERLER.filter((y) => y.tur !== 'acik'), aciklar = YERLER.filter((y) => y.tur === 'acik');
+    const Y = yerler(), gizliler = Y.filter((y) => y.tur !== 'acik'), aciklar = Y.filter((y) => y.tur === 'acik');
     const havuz = r() < S.gizli ? gizliler : aciklar;
     g.yer = havuz[Math.floor(r() * havuz.length)];
     g.kedi = kediYap(g.yer.x, g.yer.z); g.kedi.position.y = g.yer.y;
@@ -280,7 +281,7 @@
     if (g.cember) gorevGrubu.remove(g.cember);
     g.cember = cemberYap(R); g.cember.position.set(cx, 0.35, cz); g.cemberR = R;
     g.hedef = new THREE.Vector3(cx, 0.5, cz);
-    const en = ISARETLER.reduce((p, q) => Math.hypot(q[1] - cx, q[2] - cz) < Math.hypot(p[1] - cx, p[2] - cz) ? q : p);
+    const en = (sehirModu ? SEHIR.isaretler() : ISARETLER).reduce((p, q) => Math.hypot(q[1] - cx, q[2] - cz) < Math.hypot(p[1] - cx, p[2] - cz) ? q : p);
     g.ipucuSay++;
     bildir(kacti ? `İhbar: Pamuk ${en[0]} tarafına koşarken görülmüş (sarı çember, ${R} m)` : `Komşu ihbarı: Pamuk ${en[0]} yakınlarında görülmüş (sarı çember, ${R} m)`, 3600);
   }
@@ -300,7 +301,7 @@
 
   function kac(g, L) {
     const r = g.rnd, p = g.kediPoz;
-    const adaylar = YERLER.filter((y) => y.tur !== 'cati' && y !== g.yer && (d => d > 15 && d < 40)(Math.hypot(y.x - p.x, y.z - p.z)));
+    const adaylar = yerler().filter((y) => y.tur !== 'cati' && y !== g.yer && (d => d > 15 && d < 40)(Math.hypot(y.x - p.x, y.z - p.z)));
     const hedef = adaylar[Math.floor(r() * adaylar.length)] || g.yer;
     const d = Math.hypot(hedef.x - p.x, hedef.z - p.z);
     g.kosu = { x0: p.x, z0: p.z, y0: p.y, hedef, t: 0, T: Math.max(1, d / KOSU_HIZ) };
@@ -384,7 +385,7 @@
     if (g.bulundu) return { hedef: 'Pamuk bulundu! Yeşil halkanın içine yumuşak in.', ek: `Uzaklık <b>${say(g.yatay || 0, 0)} m</b>` };
     const u = uc, L1 = gurultu1m(u);
     return {
-      hedef: g.cember ? 'Sarı çember komşu ihbarı: Pamuk o civarda. Işık izinle tara, miyava kulak ver.' : 'Kayıp kedi Pamuk kasabada bir yerde. Işık izinle tara; miyav sesine kulak ver.',
+      hedef: g.cember ? 'Sarı çember komşu ihbarı: Pamuk o civarda. Işık izinle tara, miyava kulak ver.' : `Kayıp kedi Pamuk ${sehirModu ? 'şehirde' : 'kasabada'} bir yerde. Işık izinle tara; miyav sesine kulak ver.`,
       ek: `${g.S.ad} · Demet ${Math.round(2 * FENER.yari * 180 / Math.PI)}° · <b>${say(FENER.I(), 0)} cd</b> · Zeminde <b>${say(g.E0 || 0, 0)} lx</b> (≥ ${E_ESIK}) · İz çapı <b>${say(2 * (g.izR || 0), 1)} m</b>`
         + (g.S.kacis ? ` · Gürültün <b>${say(L1, 0)} dB</b> (1 m)` : '') + (K.termal ? ' · <b>TERMAL</b>' : ''),
     };
@@ -457,15 +458,15 @@ body.termal #hud::before{content:'TERMAL · beyaz-sıcak';position:absolute;left
   /* ---------- ana betiğe açılan yüz ---------- */
   const K = window.KURTARMA = {
     termal: false,
-    kur(g) { g.ruzgarHiz = 1; g.bulundu = false; g.S = null; panelGoster(g); },
+    kur(g) { sehirModu = !!g.sehir; g.ruzgarHiz = 1; g.bulundu = false; g.S = null; panelGoster(g); },
     adim, hud, bitir: bitirSonuc, ciz,
     ekGuc() { return K.termal && gorevD && gorevD.tip === 'kurtarma' ? TERMAL_W : 0; },
     kapat() { const p = $('kurtarmaP'); if (p) p.hidden = true; termalDegis(false); const b = $('bTermal'); if (b) b.hidden = true; },
-    menuRekor() { const t = ['kolay', 'orta', 'zor'].map((k) => { const r = getir(rekorAnahtar(k)); return r ? `${SEVIYE[k].ad} ${say(r.t, 0)} s` : null; }).filter(Boolean); return t.length ? 'Rekorlar: ' + t.join(' · ') : ''; },
+    menuRekor(sehir) { const t = ['kolay', 'orta', 'zor'].map((k) => { const r = getir(rekorAnahtar(k, !!sehir)); return r ? `${SEVIYE[k].ad} ${say(r.t, 0)} s` : null; }).filter(Boolean); return t.length ? 'Rekorlar: ' + t.join(' · ') : ''; },
     kediModel(x, z) {
       const k = vanKedisi(); k.position.set(x, zeminY(x, z), z); k.rotation.y = Math.random() * 6; gorevGrubu.add(k); return k;
     },
     vanKedisi, kediCanlandir,
-    yerSayisi() { if (!YERLER) YERLER = yerleriUret(); return YERLER.length; },
+    yerSayisi(sehir) { const e = sehirModu; sehirModu = !!sehir; const n = yerler().length; sehirModu = e; return n; },
   };
 })();

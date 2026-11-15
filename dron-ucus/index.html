@@ -383,6 +383,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="ek-gorevler.js"></script>
 <script src="kurtarma.js"></script>
 <script src="tasima.js"></script>
+<script src="hastane-gorev.js"></script>
 <script src="fener.js"></script>
 <script src="sehir.js"></script>
 
@@ -412,8 +413,10 @@ const GOREVLER = {
   ilk:      { ad: 'İlk kalkış', kisa: '3 m\'de 5 saniye asılı kal, sonra pede yumuşak in.', ders: 'Hover gazı' },
   halka:    { ad: 'Halka parkuru', kisa: '7 halkadan sırayla geç. Süreye karşı.', ders: 'Eğim → yatay ivme' },
   teslimat: { ad: 'Rüzgârlı teslimat', kisa: 'Kargoyu yükle, yan rüzgârda 60 m öteye götür, in.', ders: 'Yük ve TWR' },
+  sehirpist: { ad: 'Şehir yarışı: kuleler arası', kisa: '14 kapılı şehir parkuru: caddelerden kavşaklarda dönerek gökdelenlerin arasından geç. 3 rakip seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
   pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 rakip yarış dronuna karşı 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
   tunel:    { ad: 'Rüzgâr tüneli', kisa: 'Önce eğimi tahmin et, sonra sabit rüzgârda yerinde dur.', ders: 'Kuvvet dengesi: tan θ = F/W' },
+  sehirkurtarma: { ad: 'Şehirde gece araması', kisa: 'Pamuk şehir merkezinde kayboldu: ara sokaklar, park, apartman çatıları, araba altları. Kasabadakinden çok daha zor; yönlendirilebilir fenerini kullan.', ders: 'Işık E = I / d², ses L = L₁ − 20·log d' },
   kurtarma: { ad: 'Gece arama-kurtarma', kisa: 'Kayıp kedi Pamuk karanlık kasabada saklanıyor: her uçuşta başka yerde, ürkerse kaçar. Fener, miyav, ihbar çemberi ve termal kamerayla ara. 4 seviye, rekorlar.', ders: 'Işık E = I / d², ses L = L₁ − 20·log d' },
   cati:     { ad: 'Çatıya teslimat', kisa: 'Kargoyu okulun çatısındaki H pistine bırak. Çatı kenarında rüzgâr döner.', ders: 'Potansiyel enerji ve hover maliyeti' },
   serbest:  { ad: 'Serbest uçuş', kisa: 'Kural yok. V ile rüzgârı aç/kapat.', ders: 'Keşif' },
@@ -1658,8 +1661,9 @@ function otoGaz(dt, egim, Tmaks) {
 function gorevKur() {
   // eski görev nesnelerini temizle
   while (gorevGrubu.children.length) gorevGrubu.remove(gorevGrubu.children[0]);
-  pedB.visible = false;
-  const g = { tip: ayar.gorev, sure: 0, bitti: false, ruzgarHiz: 0, ruzgarYon: new THREE.Vector3(-1, 0, 0.15).normalize(), halkalar: [], kapilar: [], sira: 0, adim: 0, asili: 0, hoverToplam: 0, hoverSay: 0, hedef: null };
+  pedB.visible = false; pedA.position.set(0, 0.005, 0);
+  const TAKMA = { sehirpist: 'pist', sehirkurtarma: 'kurtarma' };   // aynı görev, şehir sahnesinde
+  const g = { tip: TAKMA[ayar.gorev] || ayar.gorev, gorevAdi: ayar.gorev, sehir: !!TAKMA[ayar.gorev], sure: 0, bitti: false, ruzgarHiz: 0, ruzgarYon: new THREE.Vector3(-1, 0, 0.15).normalize(), halkalar: [], kapilar: [], sira: 0, adim: 0, asili: 0, hoverToplam: 0, hoverSay: 0, hedef: null };
   let t = { ...ayar.tasarim };
   if (g.tip === 'ilk') {
     const zon = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 1.5, 40, 1, true), new THREE.MeshBasicMaterial({ color: '#ffb04a', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }));
@@ -1705,7 +1709,7 @@ function gorevKur() {
   }
   if (g.tip === 'pist') {
     // kapalı devre: kapı 0 başlangıç/bitiş. Ağaçsız parkur alanının içinde.
-    const P = [[0, 2, -12], [14, 3, -30], [34, 2.5, -42], [48, 4, -25], [40, 2, -5], [22, 5, 8], [6, 2.2, 10]];
+    const P = g.sehir ? SEHIR.pist : [[0, 2, -12], [14, 3, -30], [34, 2.5, -42], [48, 4, -25], [40, 2, -5], [22, 5, 8], [6, 2.2, 10]];
     const c = P.map((p) => new THREE.Vector3(...p));
     const W = 1.0, H = 1.0, k = 0.12;   // yarı genişlik, yarı yükseklik, çubuk kalınlığı
     c.forEach((m, i) => {
@@ -1725,7 +1729,7 @@ function gorevKur() {
     });
     g.tur = 0; g.turSure = 0; g.turlar = []; g.basladi = false; g.iz = []; g.izT = 0; g.maksEgim = 0; g.hizToplam = 0; g.hizSay = 0;
     rakipKur(g, c);
-    g.rekor = oku('dronSim.pist.' + ayar.sablon);
+    g.rekor = oku(pistAnahtar(g));
     g.hedef = c[0];
   }
   if (g.tip === 'tunel') {
@@ -1787,7 +1791,7 @@ function baslat() {
   kollar.kolSol.sifirla(); kollar.kolSag.sifirla(); cscSure = 0;
   durum = 'ucus';
   $('menu').hidden = true; $('sonuc').hidden = true; $('hud').hidden = false; $('uyari').hidden = true;
-  $('gAd').textContent = [GOREVLER[g.tip].ad, ayar.kumanda === 'akro' ? 'Akro' : '', uc.pid ? 'PID' : ''].filter(Boolean).join(' · ');
+  $('gAd').textContent = [GOREVLER[g.gorevAdi || g.tip].ad, ayar.kumanda === 'akro' ? 'Akro' : '', uc.pid ? 'PID' : ''].filter(Boolean).join(' · ');
   $('tahminP').hidden = true;
   if (g.tip !== 'kurtarma') KURTARMA.kapat();
   if (g.tip === 'tunel') tahminSor();
@@ -1971,7 +1975,7 @@ function fizikAdim(dt) {
    Engele dik yöndeki hız sınırı aşarsa pervane kırılır (düşüş); daha yavaş temasta dron
    engelden itilir, içeri doğru hızı silinir ve hafifçe seker. */
 const _n = new THREE.Vector3(), _d = new THREE.Vector3(), _r = new THREE.Vector3();
-const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac' };
+const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac', cam: 'cam', mobilya: 'mobilya' };
 function engelKontrol() {
   const u = uc, f = fz, p = u.poz;
   const rD = f.kol + f.t.pervaneCap * 0.0254 / 2;
@@ -2010,6 +2014,7 @@ function engelKontrol() {
 
   // binalar: yan yüzler ve alt yüz (üst yüz zemin sayılır, iniş orada)
   for (const B of KUTULAR) {
+    if (p.x < B.x0 - rD || p.x > B.x1 + rD || p.z < B.z0 - rD || p.z > B.z1 + rD) continue;   // hızlı eleme (şehirde yüzlerce kutu var)
     if (p.y > B.ust - 0.05 || p.y < B.y0 - rD) continue;
     const qx = Math.min(Math.max(p.x, B.x0), B.x1), qz = Math.min(Math.max(p.z, B.z0), B.z1), qy = Math.min(Math.max(p.y, B.y0), B.ust);
     const dx = p.x - qx, dy = p.y - qy, dz = p.z - qz, d = Math.hypot(dx, dy, dz);
@@ -2070,7 +2075,7 @@ function engelKontrol() {
   }
 
   // yakınlık uyarısı: bir pervane çapından yakınsa
-  if (!carp && enYakin < 2 * f.t.pervaneCap * 0.0254 / 2 && u.zaman > (u.engelUyari || 0)) {
+  if (!carp && enYakin < 2 * f.t.pervaneCap * 0.0254 / 2 && u.zaman > (u.engelUyari || 0) && !SEHIR.icMekan(p)) {
     bildir('Engele çok yakınsın: yavaşla', 900); u.engelUyari = u.zaman + 2.5;
   }
   return carp;
@@ -2210,6 +2215,7 @@ function rakipAdim(dt) {
     r.p.forEach((q) => { q.rotation.y += q.userData.yon * 55 * dt; });
   });
 }
+function pistAnahtar(g) { return 'dronSim.pist.' + (g.sehir ? 'sehir.' : '') + ayar.sablon; }
 function pistSira() {   // canlı sıralama: tamamlanan tur + kapı ilerlemesi
   const g = gorevD; if (!g.rakipler || !g.basladi) return null;
   const ben = g.turlar.length + ((g.sira + g.kapilar.length - 1) % g.kapilar.length) / g.kapilar.length;
@@ -2247,7 +2253,7 @@ function pistAdim(dt) {
 function turBitti() {
   const g = gorevD, sure = g.turSure;
   g.turlar.push(sure);
-  const anahtar = 'dronSim.pist.' + ayar.sablon;
+  const anahtar = pistAnahtar(g);
   const rekor = oku(anahtar);
   if (!g.hile && (!rekor || sure < rekor.t)) { yaz(anahtar, { t: Math.round(sure * 100) / 100, iz: g.iz }); g.yeniRekor = true; bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s · yeni en iyi tur!`, 1600); }
   else bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s`, 1300);
@@ -2300,7 +2306,7 @@ function dus(neden, v) {
     metin = `Yere <b>${tr(der(v.egim), 0)}°</b> eğik değdin. İnişten önce dronu düzle (sağ kolu bırak). Eğik dronda itkinin yalnızca T·cosθ kadarı yukarı çeker, gerisi dronu yana iter.`;
     formul = `cos ${tr(der(v.egim), 0)}° = ${tr(Math.cos(v.egim), 2)} → itkinin %${tr(100 * (1 - Math.cos(v.egim)), 0)}'i yana gidiyor`;
   } else if (neden === 'engel') {
-    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], ev: ['Binaya çarptın', 'binanın duvarına'], arac: ['Arabaya çarptın', 'park etmiş arabaya'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'], kapi: ['Kapıya çarptın', 'yarış kapısının çerçevesine'] }[v.ne] || ['Engele çarptın', 'engele'];
+    const ad = { agac: ['Ağaca çarptın', 'ağacın dallarına'], bina: ['Binaya çarptın', 'okul binasının duvarına'], ev: ['Binaya çarptın', 'binanın duvarına'], arac: ['Arabaya çarptın', 'park etmiş arabaya'], direk: ['Direğe çarptın', 'direğe'], halka: ['Halkaya çarptın', 'halkanın çerçevesine'], kapi: ['Kapıya çarptın', 'yarış kapısının çerçevesine'], cam: ['Cama çarptın', 'kapalı bir pencerenin camına'], mobilya: ['Mobilyaya çarptın', 'odadaki eşyaya'] }[v.ne] || ['Engele çarptın', 'engele'];
     const cap = f.t.pervaneCap * 2.54;
     baslik = ad[0];
     metin = `Dron ${ad[1]} <b>${tr(v.v, 1)} m/s</b> hızla değdi. Dakikada binlerce devirle dönen pervane bir dala ya da duvara değince kırılır; o köşenin itkisi bir anda kaybolur ve dron takla atar. Engelin yanından geçerken en az bir pervane çapı (<b>${tr(cap, 0)} cm</b>) boşluk bırak ve yavaşla. Hızı yarıya indirmek darbe enerjisini dörtte bire düşürür.`;
@@ -2349,7 +2355,7 @@ function bitir(basarili) {
     olcum.push(['Kargo', g.kargo + ' g'], ['Harcanan enerji', tr(Eb, 0) + ' J']);
   }
   if (g.tip === 'pist') {
-    const enIyi = Math.min(...g.turlar), rekor = oku('dronSim.pist.' + ayar.sablon);
+    const enIyi = Math.min(...g.turlar), rekor = oku(pistAnahtar(g));
     const v = g.hizSay ? g.hizToplam / g.hizSay : 0, th = Math.max(g.maksEgim, rad(5));
     const r = v * v / (G * Math.tan(th));
     baslik = g.yeniRekor ? 'Yeni en iyi tur!' : '3 tur tamam';
@@ -2379,7 +2385,7 @@ function bitir(basarili) {
   if (g.tip === 'serbest') return;
   if (g.hile) metin += '<br><br><small>Bu uçuşta fizik kurallarının dışında bir hareket algılandı (konsoldan kod çalıştırmak gibi), bu yüzden rekor kaydedilmedi. Simülatörün kodunu merak etmen güzel: fiziği değiştirmek istiyorsan Dron Lab\'da tasarımını değiştir.</small>';
   sesSus();
-  setTimeout(() => sonucGoster(GOREVLER[g.tip].ad, baslik, metin, formul, olcum), 500);
+  setTimeout(() => sonucGoster(GOREVLER[g.gorevAdi || g.tip].ad, baslik, metin, formul, olcum), 500);
 }
 
 function sonucGoster(kas, baslik, metin, formul, olcum) {
@@ -2439,6 +2445,22 @@ function sesGuncelle() {
 let kameraAni = true;
 const kamHedef = new THREE.Vector3(), kamPoz = new THREE.Vector3();
 function kameraDegis() { kameraModu = (kameraModu + 1) % 3; $('bKamera').textContent = 'Kamera: ' + KAMERALAR[kameraModu]; kameraAni = true; }
+// takip kamerası ile dron arasında bir kutu (duvar, döşeme) varsa kamerayı engelin önüne çek
+function kameraEngel(p, k) {
+  const dx = k.x - p.x, dy = k.y - p.y, dz = k.z - p.z; let tmin = 1;
+  const xa = Math.min(p.x, k.x) - 0.3, xb = Math.max(p.x, k.x) + 0.3, za = Math.min(p.z, k.z) - 0.3, zb = Math.max(p.z, k.z) + 0.3;
+  for (const B of KUTULAR) {
+    if (B.x1 < xa || B.x0 > xb || B.z1 < za || B.z0 > zb) continue;
+    let t0 = 0, t1 = tmin;
+    for (const [o, d, a, b] of [[p.x, dx, B.x0, B.x1], [p.y, dy, B.y0, B.ust], [p.z, dz, B.z0, B.z1]]) {
+      if (Math.abs(d) < 1e-9) { if (o < a || o > b) { t0 = 2; break; } continue; }
+      let ta = (a - o) / d, tb = (b - o) / d; if (ta > tb) [ta, tb] = [tb, ta];
+      t0 = Math.max(t0, ta); t1 = Math.min(t1, tb); if (t0 > t1) break;
+    }
+    if (t0 <= t1 && t0 > 0.02 && t0 < tmin) tmin = t0;
+  }
+  if (tmin < 1) { const t = Math.max(0.08, tmin - 0.12); k.set(p.x + dx * t, p.y + dy * t, p.z + dz * t); }
+}
 function kameraGuncelle(dt) {
   const u = uc, f = fz, p = u.poz;
   const yer = Math.max(0.15, f.kol * 2);
@@ -2446,6 +2468,7 @@ function kameraGuncelle(dt) {
     const d = 0.6 + f.kol * 7, h = 0.22 + f.kol * 2.4;
     const geri = new THREE.Vector3(Math.sin(u.yaw) * d, h, Math.cos(u.yaw) * d);
     kamPoz.copy(p).add(geri); kamPoz.y = Math.max(kamPoz.y, 0.25);
+    kameraEngel(p, kamPoz);
     const ileri = new THREE.Vector3(-Math.sin(u.yaw), 0, -Math.cos(u.yaw)).multiplyScalar(2);
     const k = kameraAni ? 1 : 1 - Math.exp(-dt * 5);
     kamera.position.lerp(kamPoz, k); kamHedef.lerp(p.clone().add(ileri).setY(p.y + h * 0.15), kameraAni ? 1 : 1 - Math.exp(-dt * 8));
@@ -2710,7 +2733,7 @@ function menuOnizle() {
   $('baslaHata').textContent = f.ucabilir ? '' : 'Bu tasarım havalanamaz: hover gazı %100\'ü aşıyor. Laboratuvarda tasarımı değiştir.';
   const q = Object.keys(SABLONLAR.yaris5).filter((k) => k !== 'ad').map((k) => `${k}=${t[k]}`).join('&');
   $('labaGit').href = '../dron-lab/index.html#' + q;
-  document.querySelectorAll('#gorevler .rek').forEach((el) => { if (el.dataset.rek === 'kurtarma') { el.textContent = KURTARMA.menuRekor(); return; } const r = oku(`dronSim.${el.dataset.rek}.` + ayar.sablon), t = r && (r.t || r); el.textContent = t ? (el.dataset.rek === 'pist' ? 'En iyi tur: ' : 'En iyi: ') + tr(t, el.dataset.rek === 'pist' ? 2 : 1) + ' s' : ''; });
+  document.querySelectorAll('#gorevler .rek').forEach((el) => { if (el.dataset.rek === 'kurtarma' || el.dataset.rek === 'sehirkurtarma') { el.textContent = KURTARMA.menuRekor(el.dataset.rek === 'sehirkurtarma'); return; } const r = oku(`dronSim.${el.dataset.rek}.` + ayar.sablon), t = r && (r.t || r); el.textContent = t ? (el.dataset.rek === 'pist' ? 'En iyi tur: ' : 'En iyi: ') + tr(t, el.dataset.rek === 'pist' ? 2 : 1) + ' s' : ''; });
 }
 function menuKur() {
   $('sablonlar').innerHTML = Object.entries(SABLONLAR).map(([k, v]) => `<button class="cip" data-sablon="${k}" aria-pressed="${k === ayar.sablon}">${v.ad}</button>`).join('');
@@ -2719,7 +2742,7 @@ function menuKur() {
     ayar.sablon = b.dataset.sablon; ayar.tasarim = ayar.sablon === 'lab' && labTasarim ? { ...labTasarim } : { ...SABLONLAR[ayar.sablon] };
     $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', c === b)); $('labHata').textContent = ''; menuOnizle();
   });
-  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' || k === 'pist' || k === 'kurtarma' ? `<small class="rek" data-rek="${k}"></small>` : ''}</button>`).join('');
+  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${['halka', 'pist', 'kurtarma', 'sehirpist', 'sehirkurtarma'].includes(k) ? `<small class="rek" data-rek="${k === 'sehirpist' ? 'pist.sehir' : k}"></small>` : ''}</button>`).join('');
   $('gorevler').addEventListener('click', (e) => {
     const b = e.target.closest('[data-gorev]'); if (!b) return; ayar.gorev = b.dataset.gorev;
     $('gorevler').querySelectorAll('.gorev-k').forEach((c) => c.setAttribute('aria-pressed', c === b));

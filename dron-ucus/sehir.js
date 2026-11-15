@@ -221,7 +221,138 @@
     }
   }
 
+
+  /* ---------- HASTANE: içine girilebilen bina ----------
+     40 m × 22 m, 3 kat (kat yüksekliği 4,3 m). Dış duvarlar gerçek pencere boşluklarıyla örülür:
+     her pencere bölmesi = ayaklar + denizlik + lento + cam. Camlar da çarpışma kutusudur (cama çarpılır).
+     Turuncu çerçeveli pencereler AÇIK: küçük bir dron oradan içeri girebilir. Zemin katta giriş kapısı.
+     İçeride her katta orta koridor, iki yanında numaralı odalar (101–110, 201–210, 301–310),
+     koridorun doğu ucunda katları birbirine bağlayan merdiven boşluğu (döşemede delik).
+     Odalarda yatak ve komodin; lobide danışma masası. Bütün parçalar KUTULAR'a eklenir. */
+  function hastaneYap(grup, cx, cz) {
+    const X0 = cx - 20, X1 = cx + 20, Z0 = cz - 11, Z1 = cz + 11, T = 0.3, ti = 0.15, FH = 4.3, KATS = 3;
+    const taban = (k) => 0.15 + k * FH;                       // k. katın döşeme üstü
+    const dis = new Birlesik(), ic = new Birlesik(), dos = new Birlesik(), tav = new Birlesik(), camB = new Birlesik(), cerB = new Birlesik(), mob = new Birlesik(), yatak = new Birlesik(), bantB = new Birlesik();
+    const kutu = (B, x0, x1, y0, y1, z0, z1, ad) => {
+      if (x1 - x0 < 0.01 || y1 - y0 < 0.01 || z1 - z0 < 0.01) return;
+      B.kutuYan((x0 + x1) / 2, (z0 + z1) / 2, y0, x1 - x0, y1 - y0, z1 - z0, 2, 2);
+      B.ust(x0, x1, z0, z1, y1, 2, 2);
+      (B === dos ? tav : B).dortgen([x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1], [0, -1, 0], [0, 0, 1, 0, 1, 1, 0, 1]);   // alt yüz (döşemenin altı = tavan)
+      if (ad) KUTULAR.push({ x0, x1, z0, z1, y0, ust: y1, ad });
+    };
+    const ACIK = { 'S:1:1': 1, 'S:2:3': 1, 'N:2:7': 1, 'E:1:2': 1 };   // yüz:kat:bölme → açık pencere
+    const PEN = { esik: 0.9, yuk: 1.75 };
+    // uzun yüzler (güney S: z = Z0, kuzey N: z = Z1): 10 bölme × 4 m; kısa yüzler (batı W, doğu E): 5 bölme × 4,4 m
+    const yuz = (ad, kat) => {
+      const y0 = taban(kat) - (kat ? 0.3 : 0.15), yT = taban(kat), yU = taban(kat + 1) - 0.3, uzun = ad === 'S' || ad === 'N', n = uzun ? 10 : 5, L = uzun ? 40 : 22, bw = L / n, pw = 2.2;
+      const P = (a0, a1, b0, b1, y0_, y1_, mat, isim) => {   // yüzün yerel ekseninde (a: yüz boyunca, b: kalınlık) kutu
+        if (uzun) { const zb = ad === 'S' ? Z0 : Z1 - T; kutu(mat, X0 + a0, X0 + a1, y0_, y1_, zb + b0, zb + b1, isim); }
+        else { const xb = ad === 'W' ? X0 : X1 - T; kutu(mat, xb + b0, xb + b1, y0_, y1_, Z0 + a0, Z0 + a1, isim); }
+      };
+      let a = 0;
+      for (let i = 0; i < n; i++) {
+        const w0 = i * bw + (bw - pw) / 2, w1 = w0 + pw, kapi = ad === 'S' && kat === 0 && i === 5, acik = ACIK[`${ad}:${kat}:${i}`];
+        P(a, w0 - (kapi ? 0.4 : 0), 0, T, y0, yU, dis, 'ev');              // ayak
+        const k0 = kapi ? w0 - 0.4 : w0, k1 = kapi ? w1 + 0.4 : w1;
+        const esik = kapi ? yT : yT + PEN.esik, ust = kapi ? yT + 3 : yT + PEN.esik + PEN.yuk;
+        if (!kapi) P(k0, k1, 0, T, y0, esik, dis, 'ev');                   // denizlik altı duvar
+        P(k0, k1, 0, T, ust, yU, dis, 'ev');                              // lento
+        if (!acik && !kapi) P(k0, k1, T / 2 - 0.03, T / 2 + 0.03, esik, ust, camB, 'cam');
+        if (acik || kapi) {   // turuncu çerçeve: buradan girilir
+          const c = 0.08; P(k0, k1, -0.05, T + 0.05, ust - c, ust, cerB); P(k0, k1, -0.05, T + 0.05, esik, esik + c, cerB);
+          P(k0, k0 + c, -0.05, T + 0.05, esik, ust, cerB); P(k1 - c, k1, -0.05, T + 0.05, esik, ust, cerB);
+          S.acikPencereler.push({ ad, kat, i, x: uzun ? X0 + (k0 + k1) / 2 : (ad === 'W' ? X0 : X1), z: uzun ? (ad === 'S' ? Z0 : Z1) : Z0 + (k0 + k1) / 2, y: (esik + ust) / 2, kapi });
+        }
+        a = k1;
+      }
+      P(a, L, 0, T, y0, yU, dis, 'ev');
+      // kat bandı (dışta mavi şerit)
+      if (kat) P(-0.1, L + 0.1, -0.08, 0, y0, y0 + 0.3, bantB);
+    };
+    S.acikPencereler = [];
+    for (let k = 0; k < KATS; k++) for (const ad of ['S', 'N', 'W', 'E']) yuz(ad, k);
+    KUTULAR.push({ x0: X0 + T, x1: X1 - T, z0: Z0 + T, z1: Z1 - T, y0: 0, ust: 0.15, ad: 'ev' });   // zemin kat döşemesi (iniş yüzeyi)
+    // döşemeler (merdiven boşluğu doğu uçta, koridorda) ve çatı
+    const DX0 = X1 - 4.1, DX1 = X1 - T, CZ0 = cz - 1.5, CZ1 = cz + 1.5;
+    for (let k = 1; k <= KATS; k++) {
+      const y1 = taban(k), y0 = y1 - 0.3;
+      if (k < KATS) {
+        kutu(dos, X0 + T, X1 - T, y0, y1, Z0 + T, CZ0, 'ev'); kutu(dos, X0 + T, X1 - T, y0, y1, CZ1, Z1 - T, 'ev'); kutu(dos, X0 + T, DX0, y0, y1, CZ0, CZ1, 'ev');
+      } else kutu(dos, X0, X1, y0, y1, Z0, Z1, 'ev');
+    }
+    // çatı korkuluğu
+    const cY = taban(KATS);
+    kutu(dis, X0, X1, cY, cY + 0.9, Z0, Z0 + 0.25, 'ev'); kutu(dis, X0, X1, cY, cY + 0.9, Z1 - 0.25, Z1, 'ev');
+    kutu(dis, X0, X0 + 0.25, cY, cY + 0.9, Z0, Z1, 'ev'); kutu(dis, X1 - 0.25, X1, cY, cY + 0.9, Z0, Z1, 'ev');
+    // iç duvarlar: koridor duvarları (kapılı) ve oda ara duvarları
+    const ODA = [0, 8, 16, 24, 32, 40];
+    const odalar = [];
+    for (let k = 0; k < KATS; k++) {
+      const y0 = taban(k), y1 = taban(k + 1) - 0.3, kapiU = y0 + 2.4;
+      for (const [zw, yon] of [[CZ0 - ti, 'S'], [CZ1, 'N']]) {
+        let a = X0 + T;
+        for (let i = 0; i < 5; i++) {
+          const lobi = k === 0 && yon === 'S' && i === 2;   // zemin kat lobisi koridora tamamen açık
+          const d0 = X0 + ODA[i] + 2.4, d1 = d0 + 1.6;
+          if (lobi) { kutu(ic, a, X0 + ODA[i] + 0.2, y0, y1, zw, zw + ti, 'ev'); kutu(ic, X0 + ODA[i] + 0.2, X0 + ODA[i + 1] - 0.2, y1 - 0.6, y1, zw, zw + ti, 'ev'); a = X0 + ODA[i + 1] - 0.2; continue; }
+          kutu(ic, a, d0, y0, y1, zw, zw + ti, 'ev'); kutu(ic, d0, d1, kapiU, y1, zw, zw + ti, 'ev'); a = d1;
+          const no = `${k + 1}${String(i + 1 + (yon === 'N' ? 5 : 0)).padStart(2, '0')}`;
+          odalar.push({ no, k, i, yon, kapiX: (d0 + d1) / 2, zw, x0: X0 + ODA[i], x1: X0 + ODA[i + 1], z0: yon === 'S' ? Z0 + T : CZ1 + ti, z1: yon === 'S' ? CZ0 - ti : Z1 - T, y: y0 });
+        }
+        kutu(ic, a, Math.min(DX0, X1 - T), y0, y1, zw, zw + ti, 'ev');
+      }
+      for (const xo of ODA.slice(1, 5)) { kutu(ic, X0 + xo - ti / 2, X0 + xo + ti / 2, y0, y1, Z0 + T, CZ0 - ti, 'ev'); kutu(ic, X0 + xo - ti / 2, X0 + xo + ti / 2, y0, y1, CZ1 + ti, Z1 - T, 'ev'); }
+      // döşeme kaplaması (vinil); üst katlarda merdiven boşluğu açık kalır
+      const yk = y0 + (k ? 0.004 : 0.012);
+      if (k === 0) dos.ust(X0 + T, X1 - T, Z0 + T, Z1 - T, yk, 4, 4);
+      else { dos.ust(X0 + T, X1 - T, Z0 + T, CZ0, yk, 4, 4); dos.ust(X0 + T, X1 - T, CZ1, Z1 - T, yk, 4, 4); dos.ust(X0 + T, DX0, CZ0, CZ1, yk, 4, 4); }
+    }
+    // mobilya: her hasta odasında yatak + komodin; lobide danışma masası
+    for (const o of odalar) {
+      if (o.k === 0 && o.yon === 'S' && o.i === 2) continue;
+      const pencereTarafi = o.yon === 'S' ? o.z0 : o.z1, ic_ = o.yon === 'S' ? 1 : -1;
+      const bx0 = o.x0 + 1.2, bx1 = bx0 + 2.1, bz0 = Math.min(pencereTarafi + ic_ * 1.4, pencereTarafi + ic_ * 2.4), bz1 = bz0 + 1.0;
+      kutu(yatak, bx0, bx1, o.y, o.y + 0.6, bz0, bz1, 'mobilya');
+      kutu(mob, bx0 - 0.08, bx0, o.y, o.y + 1.1, bz0, bz1, 'mobilya');   // başlık
+      const kx0 = bx0 - 0.1, kz0 = o.yon === 'S' ? bz1 + 0.15 : bz0 - 0.75;
+      kutu(mob, kx0, kx0 + 0.6, o.y, o.y + 0.7, kz0, kz0 + 0.6, 'mobilya');   // komodin
+      o.komodin = { x: kx0 + 0.3, z: kz0 + 0.3, y: o.y + 0.7 };
+    }
+    { const y = taban(0), lx = X0 + 20; kutu(mob, lx - 2.5, lx + 2.5, y, y + 1.1, Z0 + 4.5, Z0 + 5.4, 'mobilya'); }
+    // merdiven: boşlukta yükselen basamaklar (yalnız görünüş; dron arasından geçebilir)
+    for (let k = 0; k < KATS - 1; k++) for (let s = 0; s < 14; s++) {
+      const y = taban(k) + (s + 1) * FH / 15, x = DX0 + 0.2 + (s / 13) * 3.2;
+      kutu(mob, x, x + 0.25, y - 0.12, y, CZ0 + 0.1, cz - 0.1);
+    }
+    // oda numarası tabelaları (koridor duvarında, kapının yanında)
+    const no = new Birlesik(), N = odalar.length;
+    const noD = doku(1024, 256, (x) => {
+      odalar.forEach((o, j) => {
+        const cx_ = (j % 8) * 128, cy = Math.floor(j / 8) * 64;
+        x.fillStyle = '#1d3b8b'; x.fillRect(cx_ + 4, cy + 4, 120, 56); x.fillStyle = '#fff'; x.font = '800 38px Onest, Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(o.no, cx_ + 64, cy + 34);
+      });
+    });
+    odalar.forEach((o, j) => {
+      const u0 = (j % 8) / 8, u1 = u0 + 1 / 8, v1 = 1 - Math.floor(j / 8) / 4, v0 = v1 - 1 / 4, y = o.y + 1.9, xa = o.kapiX + 1.0, z = o.yon === 'S' ? o.zw + ti + 0.01 : o.zw - 0.01;
+      if (o.yon === 'S') no.dortgen([xa, y, z], [xa + 0.6, y, z], [xa + 0.6, y + 0.3, z], [xa, y + 0.3, z], [0, 0, 1], [u0, v0, u1, v0, u1, v1, u0, v1]);
+      else no.dortgen([xa + 0.6, y, z], [xa, y, z], [xa, y + 0.3, z], [xa + 0.6, y + 0.3, z], [0, 0, -1], [u0, v0, u1, v0, u1, v1, u0, v1]);
+    });
+    // tavan lambaları (koridor boyunca)
+    const lamba = new Birlesik();
+    for (let k = 0; k < KATS; k++) for (let x = X0 + 3; x < DX0 - 1; x += 4) { const y = taban(k + 1) - 0.31; lamba.dortgen([x - 0.6, y, CZ1 - 0.6], [x + 0.6, y, CZ1 - 0.6], [x + 0.6, y, CZ0 + 0.6], [x - 0.6, y, CZ0 + 0.6], [0, -1, 0], [0, 0, 1, 0, 1, 1, 0, 1]); }
+    const M = (o) => new THREE.MeshStandardMaterial(Object.assign({ roughness: 0.8 }, o));
+    const lM = new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: '#f4f8ff', emissiveIntensity: 0.6 });
+    const vinil = doku(128, 128, (x) => { x.fillStyle = '#aab4b9'; x.fillRect(0, 0, 128, 128); x.strokeStyle = 'rgba(0,0,0,.08)'; x.strokeRect(0, 0, 64, 64); x.strokeRect(64, 64, 64, 64); x.fillStyle = 'rgba(40,90,170,.5)'; x.fillRect(0, 60, 128, 8); });
+    grup.add(dis.mesh(M({ color: '#f1f3f4' }), true), ic.mesh(M({ color: '#dcebe4', side: THREE.DoubleSide })), dos.mesh(M({ map: vinil, color: '#ffffff', roughness: 0.6 })), tav.mesh(M({ color: '#e9edf0', emissive: '#b9c2c8', emissiveIntensity: 0.35 })),
+      camB.mesh(new THREE.MeshStandardMaterial({ color: '#9fc6e0', roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false })),
+      cerB.mesh(M({ color: '#ff8a1e', emissive: '#ff6a00', emissiveIntensity: 0.25 })), mob.mesh(M({ color: '#c9ced4' })), yatak.mesh(M({ color: '#7fb7d9' })),
+      bantB.mesh(M({ color: '#2a63b8' })), no.mesh(M({ map: noD })), lamba.mesh(lM));
+    S.hastane = { cx, cz, X0, X1, Z0, Z1, taban, odalar, cati: taban(KATS) };
+    return S.hastane;
+  }
+
   /* ---------- şehir kurulumu ---------- */
+  S.binalar = []; S.parkAraba = [];
   S.kur = function () {
     const grup = new THREE.Group(); grup.name = 'sehir'; sahne.add(grup);
     const std = (o) => new THREE.MeshStandardMaterial(Object.assign({ roughness: 0.85 }, o));
@@ -290,6 +421,7 @@
       cati.ust(x0, x1, z0, z1, y0 + h, 6, 6);
       KUTULAR.push({ x0, x1, z0, z1, y0: 0, ust: y0 + h, ad: 'ev' });
       if (h > 38) { ikaz.push([cx, y0 + h + 0.6, cz]); kuleler.push({ cx, cz, h: y0 + h, w, d }); }
+      S.binalar.push({ x0, x1, z0, z1, h: y0 + h, tur });
       return { cx, cz, w, d, h: y0 + h };
     };
     const catiEsya = [];   // çatı klimaları ve su depoları
@@ -314,11 +446,11 @@
         if (tur !== 'kule') for (let k = 0; k < 1 + Math.floor(rnd() * 3); k++) catiEsya.push([x0 + 1 + rnd() * (x1 - x0 - 2), r.h, z0 + 1 + rnd() * (z1 - z0 - 2), rnd() < 0.35]);
       }
     }
-    // Hastane: tek büyük bina, kırmızı haç tabelası, çatıda helikopter pisti
+    // Hastane: içine girilebilen gerçek bina (hastaneYap), kırmızı haç tabelası, çatıda helikopter pisti
     if (hastaneB) {
       plaza.ust(hastaneB.x0, hastaneB.x1, hastaneB.z0, hastaneB.z1, 0.155, 4, 4);
       const cx = (hastaneB.x0 + hastaneB.x1) / 2, cz = (hastaneB.z0 + hastaneB.z1) / 2;
-      const r = binaEkle(cx - 20, cx + 20, cz - 11, cz + 11, 21, 'apt', 4, null);
+      const H = hastaneYap(grup, cx, cz), r = { h: H.cati };
       const pad = new THREE.Mesh(new THREE.CircleGeometry(4.5, 40), std({ map: doku(256, 256, (x) => {
         x.fillStyle = '#2b2f36'; x.fillRect(0, 0, 256, 256); x.strokeStyle = '#f2f2f2'; x.lineWidth = 12; x.beginPath(); x.arc(128, 128, 110, 0, 7); x.stroke();
         x.fillStyle = '#f2f2f2'; x.font = '900 150px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('H', 128, 138);
@@ -329,7 +461,9 @@
         x.fillStyle = '#c8323b'; x.font = '800 70px Onest, Arial'; x.textBaseline = 'middle'; x.fillText('HASTANE', 120, 68);
       }), emissive: '#ffffff', emissiveIntensity: 0 }));
       lev.material.emissiveMap = lev.material.map; GECE.malz.push([lev.material, 0.8]);
-      lev.position.set(cx, r.h - 2.2, cz - 11.05); lev.rotation.y = Math.PI; grup.add(lev);
+      lev.position.set(cx, r.h + 1.5, cz - 11.2); lev.rotation.y = Math.PI; grup.add(lev);
+      const levD = new THREE.Mesh(new THREE.BoxGeometry(9.2, 2.4, 0.15), std({ color: '#d9dde2' })); levD.position.set(cx, r.h + 1.5, cz - 11.05); grup.add(levD);
+      KUTULAR.push({ x0: cx - 4.6, x1: cx + 4.6, z0: cz - 11.15, z1: cz - 10.95, y0: r.h, ust: r.h + 2.7, ad: 'ev' });
       S.hastanePisti = { x: cx + 8, z: cz, y: r.h };
     }
     // Gençlik Parkı: çim, yürüyüş yolu, gölet, ağaçlar
@@ -337,6 +471,7 @@
     if (parkB) {
       cim.ust(parkB.x0, parkB.x1, parkB.z0, parkB.z1, 0.16, 6, 6);
       const cx = (parkB.x0 + parkB.x1) / 2, cz = (parkB.z0 + parkB.z1) / 2;
+      S.park = { x: cx, z: cz, b: parkB };
       const gol = new THREE.Mesh(new THREE.CircleGeometry(9, 48), std({ color: '#3f7fa6', roughness: 0.1, metalness: 0.3 })); gol.rotation.x = -Math.PI / 2; gol.scale.set(1.4, 1, 1); gol.position.set(cx + 4, 0.18, cz + 2); grup.add(gol);
       const yolM = new THREE.Mesh(new THREE.RingGeometry(12.5, 14.5, 56), std({ color: '#c9b48c', roughness: 1 })); yolM.rotation.x = -Math.PI / 2; yolM.scale.set(1.4, 1, 1); yolM.position.set(cx + 4, 0.175, cz + 2); grup.add(yolM);
       for (let k = 0; k < 36; k++) {
@@ -354,6 +489,7 @@
       const fs = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.6, 3.2, 12, 1, true), new THREE.MeshBasicMaterial({ color: '#dff1ff', transparent: true, opacity: 0.55, depthWrite: false })); fs.position.set(cx, 2.4, cz); grup.add(fs); S.fiskiye = fs;
       DIREKLER.push({ x: cx, z: cz, h: 4, R: 0.6 });
       for (const [dx, dz] of [[-14, -10], [14, -10], [-14, 10], [14, 10]]) parkAgac.push([cx + dx, cz + dz, 1.1]);
+      S.meydan = { x: cx, z: cz };
     }
     // Televizyon kulesi: gövde, seyir katı, anten, ikaz ışıkları
     if (kuleB) {
@@ -368,6 +504,7 @@
       ikaz.push([cx, 122.4, cz], [cx, 83.2, cz + 5]);
       for (const [dx, dz] of [[-12, -12], [12, -12], [-12, 12], [12, 12], [0, -16], [0, 16]]) parkAgac.push([cx + dx, cz + dz, 1]);
       S.kule = { x: cx, z: cz };
+      S.kuleB = kuleB;
     }
     // çatı eşyası (klima kutusu ya da su deposu), tek InstancedMesh her biri
     {
@@ -424,11 +561,15 @@
     // park etmiş arabalar (cadde kenarındaki park şeritleri) ve akan trafik
     for (const z of EW) for (let x = ALAN.x0 + 8; x < ALAN.x1 - 6; x += 7 + rnd() * 9) {
       if (NS.some((n) => Math.abs(n - x) < 11) || rnd() < 0.45) continue;
-      S.araba(x, rnd() < 0.5 ? z - 4.5 : z + 4.5, rnd() < 0.5 ? 0 : Math.PI, null, rnd() < 0.08 ? 'taksi' : rnd() < 0.06 ? 'minibus' : null);
+      const zz = rnd() < 0.5 ? z - 4.5 : z + 4.5;
+      S.araba(x, zz, rnd() < 0.5 ? 0 : Math.PI, null, rnd() < 0.08 ? 'taksi' : rnd() < 0.06 ? 'minibus' : null);
+      KUTULAR.push({ x0: x - 2.25, x1: x + 2.25, z0: zz - 0.98, z1: zz + 0.98, y0: 0, ust: 1.68, ad: 'araba' }); S.parkAraba.push([x, zz]);
     }
     for (const x of NS) for (let z = EW[0] + 10; z < ALAN.z1 - 6; z += 7 + rnd() * 9) {
       if (EW.some((e) => Math.abs(e - z) < 11) || rnd() < 0.5) continue;
-      S.araba(rnd() < 0.5 ? x - 4.5 : x + 4.5, z, rnd() < 0.5 ? Math.PI / 2 : -Math.PI / 2, null);
+      const xx = rnd() < 0.5 ? x - 4.5 : x + 4.5;
+      S.araba(xx, z, rnd() < 0.5 ? Math.PI / 2 : -Math.PI / 2, null);
+      KUTULAR.push({ x0: xx - 0.98, x1: xx + 0.98, z0: z - 2.25, z1: z + 2.25, y0: 0, ust: 1.68, ad: 'araba' }); S.parkAraba.push([xx, z]);
     }
     for (const z of EW) { serit('x', z + 1.8, ALAN.x0, ALAN.x1, 1, 3); serit('x', z - 1.8, ALAN.x0, ALAN.x1, -1, 3); }
     for (const x of [-66, -10, 50]) { serit('z', x - 1.8, EW[0] - YG / 2, ALAN.z1, 1, 2); serit('z', x + 1.8, EW[0] - YG / 2, ALAN.z1, -1, 2); }
@@ -454,6 +595,36 @@
     for (const k in kat) grup.add(kat[k].b.mesh(kat[k].m, true));
     S.grup = grup;
   };
+
+  /* ---------- görevler için: şehirde saklanma yerleri, ihbar işaretleri, yarış kapıları ---------- */
+  S.saklanma = function () {
+    const Y = [], icerde = (x, z, p = 0.3) => KUTULAR.some((k) => k.y0 < 1 && x > k.x0 - p && x < k.x1 + p && z > k.z0 - p && z < k.z1 + p);
+    const ekle = (x, z, y, tur, ad) => { if (S.icinde(x, z) && (tur !== 'acik' || !icerde(x, z, 0.25))) Y.push({ x, z, y, tur, ad }); };
+    for (const b of S.binalar) {
+      if (b.tur === 'kule') continue;
+      for (const [x, z] of [[b.x0 - 0.6, b.z0 - 0.6], [b.x1 + 0.6, b.z0 - 0.6], [b.x0 - 0.6, b.z1 + 0.6], [b.x1 + 0.6, b.z1 + 0.6]]) ekle(x, z, 0.15, 'acik', 'bir binanın köşesinde');
+      if (b.h < 25) ekle(b.x0 + (b.x1 - b.x0) * (0.25 + rnd() * 0.5), b.z0 + (b.z1 - b.z0) * (0.25 + rnd() * 0.5), b.h, 'cati', 'bir apartmanın çatısında');
+    }
+    for (const [x, z] of S.parkAraba) { ekle(x, z, 0, 'alti', 'park etmiş bir arabanın altında'); ekle(x + 0.4, z, 1.68, 'acik', 'bir arabanın tavanında'); }
+    if (S.park) for (let k = 0; k < 14; k++) { const b = S.park.b; ekle(b.x0 + 2 + rnd() * (b.x1 - b.x0 - 4), b.z0 + 2 + rnd() * (b.z1 - b.z0 - 4), 0.16, 'acik', 'Gençlik Parkı\'nda'); }
+    for (const a of yuvarlakAgaclarSehir) ekle(a.x + 0.38 * a.s, a.z - 0.15, 2.05 * a.s + 0.15, 'agac', 'bir ağacın dallarında');
+    if (S.meydan) for (const [dx, dz] of [[8, 0], [-8, 0], [0, 8], [0, -8]]) ekle(S.meydan.x + dx, S.meydan.z + dz, 0.16, 'acik', 'Cumhuriyet Meydanı\'nda');
+    return Y;
+  };
+  S.isaretler = function () {
+    const I = [];
+    if (S.park) I.push(['Gençlik Parkı\'nın', S.park.x, S.park.z]);
+    if (S.meydan) I.push(['Cumhuriyet Meydanı\'nın', S.meydan.x, S.meydan.z]);
+    if (S.hastane) I.push(['hastanenin', S.hastane.cx, S.hastane.cz]);
+    if (S.kule) I.push(['televizyon kulesinin', S.kule.x, S.kule.z]);
+    I.push(['gökdelenlerin', MERKEZ.x, MERKEZ.z]);
+    EW.forEach((z, i) => NS.forEach((x, j) => { if ((i + j) % 2 === 0) I.push([`${i + 1}. Cadde ile ${j + 1}. Bulvar kavşağının`, x, z]); }));
+    return I;
+  };
+  // şehir yarışı: kavşaklarda dönen, caddelerin ortasından geçen kapalı parkur [x, y, z]
+  S.pist = [[-10, 3, 72], [-10, 5, 120], [-10, 6, 156], [20, 8, 156], [50, 6, 156], [50, 9, 184], [50, 7, 212], [0, 10, 212], [-66, 6, 212], [-66, 5, 160], [-66, 4, 100], [-66, 3, 44], [-38, 4, 44], [-10, 3, 44]];
+  // takip kamerası binanın içinde mi? (koridorda duvar arkasında kalmasın diye)
+  S.icMekan = (p) => !!(S.hastane && p.x > S.hastane.X0 + 0.3 && p.x < S.hastane.X1 - 0.3 && p.z > S.hastane.Z0 + 0.3 && p.z < S.hastane.Z1 - 0.3 && p.y < S.hastane.cati);
 
   const yuvarlakAgaclarSehir = [];
   S.agaclar = yuvarlakAgaclarSehir;

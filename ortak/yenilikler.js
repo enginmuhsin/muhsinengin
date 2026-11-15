@@ -23,6 +23,18 @@
 
   var YENILIKLER = [
     {
+      id: 'hastane-ic', tarih: '2026-11-15',
+      baslik: 'Hastanenin içinde uç: acil ilaç görevi',
+      metin: 'Şehirdeki hastane artık içine girilebilen gerçek bir bina: turuncu çerçeveli açık pencerelerden ya da kapıdan gir, koridorda oda numaralarını oku, merdiven boşluğundan kat değiştir. Görev: asansör bozuk, 208 numaralı odaya ilaç götür. Dikkat: kapalı pencerelerde cam var!',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
+      id: 'sehir-gorevleri', tarih: '2026-11-15',
+      baslik: 'Şehirde iki yeni görev',
+      metin: 'Şehir yarışı: 14 kapılı parkurda caddelerden kavşaklarda dönerek gökdelenlerin arasından geç, 3 rakiple yarış. Şehirde gece araması: Pamuk bu kez şehir merkezinde, 336 farklı yerden birinde saklanıyor; ara sokaklar, park, çatılar, araba altları.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
       id: 'sehir-merkezi', tarih: '2026-11-15', oneri: true,
       baslik: 'Simülatöre şehir merkezi ve yeni arabalar',
       metin: 'Okulun kuzeyinde artık bir şehir var: gökdelenler, renkli apartmanlar, dar ara sokaklar, tabelalı dükkânlar, Gençlik Parkı, fıskiyeli meydan, çatısında helikopter pisti olan hastane ve televizyon kulesi. Caddelerde arabalar akıyor; okulun önündeki arabalar da yenilendi. Gece pencereler ve tabelalar yanıyor. Kaybolmadan dönebilecek misin?',
