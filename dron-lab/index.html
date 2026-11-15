@@ -213,6 +213,7 @@
 
   <script src="dron3d.js"></script>
   <script src="hesap.js"></script>
+  <script src="dusme.js"></script>
   <script src="app.js"></script>
 <script>/* tasarımı simülatöre taşı (üst menüdeki bağlantı ve gövde tipi kutusundaki bağlantı) */document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("#ucusLink, .sime-git");if(a)a.href="../dron-ucus/index.html"+location.hash;});</script>
 <script>/* #varsayimlar ile gelinince bölümü aç */if(new URLSearchParams(location.search).get("bolum")==="varsayimlar"){const d=document.getElementById("varsayimlar");if(d){d.open=true;setTimeout(()=>d.scrollIntoView(),300);}}</script>

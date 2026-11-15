@@ -380,6 +380,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 
 <script src="../dron-lab/hesap.js"></script>
 <script src="ek-gorevler.js"></script>
+<script src="kurtarma.js"></script>
 
 <script>
 'use strict';
@@ -409,7 +410,7 @@ const GOREVLER = {
   teslimat: { ad: 'Rüzgârlı teslimat', kisa: 'Kargoyu yükle, yan rüzgârda 60 m öteye götür, in.', ders: 'Yük ve TWR' },
   pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
   tunel:    { ad: 'Rüzgâr tüneli', kisa: 'Önce eğimi tahmin et, sonra sabit rüzgârda yerinde dur.', ders: 'Kuvvet dengesi: tan θ = F/W' },
-  kurtarma: { ad: 'Gece arama-kurtarma', kisa: 'Kayıp kedi Pamuk karanlıkta kasabada bir yerde. İniş farınla ara, bul, yanına in.', ders: 'Işık ve uzaklık: E = I / d²' },
+  kurtarma: { ad: 'Gece arama-kurtarma', kisa: 'Kayıp kedi Pamuk karanlık kasabada saklanıyor: her uçuşta başka yerde, ürkerse kaçar. Fener, miyav, ihbar çemberi ve termal kamerayla ara. 4 seviye, rekorlar.', ders: 'Işık E = I / d², ses L = L₁ − 20·log d' },
   cati:     { ad: 'Çatıya teslimat', kisa: 'Kargoyu okulun çatısındaki H pistine bırak. Çatı kenarında rüzgâr döner.', ders: 'Potansiyel enerji ve hover maliyeti' },
   serbest:  { ad: 'Serbest uçuş', kisa: 'Kural yok. V ile rüzgârı aç/kapat.', ders: 'Keşif' },
 };
@@ -479,7 +480,7 @@ const kamera = new THREE.PerspectiveCamera(62, 1, 0.02, 1500);
    aydınlanır, bahçe lambaları ve pedlerin kenar ışıkları yanar, dronun iniş farı açılır.
    ===================================================================== */
 const GECE = { malz: [], nesne: [], isik: [], pedIsik: [] };
-let gokMat = null, hemiIsik = null, dronFar = null;
+let gokMat = null, hemiIsik = null, dronFar = null, gokKure = null, yildizlar = null;
 
 function geceKur() {
   // yıldızlar (gökyüzü kubbesinin üst yarısı)
@@ -491,7 +492,7 @@ function geceKur() {
   }
   const yg = new THREE.BufferGeometry(); yg.setAttribute('position', new THREE.BufferAttribute(p, 3));
   const yildiz = new THREE.Points(yg, new THREE.PointsMaterial({ color: '#dfe8ff', size: 1.6, sizeAttenuation: false, fog: false, transparent: true, opacity: 0.85 }));
-  sahne.add(yildiz); GECE.nesne.push(yildiz);
+  sahne.add(yildiz); GECE.nesne.push(yildiz); yildizlar = yildiz;
 
   // bahçe lambaları (direk + sıcak ışık) ve giriş saçağı ışığı
   const direkM = new THREE.MeshStandardMaterial({ color: '#3a3f47', metalness: 0.6, roughness: 0.4 });
@@ -769,7 +770,7 @@ function kasabaYap() {
     vertexShader: 'varying float h; void main(){ h = normalize(position).y; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
     fragmentShader: 'uniform vec3 ust; uniform vec3 alt; varying float h; void main(){ float k = pow(clamp(h,0.0,1.0),0.55); gl_FragColor = vec4(mix(alt,ust,k),1.0); }',
   });
-  sahne.add(new THREE.Mesh(geo, mat)); gokMat = mat;
+  gokKure = new THREE.Mesh(geo, mat); sahne.add(gokKure); gokMat = mat;
 }
 hemiIsik = new THREE.HemisphereLight('#dcecff', '#4a5d2e', 0.75); sahne.add(hemiIsik);
 const gunes = new THREE.DirectionalLight('#fff3df', 1.15);
@@ -1620,10 +1621,7 @@ function gorevKur() {
     const kutu = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#c79a5b' }));
     kutu.castShadow = true; g.kutu = kutu;
   }
-  if (g.tip === 'kurtarma') {
-    const [kx, kz] = KEDI_YERLERI[Math.floor(Math.random() * KEDI_YERLERI.length)];
-    g.kedi = kediYap(kx, kz); g.kediPoz = g.kedi.position.clone(); g.bulundu = false; g.gorme = 0; g.ruzgarHiz = 1; g.miyavT = 4; g.ipucu = false;
-  }
+  if (g.tip === 'kurtarma') KURTARMA.kur(g);   // kurtarma.js: seviye paneli, saklanma yerleri, kedinin davranışı
   if (g.tip === 'cati') {
     const bos = (fz0().Ttoplam / G * 1000 - fz0().kutle.toplam);
     g.kargo = Math.max(5, Math.round(0.15 * bos / 5) * 5);
@@ -1719,15 +1717,16 @@ function baslat() {
   $('menu').hidden = true; $('sonuc').hidden = true; $('hud').hidden = false; $('uyari').hidden = true;
   $('gAd').textContent = [GOREVLER[g.tip].ad, ayar.kumanda === 'akro' ? 'Akro' : '', uc.pid ? 'PID' : ''].filter(Boolean).join(' · ');
   $('tahminP').hidden = true;
+  if (g.tip !== 'kurtarma') KURTARMA.kapat();
   if (g.tip === 'tunel') tahminSor();
   kaliteSifirla();
   hoverIzKonum();
   sesBaslat();
   kameraAni = true;
-  if (g.tip !== 'tunel' && !EK[g.tip]) bildir(dokunmatik ? 'İki kolu içe-aşağı indir: otomatik kalkış' : (ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç') + ' · T: otomatik kalkış', 2000);
+  if (g.tip !== 'tunel' && g.tip !== 'kurtarma' && !EK[g.tip]) bildir(dokunmatik ? 'İki kolu içe-aşağı indir: otomatik kalkış' : (ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç') + ' · T: otomatik kalkış', 2000);
   ek(g.tip, 'basla', g);
   zamanUygula(g.tip === 'kurtarma');
-  if (geceAcik) setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
+  if (geceAcik && g.tip !== 'kurtarma') setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
 }
 function tahminSor() {
   const g = gorevD;
@@ -1744,6 +1743,7 @@ function tahminTamam() {
 function menuyeDon() {
   durum = 'menu'; $('hud').hidden = true; $('sonuc').hidden = true; $('menu').hidden = false; $('tahminP').hidden = true;
   for (const k in EK) ek(k, 'kapat');
+  KURTARMA.kapat();
   sesSus(); zamanUygula(); menuOnizle(); pidBilgiYaz();
 }
 addEventListener('focus', () => { if (durum === 'menu') pidBilgiYaz(); });
@@ -1844,7 +1844,7 @@ function fizikAdim(dt) {
   // --- itki, akım, gerilim çökmesi ---
   u.T = Tmaks * u.gaz * u.gaz;
   const eta = SABITLER.ETA_HOVER + 0.13 * u.gaz;
-  const Pel = f.N * f.Pmil * Math.pow(u.gaz, 3) / eta + SABITLER.ELEKTRONIK_GUC_W;
+  const Pel = f.N * f.Pmil * Math.pow(u.gaz, 3) / eta + SABITLER.ELEKTRONIK_GUC_W + KURTARMA.ekGuc();
   for (let i = 0; i < 2; i++) { u.I = Pel / (f.t.hucre * Math.max(u.Vh, 2.8)); u.Vh = Math.max(2.8, Vacik - u.I * f.Rhucre); }
   u.soc -= u.I * dt * ayar.batCarpan / (f.t.kapasite / 1000 * 3600 * SABITLER.KULLANILABILIR_KAPASITE);
 
@@ -2007,7 +2007,6 @@ function engelKontrol() {
    Dronun iniş farı aşağı bakan bir fener: ışık şiddeti I (kandela), zemindeki aydınlık
    E = I / d² (lüks). Işık izi yarıçapı r = h · tan(α). Yükseldikçe iz büyür ama söner. */
 const FAR_I = 1000, FAR_ACI = rad(26), E_ESIK = 10;
-const KEDI_YERLERI = [[-90, -22], [-74, 8], [-120, 2.6], [-30, 22], [-48, -46], [-100, -40], [-58, -64], [-128, -30]];
 const ISARETLER = [['basketbol sahasının', -80, -13], ['futbol sahasının', -38, -59], ['otobüs durağının', -46, -7], ['apartmanların', -102, 13], ['kavşağın', -66, -2], ['okulun arka bahçesinin', -38, -42], ['batıdaki evlerin', -125, -20]];
 function kediYap(x, z) {
   const k = new THREE.Group(), tuy = new THREE.MeshStandardMaterial({ color: '#8f8a84', roughness: 0.9 });
@@ -2087,34 +2086,7 @@ function gorevAdim(dt) {
     g.zon.material.opacity = sakin ? 0.34 : icinde ? 0.24 : 0.14;
     if (g.asili >= 8) bitir(true);
   }
-  if (g.tip === 'kurtarma') {
-    const yer = zeminY(u.poz.x, u.poz.z, u.poz.y), h = Math.max(0.3, u.poz.y - yer);
-    const dx = u.poz.x - g.kediPoz.x, dz = u.poz.z - g.kediPoz.z, yatay = Math.hypot(dx, dz);
-    const dk = Math.hypot(yatay, u.poz.y - g.kediPoz.y), E = FAR_I / (dk * dk), iz = Math.tan(FAR_ACI) * Math.max(0.3, u.poz.y - g.kediPoz.y);
-    g.E0 = FAR_I / (h * h); g.izR = h * Math.tan(FAR_ACI); g.yatay = yatay;
-    const isikta = yatay < iz;
-    // kedinin gözleri: ışık gelirse geri yansıtır (tapetum lucidum)
-    const parlak = isikta ? Math.min(1, E / 25) : 0;
-    g.kedi.userData.gozler.forEach((m) => m.material.color.setRGB(0.45 * parlak, 1 * parlak, 0.3 * parlak));
-    if (!g.bulundu) {
-      g.gorme = isikta && E >= E_ESIK ? g.gorme + dt : Math.max(0, g.gorme - dt * 0.5);
-      if (g.gorme > 0.8) {
-        g.bulundu = true; g.bulY = h; g.bulE = E; g.bulD = dk; g.bulT = g.sure; g.hedef = g.kediPoz.clone().setY(g.kediPoz.y + 0.5);
-        g.kedi.userData.halka.visible = true; miyav(1); bildir('Pamuk bulundu! Yanına in (4 m içinde)', 2600);
-      } else if (isikta && E < E_ESIK && !g.sonukUyari) { g.sonukUyari = true; bildir('Bir şey var ama ışık çok sönük: alçal', 2000); }
-      // ses ipucu: yaklaştıkça miyav sıklaşır ve güçlenir
-      g.miyavT -= dt;
-      if (g.miyavT <= 0 && yatay < 45) { miyav(Math.max(0.15, 1 - yatay / 45)); g.miyavT = 3 + yatay / 8; }
-      if (!g.ipucu && g.sure > 60) {
-        g.ipucu = true;
-        const en = ISARETLER.reduce((a, b) => Math.hypot(b[1] - g.kediPoz.x, b[2] - g.kediPoz.z) < Math.hypot(a[1] - g.kediPoz.x, a[2] - g.kediPoz.z) ? b : a);
-        bildir(`İpucu: Pamuk ${en[0]} yakınında görülmüş`, 3500);
-      }
-    } else {
-      g.kedi.userData.halka.material.opacity = 0.5 + 0.4 * Math.sin(u.zaman * 5);
-      if (u.yerde && u.gaz < 0.12 && yatay < 4 && u.zaman > 2) bitir(true);
-    }
-  }
+  if (g.tip === 'kurtarma') KURTARMA.adim(g, dt);
   if (g.tip === 'cati') {
     g.enerji += u.I * fz.t.hucre * u.Vh * dt;   // bataryadan çekilen elektrik enerjisi
     const d = Math.hypot(u.poz.x + 32, u.poz.z + 30);
@@ -2160,7 +2132,7 @@ function turBitti() {
   g.turlar.push(sure);
   const anahtar = 'dronSim.pist.' + ayar.sablon;
   const rekor = oku(anahtar);
-  if (!rekor || sure < rekor.t) { yaz(anahtar, { t: Math.round(sure * 100) / 100, iz: g.iz }); g.yeniRekor = true; bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s · yeni en iyi tur!`, 1600); }
+  if (!g.hile && (!rekor || sure < rekor.t)) { yaz(anahtar, { t: Math.round(sure * 100) / 100, iz: g.iz }); g.yeniRekor = true; bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s · yeni en iyi tur!`, 1600); }
   else bildir(`Tur ${g.turlar.length}: ${tr(sure, 2)} s`, 1300);
   if (g.turlar.length >= 3) { if (g.hayalet) g.hayalet.visible = false; bitir(true); return; }
   // yeni tur: hayalet en iyi turdan baştan başlar
@@ -2240,7 +2212,7 @@ function bitir(basarili) {
   }
   if (g.tip === 'halka') {
     const anahtar = 'dronSim.halka.' + ayar.sablon;
-    const yeniRekor = !g.rekor || g.sure < g.rekor;
+    const yeniRekor = !g.hile && (!g.rekor || g.sure < g.rekor);
     if (yeniRekor) yaz(anahtar, g.sure);
     baslik = yeniRekor ? 'Yeni rekor!' : 'Parkur tamam';
     metin = `7 halkayı <b>${tr(g.sure, 1)} s</b>'de geçtin${g.rekor ? ` (önceki en iyi: ${tr(g.rekor, 1)} s)` : ''}. Hızlanmak için dronu daha çok eğmen gerekir: yatay ivme eğimle büyür, ama aynı yükseklikte kalmak için gazı da artırman gerekir.`;
@@ -2250,12 +2222,7 @@ function bitir(basarili) {
     metin = `<b>${g.kargo} g</b> kargoyu rüzgârda teslim ettin. Kargo, dronun itki/ağırlık oranını <b>${tr(g.twrOnce, 1)}</b>'dan <b>${tr(g.twrSonra, 1)}</b>'a düşürdü: aynı motorlar daha ağır bir yükü taşıdı, bu yüzden dron daha hantal ve rüzgâra daha açıktı.`;
     formul = `TWR = T_maks / (m·g)   ·   hover gazı %${tr(fz0().hoverGaz * 100, 0)} → %${tr(f.hoverGaz * 100, 0)}`;
   }
-  if (g.tip === 'kurtarma') {
-    baslik = 'Pamuk kurtarıldı';
-    metin = `Pamuk'u yerden <b>${tr(g.bulY, 1)} m</b> yükseklikteyken, fenerin ışığı kediye <b>${tr(g.bulE, 0)} lx</b> ulaştığı anda buldun. Fener ışığı uzaklığın karesiyle zayıflar: 5 m'den 10 m'ye çıkınca zemindeki aydınlık dörtte bire iner, ama ışık izinin alanı dört kat büyür. Arama pilotları bu yüzden önce yüksekten geniş tarar, bir şey görünce alçalır. Kedinin gözlerinin parlaması da fizik: gözün arkasındaki yansıtıcı tabaka (tapetum lucidum) ışığı geldiği yöne geri yollar.`;
-    formul = `E = I / d² = ${FAR_I} cd / (${tr(g.bulD, 1)} m)² ≈ ${tr(g.bulE, 0)} lx   ·   iz yarıçapı r = h·tan 26°`;
-    olcum.push(['Bulma yüksekliği', tr(g.bulY, 1) + ' m'], ['Bulma anı', tr(g.bulT, 1) + ' s']);
-  }
+  if (g.tip === 'kurtarma') { olcum.splice(1, 1); ({ baslik, metin, formul } = KURTARMA.bitir(g, olcum)); }
   if (g.tip === 'cati') {
     const m = f.m, Ep = m * G * 9.6, Eb = Math.max(g.enerji, 1), oran = Ep / Eb * 100;
     baslik = 'Kargo çatıda';
@@ -2284,6 +2251,7 @@ function bitir(basarili) {
   }
   if (EK[g.tip]) { const r = ek(g.tip, 'bitir', g, olcum, basarili) || {}; baslik = r.baslik || baslik; metin = r.metin || metin; formul = r.formul || formul; }
   if (g.tip === 'serbest') return;
+  if (g.hile) metin += '<br><br><small>Bu uçuşta fizik kurallarının dışında bir hareket algılandı (konsoldan kod çalıştırmak gibi), bu yüzden rekor kaydedilmedi. Simülatörün kodunu merak etmen güzel: fiziği değiştirmek istiyorsan Dron Lab\'da tasarımını değiştir.</small>';
   sesSus();
   setTimeout(() => sonucGoster(GOREVLER[g.tip].ad, baslik, metin, formul, olcum), 500);
 }
@@ -2412,10 +2380,7 @@ function hudGuncelle(dt) {
   let hedef = '', ek = '';
   if (g.tip === 'ilk') { hedef = g.adim === 0 ? '3 m yüksekliğe çık ve turuncu silindirin içinde 5 saniye kal.' : 'Turuncu H pedine yumuşak in.'; ek = g.adim === 0 ? `Asılı <b>${tr(Math.min(5, g.asili), 1)}/5 s</b>` : ''; }
   if (g.tip === 'halka') { hedef = 'Turuncu halkadan geç, sıradakine yönel.'; ek = `Halka <b>${g.sira}/${g.halkalar.length}</b>` + (g.rekor ? ` · Rekor <b>${tr(g.rekor, 1)} s</b>` : ''); }
-  if (g.tip === 'kurtarma') {
-    if (!g.bulundu) { hedef = 'Kayıp kedi Pamuk kasabada bir yerde. Işık izinle tara; miyav sesine kulak ver.'; ek = `Zeminde <b>${tr(g.E0 || 0, 0)} lx</b> (bulmak için ≥ ${E_ESIK}) · İz çapı <b>${tr(2 * (g.izR || 0), 1)} m</b>`; }
-    else { hedef = 'Pamuk bulundu! Yeşil halkanın içine yumuşak in.'; ek = `Uzaklık <b>${tr(g.yatay || 0, 0)} m</b>`; }
-  }
+  if (g.tip === 'kurtarma') ({ hedef, ek } = KURTARMA.hud(g));
   if (g.tip === 'cati') { hedef = `${g.kargo} g kargo yüklü. Okulun çatısındaki ${ayar.zaman === 'aksam' ? 'yeşil ışıklı ' : ''}H pistine in.`; ek = `Çatı 9,6 m · Harcanan <b>${tr(g.enerji || 0, 0)} J</b>`; }
   if (g.tip === 'teslimat') { hedef = `${g.kargo} g kargo yüklü. Rüzgâr soldan esiyor; mavi B pedine in.`; ek = `TWR <b>${tr(g.twrOnce, 1)} → ${tr(g.twrSonra, 1)}</b>`; }
   if (g.tip === 'pist') {
@@ -2435,7 +2400,8 @@ function hudGuncelle(dt) {
   if (u.poz.y > 120) m = '120 m üstü: Türkiye\'de dron uçuşlarında yaygın tavan 120 m';
   else if (u.soc < 0.15 && u.soc > 0) m = 'Batarya düşük: hemen in';
   else if (u.bataryaBitti) m = 'Batarya bitti: itki yok';
-  else if (Math.hypot(u.poz.x, u.poz.z) > 250) m = 'Görüş mesafesinden çıkıyorsun: geri dön';
+  else if (Math.hypot(u.poz.x, u.poz.z) > SINIR.ic - 5) m = 'Coğrafi sınır (geofence): gerçek dronlarda olduğu gibi yazılım daha öteye izin vermiyor';
+  else if (Math.hypot(u.poz.x, u.poz.z) > 230) m = 'Görüş mesafesinden çıkıyorsun: geri dön';
   uy.hidden = !m; uy.textContent = m;
   // hedef oku
   const ok = $('ok');
@@ -2455,6 +2421,30 @@ function hudGuncelle(dt) {
    ===================================================================== */
 let son = performance.now(), birikim = 0, menuAci = 0;
 const ADIM = 1 / 240;
+/* Fizik adımı adıyla değil, sabit bir başvuruyla çağrılır: konsoldan window.fizikAdim'i değiştirmek uçuşu etkilemez.
+   Yine de konumla oynanırsa (ışınlanma), o uçuşta rekor kaydedilmez. */
+const FIZIK_ADIM = fizikAdim, _p0 = new THREE.Vector3();
+function hileKontrol(T, vMaks) {
+  if (!gorevD || gorevD.hile || T <= 0 || uc.dustu) return;
+  if (uc.poz.distanceTo(_p0) > vMaks * T * 1.3 + 0.6 || !Number.isFinite(uc.poz.x)) hileIsaretle();
+}
+function hileIsaretle() {
+  if (!gorevD || gorevD.hile) return;
+  gorevD.hile = true; bildir('Fizik dışı hareket algılandı: bu uçuşta rekor kaydedilmez', 2600);
+}
+/* Coğrafi sınır (geofence): 280 m'den sonra dron yumuşakça geri itilir, 320 m'de durur; tavan 150 m. */
+const SINIR = { ic: 280, dis: 320, tavan: 150 };
+function sinirUygula(dt) {
+  const u = uc, r = Math.hypot(u.poz.x, u.poz.z);
+  if (r > SINIR.ic) {
+    const nx = u.poz.x / r, nz = u.poz.z / r, k = Math.min(1, (r - SINIR.ic) / (SINIR.dis - SINIR.ic));
+    const disa = u.hiz.x * nx + u.hiz.z * nz;
+    if (disa > 0) { const azalt = disa * Math.min(1, k * 6 * dt + (r >= SINIR.dis ? 1 : 0)); u.hiz.x -= nx * azalt; u.hiz.z -= nz * azalt; }
+    u.hiz.x -= nx * 4 * k * dt; u.hiz.z -= nz * 4 * k * dt;
+    if (r > SINIR.dis) { u.poz.x = nx * SINIR.dis; u.poz.z = nz * SINIR.dis; }
+  }
+  if (u.poz.y > SINIR.tavan) { u.poz.y = SINIR.tavan; if (u.hiz.y > 0) u.hiz.y = 0; }
+}
 function dongu(simdi) {
   requestAnimationFrame(dongu);
   const dt = Math.min(0.05, (simdi - son) / 1000); son = simdi;
@@ -2462,7 +2452,10 @@ function dongu(simdi) {
     if (durum === 'ucus' && !uc.dustu) {
       girdiOku(dt);
       birikim += dt;
-      while (birikim >= ADIM) { fizikAdim(ADIM); birikim -= ADIM; if (uc.dustu) break; }
+      if (uc._son && uc._son.distanceToSquared(uc.poz) > 1e-6) hileIsaretle();   // kareler arasında konum değişmiş: ışınlanma
+      _p0.copy(uc.poz); let adimSay = 0, vMaks = uc.hiz.length();
+      while (birikim >= ADIM) { FIZIK_ADIM(ADIM); sinirUygula(ADIM); birikim -= ADIM; adimSay++; vMaks = Math.max(vMaks, uc.hiz.length()); if (uc.dustu) break; }
+      hileKontrol(adimSay * ADIM, vMaks); (uc._son || (uc._son = new THREE.Vector3())).copy(uc.poz);
       if (uc.bataryaBitti && uc.yerde && !uc.dustu) dus('batarya', {});
     }
     // enkaz
@@ -2498,7 +2491,9 @@ function dongu(simdi) {
     if (t.t > 0.6) { sahne.remove(t.m); tozlar.splice(i, 1); }
   }
   geceAdim(performance.now() / 1000);
-  renderer.render(sahne, kamera);
+  if (gokKure) gokKure.position.copy(kamera.position);       // gökyüzü kubbesi kamerayla gelir: ufkun ötesinde boşluk görünmez
+  if (yildizlar) yildizlar.position.copy(kamera.position);
+  if (!KURTARMA.ciz()) renderer.render(sahne, kamera);
   kaliteOlc(dt);
 }
 
@@ -2586,7 +2581,7 @@ function menuOnizle() {
   $('baslaHata').textContent = f.ucabilir ? '' : 'Bu tasarım havalanamaz: hover gazı %100\'ü aşıyor. Laboratuvarda tasarımı değiştir.';
   const q = Object.keys(SABLONLAR.yaris5).filter((k) => k !== 'ad').map((k) => `${k}=${t[k]}`).join('&');
   $('labaGit').href = '../dron-lab/index.html#' + q;
-  document.querySelectorAll('#gorevler .rek').forEach((el) => { const r = oku(`dronSim.${el.dataset.rek}.` + ayar.sablon), t = r && (r.t || r); el.textContent = t ? (el.dataset.rek === 'pist' ? 'En iyi tur: ' : 'En iyi: ') + tr(t, el.dataset.rek === 'pist' ? 2 : 1) + ' s' : ''; });
+  document.querySelectorAll('#gorevler .rek').forEach((el) => { if (el.dataset.rek === 'kurtarma') { el.textContent = KURTARMA.menuRekor(); return; } const r = oku(`dronSim.${el.dataset.rek}.` + ayar.sablon), t = r && (r.t || r); el.textContent = t ? (el.dataset.rek === 'pist' ? 'En iyi tur: ' : 'En iyi: ') + tr(t, el.dataset.rek === 'pist' ? 2 : 1) + ' s' : ''; });
 }
 function menuKur() {
   $('sablonlar').innerHTML = Object.entries(SABLONLAR).map(([k, v]) => `<button class="cip" data-sablon="${k}" aria-pressed="${k === ayar.sablon}">${v.ad}</button>`).join('');
@@ -2595,7 +2590,7 @@ function menuKur() {
     ayar.sablon = b.dataset.sablon; ayar.tasarim = ayar.sablon === 'lab' && labTasarim ? { ...labTasarim } : { ...SABLONLAR[ayar.sablon] };
     $('sablonlar').querySelectorAll('.cip').forEach((c) => c.setAttribute('aria-pressed', c === b)); $('labHata').textContent = ''; menuOnizle();
   });
-  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' || k === 'pist' ? `<small class="rek" data-rek="${k}"></small>` : ''}</button>`).join('');
+  $('gorevler').innerHTML = Object.entries(GOREVLER).map(([k, v]) => `<button class="gorev-k" data-gorev="${k}" aria-pressed="${k === ayar.gorev}"><b>${v.ad}</b><small>${v.kisa}</small><small>Öğrettiği: ${v.ders}</small>${k === 'halka' || k === 'pist' || k === 'kurtarma' ? `<small class="rek" data-rek="${k}"></small>` : ''}</button>`).join('');
   $('gorevler').addEventListener('click', (e) => {
     const b = e.target.closest('[data-gorev]'); if (!b) return; ayar.gorev = b.dataset.gorev;
     $('gorevler').querySelectorAll('.gorev-k').forEach((c) => c.setAttribute('aria-pressed', c === b));

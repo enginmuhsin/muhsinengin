@@ -23,6 +23,18 @@
 
   var YENILIKLER = [
     {
+      id: 'pamuk-2', tarih: '2026-11-15', oneri: true,
+      baslik: 'Pamuk artık her yere saklanıyor',
+      metin: 'Gece arama-kurtarmada kedi 185 farklı yerden birine saklanıyor: araba altı, ağaç dalı, apartman çatısı… Gürültüden ürküp kaçabiliyor. Komşu ihbarı çemberi, termal kamera (I tuşu), 4 seviye, Günün Kedisi ve rekorlar eklendi.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
+      id: 'dusme-testi', tarih: '2026-11-15', oneri: true,
+      baslik: 'Laboratuvarda düşme ve arıza testi',
+      metin: 'Tasarımını uçurmadan önce düşür: batarya biterse, bir motor arızalanırsa ya da sert inersen çarpma hızı, enerjisi ve hasar tahmini. 4 motorlu ile 6 motorlu dronun farkını gör.',
+      adres: '/dron-lab/', sayfalar: ['/dron-lab/']
+    },
+    {
       id: 'dron-senin-tasarimin', tarih: '2026-11-13', oneri: true,
       baslik: 'Laboratuvarda tasarladığın dron artık simülatörde',
       metin: 'Tasarım Laboratuvarı\'ndaki "Bu tasarımı Uçuş Simülatörü\'nde uçur" bağlantısıyla dronun simülatöre "★ Senin tasarımın" olarak gelir. Laboratuvar artık fizik kurallarıyla bağdaşmayan tasarımları da yakalıyor: 5 gramlık bir bataryaya 12000 mAh sığmaz!',
