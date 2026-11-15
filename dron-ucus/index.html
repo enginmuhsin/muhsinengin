@@ -386,6 +386,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="hastane-gorev.js"></script>
 <script src="fener.js"></script>
 <script src="sehir.js"></script>
+<script src="cami.js"></script>
 <script src="okul.js"></script>
 <script src="okul-gorev.js"></script>
 
@@ -1958,7 +1959,7 @@ function fizikAdim(dt) {
     const surtunme = Math.exp(-dt * 8); u.hiz.x *= surtunme; u.hiz.z *= surtunme;
     if (u.T * Math.cos(egim) < W * 1.001) {
       if (!u.yerde && zy > 0.5) {
-        const yer = { cati: 'Okulun çatısına', makine: 'Okulun çatısına', panel: 'Güneş panellerinin üstüne', sacak: 'Giriş saçağına', ev: 'Bir evin çatısına', durak: 'Otobüs durağının çatısına', araba: 'Bir arabanın tavanına' }[zeminAd] || 'Bir çatıya';
+        const yer = { cati: 'Okulun çatısına', makine: 'Okulun çatısına', panel: 'Güneş panellerinin üstüne', sacak: 'Giriş saçağına', ev: 'Bir evin çatısına', durak: 'Otobüs durağının çatısına', araba: 'Bir arabanın tavanına', cami: 'Caminin çatısına', kubbe: 'Caminin kubbesine', avlu: 'Cami avlusuna', sadirvan: 'Şadırvanın kubbesine' }[zeminAd] || 'Bir çatıya';
         bildir(`${yer} indin: ${tr(zy, 1)} m yükseklik`, 1800);
       }
       u.yerde = true; u.hiz.set(0, 0, 0); u.roll *= 0.9; u.pitch *= 0.9; u.rRoll = u.rPitch = 0; }
@@ -1975,7 +1976,7 @@ function fizikAdim(dt) {
    Engele dik yöndeki hız sınırı aşarsa pervane kırılır (düşüş); daha yavaş temasta dron
    engelden itilir, içeri doğru hızı silinir ve hafifçe seker. */
 const _n = new THREE.Vector3(), _d = new THREE.Vector3(), _r = new THREE.Vector3();
-const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac', cam: 'cam', mobilya: 'mobilya', duvar: 'ev' };
+const KUTU_NE = { cami: 'ev', kubbe: 'ev', avlu: 'ev', sadirvan: 'ev', ev: 'ev', durak: 'ev', araba: 'arac', cam: 'cam', mobilya: 'mobilya', duvar: 'ev' };
 function engelKontrol() {
   const u = uc, f = fz, p = u.poz;
   const rD = f.kol + f.t.pervaneCap * 0.0254 / 2;

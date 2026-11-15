@@ -425,9 +425,10 @@
       return { cx, cz, w, d, h: y0 + h };
     };
     const catiEsya = [];   // çatı klimaları ve su depoları
-    const PARK = (b) => ozel(b, -38, 128), MEYDAN = (b) => ozel(b, 20, 72), HASTANE = (b) => ozel(b, 80, 72), KULE = (b) => ozel(b, 80, 184);
-    let hastaneB = null, kuleB = null, parkB = null, meydanB = null;
+    const CAMIB = (b) => !!window.CAMI && ozel(b, CAMI.blok.x, CAMI.blok.z), PARK = (b) => ozel(b, -38, 128), MEYDAN = (b) => ozel(b, 20, 72), HASTANE = (b) => ozel(b, 80, 72), KULE = (b) => ozel(b, 80, 184);
+    let camiB = null, hastaneB = null, kuleB = null, parkB = null, meydanB = null;
     for (const b of bloklar) {
+      if (CAMIB(b)) { camiB = b; continue; }
       if (PARK(b)) { parkB = b; continue; } if (MEYDAN(b)) { meydanB = b; continue; } if (HASTANE(b)) { hastaneB = b; continue; } if (KULE(b)) { kuleB = b; continue; }
       plaza.ust(b.x0, b.x1, b.z0, b.z1, 0.155, 4, 4);
       const W = b.x1 - b.x0, D = b.z1 - b.z0, nx = Math.max(1, Math.round(W / 22)), nz = Math.max(1, Math.round(D / 19)), ara = 3;
@@ -466,6 +467,8 @@
       KUTULAR.push({ x0: cx - 4.6, x1: cx + 4.6, z0: cz - 11.15, z1: cz - 10.95, y0: r.h, ust: r.h + 2.7, ad: 'ev' });
       S.hastanePisti = { x: cx + 8, z: cz, y: r.h };
     }
+    // Selatin camii (cami.js): kubbeler, 4 minare, avlu, şadırvan, mahya
+    if (camiB) { plaza.ust(camiB.x0, camiB.x1, camiB.z0, camiB.z1, 0.155, 4, 4); CAMI.yap(grup, camiB); S.cami = CAMI; }
     // Gençlik Parkı: çim, yürüyüş yolu, gölet, ağaçlar
     const parkAgac = [];
     if (parkB) {
@@ -609,11 +612,13 @@
     if (S.park) for (let k = 0; k < 14; k++) { const b = S.park.b; ekle(b.x0 + 2 + rnd() * (b.x1 - b.x0 - 4), b.z0 + 2 + rnd() * (b.z1 - b.z0 - 4), 0.16, 'acik', 'Gençlik Parkı\'nda'); }
     for (const a of yuvarlakAgaclarSehir) ekle(a.x + 0.38 * a.s, a.z - 0.15, 2.05 * a.s + 0.15, 'agac', 'bir ağacın dallarında');
     if (S.meydan) for (const [dx, dz] of [[8, 0], [-8, 0], [0, 8], [0, -8]]) ekle(S.meydan.x + dx, S.meydan.z + dz, 0.16, 'acik', 'Cumhuriyet Meydanı\'nda');
+    if (S.cami) for (const y of CAMI.saklanma()) Y.push(y);
     return Y;
   };
   S.isaretler = function () {
     const I = [];
     if (S.park) I.push(['Gençlik Parkı\'nın', S.park.x, S.park.z]);
+    if (S.cami) I.push(['caminin', CAMI.avlu.x, CAMI.avlu.z]);
     if (S.meydan) I.push(['Cumhuriyet Meydanı\'nın', S.meydan.x, S.meydan.z]);
     if (S.hastane) I.push(['hastanenin', S.hastane.cx, S.hastane.cz]);
     if (S.kule) I.push(['televizyon kulesinin', S.kule.x, S.kule.z]);

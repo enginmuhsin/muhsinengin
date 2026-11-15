@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'sehir-cami', tarih: '2026-11-15',
+      baslik: 'Şehre selatin camii ve mahya; Pamuk yenilendi',
+      metin: 'Gençlik Parkı\'nın batısında Süleymaniye örnek alınarak yapılmış büyük bir cami var: 24 pencereli kasnağıyla ana kubbe, yarım kubbeler, dört minare (şerefeleri gece yanar), kubbeli revaklarıyla avlu, şadırvan ve taçkapı. Minareler arasındaki mahyada Yunus Emre\'nin sözü yazıyor: "İLİM İLİM BİLMEKTİR, İLİM KENDİN BİLMEKTİR". En güzel hâli gece, doğudan bakınca! Van kedisi Pamuk da yenilendi: bembeyaz, iri iki renkli gözlü, kırmızı tasmalı. Artık uzaktan kaplana benzemiyor.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
       id: 'bilsem-ic', tarih: '2026-11-15',
       baslik: 'BİLSEM binasının içine gir: atölyeler, müdür odası, akıllı tahtalar',
       metin: 'Simülatördeki okul artık üç katlı gerçek bir bina. Zemin katta giriş holü, müdür ve müdür yardımcısı odası, öğretmenler odası, kütüphane, kantin ve Zekâ Oyunları Atölyesi; üst katlarda Matematik, Fen, Bilişim, Yapay Zekâ, Dron ve Robotik, İngilizce, Türk Dili ve Edebiyatı, Görsel Sanatlar, Müzik ve Proje atölyeleri var. Her sınıfta akıllı tahta ve sıralar. Yeni görev: "BİLSEM\'i gez", sekiz atölyedeki halkalardan geç, rekorunu kır!',

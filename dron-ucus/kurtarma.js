@@ -118,66 +118,105 @@
   }
 
 
-  /* ---------- Van kedisi ----------
-     Bembeyaz, yarı uzun tüylü; başında ve kulak diplerinde kızıl lekeler, kuyruğu kızıl halkalı.
-     Gözler farklı renkte (biri mavi, biri kehribar). Gece ışık gelince kehribar göz yeşilimsi parlar;
-     mavi gözün arkasındaki yansıtıcı tabakada pigment az olduğundan o göz kırmızımsı parlar. */
+  /* ---------- Van kedisi: Pamuk ----------
+     Van'ın kedisi bembeyaz ve yarı uzun tüylüdür; en bilinen özelliği gözlerinin farklı renkte
+     olmasıdır (biri mavi, biri kehribar). Önceki modelde başında kızıl lekeler ve kuyrukta kızıl
+     halkalar vardı: uzaktan kaplan gibi görünüyordu. Bıyıklar da 1 piksellik çizgi olduğundan
+     uzaklık ne olursa olsun aynı kalınlıkta kalıyor, ağızda kemik gibi duruyordu.
+     Yeni Pamuk: tamamen beyaz, yuvarlak yanaklı iri başlı (sevimli oran), kocaman iki renkli
+     gözlü, pembe burunlu, kırmızı tasmalı ve altın çıngıraklı. Bıyıklar yalnızca yakından görünür,
+     uzaklaştıkça saydamlaşıp kaybolur. Gözler arada bir kırpılır, kulaklar oynar.
+     Gece ışık gelince kehribar göz yeşilimsi, mavi göz kırmızımsı parlar (yansıtıcı tabaka). */
+  let tuyDoku = null;
+  function tuyDokusu() {
+    if (tuyDoku) return tuyDoku;
+    const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
+    x.fillStyle = '#f7f4ef'; x.fillRect(0, 0, 128, 128);
+    for (let i = 0; i < 900; i++) {          // kısa tüy darbeleri: hafif gri ve krem
+      const px = Math.random() * 128, py = Math.random() * 128, a = Math.PI / 2 + (Math.random() - 0.5) * 0.7, L = 3 + Math.random() * 6;
+      x.strokeStyle = Math.random() < 0.5 ? 'rgba(190,182,170,0.28)' : 'rgba(255,255,255,0.7)'; x.lineWidth = 0.8;
+      x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * L, py + Math.sin(a) * L); x.stroke();
+    }
+    tuyDoku = new THREE.CanvasTexture(c); tuyDoku.wrapS = tuyDoku.wrapT = THREE.RepeatWrapping; return tuyDoku;
+  }
   function vanKedisi() {
     const k = new THREE.Group(), ic = new THREE.Group(); k.add(ic);
     const M = (renk, o) => new THREE.MeshStandardMaterial(Object.assign({ color: renk, roughness: 0.95 }, o));
-    const beyaz = M('#f3efe6'), kizil = M('#c56a2c'), pembe = M('#e9a3a6'), koyu = M('#2a2220');
-    const kure = (r, m, x, y, z, sx = 1, sy = 1, sz = 1, ana = ic) => { const o = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), m); o.position.set(x, y, z); o.scale.set(sx, sy, sz); ana.add(o); return o; };
-    // gövde: göğüs, karın, kalça
-    const govde = new THREE.Group(); ic.add(govde);
-    kure(0.1, beyaz, 0, 0.205, 0.015, 1.02, 0.98, 2.25, govde);
-    kure(0.092, beyaz, 0, 0.215, -0.1, 1.0, 1.06, 1.0, govde);
-    kure(0.09, beyaz, 0, 0.21, 0.13, 1.08, 1.0, 1.0, govde);
-    // bacaklar: kalçadan dönen gruplar (koşarken salınır)
+    const beyaz = M('#ffffff', { map: tuyDokusu(), roughness: 1 }), golge = M('#e8e2da', { map: tuyDokusu(), roughness: 1 });
+    const pembe = M('#f2a7b0', { roughness: 0.6 }), burunM = M('#e88c99', { roughness: 0.4 }), kirmizi = M('#d0283a', { roughness: 0.5 }), altin = M('#e8b830', { roughness: 0.25, metalness: 0.8 });
+    const kure = (r, m, x, y, z, sx = 1, sy = 1, sz = 1, ana = ic, seg = 16) => { const o = new THREE.Mesh(new THREE.SphereGeometry(r, seg, Math.round(seg * 0.75)), m); o.position.set(x, y, z); o.scale.set(sx, sy, sz); ana.add(o); return o; };
+    // gövde: yumuşak, tombul; göğüste kabarık yaka tüyü
+    const govde = new THREE.Group(); govde.position.y = -0.028; ic.add(govde);
+    kure(0.1, beyaz, 0, 0.2, 0.02, 1.05, 0.95, 2.05, govde);
+    kure(0.095, beyaz, 0, 0.205, 0.13, 1.15, 1.0, 1.0, govde);                 // kalça
+    kure(0.088, beyaz, 0, 0.225, -0.1, 1.05, 1.08, 1.0, govde);                // omuz
+    kure(0.07, beyaz, 0, 0.21, -0.165, 1.15, 1.15, 0.85, govde);               // göğüs yakası (kabarık)
+    kure(0.06, golge, 0, 0.155, 0.03, 1.3, 0.6, 2.2, govde);                   // karın (hafif gölgeli)
+    // bacaklar: kalçadan dönen gruplar (koşarken salınır); patilerde pembe yastıkçıklar
     const bacaklar = [];
-    for (const [x, z, on] of [[-0.055, -0.13, 1], [0.055, -0.13, 1], [-0.058, 0.15, 0], [0.058, 0.15, 0]]) {
-      const kalca = new THREE.Group(); kalca.position.set(x, 0.18, z); ic.add(kalca);
-      const ust = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.022, 0.1, 8), beyaz); ust.position.y = -0.05; kalca.add(ust);
-      const alt = new THREE.Mesh(new THREE.CylinderGeometry(0.019, 0.017, 0.09, 8), beyaz); alt.position.set(0, -0.12, on ? 0 : 0.008); kalca.add(alt);
-      kure(0.024, beyaz, 0, -0.165, on ? -0.01 : 0.004, 1, 0.65, 1.3, kalca);   // pati
+    for (const [x, z, on] of [[-0.052, -0.12, 1], [0.052, -0.12, 1], [-0.06, 0.15, 0], [0.06, 0.15, 0]]) {
+      const kalca = new THREE.Group(); kalca.position.set(x, 0.15, z); ic.add(kalca);
+      kure(on ? 0.034 : 0.046, beyaz, 0, -0.015, on ? 0 : 0.008, 1, 1.35, 1.1, kalca);           // omuz / tüylü "şalvar"
+      const alt = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.023, 0.09, 10), beyaz); alt.position.set(0, -0.08, on ? 0 : 0.01); kalca.add(alt);
+      kure(0.03, beyaz, 0, -0.133, on ? -0.012 : 0.004, 1.05, 0.6, 1.3, kalca);   // pati
       bacaklar.push(kalca);
     }
-    // baş: boyun, kafa, ağız, burun, kulaklar, lekeler
-    const bas = new THREE.Group(); bas.position.set(0, 0.3, -0.2); ic.add(bas);
-    kure(0.06, beyaz, 0, -0.04, 0.05, 1, 1, 1.2, bas);                                 // boyun
-    kure(0.068, beyaz, 0, 0, 0, 1.1, 0.95, 1, bas);                                     // kafa
-    kure(0.042, beyaz, 0, -0.03, -0.058, 1.15, 0.8, 0.9, bas);                          // ağız
-    kure(0.012, pembe, 0, -0.012, -0.096, 1.2, 0.8, 0.8, bas);                          // burun
-    kure(0.034, kizil, -0.03, 0.045, 0.002, 1.1, 0.42, 1.15, bas); kure(0.034, kizil, 0.03, 0.045, 0.002, 1.1, 0.42, 1.15, bas);   // Van lekeleri (kulak dibinde)
+    // tasma ve çıngırak: uzaktan bile "bu bir ev kedisi" der
+    const tasma = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.012, 8, 28), kirmizi); tasma.position.set(0, 0.25, -0.205); tasma.rotation.x = Math.PI / 2 + 0.75; tasma.scale.set(1.05, 1, 1); ic.add(tasma);
+    kure(0.016, altin, 0, 0.2, -0.25, 1, 1, 1, ic, 10);
+    // baş: iri ve yuvarlak (yavru kedi oranı), yanak tüyleri, iki bıyık yastığı, pembe burun
+    const bas = new THREE.Group(); bas.position.set(0, 0.29, -0.215); ic.add(bas);
+    kure(0.078, beyaz, 0, 0, 0, 1.12, 0.98, 1.0, bas);                                  // kafa
+    kure(0.045, beyaz, -0.052, -0.026, -0.008, 1, 0.9, 1, bas); kure(0.045, beyaz, 0.052, -0.026, -0.008, 1, 0.9, 1, bas);   // yanak tüyleri
+    kure(0.024, beyaz, -0.016, -0.03, -0.07, 1, 0.85, 0.9, bas); kure(0.024, beyaz, 0.016, -0.03, -0.07, 1, 0.85, 0.9, bas); // bıyık yastıkları
+    kure(0.016, golge, 0, -0.05, -0.058, 1.1, 0.7, 1, bas);                                // çene
+    const burun = new THREE.Mesh(new THREE.ConeGeometry(0.011, 0.012, 3), burunM); burun.rotation.set(Math.PI / 2 + 0.25, 0, Math.PI); burun.position.set(0, -0.013, -0.088); bas.add(burun);
+    const kulaklar = [];
     for (const s of [-1, 1]) {
-      const kulak = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.065, 4), kizil); kulak.position.set(s * 0.045, 0.085, 0.005); kulak.rotation.set(-0.15, Math.PI / 4, s * -0.28); bas.add(kulak);
-      const icKulak = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.045, 4), pembe); icKulak.position.set(s * 0.044, 0.08, -0.008); icKulak.rotation.set(-0.15, Math.PI / 4, s * -0.28); bas.add(icKulak);
+      const kg = new THREE.Group(); kg.position.set(s * 0.048, 0.06, 0.005); kg.rotation.set(-0.1, 0, s * -0.32); bas.add(kg);
+      const dis = new THREE.Mesh(new THREE.ConeGeometry(0.036, 0.07, 4), beyaz); dis.rotation.y = Math.PI / 4; dis.position.y = 0.03; kg.add(dis);
+      const icK = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.052, 4), pembe); icK.rotation.y = Math.PI / 4; icK.position.set(0, 0.026, -0.011); kg.add(icK);
+      kulaklar.push(kg);
     }
-    const gozler = [];
-    for (const [s, taban, parilti] of [[-1, [0.29, 0.6, 1], [1, 0.25, 0.18]], [1, [0.92, 0.66, 0.2], [0.45, 1, 0.3]]]) {
-      const goz = new THREE.Mesh(new THREE.SphereGeometry(0.013, 10, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(...taban) }));
-      goz.position.set(s * 0.031, 0.012, -0.068); goz.scale.set(1, 0.8, 0.6); bas.add(goz);
-      const bebek = new THREE.Mesh(new THREE.SphereGeometry(0.006, 8, 6), new THREE.MeshBasicMaterial({ color: '#111' })); bebek.position.set(s * 0.031, 0.012, -0.076); bebek.scale.set(0.5, 1, 0.5); bas.add(bebek);
+    // gözler: kocaman, sol mavi, sağ kehribar; dikey göz bebeği ve parlak ışık noktası; kırpmak için kapak grubu
+    const gozler = [], gozGrup = [];
+    for (const [s, taban, parilti] of [[-1, [0.36, 0.66, 1], [1, 0.25, 0.18]], [1, [0.98, 0.72, 0.22], [0.45, 1, 0.3]]]) {
+      const gg = new THREE.Group(); gg.position.set(s * 0.032, 0.008, -0.068); bas.add(gg); gozGrup.push(gg);
+      const goz = new THREE.Mesh(new THREE.SphereGeometry(0.019, 14, 10), new THREE.MeshBasicMaterial({ color: new THREE.Color(...taban) }));
+      goz.scale.set(1, 1, 0.55); goz.rotation.y = s * 0.25; gg.add(goz);
+      const bebek = new THREE.Mesh(new THREE.SphereGeometry(0.0085, 10, 8), new THREE.MeshBasicMaterial({ color: '#0d0d10' })); bebek.position.set(0, 0, -0.0095); bebek.scale.set(0.55, 1.25, 0.4); gg.add(bebek);
+      const isik = new THREE.Mesh(new THREE.SphereGeometry(0.0038, 6, 5), new THREE.MeshBasicMaterial({ color: '#ffffff' })); isik.position.set(0.006, 0.007, -0.0105); gg.add(isik);
       goz.userData.taban = taban; goz.userData.parilti = parilti; gozler.push(goz);
     }
-    // bıyıklar
-    const bp = []; for (const s of [-1, 1]) for (const a of [-0.12, 0, 0.12]) bp.push(s * 0.025, -0.035, -0.08, s * 0.11, -0.03 + a * 0.2, -0.09 + a * 0.1);
+    // ağız çizgisi ("ω") — küçük pembe-gri iki yay
+    for (const s of [-1, 1]) { const a = new THREE.Mesh(new THREE.TorusGeometry(0.007, 0.0016, 4, 10, Math.PI), M('#b58f93')); a.position.set(s * 0.007, -0.034, -0.088); a.rotation.z = Math.PI; bas.add(a); }
+    // bıyıklar: ince, açık gri, yanlara ve hafif geriye yelpaze; uzaktan saydamlaşıp kaybolur
+    const bp = [];
+    for (const s of [-1, 1]) for (const [dy, dz] of [[0.012, -0.004], [0, 0], [-0.012, 0.006]]) bp.push(s * 0.03, -0.032, -0.074, s * 0.115, -0.026 + dy * 2.2, -0.052 + dz * 3);
     const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(bp, 3));
-    bas.add(new THREE.LineSegments(bg, new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.7 })));
-    // kuyruk: kızıl halkalı, gür; zincir halinde (her halka bir öncekine bağlı, kıvrılabilir)
-    const kuyruk = new THREE.Group(); kuyruk.position.set(0, 0.24, 0.24); ic.add(kuyruk);
+    const biyikM = new THREE.LineBasicMaterial({ color: '#d9d6d0', transparent: true, opacity: 0.5, depthWrite: false });
+    const biyik = new THREE.LineSegments(bg, biyikM); bas.add(biyik);
+    const _v = new THREE.Vector3();
+    biyik.onBeforeRender = (r, sc, cam) => {
+      biyik.getWorldPosition(_v); const d = _v.distanceTo(cam.position) / Math.max(0.2, biyik.matrixWorld.getMaxScaleOnAxis() * 2.2);
+      biyikM.opacity = Math.max(0, Math.min(0.55, 0.55 * (2.6 - d) / 1.6));   // ~1 m'de tam, ~2,6 m'den sonra görünmez
+    };
+    // kuyruk: gür, bembeyaz "fırça"; zincir halinde (her parça bir öncekine bağlı, kıvrılabilir)
+    const kuyruk = new THREE.Group(); kuyruk.position.set(0, 0.212, 0.225); ic.add(kuyruk);
     let ana = kuyruk; const halkalar = [];
-    for (let i = 0; i < 9; i++) {
-      const p = new THREE.Group(); p.position.set(0, i ? 0.03 : 0, 0); p.rotation.x = i ? 0.09 : 1.0; ana.add(p);
-      kure(0.029 - i * 0.0012, i < 3 ? beyaz : (i >> 1) % 2 ? kizil : beyaz, 0, 0.018, 0, 1, 1.3, 1, p);
+    for (let i = 0; i < 10; i++) {
+      const p = new THREE.Group(); p.position.set(0, i ? 0.028 : 0, 0); p.rotation.x = i ? 0.085 : 1.05; ana.add(p);
+      const r = 0.026 + Math.sin(i / 9 * Math.PI) * 0.012;     // ortası kabarık fırça
+      kure(r, beyaz, 0, 0.016, 0, 1, 1.25, 1, p, 10);
       halkalar.push(p); ana = p;
     }
     k.traverse((o) => { if (o.isMesh) o.castShadow = true; });
     const halka = new THREE.Mesh(new THREE.RingGeometry(1.1, 1.3, 40), new THREE.MeshBasicMaterial({ color: '#3ddc97', transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false }));
     halka.rotation.x = -Math.PI / 2; halka.position.y = 0.05; halka.visible = false; k.add(halka);
-    Object.assign(k.userData, { ic, bas, bacaklar, kuyruk: halkalar, gozler, halka, faz: Math.random() * 6 });
+    Object.assign(k.userData, { ic, bas, bacaklar, kuyruk: halkalar, gozler, gozGrup, kulaklar, halka, faz: Math.random() * 6, kirp: 2 + Math.random() * 3 });
     return k;
   }
-  // her kare: nefes, kuyruk sallama, baş çevirme; koşarken bacaklar salınır
+  // her kare: nefes, kuyruk sallama, baş çevirme, göz kırpma, kulak oynatma; koşarken bacaklar salınır
   function kediCanlandir(k, dt, kosuyor, sinme) {
     const d = k.userData; if (!d.ic) return;
     d.faz += dt * (kosuyor ? 14 : 1);
@@ -185,7 +224,14 @@
     d.bacaklar.forEach((b, i) => { b.rotation.x = kosuyor ? Math.sin(f + (i % 2 ? Math.PI : 0) + (i > 1 ? Math.PI / 2 : 0)) * 0.7 : 0; });
     d.kuyruk.forEach((h, i) => { h.rotation.z = Math.sin(f * (kosuyor ? 0.3 : 1.6) - i * 0.5) * (kosuyor ? 0.05 : 0.12); });
     d.bas.rotation.y = kosuyor ? 0 : Math.sin(f * 0.37) * 0.5;
+    d.bas.rotation.z = kosuyor ? 0 : Math.sin(f * 0.23) * 0.12;              // merakla başını yana eğer
     d.ic.scale.y = (sinme ? 0.78 : 1) * (1 + Math.sin(f * 2.2) * (kosuyor ? 0 : 0.015));
+    if (d.gozGrup) {
+      d.kirp -= dt; const kapali = d.kirp < 0.12 && d.kirp > 0;
+      if (d.kirp < 0) d.kirp = 2 + Math.random() * 4;
+      d.gozGrup.forEach((g) => { g.scale.y = kapali || sinme ? 0.12 : 1; });
+      d.kulaklar.forEach((q, i) => { q.rotation.x = -0.1 + (sinme ? 0.5 : Math.max(0, Math.sin(f * 0.9 + i * 2.1) - 0.93) * 4); });
+    }
   }
 
   /* ---------- sesler ---------- */
