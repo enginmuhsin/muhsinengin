@@ -379,6 +379,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="../ortak/kutuphane/three-r128.min.js"></script>
 
 <script src="../dron-lab/hesap.js"></script>
+<script src="../dron-lab/gorunum.js"></script>
 <script src="ek-gorevler.js"></script>
 <script src="kurtarma.js"></script>
 <script src="tasima.js"></script>
@@ -410,7 +411,7 @@ const GOREVLER = {
   ilk:      { ad: 'İlk kalkış', kisa: '3 m\'de 5 saniye asılı kal, sonra pede yumuşak in.', ders: 'Hover gazı' },
   halka:    { ad: 'Halka parkuru', kisa: '7 halkadan sırayla geç. Süreye karşı.', ders: 'Eğim → yatay ivme' },
   teslimat: { ad: 'Rüzgârlı teslimat', kisa: 'Kargoyu yükle, yan rüzgârda 60 m öteye götür, in.', ders: 'Yük ve TWR' },
-  pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
+  pist:     { ad: 'FPV yarış pisti', kisa: '7 kapılı pistte 3 rakip yarış dronuna karşı 3 tur at. En iyi turun hayalet olarak seninle yarışır.', ders: 'Viraj ve merkezcil ivme' },
   tunel:    { ad: 'Rüzgâr tüneli', kisa: 'Önce eğimi tahmin et, sonra sabit rüzgârda yerinde dur.', ders: 'Kuvvet dengesi: tan θ = F/W' },
   kurtarma: { ad: 'Gece arama-kurtarma', kisa: 'Kayıp kedi Pamuk karanlık kasabada saklanıyor: her uçuşta başka yerde, ürkerse kaçar. Fener, miyav, ihbar çemberi ve termal kamerayla ara. 4 seviye, rekorlar.', ders: 'Işık E = I / d², ses L = L₁ − 20·log d' },
   cati:     { ad: 'Çatıya teslimat', kisa: 'Kargoyu okulun çatısındaki H pistine bırak. Çatı kenarında rüzgâr döner.', ders: 'Potansiyel enerji ve hover maliyeti' },
@@ -1146,18 +1147,27 @@ const TIPLER = {
 function dronYap(f) {
   if (dron) sahne.remove(dron);
   dron = new THREE.Group(); pervaneler = []; parcalar = [];
-  const t = f.t, L = f.kol, r = t.pervaneCap * 0.0254 / 2, env = dronOrtamYap(), tip = f.tip ? f.tip.anahtar : dronTipi(t);
+  const t = f.t, L = f.kol, r = t.pervaneCap * 0.0254 / 2, env = dronOrtamYap();
+  // görünüm (dron-lab/gorunum.js): öğrencinin seçtiği gövde stili, renkler, kol düzeni, yarış numarası. Fiziğe etkisi yok.
+  const GR = window.DronGorunum, tip = GR.tip(t, f.tip ? f.tip.anahtar : dronTipi(t));
+  const gv = { renk: GR.sec(GR.renk, t.gRenk, '#e7ecf2'), vurgu: GR.sec(GR.vurgu, t.gVurgu, '#e08a1e'), led: GR.sec(GR.led, t.gLed, '#ff9a3c'),
+    pervane: GR.sec(GR.pervane, t.gPervane, null), no: Math.max(0, Math.min(99, Math.round(+t.gNo || 0))), acilar: null };
+  gv.acilar = GR.acilar(t, tip);
+  const pR = (renk) => gv.pervane || renk;
   const fiz = (o) => new THREE.MeshPhysicalMaterial(Object.assign({ envMap: env, clearcoat: 1, clearcoatRoughness: 0.12 }, o));
   const std = (o) => new THREE.MeshStandardMaterial(Object.assign({ envMap: env }, o));
   const M = {
-    beyaz: fiz({ color: '#dde3ea', roughness: 0.38, metalness: 0.05, envMapIntensity: 0.6 }),
+    beyaz: fiz({ color: gv.renk, roughness: 0.38, metalness: 0.05, envMapIntensity: 0.6 }),
     karbon: fiz({ color: '#262b33', roughness: 0.42, metalness: 0.35, clearcoatRoughness: 0.2, envMapIntensity: 0.7 }),
     karbonMat: std({ color: '#15171b', roughness: 0.55, metalness: 0.4, envMapIntensity: 0.5 }),
     mat: std({ color: '#1a1e25', roughness: 0.75, metalness: 0.2, envMapIntensity: 0.4 }),
     metal: std({ color: '#b9c1cb', roughness: 0.22, metalness: 0.95, envMapIntensity: 1.1 }),
-    turuncu: std({ color: '#e08a1e', roughness: 0.3, metalness: 0.7, envMapIntensity: 0.9 }),
+    turuncu: std({ color: gv.vurgu, roughness: 0.3, metalness: 0.7, envMapIntensity: 0.9 }),
     lacivert: fiz({ color: '#1d3b8b', roughness: 0.3, metalness: 0.1, envMapIntensity: 0.7 }),
-    serit: new THREE.MeshBasicMaterial({ color: '#ff9a3c' }),
+    serit: new THREE.MeshBasicMaterial({ color: gv.led }),
+    tpu: fiz({ color: gv.renk, roughness: 0.55, metalness: 0, clearcoat: 0.3, envMapIntensity: 0.5 }),
+    gri: fiz({ color: '#8c949e', roughness: 0.45, metalness: 0.2, envMapIntensity: 0.6 }),
+    cam: fiz({ color: '#0b1430', roughness: 0.04, metalness: 0.3, emissive: '#1d3b8b', emissiveIntensity: 0.35 }),
     pcb: std({ color: '#1f6e45', roughness: 0.6, metalness: 0.2 }),
   };
   const ekle = (m, x, y, z, ebeveyn) => { m.position.set(x, y, z); (ebeveyn || dron).add(m); if (!ebeveyn) parcalar.push(m); return m; };
@@ -1242,7 +1252,16 @@ function dronYap(f) {
     a.rotation.set(aciX, 0, aciZ); ekle(a, x, y, z);
     const uc = silindir(L * 0.018, L * 0.018, L * 0.05, M.turuncu, 8); uc.position.y = boy; a.add(uc);
   };
-  const kollar = (cb) => { for (let i = 0; i < f.N; i++) { const a = (i + 0.5) / f.N * Math.PI * 2; cb(i, a, Math.sin(a) * L, -Math.cos(a) * L); } };
+  const kollar = (cb) => { for (let i = 0; i < f.N; i++) { const a = gv.acilar ? gv.acilar[i] * Math.PI / 180 : (i + 0.5) / f.N * Math.PI * 2; cb(i, a, Math.sin(a) * L, -Math.cos(a) * L); } };
+  // yarış numarası çıkartması (kare, üstten okunur)
+  const noYap = (boy) => {
+    const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
+    x.fillStyle = gv.vurgu; x.beginPath(); x.arc(64, 64, 60, 0, 7); x.fill();
+    x.fillStyle = '#ffffff'; x.font = '800 74px Onest, Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(gv.no), 64, 70);
+    const d = new THREE.CanvasTexture(c); d.encoding = THREE.sRGBEncoding;
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(boy, boy), new THREE.MeshStandardMaterial({ map: d, transparent: true, roughness: 0.4, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
+    m.rotation.x = -Math.PI / 2; m.userData.golgesiz = true; return m;
+  };
 
   if (tip === 'yaris') {
     // açık karbon X gövde: alt plaka + kollar, alüminyum direkler, FC yığını, üst plaka, kayışlı batarya
@@ -1251,15 +1270,24 @@ function dronYap(f) {
     kollar((i, a, x, z) => {
       const k = new THREE.Mesh(kg, M.karbonMat); k.rotation.y = Math.PI - a; ekle(k, 0, L * 0.03, 0);
       motorYap(x, L * 0.07, z, z < 0, 1);
-      pervaneYap(x, L * 0.225, z, i, z < 0, '#e8650f', '#c9d0d9');
+      pervaneYap(x, L * 0.225, z, i, z < 0, pR('#e8650f'), pR('#c9d0d9'));
       // kol altı LED şeridi
-      const led = kutu(L * 0.02, L * 0.01, L * 0.5, new THREE.MeshBasicMaterial({ color: '#ff9a3c' })); led.rotation.y = Math.PI - a; led.userData.golgesiz = true;
+      const led = kutu(L * 0.02, L * 0.01, L * 0.5, M.serit); led.rotation.y = Math.PI - a; led.userData.golgesiz = true;
       ekle(led, x * 0.6, L * 0.03, z * 0.6);
+      // kol ucunda TPU motor koruyucu (gövde renginde)
+      const kor = new THREE.Mesh(new THREE.TorusGeometry(L * 0.1, L * 0.018, 8, 24, Math.PI * 1.1), M.tpu); kor.rotation.set(Math.PI / 2, 0, -a + Math.PI * 0.95); ekle(kor, x, L * 0.06, z);
     });
     for (const [x, z] of [[-0.15, -0.28], [0.15, -0.28], [-0.15, 0.28], [0.15, 0.28]]) ekle(silindir(L * 0.016, L * 0.016, L * 0.15, M.turuncu, 8), x * L, L * 0.145, z * L);
     ekle(kutu(L * 0.2, L * 0.02, L * 0.2, M.pcb), 0, L * 0.1, 0.02 * L);
     ekle(kutu(L * 0.18, L * 0.02, L * 0.18, M.pcb), 0, L * 0.15, 0.02 * L);
     ekle(new THREE.Mesh(yuvarlakKutu(L * 0.34, L * 0.025, L * 0.64, L * 0.05, L * 0.006), M.karbonMat), 0, L * 0.225, 0);
+    // modern yarış dronu: renkli TPU parçalar (kamera kafesi yan plakaları, arka anten yuvası) + yanlarda LED şerit
+    for (const yon of [-1, 1]) {
+      const yp = new THREE.Mesh(yuvarlakKutu(L * 0.03, L * 0.2, L * 0.24, L * 0.012, L * 0.01), M.tpu); ekle(yp, yon * L * 0.115, L * 0.15, -L * 0.33);
+      const y = kutu(L * 0.006, L * 0.03, L * 0.22, M.serit); y.userData.golgesiz = true; ekle(y, yon * L * 0.172, L * 0.205, 0);
+    }
+    const ay = new THREE.Mesh(yuvarlakKutu(L * 0.26, L * 0.16, L * 0.08, L * 0.025, L * 0.015), M.tpu); ekle(ay, 0, L * 0.16, L * 0.33);
+    if (gv.no) { const n = noYap(L * 0.14); n.rotation.set(0, 0, 0); n.position.set(0, L * 0.16, L * 0.33 + L * 0.041); dron.add(n); }   // arkadan (takip kamerası) okunur
     // FPV kamera (plakalar arasında, 30° yukarı bakar)
     const fpv = new THREE.Group(); fpv.rotation.x = 0.5;
     ekle(kutu(L * 0.17, L * 0.15, L * 0.13, M.mat), 0, 0, 0, fpv);
@@ -1267,12 +1295,13 @@ function dronYap(f) {
     ekle(fpv, 0, L * 0.14, -L * 0.36);
     // batarya (üstte, turuncu kayışla) + logo
     const bat = bataryaYap(L * 0.3, L * 0.2, L * 0.56, false); ekle(bat, 0, L * 0.34, L * 0.04);
+    if (gv.no) { const n = noYap(L * 0.15); n.position.set(0, L * 0.2 / 2 + 0.0012, L * 0.2); bat.add(n); }
     for (const zz of [-0.12, 0.14]) ekle(kutu(L * 0.32, L * 0.205, L * 0.04, M.turuncu), 0, L * 0.34, (zz + 0.04) * L);
     // aksiyon kamerası (önde, TPU yuvada, 20° yukarı)
     const ak = new THREE.Group(); ak.rotation.x = 0.35;
     ekle(kutu(L * 0.22, L * 0.15, L * 0.11, M.karbon), 0, 0, 0, ak);
     const la = silindir(L * 0.04, L * 0.045, L * 0.03, fiz({ color: '#0b1430', roughness: 0.05 }), 20); la.rotation.x = Math.PI / 2; la.position.set(L * 0.05, 0, -L * 0.065); ak.add(la);
-    ekle(kutu(L * 0.24, L * 0.04, L * 0.14, M.turuncu), 0, -L * 0.09, 0, ak);
+    ekle(kutu(L * 0.24, L * 0.04, L * 0.14, M.tpu), 0, -L * 0.09, 0, ak);
     ekle(ak, 0, L * 0.34, -L * 0.36);
     // video ve alıcı antenleri (arkada, yukarı-geri)
     antenYap(-L * 0.08, L * 0.23, L * 0.3, L * 0.35, 0.6, 0.35);
@@ -1289,7 +1318,7 @@ function dronYap(f) {
       const k = new THREE.Mesh(kg, whoop ? M.lacivert : M.karbonMat); k.rotation.y = Math.PI - a; ekle(k, 0, L * 0.03, 0);
       const ust = motorYap(x, L * 0.05, z, z < 0, whoop ? 1.2 : 1), pY = L * 0.05 + ust + L * 0.01;
       kanalYap(x, pY - h * 0.2, z, h, kanalM, dudakM);   // pervane düzlemi kanalın üst yarısında
-      pervaneYap(x, pY, z, i, z < 0, whoop ? '#ff9a3c' : '#e8650f', whoop ? '#e9edf2' : '#59606b', 0.85);
+      pervaneYap(x, pY, z, i, z < 0, pR(whoop ? '#ff9a3c' : '#e8650f'), pR(whoop ? '#e9edf2' : '#59606b'), 0.85);
     });
     if (whoop) {
       // kanopi (beyaz kubbe) + logo, önde küçük kamera, altta 1S batarya
@@ -1314,6 +1343,50 @@ function dronYap(f) {
       const bat = bataryaYap(L * 0.3, L * 0.16, L * 0.42, false); ekle(bat, 0, L * 0.16, L * 0.26);
       antenYap(0, L * 0.12, L * 0.42, L * 0.3, 0.9, 0);
     }
+  } else if (tip === 'gezgin') {
+    /* Gezgin: katlanır kollu, kabuklu kameralı dron (ana sayfadaki filonun "gezgin"i).
+       Uzun, yuvarlatılmış kabuk; önde ve arkada engel algılama gözleri; ön kollar üstten,
+       arka kollar alttan katlanır (bu yüzden pervaneler iki farklı yükseklikte); burnun
+       altında 3 eksenli gimbal kamera; üstten takılan akıllı batarya; ön motorların altında
+       iniş ayakları ve LED'ler. */
+    const gB = L * 0.44, gH = L * 0.24, gD = L * 1.2;
+    const govde = new THREE.Mesh(yuvarlakKutu(gB, gH, gD, gB * 0.42, gH * 0.45), M.beyaz); ekle(govde, 0, L * 0.12, 0);
+    const burun = new THREE.Mesh(new THREE.SphereGeometry(1, 28, 16), M.beyaz); burun.scale.set(gB * 0.5, gH * 0.48, L * 0.12); ekle(burun, 0, L * 0.12, -gD * 0.47);
+    // üstte koyu batarya yuvası ve akıllı batarya
+    const bat = bataryaYap(gB * 0.78, gH * 0.32, gD * 0.55, true, M.gri); ekle(bat, 0, L * 0.12 + gH * 0.52, gD * 0.12);
+    if (gv.no) { const n = noYap(gB * 0.5); n.position.set(0, gH * 0.32 / 2 + 0.0012, -gD * 0.18); bat.add(n); }
+    // yan şeritler (vurgu rengi) ve LED şeritleri
+    for (const yon of [-1, 1]) {
+      const sr = kutu(L * 0.008, L * 0.02, gD * 0.7, M.turuncu); ekle(sr, yon * gB * 0.505, L * 0.13, 0);
+      const ld = kutu(L * 0.006, L * 0.008, gD * 0.3, M.serit); ld.userData.golgesiz = true; ekle(ld, yon * gB * 0.505, L * 0.07, -gD * 0.2);
+    }
+    // engel algılama gözleri: önde ve arkada çift kamera
+    for (const zz of [-1, 1]) for (const yon of [-1, 1]) {
+      const g = silindir(L * 0.022, L * 0.022, L * 0.012, M.cam, 16); g.rotation.x = Math.PI / 2; ekle(g, yon * gB * 0.18, L * 0.135, zz * (zz < 0 ? gD * 0.47 + L * 0.115 : gD * 0.5 + L * 0.004));
+    }
+    // katlanır kollar
+    kollar((i, a, x, z) => {
+      const on = z < 0, kY = on ? L * 0.17 : L * 0.06;          // ön kollar üstten, arka kollar alttan
+      const kok = new THREE.Vector3(Math.sign(x) * gB * 0.42, kY, on ? -gD * 0.3 : gD * 0.33);
+      const uc = new THREE.Vector3(x, kY, z), boy = kok.distanceTo(uc);
+      const kol = new THREE.Mesh(yuvarlakKutu(L * 0.075, L * 0.05, boy, L * 0.022, L * 0.012), M.beyaz);
+      kol.position.copy(kok).lerp(uc, 0.5); kol.lookAt(uc); ekle(kol, kol.position.x, kol.position.y, kol.position.z);
+      const maf = silindir(L * 0.05, L * 0.05, L * 0.07, M.gri, 16); ekle(maf, kok.x, kY, kok.z);   // katlanma mafsalı
+      const ust = motorYap(x, kY - L * 0.03, z, on, 0.95);
+      pervaneYap(x, kY - L * 0.03 + ust + L * 0.008, z, i, on, pR('#2a2e35'), pR('#2a2e35'), 0.95);
+      if (on) {   // ön motorların altında iniş ayağı + LED
+        const ay = silindir(L * 0.018, L * 0.012, L * 0.16, M.gri, 10); ekle(ay, x, kY - L * 0.11, z);
+        const l = new THREE.Mesh(new THREE.SphereGeometry(L * 0.016, 10, 8), M.serit); l.userData.golgesiz = true; ekle(l, x, kY - L * 0.19, z);
+      } else { const ay = silindir(L * 0.03, L * 0.025, L * 0.06, M.gri, 10); ekle(ay, x * 0.55, L * 0.0, z * 0.6); }
+    });
+    // 3 eksenli gimbal: boyunduruk + kamera kutusu + büyük lens
+    const gim = new THREE.Group();
+    ekle(kutu(L * 0.05, L * 0.08, L * 0.05, M.gri), 0, L * 0.02, 0, gim);
+    const yk = new THREE.Mesh(new THREE.TorusGeometry(L * 0.075, L * 0.012, 8, 20, Math.PI), M.gri); yk.rotation.z = Math.PI; yk.position.y = -L * 0.03; gim.add(yk);
+    const kk = new THREE.Mesh(yuvarlakKutu(L * 0.13, L * 0.1, L * 0.11, L * 0.03, L * 0.02), M.karbon); kk.position.y = -L * 0.07; gim.add(kk);
+    const ln = silindir(L * 0.036, L * 0.04, L * 0.03, M.cam, 24); ln.rotation.x = Math.PI / 2; ln.position.set(0, -L * 0.07, -L * 0.065); gim.add(ln);
+    const lh = new THREE.Mesh(new THREE.TorusGeometry(L * 0.04, L * 0.006, 8, 24), M.turuncu); lh.position.set(0, -L * 0.07, -L * 0.08); gim.add(lh);
+    ekle(gim, 0, L * 0.04, -gD * 0.42);
   } else {
     // uzun menzil ve ağır yük: aerodinamik kabuk, akıllı batarya, gimbal, GPS
     const agir = tip === 'agir', o = agir ? 1.15 : 1;
@@ -1340,7 +1413,7 @@ function dronYap(f) {
         const kilif = silindir(L * 0.05, L * 0.05, L * 0.1, M.turuncu, 16); kilif.rotation.x = Math.PI / 2; kilif.position.z = L * 0.86; kg.add(kilif);
         ekle(kg, 0, L * 0.08, 0);
         const ust = motorYap(x, L * 0.1, z, z < 0, 1.25);
-        pervaneYap(x, L * 0.1 + ust + L * 0.01, z, i, z < 0, '#2a2e35', '#2a2e35', 0.95);
+        pervaneYap(x, L * 0.1 + ust + L * 0.01, z, i, z < 0, pR('#2a2e35'), pR('#2a2e35'), 0.95);
         // pervane ucu uyarı bandı yerine motor başına küçük uyarı şeridi
       });
       // yaylı uzun iniş takımı (T bacak + yatay kızak)
@@ -1366,7 +1439,7 @@ function dronYap(f) {
       kollar((i, a, x, z) => {
         const k = new THREE.Mesh(kg, M.karbon); k.rotation.y = Math.PI - a; ekle(k, 0, L * 0.06, 0);
         const ust = motorYap(x, L * 0.06, z, z < 0, 1);
-        pervaneYap(x, L * 0.06 + ust + L * 0.005, z, i, z < 0, '#e8650f', '#c9d0d9');
+        pervaneYap(x, L * 0.06 + ust + L * 0.005, z, i, z < 0, pR('#e8650f'), pR('#c9d0d9'));
       });
       antenYap(-L * 0.12, L * 0.1, L * 0.42, L * 0.5, 1.1, 0.25);
       antenYap(L * 0.12, L * 0.1, L * 0.42, L * 0.5, 1.1, -0.25);
@@ -1655,6 +1728,7 @@ function gorevKur() {
       g.kapilar.push({ c: m, n, yan, W, H, mat, cub });
     });
     g.tur = 0; g.turSure = 0; g.turlar = []; g.basladi = false; g.iz = []; g.izT = 0; g.maksEgim = 0; g.hizToplam = 0; g.hizSay = 0;
+    rakipKur(g, c);
     g.rekor = oku('dronSim.pist.' + ayar.sablon);
     g.hedef = c[0];
   }
@@ -2088,6 +2162,64 @@ function gorevAdim(dt) {
   if (u.bataryaBitti && !u.dustu) { /* itki zaten sıfır; yere çarpınca dus('batarya') */ }
 }
 
+/* ---------- yarış rakipleri: modern FPV yarış dronları ----------
+   Kapıların merkezinden geçen kapalı bir eğri (Catmull-Rom) üzerinde sabit hızla uçarlar.
+   Virajda yatış açısı fizikten: tan φ = v·ω / g (merkezcil ivmeyi itkinin yatay payı sağlar).
+   Senin turun başladığı anda onlar da çıkış kapısından kalkar; çarpışma yoktur. */
+const RAKIPLER = [
+  { ad: 'Çaylak', v: 7, gorunum: { gRenk: 6, gVurgu: 5, gLed: 1, gPervane: 3, gNo: 12, gKol: 0 } },
+  { ad: 'Kaptan', v: 9, gorunum: { gRenk: 3, gVurgu: 5, gLed: 4, gPervane: 2, gNo: 7, gKol: 2 } },
+  { ad: 'Usta', v: 11.5, gorunum: { gRenk: 5, gVurgu: 0, gLed: 2, gPervane: 1, gNo: 1, gKol: 1 } },
+];
+function dronModeli(t) {   // dronYap'ı oyuncunun dronuna dokunmadan ikinci bir model için çalıştırır
+  const eski = { dron, pervaneler, parcalar };
+  dron = null; dronYap(fizikHazirla(t));
+  const m = dron, p = pervaneler; sahne.remove(m);
+  dron = eski.dron; pervaneler = eski.pervaneler; parcalar = eski.parcalar;
+  return { m, p };
+}
+function rakipKur(g, c) {
+  g.egri = new THREE.CatmullRomCurve3(c.map((v) => v.clone()), true, 'centripetal'); g.egriL = g.egri.getLength();
+  g.rakipT = 0;
+  g.rakipler = RAKIPLER.map((r, i) => {
+    const { m, p } = dronModeli({ ...SABLONLAR.yaris5, gStil: 1, ...r.gorunum });
+    m.traverse((o) => { if (o.isMesh) o.castShadow = false; });
+    gorevGrubu.add(m);
+    return { ...r, m, p, kay: (i - 1) * 0.55, T: g.egriL / r.v, s: 0 };
+  });
+}
+function rakipAdim(dt) {
+  const g = gorevD; if (!g || !g.rakipler) return;
+  if (g.basladi && !g.bitti) g.rakipT += dt;
+  const c0 = g.kapilar[0], t0 = performance.now() / 1000;
+  g.rakipler.forEach((r, i) => {
+    let p, yaw, roll = 0, pitch = -0.08;
+    if (!g.basladi) {   // çıkış ızgarası: başlangıç kapısının önünde, yere yakın bekler
+      p = c0.c.clone().addScaledVector(c0.n, -3 - i * 1.6).addScaledVector(c0.yan, (i - 1) * 1.4); p.y = 1.2 + 0.05 * Math.sin(t0 * 2 + i);
+      yaw = Math.atan2(-c0.n.x, -c0.n.z);
+    } else {
+      r.s = Math.min(3, g.rakipT * r.v / g.egriL);
+      const u = r.s >= 3 ? 0.999 : r.s % 1, du = 0.004;
+      p = g.egri.getPointAt(u);
+      const t1 = g.egri.getTangentAt(u), t2 = g.egri.getTangentAt((u + du) % 1);
+      yaw = Math.atan2(-t1.x, -t1.z);
+      let dy = Math.atan2(-t2.x, -t2.z) - yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+      const w = dy / (du * g.egriL / r.v);             // dönüş hızı (rad/s)
+      roll = Math.max(-1, Math.min(1, Math.atan(r.v * w / G)));
+      pitch = -Math.atan(0.012 * r.v * r.v);             // hızlandıkça burun sürüklenmeye karşı öne eğilir
+      p.addScaledVector(new THREE.Vector3(-t1.z, 0, t1.x).normalize(), r.kay);
+      if (r.s >= 3) { pitch = -0.05; roll = 0; }
+    }
+    r.m.position.copy(p); _e.set(pitch, yaw, roll, 'YXZ'); r.m.quaternion.setFromEuler(_e);
+    r.p.forEach((q) => { q.rotation.y += q.userData.yon * 55 * dt; });
+  });
+}
+function pistSira() {   // canlı sıralama: tamamlanan tur + kapı ilerlemesi
+  const g = gorevD; if (!g.rakipler || !g.basladi) return null;
+  const ben = g.turlar.length + ((g.sira + g.kapilar.length - 1) % g.kapilar.length) / g.kapilar.length;
+  return 1 + g.rakipler.filter((r) => r.s > ben).length;
+}
+
 function pistAdim(dt) {
   const u = uc, g = gorevD, K = g.kapilar, i = g.sira % K.length, kp = K[i];
   if (g.basladi) {
@@ -2133,6 +2265,7 @@ function turBitti() {
 // hayalet ve rüzgâr çizgileri: yalnızca görsel, her karede bir kez
 function gorevGorsel(dt) {
   const g = gorevD; if (!g) return;
+  if (g.rakipler) rakipAdim(dt);
   if (g.hayalet && g.hayalet.visible) {
     const iz = g.hayaletIz || (g.rekor && g.rekor.iz); if (!iz) return;
     g.hayaletT += dt;
@@ -2228,6 +2361,14 @@ function bitir(basarili) {
     formul = `r = v² / (g·tan θ) = (${tr(v, 1)} m/s)² / (9,81 · tan ${tr(der(th), 0)}°) ≈ ${tr(r, 1)} m`;
     olcum.splice(1, 1);
     g.turlar.forEach((t, i) => olcum.push([`Tur ${i + 1}`, tr(t, 2) + ' s']));
+    if (g.rakipler) {   // yarış sonucu: senin 3 turun ile rakiplerin 3 turu
+      const top = g.turlar.reduce((x, y) => x + y, 0);
+      const liste = [{ ad: 'Sen', t: top, ben: true }, ...g.rakipler.map((r) => ({ ad: `${r.ad} #${r.gorunum.gNo}`, t: 3 * r.T }))].sort((x, y) => x.t - y.t);
+      const sira = liste.findIndex((x) => x.ben) + 1;
+      baslik = sira === 1 ? 'Birincisin! ' + baslik : sira + '. oldun · ' + baslik;
+      metin += ` Yarış: ${liste.map((x, i) => `${i + 1}. ${x.ben ? '<b>Sen</b>' : x.ad} ${tr(x.t, 1)} s`).join(' · ')}. Rakipler virajda tan φ = v·ω/g kadar yatıyor: hızlı olan daha çok yatar.`;
+      olcum.unshift(['Sıralama', `${sira}/${liste.length}`]);
+    }
   }
   if (g.tip === 'tunel') {
     const th = g.olcSay ? g.egimToplam / g.olcSay : 0, v = g.olcSay ? g.ruzToplam / g.olcSay : 0;
@@ -2374,7 +2515,8 @@ function hudGuncelle(dt) {
   if (g.tip === 'teslimat') { hedef = `${g.kargo} g kargo yüklü. Rüzgâr soldan esiyor; mavi B pedine in.`; ek = `TWR <b>${tr(g.twrOnce, 1)} → ${tr(g.twrSonra, 1)}</b>`; }
   if (g.tip === 'pist') {
     hedef = g.basladi ? 'Turuncu kapıdan geç. 3 tur, en iyi tur sayılır.' : 'Beyaz-damalı başlangıç kapısından geç: süre orada başlar.';
-    ek = `Tur <b>${Math.min(3, g.turlar.length + 1)}/3</b>` + (g.rekor ? ` · En iyi <b>${tr(g.rekor.t, 2)} s</b>` : '');
+    const sira = pistSira();
+    ek = `Tur <b>${Math.min(3, g.turlar.length + 1)}/3</b>` + (sira ? ` · Sıra <b>${sira}/${g.rakipler.length + 1}</b>` : g.rakipler ? ` · ${g.rakipler.length} rakip ızgarada` : '') + (g.rekor ? ` · En iyi <b>${tr(g.rekor.t, 2)} s</b>` : '');
     $('gSure').textContent = tr(g.basladi ? g.turSure : 0, 1) + ' s';
   }
   if (g.tip === 'tunel') {

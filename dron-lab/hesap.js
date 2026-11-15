@@ -82,6 +82,7 @@ const SABLONLAR = {
     hucre: 6, kapasite: 1300, cDegeri: 120, bataryaG: 200,
     fcEscG: 15, kameraG: 10, aliciG: 3, ekYukG: 0,
     rakim: 0, sicaklik: 20,
+    gStil: 1, gKol: 0, gRenk: 4, gVurgu: 0, gLed: 0, gPervane: 0, gNo: 5,   // görünüm (gorunum.js): fiziğe etkisi yok
   },
   sinematik3: {
     ad: 'Sinematik 3 inç (cinewhoop)',
@@ -91,6 +92,7 @@ const SABLONLAR = {
     hucre: 4, kapasite: 850, cDegeri: 75, bataryaG: 100,
     fcEscG: 12, kameraG: 30, aliciG: 3, ekYukG: 0,
     rakim: 0, sicaklik: 20,
+    gStil: 0, gKol: 0, gRenk: 0, gVurgu: 0, gLed: 1, gPervane: 0, gNo: 0,   // görünüm (gorunum.js): fiziğe etkisi yok
   },
   uzun7: {
     ad: 'Uzun menzil 7 inç',
@@ -100,6 +102,17 @@ const SABLONLAR = {
     hucre: 6, kapasite: 2200, cDegeri: 50, bataryaG: 330,
     fcEscG: 15, kameraG: 10, aliciG: 5, ekYukG: 30,
     rakim: 0, sicaklik: 20,
+    gStil: 0, gKol: 0, gRenk: 0, gVurgu: 0, gLed: 2, gPervane: 0, gNo: 0,   // görünüm (gorunum.js): fiziğe etkisi yok
+  },
+  gezgin: {
+    ad: 'Gezgin 8,5 inç (katlanır kameralı)',
+    cerceveSinif: 7, cerceveG: 260,
+    kv: 900, motorG: 38, motorSayisi: 4,
+    pervaneCap: 8.5, hatve: 4.5, kanat: 2,
+    hucre: 4, kapasite: 5000, cDegeri: 15, bataryaG: 340,
+    fcEscG: 30, kameraG: 60, aliciG: 5, ekYukG: 0,
+    rakim: 0, sicaklik: 20,
+    gStil: 2, gKol: 0, gRenk: 0, gVurgu: 0, gLed: 1, gPervane: 2, gNo: 0,   // görünüm (gorunum.js): fiziğe etkisi yok
   },
   mikro: {
     ad: 'Eğitim / Mikro 2 inç',
@@ -109,6 +122,7 @@ const SABLONLAR = {
     hucre: 2, kapasite: 450, cDegeri: 80, bataryaG: 26,
     fcEscG: 5, kameraG: 4, aliciG: 1, ekYukG: 0,
     rakim: 0, sicaklik: 20,
+    gStil: 0, gKol: 0, gRenk: 0, gVurgu: 0, gLed: 1, gPervane: 0, gNo: 0,   // görünüm (gorunum.js): fiziğe etkisi yok
   },
   yuk10: {
     ad: 'Yük taşıyıcı 10 inç',
@@ -118,6 +132,7 @@ const SABLONLAR = {
     hucre: 6, kapasite: 6000, cDegeri: 25, bataryaG: 800,
     fcEscG: 30, kameraG: 20, aliciG: 10, ekYukG: 500,
     rakim: 0, sicaklik: 20,
+    gStil: 0, gKol: 0, gRenk: 0, gVurgu: 0, gLed: 0, gPervane: 0, gNo: 0,   // görünüm (gorunum.js): fiziğe etkisi yok
   },
 };
 

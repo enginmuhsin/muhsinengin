@@ -12,6 +12,7 @@
 
 (function () {
   const H = window.DronHesap;
+  const GR = window.DronGorunum;   // görünüm kataloğu (gorunum.js)
 
   /* -------------------------------------------------------------------
      GRUPLAR: Ekrandaki girdi alanlarının listesi.
@@ -45,6 +46,15 @@
       { id: 'kameraG', tip: 'aralik', etiket: 'Kamera', min: 0, max: 500, adim: 1, birim: 'g' },
       { id: 'aliciG', tip: 'aralik', etiket: 'Alıcı', min: 0, max: 100, adim: 1, birim: 'g' },
       { id: 'ekYukG', tip: 'aralik', etiket: 'Ek yük', min: 0, max: 5000, adim: 5, birim: 'g' },
+    ]},
+    { baslik: 'Görünüm (fiziğe etkisi yok)', gorunum: true, alanlar: [
+      { id: 'gStil', tip: 'secim', etiket: 'Gövde stili', secenekler: GR.stil.map((a, i) => [i, a]) },
+      { id: 'gKol', tip: 'secim', etiket: 'Kol düzeni (4 motor)', secenekler: GR.kol.map((a, i) => [i, a]) },
+      { id: 'gRenk', tip: 'secim', etiket: 'Gövde rengi', secenekler: GR.renk.map((a, i) => [i, a[0]]) },
+      { id: 'gVurgu', tip: 'secim', etiket: 'Vurgu rengi', secenekler: GR.vurgu.map((a, i) => [i, a[0]]) },
+      { id: 'gLed', tip: 'secim', etiket: 'LED rengi', secenekler: GR.led.map((a, i) => [i, a[0]]) },
+      { id: 'gPervane', tip: 'secim', etiket: 'Pervane rengi', secenekler: GR.pervane.map((a, i) => [i, a[0]]) },
+      { id: 'gNo', tip: 'aralik', etiket: 'Yarış numarası (0 = yok)', min: 0, max: 99, adim: 1, birim: '#' },
     ]},
     { baslik: 'Ortam', alanlar: [
       { id: 'rakim', tip: 'aralik', etiket: 'Rakım', min: 0, max: 5000, adim: 10, birim: 'm' },
@@ -223,6 +233,10 @@
       });
     }
     onizleme.ayarla(Dron3D.tasarimdan(tasarim));
+    // görünüm seçimleri 3B önizlemeye de yansısın (renkler yalnız görünüştür)
+    const renk = GR.sec(GR.renk, tasarim.gRenk, '#e7ecf2'), vurgu = GR.sec(GR.vurgu, tasarim.gVurgu, '#e08a1e'), pr = GR.sec(GR.pervane, tasarim.gPervane, null);
+    const karbon = (tasarim.gStil | 0) === 1 || (tasarim.gRenk | 0) === 0;
+    onizleme.renkler(Object.assign({ motorUst: vurgu, anten: vurgu }, karbon ? {} : { cerceve: renk, plaka: renk }, pr ? { pervane: pr } : {}));
     // gövde tipi: tasarımın kendisinden çıkar (uçuş simülatörüyle aynı kural)
     const tipKutu = $('govdeTipi');
     if (tipKutu && Dron3D.dronTipi) {

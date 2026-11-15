@@ -23,6 +23,18 @@
 
   var YENILIKLER = [
     {
+      id: 'yaris-rakipler', tarih: '2026-11-15',
+      baslik: 'FPV yarış pistinde 3 rakip dron',
+      metin: 'Pistte artık yalnız değilsin: Çaylak #12, Kaptan #7 ve Usta #1 seninle aynı anda kalkıyor. Virajda ne kadar yattıklarına bak: hız arttıkça yatış açısı da artar (tan φ = v·ω/g). Sonuçta kaçıncı olduğunu görürsün.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
+      id: 'dron-gorunum', tarih: '2026-11-15',
+      baslik: 'Dronunu boya: yeni Görünüm bölümü ve Gezgin dronu',
+      metin: 'Laboratuvarda gövde stili (açık karbon ya da kabuklu), kol düzeni (X, uzun X, ölü kedi), gövde, vurgu, LED ve pervane renkleri ve yarış numarası seçebilirsin; dronun simülatörde de böyle uçar. Görünüm fiziği değiştirmez. Yeni şablon: katlanır kollu, kameralı Gezgin.',
+      adres: '/dron-lab/', sayfalar: ['/dron-lab/', '/dron-ucus/', '/dron/']
+    },
+    {
       id: 'fener-gimbal', tarih: '2026-11-15',
       baslik: 'Gece uçuşlarında yönlendirilebilir arama feneri',
       metin: 'Fener artık bir gimbalda: Q/E ile sağa-sola, Z/X ile aşağı-yukarı çevir; N ile demeti daralt (uzağa vurur), M ile genişlet, B ile odakla. Dokunmatikte sağdaki FENER paneli var. Dar demet daha parlaktır: I = Φ/Ω. Termal kamera artık G tuşunda.',

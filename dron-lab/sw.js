@@ -1,8 +1,8 @@
 /* Dron Tasarım Laboratuvarı çevrimdışı önbelleği (Oyun Salonu ve Uçuş Simülatörü ile aynı yöntem).
    Sayfa: önce ağ, yoksa önbellek. Diğer dosyalar: önbellekten hemen, arkada güncelle.
    Bir dosya değişince SURUM'u bir artır. */
-const SURUM = 'lab-v9';
-const DOSYALAR = ['./', 'index.html', 'style.css', 'app.js', 'dron3d.js', 'hesap.js', 'dusme.js', '../tema.js', '../ortak/ana-sayfa.js', '../ortak/matematik.css', '../simge.svg'];
+const SURUM = 'lab-v10';
+const DOSYALAR = ['./', 'index.html', 'style.css', 'app.js', 'dron3d.js', 'hesap.js', 'gorunum.js', 'dusme.js', '../tema.js', '../ortak/ana-sayfa.js', '../ortak/matematik.css', '../simge.svg'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(SURUM).then((c) => Promise.all(DOSYALAR.map((u) => c.add(new Request(u, { cache: 'reload' })).catch(() => {})))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x.startsWith('lab-') && x !== SURUM).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
