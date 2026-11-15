@@ -386,6 +386,8 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="hastane-gorev.js"></script>
 <script src="fener.js"></script>
 <script src="sehir.js"></script>
+<script src="okul.js"></script>
+<script src="okul-gorev.js"></script>
 
 <script>
 'use strict';
@@ -817,7 +819,7 @@ const pedB = pedYap('#2b7bd6', 'B'); pedB.position.set(20, 0.005, -55); pedB.vis
 const agaclar = [];                                                   // { x, z, s }
 // katı kutular: yanlarına çarpılır, üstlerine inilebilir (y0: alt yüz, ust: üst yüz)
 const KUTULAR = [
-  { x0: -53.3, x1: -22.7, z0: -36.3, z1: -23.7, y0: 0, ust: 9.6, ad: 'cati' },     // okul binası
+  { x0: -53.3, x1: -22.7, z0: -36.3, z1: -23.7, y0: 9.0, ust: 9.6, ad: 'cati' },   // okulun çatı döşemesi (bina içi okul.js'te: duvarlar, katlar, atölyeler)
   { x0: -42, x1: -34, z0: -24, z1: -21, y0: 3.0, ust: 3.3, ad: 'sacak' },           // giriş saçağı
   { x0: -48.5, x1: -45.5, z0: -33.2, z1: -30.8, y0: 9.6, ust: 11.2, ad: 'makine' }, // çatıdaki makine dairesi
   { x0: -51.6, x1: -42.0, z0: -27.1, z1: -25.7, y0: 9.6, ust: 10.3, ad: 'panel' },  // güneş panelleri
@@ -975,10 +977,8 @@ function okulYap() {
   const okul = new THREE.Group(); sahne.add(okul);
   const cx = -38, cz = -30;
   // ana kütle: 30 × 9 × 12 m; ön cephe (+z) okul bahçesine ve kalkış pedine bakar
-  const yan = cepheDokusu(12, 3, false), arka = cepheDokusu(30, 3, false), on = cepheDokusu(30, 3, true);
-  const catiAlt = new THREE.MeshStandardMaterial({ color: '#8f8a83' });
-  const govde = new THREE.Mesh(new THREE.BoxGeometry(30, 9, 12), [yan, yan, catiAlt, catiAlt, on, arka]);
-  govde.position.set(cx, 4.5, cz); govde.castShadow = govde.receiveShadow = true; okul.add(govde);
+  // içine girilebilen bina: dış duvarlar gerçek pencereli, 3 kat, atölyeler, idari odalar (okul.js)
+  OKUL.yap(okul);
   // düz çatı + korkuluk (parapet) + çatı pisti
   const cati = new THREE.Mesh(new THREE.BoxGeometry(30.6, 0.6, 12.6), new THREE.MeshStandardMaterial({ color: '#6e737a', roughness: 0.95 }));
   cati.position.set(cx, 9.3, cz); cati.receiveShadow = true; okul.add(cati);
@@ -1975,7 +1975,7 @@ function fizikAdim(dt) {
    Engele dik yöndeki hız sınırı aşarsa pervane kırılır (düşüş); daha yavaş temasta dron
    engelden itilir, içeri doğru hızı silinir ve hafifçe seker. */
 const _n = new THREE.Vector3(), _d = new THREE.Vector3(), _r = new THREE.Vector3();
-const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac', cam: 'cam', mobilya: 'mobilya' };
+const KUTU_NE = { ev: 'ev', durak: 'ev', araba: 'arac', cam: 'cam', mobilya: 'mobilya', duvar: 'ev' };
 function engelKontrol() {
   const u = uc, f = fz, p = u.poz;
   const rD = f.kol + f.t.pervaneCap * 0.0254 / 2;
@@ -2075,7 +2075,7 @@ function engelKontrol() {
   }
 
   // yakınlık uyarısı: bir pervane çapından yakınsa
-  if (!carp && enYakin < 2 * f.t.pervaneCap * 0.0254 / 2 && u.zaman > (u.engelUyari || 0) && !SEHIR.icMekan(p)) {
+  if (!carp && enYakin < 2 * f.t.pervaneCap * 0.0254 / 2 && u.zaman > (u.engelUyari || 0) && !SEHIR.icMekan(p) && !OKUL.icMekan(p)) {
     bildir('Engele çok yakınsın: yavaşla', 900); u.engelUyari = u.zaman + 2.5;
   }
   return carp;

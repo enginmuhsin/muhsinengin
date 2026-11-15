@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'bilsem-ic', tarih: '2026-11-15',
+      baslik: 'BİLSEM binasının içine gir: atölyeler, müdür odası, akıllı tahtalar',
+      metin: 'Simülatördeki okul artık üç katlı gerçek bir bina. Zemin katta giriş holü, müdür ve müdür yardımcısı odası, öğretmenler odası, kütüphane, kantin ve Zekâ Oyunları Atölyesi; üst katlarda Matematik, Fen, Bilişim, Yapay Zekâ, Dron ve Robotik, İngilizce, Türk Dili ve Edebiyatı, Görsel Sanatlar, Müzik ve Proje atölyeleri var. Her sınıfta akıllı tahta ve sıralar. Yeni görev: "BİLSEM\'i gez", sekiz atölyedeki halkalardan geç, rekorunu kır!',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
       id: 'hastane-ic', tarih: '2026-11-15',
       baslik: 'Hastanenin içinde uç: acil ilaç görevi',
       metin: 'Şehirdeki hastane artık içine girilebilen gerçek bir bina: turuncu çerçeveli açık pencerelerden ya da kapıdan gir, koridorda oda numaralarını oku, merdiven boşluğundan kat değiştir. Görev: asansör bozuk, 208 numaralı odaya ilaç götür. Dikkat: kapalı pencerelerde cam var!',

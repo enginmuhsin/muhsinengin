@@ -303,7 +303,7 @@
       }
       for (const xo of ODA.slice(1, 5)) { kutu(ic, X0 + xo - ti / 2, X0 + xo + ti / 2, y0, y1, Z0 + T, CZ0 - ti, 'ev'); kutu(ic, X0 + xo - ti / 2, X0 + xo + ti / 2, y0, y1, CZ1 + ti, Z1 - T, 'ev'); }
       // döşeme kaplaması (vinil); üst katlarda merdiven boşluğu açık kalır
-      const yk = y0 + (k ? 0.004 : 0.012);
+      const yk = y0 + (k ? 0.01 : 0.04);
       if (k === 0) dos.ust(X0 + T, X1 - T, Z0 + T, Z1 - T, yk, 4, 4);
       else { dos.ust(X0 + T, X1 - T, Z0 + T, CZ0, yk, 4, 4); dos.ust(X0 + T, X1 - T, CZ1, Z1 - T, yk, 4, 4); dos.ust(X0 + T, DX0, CZ0, CZ1, yk, 4, 4); }
     }
@@ -343,7 +343,7 @@
     const M = (o) => new THREE.MeshStandardMaterial(Object.assign({ roughness: 0.8 }, o));
     const lM = new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: '#f4f8ff', emissiveIntensity: 0.6 });
     const vinil = doku(128, 128, (x) => { x.fillStyle = '#aab4b9'; x.fillRect(0, 0, 128, 128); x.strokeStyle = 'rgba(0,0,0,.08)'; x.strokeRect(0, 0, 64, 64); x.strokeRect(64, 64, 64, 64); x.fillStyle = 'rgba(40,90,170,.5)'; x.fillRect(0, 60, 128, 8); });
-    grup.add(dis.mesh(M({ color: '#f1f3f4' }), true), ic.mesh(M({ color: '#dcebe4', side: THREE.DoubleSide })), dos.mesh(M({ map: vinil, color: '#ffffff', roughness: 0.6 })), tav.mesh(M({ color: '#e9edf0', emissive: '#b9c2c8', emissiveIntensity: 0.35 })),
+    grup.add(dis.mesh(M({ color: '#f1f3f4' }), true), ic.mesh(M({ color: '#dcebe4', side: THREE.DoubleSide })), dos.mesh(M({ map: vinil, color: '#ffffff', roughness: 0.6, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })), tav.mesh(M({ color: '#e9edf0', emissive: '#b9c2c8', emissiveIntensity: 0.35 })),
       camB.mesh(new THREE.MeshStandardMaterial({ color: '#9fc6e0', roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false })),
       cerB.mesh(M({ color: '#ff8a1e', emissive: '#ff6a00', emissiveIntensity: 0.25 })), mob.mesh(M({ color: '#c9ced4' })), yatak.mesh(M({ color: '#7fb7d9' })),
       bantB.mesh(M({ color: '#2a63b8' })), no.mesh(M({ map: noD })), lamba.mesh(lM));
@@ -634,5 +634,6 @@
     if (S.ikaz) S.ikaz.color.setRGB(Math.sin(t * 3) > 0.2 ? 1 : 0.18, 0.06, 0.06);
     if (S.fiskiye) S.fiskiye.scale.y = 1 + 0.08 * Math.sin(t * 9);
   };
+  S.Birlesik = Birlesik; S.doku = doku;   // okul.js de kullanır
   window.SEHIR = S;
 })();
