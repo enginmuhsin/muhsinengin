@@ -11,7 +11,7 @@
      Ses düzeyi: L = L₁ − 20·log₁₀(d)  (uzaklık iki katına çıkınca −6 dB)
    • Komşu ihbarı: haritada belirsizlik çemberi. Zamanla daralır, ama
      kedinin tam yerini hiçbir zaman söylemez.
-   • Termal kamera (I tuşu): sıcak cisimler beyaz görünür. Kirpiler de
+   • Termal kamera (G tuşu): sıcak cisimler beyaz görünür. Kirpiler de
      sıcaktır, kafa karıştırır. Kamera pilden ek güç çeker.
    • Seviyeler: Kolay / Orta / Zor / Günün Kedisi (o gün herkes için aynı).
    • Rekorlar bu cihazda saklanır; fizik dışı hareket algılanırsa sayılmaz.
@@ -229,7 +229,8 @@
     p.innerHTML = `<h3 id="kurtarmaBaslik">Gece arama-kurtarma: seviye seç</h3>
       <p>Pamuk akşam kaybolmuş. Kasabanın <b>150'den fazla</b> köşesinden birinde saklanıyor ve her uçuşta yeri değişiyor. İniş fenerinle ara, miyavına kulak ver, komşu ihbarlarının <b style="color:#ffd23f">sarı çemberine</b> bak.</p>
       <div class="kurtar-sev">${Object.entries(SEVIYE).map(([k, s], i) => `<button class="dg" data-sev="${k}"><b>${i + 1}. ${s.ad}</b><small>${s.not}</small><small class="rek">${rekorYazi(k)}</small></button>`).join('')}</div>
-      <p class="ek-not"><b>Termal kamera:</b> I tuşu ya da üstteki Termal düğmesi. Sıcak cisimler beyaz görünür; pilden ${TERMAL_W} W ek güç çeker. <b>Sessiz yaklaş:</b> gazı kıstıkça pervane gürültüsü azalır.</p>`;
+      <p class="ek-not"><b>Termal kamera:</b> G tuşu ya da üstteki Termal düğmesi. Sıcak cisimler beyaz görünür; pilden ${TERMAL_W} W ek güç çeker. <b>Sessiz yaklaş:</b> gazı kıstıkça pervane gürültüsü azalır.</p>
+      <p class="ek-not"><b>Fener:</b> Q/E sağa-sola, Z/X aşağı-yukarı, N demeti daraltır (uzağa vurur), M genişletir, B odak, 0 ortalar. Dokunmatikte sağdaki FENER paneli.</p>`;
     p.hidden = false; g.bekle = true;
     setTimeout(() => { const b = p.querySelector('[data-sev]'); if (b) b.focus(); }, 50);
   }
@@ -242,7 +243,7 @@
     const g = gorevD;
     if (typeof durum === 'undefined' || durum !== 'ucus' || !g || g.tip !== 'kurtarma') return;
     if (g.bekle && /^Digit[1-4]$/.test(e.code)) { secildi(Object.keys(SEVIYE)[+e.code.slice(5) - 1]); e.preventDefault(); }
-    else if (!g.bekle && e.code === 'KeyI') termalDegis();
+    else if (!g.bekle && e.code === 'KeyG') termalDegis();
   });
 
   /* ---------- görev ---------- */
@@ -284,12 +285,15 @@
     bildir(kacti ? `İhbar: Pamuk ${en[0]} tarafına koşarken görülmüş (sarı çember, ${R} m)` : `Komşu ihbarı: Pamuk ${en[0]} yakınlarında görülmüş (sarı çember, ${R} m)`, 3600);
   }
 
+  // Fener demeti (fener.js) kediye ulaşıyor mu? Demetin içinde olmak ve yeterli aydınlık şart.
+  // Araba altı: ancak alçaktan ve yandan bakan ışık girer. Ağaç: dalların hizasından bakmak gerekir.
+  const _hp = new THREE.Vector3();
   function bakis(u, p, tur) {
     const dx = u.poz.x - p.x, dz = u.poz.z - p.z, yatay = Math.hypot(dx, dz), dy = u.poz.y - p.y;
-    const dk = Math.hypot(yatay, dy), E = FAR_I / (dk * dk), iz = Math.tan(FAR_ACI) * Math.max(0.3, dy);
-    let isikta = dy > 0 && yatay < iz, engel = false;
-    if (tur === 'alti') { const ok = dy > 0.2 && dy < 3.2 && yatay > 0.8 && yatay < 4.5; engel = isikta && !ok; isikta = ok; }
-    if (tur === 'agac') { const ok = dy < 1.2 && yatay < 5; engel = !ok && yatay < 3 && dy > 0; isikta = ok; }
+    const f = FENER.isik(u, _hp.set(p.x, p.y + 0.15, p.z)), dk = f.d, E = f.E;
+    let isikta = f.ic, engel = false;
+    if (tur === 'alti') { const ok = dy > 0.2 && dy < 3.2 && yatay > 0.8 && yatay < 6; engel = isikta && !ok; isikta = isikta && ok; }
+    if (tur === 'agac') { const ok = dy < 1.2 && yatay < 8; engel = isikta && !ok; isikta = isikta && ok; }
     return { isikta, engel, E, dk, yatay };
   }
   const gurultu1m = (u) => u.gaz < 0.02 ? 0 : 78 + 20 * log10(Math.max(u.gaz, 0.05) / 0.5);   // pervane gürültüsü, 1 m'de (dB)
@@ -311,7 +315,7 @@
   function adim(g, dt) {
     if (!g.S) return;
     const u = uc, S = g.S, yer = zeminY(u.poz.x, u.poz.z, u.poz.y), h = Math.max(0.3, u.poz.y - yer);
-    g.E0 = FAR_I / (h * h); g.izR = h * Math.tan(FAR_ACI);
+    const zf = FENER.zemin(u, h); g.E0 = zf.E; g.izR = zf.r;
     if (K.termal) g.termalSure += dt;
     // komşu ihbarları
     while (!g.bulundu && g.ihbarlar.length && g.ihbarlar[0].t <= g.sure) { const i = g.ihbarlar.shift(); ihbarVer(g, i.R, i.kacti); }
@@ -345,7 +349,7 @@
     // görme
     g.gorme = b.isikta && b.E >= E_ESIK ? g.gorme + dt : Math.max(0, g.gorme - dt * 0.5);
     if (g.gorme > 0.8) {
-      g.bulundu = true; g.bulY = h; g.bulE = b.E; g.bulD = b.dk; g.bulT = g.sure; g.bulTur = tur;
+      g.bulundu = true; g.bulY = h; g.bulE = b.E; g.bulD = b.dk; g.bulT = g.sure; g.bulTur = tur; g.bulYari = FENER.yari; g.bulI = FENER.I(); g.bulEgim = FENER.egim;
       if (g.kosu) { g.yer = { x: g.kediPoz.x, z: g.kediPoz.z, y: g.kedi.position.y, tur: 'acik', ad: 'kaçarken' }; g.kosu = null; g.kedi.position.y = zeminY(g.kediPoz.x, g.kediPoz.z, g.kediPoz.y + 0.5); g.kediPoz.copy(g.kedi.position); }
       g.hedef = g.kediPoz.clone().setY(g.kediPoz.y + 0.5);
       if (g.cember) g.cember.visible = false;
@@ -381,7 +385,7 @@
     const u = uc, L1 = gurultu1m(u);
     return {
       hedef: g.cember ? 'Sarı çember komşu ihbarı: Pamuk o civarda. Işık izinle tara, miyava kulak ver.' : 'Kayıp kedi Pamuk kasabada bir yerde. Işık izinle tara; miyav sesine kulak ver.',
-      ek: `${g.S.ad} · Zeminde <b>${say(g.E0 || 0, 0)} lx</b> (≥ ${E_ESIK}) · İz çapı <b>${say(2 * (g.izR || 0), 1)} m</b>`
+      ek: `${g.S.ad} · Demet ${Math.round(2 * FENER.yari * 180 / Math.PI)}° · <b>${say(FENER.I(), 0)} cd</b> · Zeminde <b>${say(g.E0 || 0, 0)} lx</b> (≥ ${E_ESIK}) · İz çapı <b>${say(2 * (g.izR || 0), 1)} m</b>`
         + (g.S.kacis ? ` · Gürültün <b>${say(L1, 0)} dB</b> (1 m)` : '') + (K.termal ? ' · <b>TERMAL</b>' : ''),
     };
   }
@@ -395,6 +399,8 @@
     if (g.kacisSay) metin += ` Pamuk <b>${g.kacisSay} kez</b> kaçtı: pervane gürültüsü ona <b>${say(g.sonKacisL, 0)} dB</b> ulaşmıştı. Ses de uzaklıkla zayıflar: uzaklık iki katına çıkınca düzey <b>6 dB</b> düşer. Gazı kısıp yüksekten yaklaşan pilot kediyi ürkütmez.`;
     else if (S.kacis) metin += ` Pamuk hiç ürkmedi: kediye ulaşan en yüksek gürültü <b>${say(g.Lmaks, 0)} dB</b> idi (ürkme eşiği ${S.esik} dB).`;
     if (g.termalSure > 1) metin += ` Termal kamerayı <b>${say(g.termalSure, 0)} s</b> kullandın: kedinin vücudu (~38 °C) gece soğumuş zeminden (~8 °C) daha çok kızılötesi ışır. Işınım mutlak sıcaklığın 4. kuvvetiyle büyür: (311 K / 281 K)⁴ ≈ <b>1,5 kat</b>.`;
+    { const dm = Math.round(2 * g.bulYari * 180 / Math.PI), eg = Math.round(g.bulEgim * 180 / Math.PI);
+      metin += ` Bulduğun anda fener <b>${eg}°</b> eğimle, <b>${dm}°</b> genişliğinde bir demetle bakıyordu ve ışık şiddeti <b>${say(g.bulI, 0)} cd</b> idi. Fenerin ışık akısı hep aynıdır; demeti daraltınca aynı ışık daha küçük bir koniye toplanır ve şiddet artar (I = Φ/Ω). Dar demet uzağı aydınlatır ama küçük bir yeri gösterir, geniş demet çok yeri görür ama sönüktür.`; }
     metin += ' Kedinin gözlerinin parlaması da fizik: gözün arkasındaki yansıtıcı tabaka (tapetum lucidum) ışığı geldiği yöne geri yollar.';
     olcum.push(['Seviye', S.ad], ['Bulma yüksekliği', say(g.bulY, 1) + ' m'], ['Bulma anı', say(g.bulT, 1) + ' s'], ['Kaçış', g.kacisSay + ' kez'], ['İhbar', g.ipucuSay + ' kez']);
     if (g.termalSure > 1) olcum.push(['Termal', say(g.termalSure, 0) + ' s']);
@@ -402,7 +408,7 @@
     return {
       baslik: yeni ? (sev === 'gun' ? 'Günün Kedisi: yeni en iyi süre!' : `Yeni rekor (${S.ad})! Pamuk kurtarıldı`) : 'Pamuk kurtarıldı',
       metin,
-      formul: `E = I / d² = ${FAR_I} cd / (${say(g.bulD, 1)} m)² ≈ ${say(g.bulE, 0)} lx   ·   L = L₁ − 20·log₁₀ d`,
+      formul: `I = Φ / Ω = ${say(FENER.I(), 0)} cd   ·   E = I / d² = ${say(FENER.I(), 0)} / (${say(g.bulD, 1)} m)² ≈ ${say(g.bulE, 0)} lx   ·   L = L₁ − 20·log₁₀ d`,
     };
   }
 
@@ -444,7 +450,7 @@ body.termal #hud::before{content:'TERMAL · beyaz-sıcak';position:absolute;left
   addEventListener('DOMContentLoaded', () => {
     const dg = document.querySelector('#hud .dugmeler'); if (!dg || $('bTermal')) return;
     const b = document.createElement('button'); b.id = 'bTermal'; b.type = 'button'; b.hidden = true; b.textContent = 'Termal: kapalı';
-    b.title = 'Termal kamera (I tuşu): sıcak cisimleri beyaz gösterir, pilden ek güç çeker';
+    b.title = 'Termal kamera (G tuşu): sıcak cisimleri beyaz gösterir, pilden ek güç çeker';
     b.addEventListener('click', () => termalDegis()); dg.prepend(b);
   });
 

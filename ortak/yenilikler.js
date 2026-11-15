@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'fener-gimbal', tarih: '2026-11-15',
+      baslik: 'Gece uçuşlarında yönlendirilebilir arama feneri',
+      metin: 'Fener artık bir gimbalda: Q/E ile sağa-sola, Z/X ile aşağı-yukarı çevir; N ile demeti daralt (uzağa vurur), M ile genişlet, B ile odakla. Dokunmatikte sağdaki FENER paneli var. Dar demet daha parlaktır: I = Φ/Ω. Termal kamera artık G tuşunda.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/']
+    },
+    {
       id: 'dron-sinir-adil-rekor', tarih: '2026-11-15', oneri: true,
       baslik: 'Simülatörde harita sınırı ve adil rekorlar',
       metin: 'Haritanın ucunda görünen o korkunç siyah boşluk gitti: gökyüzü artık her yerde, dronu da gerçek dronlardaki gibi bir coğrafi sınır (geofence) durduruyor. Konsoldan kod yazarak hızı değiştirmek artık işe yaramıyor; fizik dışı bir hareket olursa o uçuşun rekoru sayılmıyor.',
@@ -43,7 +49,7 @@
     {
       id: 'pamuk-2', tarih: '2026-11-15', oneri: true,
       baslik: 'Pamuk artık her yere saklanıyor',
-      metin: 'Gece arama-kurtarmada kedi 185 farklı yerden birine saklanıyor: araba altı, ağaç dalı, apartman çatısı… Gürültüden ürküp kaçabiliyor. Komşu ihbarı çemberi, termal kamera (I tuşu), 4 seviye, Günün Kedisi ve rekorlar eklendi.',
+      metin: 'Gece arama-kurtarmada kedi 185 farklı yerden birine saklanıyor: araba altı, ağaç dalı, apartman çatısı… Gürültüden ürküp kaçabiliyor. Komşu ihbarı çemberi, termal kamera (G tuşu), 4 seviye, Günün Kedisi ve rekorlar eklendi.',
       adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
     },
     {

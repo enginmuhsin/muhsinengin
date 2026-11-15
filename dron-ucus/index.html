@@ -382,6 +382,7 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
 <script src="ek-gorevler.js"></script>
 <script src="kurtarma.js"></script>
 <script src="tasima.js"></script>
+<script src="fener.js"></script>
 
 <script>
 'use strict';
@@ -548,7 +549,7 @@ function zamanUygula(zorla) {
 function geceAdim(t) {
   if (!geceAcik) return;
   GECE.pedIsik.forEach((p) => { p.m.scale.setScalar(((t * 0.8 + p.faz) % 1) < 0.14 ? 1.8 : 1); });
-  if (dronFar && dron && uc) {
+  if (false && dronFar && dron && uc) {   // fener artık fener.js'te (yönlendirilebilir gimbal)
     dronFar.position.copy(uc.poz);
     const arama = gorevD && gorevD.tip === 'kurtarma';   // aramada fener aşağı bakar
     _v.set(-Math.sin(uc.yaw) * (arama ? 0.3 : 4), arama ? -8 : -3, -Math.cos(uc.yaw) * (arama ? 0.3 : 4));
@@ -1726,6 +1727,7 @@ function baslat() {
   kameraAni = true;
   if (g.tip !== 'tunel' && g.tip !== 'kurtarma' && !EK[g.tip]) bildir(dokunmatik ? 'İki kolu içe-aşağı indir: otomatik kalkış' : (ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç') + ' · T: otomatik kalkış', 2000);
   ek(g.tip, 'basla', g);
+  FENER.sifirla(g.tip);
   zamanUygula(g.tip === 'kurtarma');
   if (geceAcik && g.tip !== 'kurtarma') setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
 }
@@ -2478,6 +2480,7 @@ function dongu(simdi) {
     if (t.t > 0.6) { sahne.remove(t.m); tozlar.splice(i, 1); }
   }
   geceAdim(performance.now() / 1000);
+  FENER.adim(dt);
   if (gokKure) gokKure.position.copy(kamera.position);       // gökyüzü kubbesi kamerayla gelir: ufkun ötesinde boşluk görünmez
   if (yildizlar) yildizlar.position.copy(kamera.position);
   if (!KURTARMA.ciz()) renderer.render(sahne, kamera);
