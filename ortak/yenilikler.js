@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'dron-sinir-adil-rekor', tarih: '2026-11-15', oneri: true,
+      baslik: 'Simülatörde harita sınırı ve adil rekorlar',
+      metin: 'Haritanın ucunda görünen o korkunç siyah boşluk gitti: gökyüzü artık her yerde, dronu da gerçek dronlardaki gibi bir coğrafi sınır (geofence) durduruyor. Konsoldan kod yazarak hızı değiştirmek artık işe yaramıyor; fizik dışı bir hareket olursa o uçuşun rekoru sayılmıyor.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/']
+    },
+    {
       id: 'kasif-defteri-b1', tarih: '2026-11-15',
       baslik: 'Kâşif Defteri: Pamuk\'un yolculuğu',
       metin: 'Sitenin bölümlerini birbirine bağlayan hazine avı: Şifre Dairesi\'nde notu çöz, dronla Pamuk\'u bul, kargo dronu tasarla, veterinere taşı, Gizli Kod\'u kır. Tek başına ya da takımla; en hızlılar Kâşifler Duvarı\'na.',
@@ -106,6 +112,12 @@
     '.yn-oneri{color:var(--yesil,#2e7d4f)}.yn-oneri::before{content:"✎ "}' +
     '.yn-baslik{margin:0 0 .2rem;font:600 1.12rem/1.3 var(--serif,serif)}.yn-baslik a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}' +
     '.yn-metin{margin:0;max-width:64ch;color:var(--metin,#1d2733)}' +
+    '.yn-canli{position:relative}' +
+    '.yn-imlec{display:inline-block;width:3px;height:1.05em;margin-left:.3em;vertical-align:-.15em;background:var(--kirmizi,#c0392b);border-radius:1px;animation:ynImlec 1s steps(1,end) infinite}' +
+    '@keyframes ynImlec{50%{opacity:0}}' +
+    '.yn-canli .yn-sayi{animation:ynNabiz 1.6s ease-out infinite}' +
+    '@keyframes ynNabiz{0%{box-shadow:0 0 0 0 rgba(200,50,59,.65)}70%{box-shadow:0 0 0 9px rgba(200,50,59,0)}100%{box-shadow:0 0 0 0 rgba(200,50,59,0)}}' +
+    '@media (prefers-reduced-motion:reduce){.yn-imlec,.yn-canli .yn-sayi{animation:none}}' +
     '.yn-sayi{display:inline-block;min-width:1.2em;margin-left:.35em;padding:0 .3em;border-radius:1em;background:var(--kirmizi,#c0392b);color:#fff;font:700 .7rem/1.45 var(--mono,monospace);text-align:center;vertical-align:.15em}' +
     '.yn-not{position:fixed;z-index:9999;right:16px;bottom:16px;max-width:min(360px,calc(100vw - 32px));padding:.8rem 2.6rem .85rem 1rem;background:var(--kagit,#f5f7fa);color:var(--metin,#1d2733);border:2px solid var(--murekkep,#1f3a8a);border-radius:6px;font:15px/1.45 var(--yazi,system-ui,sans-serif);transform:translateY(12px);opacity:0;transition:transform .35s ease-out,opacity .35s ease-out}' +
     '.yn-not.acik{transform:none;opacity:1}' +
@@ -135,10 +147,17 @@
   var yeniSayi = YENILIKLER.filter(function (y) { return yeniMi(y, g); }).length;
   if (kisa || document.querySelector('[data-yenilik-sayi]')) {
     stilEkle();
-    if (kisa) { var u2 = el('ul', 'yn-liste'); YENILIKLER.slice(0, 3).forEach(function (y) { u2.appendChild(maddeYap(y, yeniMi(y, g))); }); kisa.appendChild(u2); }
+    if (kisa) { var u2 = el('ul', 'yn-liste'); var sonGun = YENILIKLER.filter(function (y) { return y.tarih === YENILIKLER[0].tarih; });   // en son günün hepsi, en az 3 duyuru
+      (sonGun.length >= 3 ? sonGun : YENILIKLER.slice(0, 3)).forEach(function (y) { u2.appendChild(maddeYap(y, yeniMi(y, g))); }); kisa.appendChild(u2); }
     if (yeniSayi) document.querySelectorAll('[data-yenilik-sayi]').forEach(function (a) {
       var s = el('span', 'yn-sayi', String(yeniSayi)); s.setAttribute('aria-label', yeniSayi + ' yeni'); a.appendChild(s);
+      // yanıp sönen kırmızı imleç: yeni bir şey var, gidip bak (Yenilikler sayfası açılınca söner)
+      var i = el('span', 'yn-imlec'); i.setAttribute('aria-hidden', 'true'); a.appendChild(i);
+      a.classList.add('yn-canli'); a.title = yeniSayi + ' yeni güncelleme var';
     });
+    // ana sayfadaki "Son yenilikler" başlığına da aynı imleç
+    var bas = document.getElementById('yenilikBaslik');
+    if (yeniSayi && bas && !bas.querySelector('.yn-imlec')) { var i2 = el('span', 'yn-imlec'); i2.setAttribute('aria-hidden', 'true'); bas.appendChild(i2); }
     return;
   }
 
