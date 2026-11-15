@@ -83,3 +83,7 @@ grant execute on function public.kasif_liste(text) to anon, authenticated;
 grant execute on function public.kasif_yonetim() to authenticated;
 grant execute on function public.kasif_onay(bigint, boolean) to authenticated;
 grant execute on function public.kasif_sil(bigint) to authenticated;
+-- Supabase yeni fonksiyonlara anon için ayrıca yetki verebilir; öğretmen fonksiyonlarında kapat.
+revoke execute on function public.kasif_yonetim() from anon;
+revoke execute on function public.kasif_onay(bigint, boolean) from anon;
+revoke execute on function public.kasif_sil(bigint) from anon;
