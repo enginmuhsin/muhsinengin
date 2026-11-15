@@ -200,7 +200,8 @@
     yazdirTablosu();
     karsilastirmaCiz();
     onizlemeGuncelle(s);
-    window.dispatchEvent(new CustomEvent('tasarim-degisti', { detail: { tasarim: Object.assign({}, tasarim), s } }));   // dusme.js dinler
+    window.sonTasarim = { tasarim: Object.assign({}, tasarim), s };
+    window.dispatchEvent(new CustomEvent('tasarim-degisti', { detail: window.sonTasarim }));   // dusme.js ve ortak/kasif.js dinler
     // Adres çubuğunu çok sık değiştirmemek için kısa bir gecikme
     clearTimeout(hashZamanlayici);
     hashZamanlayici = setTimeout(hashYaz, 300);

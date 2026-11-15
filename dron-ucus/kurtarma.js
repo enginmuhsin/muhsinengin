@@ -115,6 +115,77 @@
     m.rotation.x = -Math.PI / 2; m.renderOrder = 3; gorevGrubu.add(m); return m;
   }
 
+
+  /* ---------- Van kedisi ----------
+     Bembeyaz, yarı uzun tüylü; başında ve kulak diplerinde kızıl lekeler, kuyruğu kızıl halkalı.
+     Gözler farklı renkte (biri mavi, biri kehribar). Gece ışık gelince kehribar göz yeşilimsi parlar;
+     mavi gözün arkasındaki yansıtıcı tabakada pigment az olduğundan o göz kırmızımsı parlar. */
+  function vanKedisi() {
+    const k = new THREE.Group(), ic = new THREE.Group(); k.add(ic);
+    const M = (renk, o) => new THREE.MeshStandardMaterial(Object.assign({ color: renk, roughness: 0.95 }, o));
+    const beyaz = M('#f3efe6'), kizil = M('#c56a2c'), pembe = M('#e9a3a6'), koyu = M('#2a2220');
+    const kure = (r, m, x, y, z, sx = 1, sy = 1, sz = 1, ana = ic) => { const o = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), m); o.position.set(x, y, z); o.scale.set(sx, sy, sz); ana.add(o); return o; };
+    // gövde: göğüs, karın, kalça
+    const govde = new THREE.Group(); ic.add(govde);
+    kure(0.1, beyaz, 0, 0.205, 0.015, 1.02, 0.98, 2.25, govde);
+    kure(0.092, beyaz, 0, 0.215, -0.1, 1.0, 1.06, 1.0, govde);
+    kure(0.09, beyaz, 0, 0.21, 0.13, 1.08, 1.0, 1.0, govde);
+    // bacaklar: kalçadan dönen gruplar (koşarken salınır)
+    const bacaklar = [];
+    for (const [x, z, on] of [[-0.055, -0.13, 1], [0.055, -0.13, 1], [-0.058, 0.15, 0], [0.058, 0.15, 0]]) {
+      const kalca = new THREE.Group(); kalca.position.set(x, 0.18, z); ic.add(kalca);
+      const ust = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.022, 0.1, 8), beyaz); ust.position.y = -0.05; kalca.add(ust);
+      const alt = new THREE.Mesh(new THREE.CylinderGeometry(0.019, 0.017, 0.09, 8), beyaz); alt.position.set(0, -0.12, on ? 0 : 0.008); kalca.add(alt);
+      kure(0.024, beyaz, 0, -0.165, on ? -0.01 : 0.004, 1, 0.65, 1.3, kalca);   // pati
+      bacaklar.push(kalca);
+    }
+    // baş: boyun, kafa, ağız, burun, kulaklar, lekeler
+    const bas = new THREE.Group(); bas.position.set(0, 0.3, -0.2); ic.add(bas);
+    kure(0.06, beyaz, 0, -0.04, 0.05, 1, 1, 1.2, bas);                                 // boyun
+    kure(0.068, beyaz, 0, 0, 0, 1.1, 0.95, 1, bas);                                     // kafa
+    kure(0.042, beyaz, 0, -0.03, -0.058, 1.15, 0.8, 0.9, bas);                          // ağız
+    kure(0.012, pembe, 0, -0.012, -0.096, 1.2, 0.8, 0.8, bas);                          // burun
+    kure(0.034, kizil, -0.03, 0.045, 0.002, 1.1, 0.42, 1.15, bas); kure(0.034, kizil, 0.03, 0.045, 0.002, 1.1, 0.42, 1.15, bas);   // Van lekeleri (kulak dibinde)
+    for (const s of [-1, 1]) {
+      const kulak = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.065, 4), kizil); kulak.position.set(s * 0.045, 0.085, 0.005); kulak.rotation.set(-0.15, Math.PI / 4, s * -0.28); bas.add(kulak);
+      const icKulak = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.045, 4), pembe); icKulak.position.set(s * 0.044, 0.08, -0.008); icKulak.rotation.set(-0.15, Math.PI / 4, s * -0.28); bas.add(icKulak);
+    }
+    const gozler = [];
+    for (const [s, taban, parilti] of [[-1, [0.29, 0.6, 1], [1, 0.25, 0.18]], [1, [0.92, 0.66, 0.2], [0.45, 1, 0.3]]]) {
+      const goz = new THREE.Mesh(new THREE.SphereGeometry(0.013, 10, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(...taban) }));
+      goz.position.set(s * 0.031, 0.012, -0.068); goz.scale.set(1, 0.8, 0.6); bas.add(goz);
+      const bebek = new THREE.Mesh(new THREE.SphereGeometry(0.006, 8, 6), new THREE.MeshBasicMaterial({ color: '#111' })); bebek.position.set(s * 0.031, 0.012, -0.076); bebek.scale.set(0.5, 1, 0.5); bas.add(bebek);
+      goz.userData.taban = taban; goz.userData.parilti = parilti; gozler.push(goz);
+    }
+    // bıyıklar
+    const bp = []; for (const s of [-1, 1]) for (const a of [-0.12, 0, 0.12]) bp.push(s * 0.025, -0.035, -0.08, s * 0.11, -0.03 + a * 0.2, -0.09 + a * 0.1);
+    const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(bp, 3));
+    bas.add(new THREE.LineSegments(bg, new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.7 })));
+    // kuyruk: kızıl halkalı, gür; zincir halinde (her halka bir öncekine bağlı, kıvrılabilir)
+    const kuyruk = new THREE.Group(); kuyruk.position.set(0, 0.24, 0.24); ic.add(kuyruk);
+    let ana = kuyruk; const halkalar = [];
+    for (let i = 0; i < 9; i++) {
+      const p = new THREE.Group(); p.position.set(0, i ? 0.03 : 0, 0); p.rotation.x = i ? 0.09 : 1.0; ana.add(p);
+      kure(0.029 - i * 0.0012, i < 3 ? beyaz : (i >> 1) % 2 ? kizil : beyaz, 0, 0.018, 0, 1, 1.3, 1, p);
+      halkalar.push(p); ana = p;
+    }
+    k.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+    const halka = new THREE.Mesh(new THREE.RingGeometry(1.1, 1.3, 40), new THREE.MeshBasicMaterial({ color: '#3ddc97', transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false }));
+    halka.rotation.x = -Math.PI / 2; halka.position.y = 0.05; halka.visible = false; k.add(halka);
+    Object.assign(k.userData, { ic, bas, bacaklar, kuyruk: halkalar, gozler, halka, faz: Math.random() * 6 });
+    return k;
+  }
+  // her kare: nefes, kuyruk sallama, baş çevirme; koşarken bacaklar salınır
+  function kediCanlandir(k, dt, kosuyor, sinme) {
+    const d = k.userData; if (!d.ic) return;
+    d.faz += dt * (kosuyor ? 14 : 1);
+    const f = d.faz;
+    d.bacaklar.forEach((b, i) => { b.rotation.x = kosuyor ? Math.sin(f + (i % 2 ? Math.PI : 0) + (i > 1 ? Math.PI / 2 : 0)) * 0.7 : 0; });
+    d.kuyruk.forEach((h, i) => { h.rotation.z = Math.sin(f * (kosuyor ? 0.3 : 1.6) - i * 0.5) * (kosuyor ? 0.05 : 0.12); });
+    d.bas.rotation.y = kosuyor ? 0 : Math.sin(f * 0.37) * 0.5;
+    d.ic.scale.y = (sinme ? 0.78 : 1) * (1 + Math.sin(f * 2.2) * (kosuyor ? 0 : 0.015));
+  }
+
   /* ---------- sesler ---------- */
   function sesBaglam() { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; return miyav.c || (miyav.c = new AC()); }
   function kediSesi(guc, pan) {
@@ -255,7 +326,8 @@
     const tur = g.kosu ? 'acik' : g.yer.tur;
     const b = bakis(u, g.kediPoz, tur); g.yatay = b.yatay;
     const parlak = b.isikta ? Math.min(1, b.E / 25) : 0;   // tapetum lucidum: ışık gelirse gözler geri yansıtır
-    g.kedi.userData.gozler.forEach((m) => m.material.color.setRGB(0.45 * parlak, parlak, 0.3 * parlak));
+    g.kedi.userData.gozler.forEach((m) => { const a = m.userData.taban, b = m.userData.parilti, k = parlak; m.material.color.setRGB(a[0] * (1 - k) * 0.35 + b[0] * k, a[1] * (1 - k) * 0.35 + b[1] * k, a[2] * (1 - k) * 0.35 + b[2] * k); });
+    kediCanlandir(g.kedi, dt, !!g.kosu, !g.kosu && g.yer.tur === 'alti');
     // kirpiler: yavaşça dolaşır; ışıkta görülünce tanınır
     for (const kp of g.kirpiler) {
       kp.faz += dt * 0.3; kp.m.position.set(kp.x0 + Math.sin(kp.faz) * 1.5, 0, kp.z0 + Math.cos(kp.faz * 0.7) * 1.5); kp.m.rotation.y = -kp.faz;
@@ -278,6 +350,7 @@
       g.hedef = g.kediPoz.clone().setY(g.kediPoz.y + 0.5);
       if (g.cember) g.cember.visible = false;
       g.kedi.userData.halka.visible = true; kediSesi(1, 0);
+      dispatchEvent(new CustomEvent('kasif-olay', { detail: { olay: 'kurtarma-bulundu', seviye: g.sev } }));
       const nerede = { alti: ' Arabanın altından çıkardın.', agac: ' Ağaçta mahsur kalmış.', cati: ' Çatıya çıkmış!' }[g.yer.tur] || '';
       bildir(`Pamuk bulundu!${nerede} Yanına in (4 m içinde)`, 3000);
       return;
@@ -383,6 +456,10 @@ body.termal #hud::before{content:'TERMAL · beyaz-sıcak';position:absolute;left
     ekGuc() { return K.termal && gorevD && gorevD.tip === 'kurtarma' ? TERMAL_W : 0; },
     kapat() { const p = $('kurtarmaP'); if (p) p.hidden = true; termalDegis(false); const b = $('bTermal'); if (b) b.hidden = true; },
     menuRekor() { const t = ['kolay', 'orta', 'zor'].map((k) => { const r = getir(rekorAnahtar(k)); return r ? `${SEVIYE[k].ad} ${say(r.t, 0)} s` : null; }).filter(Boolean); return t.length ? 'Rekorlar: ' + t.join(' · ') : ''; },
+    kediModel(x, z) {
+      const k = vanKedisi(); k.position.set(x, zeminY(x, z), z); k.rotation.y = Math.random() * 6; gorevGrubu.add(k); return k;
+    },
+    vanKedisi, kediCanlandir,
     yerSayisi() { if (!YERLER) YERLER = yerleriUret(); return YERLER.length; },
   };
 })();

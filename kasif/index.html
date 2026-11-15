@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bu sayfa yalnız Kâşifler Duvarı için Supabase'teki iki fonksiyona bağlanır (kasif/kurulum.sql). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; worker-src 'self'; connect-src 'self' https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/kasif_gonder https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/kasif_liste https://kfpziysmsajqidkzaawh.supabase.co/rest/v1/rpc/sayac_artir; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Kâşif Defteri: Pamuk'un Yolculuğu · Muhsin ENGİN</title>
+  <meta name="description" content="Sitenin bölümlerini birbirine bağlayan hazine avı: Şifre Dairesi'nde şifre çöz, dronla Pamuk'u bul, kargo dronu tasarla, veterinere taşı, Gizli Kod'u kır. Tek başına ya da takımla.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Muhsin ENGİN">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:title" content="Kâşif Defteri: Pamuk'un Yolculuğu">
+  <meta property="og:description" content="Beş bölüm, beş parola, bir kasa. Tek başına ya da takımla.">
+  <meta property="og:url" content="https://muhsinengin.com/kasif/">
+  <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111b1c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="../simge.svg" type="image/svg+xml">
+  <script src="../tema.js"></script>
+  <script src="../ortak/ana-sayfa.js" defer></script>
+  <link rel="stylesheet" href="../ortak/tokenlar.css">
+  <link rel="stylesheet" href="kasif.css">
+  <script src="../ortak/sayac.js" defer></script>
+  <script src="../ortak/gorus-baglanti.js" defer></script>
+  <script src="../ortak/kasif.js" defer></script>
+  <script src="kasif-sayfa.js" defer></script>
+</head>
+<body>
+  <main id="kasifSayfa">
+    <ana-sayfa-dugmesi class="eve"><a href="https://muhsinengin.com/">Ana sayfa</a></ana-sayfa-dugmesi>
+    <p class="kunye">Kâşif Defteri · Bölüm 1</p>
+    <h1>Pamuk'un <span class="ik-alt">yolculuğu</span></h1>
+    <p class="giris">Kahramankazan'da bir akşam, bembeyaz Van kedisi <b>Pamuk</b> kayboldu. Sahibi kapıya şifreli bir not bırakmış. Pamuk'u bulmak, onu taşıyacak dronu tasarlamak, veterinere götürmek ve aşı kartının durduğu dolabı açmak senin elinde. Sitenin beş farklı köşesinde beş görev var; her görev sana bir <b>parola</b> ve bir <b>kasa rakamı</b> verir. Beş rakamı bulan, defterin son sayfasındaki kasayı açar.</p>
+
+    <!-- 1) Başlangıç -->
+    <section id="baslangic" hidden>
+      <h2>Nasıl oynayacaksın?</h2>
+      <fieldset class="secici" id="modSec">
+        <legend>Bir mod seç</legend>
+        <button type="button" data-mod="bireysel" aria-pressed="false">Tek başıma</button>
+        <button type="button" data-mod="kaptan" aria-pressed="false">Takım kaptanıyım</button>
+        <button type="button" data-mod="uye" aria-pressed="false">Takım üyesiyim</button>
+      </fieldset>
+      <div class="mod-aciklama" data-ac="bireysel" hidden>
+        <p>Beş görevi de kendin yaparsın. Süren defteri açtığın anda başlar, kasayı açtığında durur. Parolaları arkadaşından alamazsın: her pul, görevi bu cihazda bitirince yapışır.</p>
+        <label class="alan" for="adBireysel">Takma adın <span class="zorunlu">zorunlu</span></label>
+        <input id="adBireysel" maxlength="24" autocomplete="off" placeholder="ör. GeceKuşu">
+      </div>
+      <div class="mod-aciklama" data-ac="kaptan" hidden>
+        <p>Süreyi senin cihazın tutar ve kasayı sen açarsın. İşi bölüşün: arkadaşların kendi cihazlarında <b>Takım üyesiyim</b> modunu açar, görevleri yapar ve buldukları parolayı sana söyler; sen deftere yazarsın. Önerilen roller: <b>kriptograf</b> (1. ve 5. görev), <b>pilot</b> (2. ve 4.), <b>mühendis</b> (3.).</p>
+        <label class="alan" for="takimAdi">Takım adı <span class="zorunlu">zorunlu</span></label>
+        <input id="takimAdi" maxlength="24" autocomplete="off" placeholder="ör. Kaldera Kartalları">
+        <label class="alan" for="uyeler">Üyelerin takma adları <span class="istege">virgülle, en çok 5</span></label>
+        <input id="uyeler" maxlength="130" autocomplete="off" placeholder="ör. Ece, Arda, Mert">
+      </div>
+      <div class="mod-aciklama" data-ac="uye" hidden>
+        <p>Görevleri kendi cihazında yap. Bir görevi bitirince parola ekranda belirir: onu <b>takım kaptanına söyle</b>. Süreyi ve kasayı kaptan tutar.</p>
+        <label class="alan" for="takimAdiUye">Takımının adı <span class="istege">isteğe bağlı</span></label>
+        <input id="takimAdiUye" maxlength="24" autocomplete="off">
+      </div>
+      <p class="kucuk"><strong>Gerçek adını yazma.</strong> Takma ad yeter. Defter yalnız bu tarayıcıda saklanır.</p>
+      <button class="ana-dugme" type="button" id="baslat" disabled>Defteri aç, süre başlasın</button>
+      <p class="geri-bildirim" id="baslatHata" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- 2) Defter -->
+    <section id="defter" hidden>
+      <div class="defter-ust">
+        <div>
+          <p class="kunye" id="kimlik"></p>
+          <p class="ilerleme"><b id="ilerleme">0/5</b> parça · süre <b id="sure" class="num">0:00</b></p>
+        </div>
+        <div class="pullar" id="pullar" aria-hidden="true"></div>
+      </div>
+
+      <ol class="istasyonlar" id="istasyonlar"></ol>
+
+      <div class="parola-kutu">
+        <label class="alan" for="parola" id="parolaEtiket">Parola yaz</label>
+        <div class="satir">
+          <input id="parola" maxlength="20" autocomplete="off" autocapitalize="characters">
+          <button type="button" id="parolaGonder">Deftere yaz</button>
+        </div>
+        <p class="geri-bildirim" id="parolaSonuc" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="kasa" id="kasa">
+        <h2>Aşı kartının kasası</h2>
+        <p id="kasaNot">Beş kasa rakamını görevlerin sırasıyla (1'den 5'e) yaz.</p>
+        <div class="satir">
+          <input id="kasaKod" inputmode="numeric" maxlength="5" autocomplete="off" aria-label="Beş haneli kasa şifresi" placeholder="• • • • •">
+          <button type="button" id="kasaAc">Kasayı aç</button>
+        </div>
+        <p class="geri-bildirim" id="kasaSonuc" role="status" aria-live="polite"></p>
+      </div>
+
+      <section class="final" id="final" hidden>
+        <p class="damga" aria-hidden="true">AÇILDI</p>
+        <h2 tabindex="-1" id="finalBaslik">Pamuk evinde!</h2>
+        <p id="finalMetin"></p>
+        <button class="ana-dugme" type="button" id="duvaraYaz">Kâşifler Duvarı'na yaz</button>
+        <p class="geri-bildirim" id="duvarSonuc" role="status" aria-live="polite"></p>
+      </section>
+
+      <p class="kucuk"><button type="button" class="metin-dugme" id="sifirla">Defteri sıfırla</button> (bu cihazdaki ilerleme silinir)</p>
+    </section>
+
+    <!-- 3) Duvar -->
+    <section class="duvar" aria-labelledby="duvarBaslik">
+      <h2 id="duvarBaslik">Kâşifler Duvarı</h2>
+      <p class="kucuk">Bölüm 1'i en hızlı bitirenler. İsimler öğretmen onayından sonra görünür.</p>
+      <div class="duvar-izgara">
+        <div><h3>Tek başına</h3><ol id="duvarBireysel"><li class="bos">Yükleniyor…</li></ol></div>
+        <div><h3>Takımlar</h3><ol id="duvarTakim"><li class="bos">Yükleniyor…</li></ol></div>
+      </div>
+    </section>
+
+    <details class="aciklama">
+      <summary>Öğretmen için: sınıfta nasıl oynatılır?</summary>
+      <ul>
+        <li><b>Süre:</b> takımla bir ders saati (40 dk) yetecek biçimde tasarlandı; tek başına 45–70 dakika sürer.</li>
+        <li><b>Takım (3–5 kişi):</b> kaptan bir cihazda defteri açar, üyeler kendi cihazlarında "Takım üyesiyim" modunu açar. Görevler aynı anda yapılabilir; yalnız 1. görevin notu her cihazın defterinde görünür.</li>
+        <li><b>Tek başına:</b> ödev ya da kulüp etkinliği olarak. Parolalar elle yazılamaz (ilki hariç); görev o cihazda bitince pul kendiliğinden yapışır.</li>
+        <li><b>Öğrettikleri:</b> Sezar şifresi ve kaba kuvvet, ışığın uzaklıkla zayıflaması (E = I/d²), sesin desibeli, itki/ağırlık ve yükün güce etkisi, bilgi kuramıyla tahmin stratejisi.</li>
+        <li><b>Duvar:</b> gönderilen adlar görüş panelinde onayınızı bekler.</li>
+      </ul>
+    </details>
+  </main>
+</body>
+</html>

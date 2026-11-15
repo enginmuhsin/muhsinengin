@@ -38,7 +38,29 @@
         : 'Veri alınamadı: ' + r.error.message;
       return;
     }
-    veri = r.data || []; ciz();
+    veri = r.data || []; ciz(); kasifYukle();
+  }
+
+  /* Kâşifler Duvarı onayı (kasif/kurulum.sql) */
+  async function kasifYukle() {
+    var kutu = $('kasifListe'); kutu.textContent = '';
+    var r = await sb.rpc('kasif_yonetim');
+    if (r.error) { kutu.append(el('p', 'bos', /kasif_yonetim|function/.test(r.error.message) ? 'Duvar henüz kurulmamış: kasif/kurulum.sql dosyasını Supabase SQL Editor\'da çalıştır.' : 'Veri alınamadı: ' + r.error.message)); return; }
+    var l = r.data || [];
+    if (!l.length) { kutu.append(el('p', 'bos', 'Henüz gönderim yok.')); return; }
+    l.forEach(function (d) {
+      var k = el('article', 'gorus' + (d.onay ? '' : ' okunmamis')), ust = el('div', 'ust');
+      var s = d.sure, sure = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+      ust.append(el('b', null, new Date(d.zaman).toLocaleString('tr-TR', { dateStyle: 'medium', timeStyle: 'short' })), el('span', null, d.tur === 'takim' ? 'Takım' : 'Tek başına'), el('span', null, 'süre ' + sure), el('span', 'yol', d.bolum));
+      var islem = el('div', 'islem');
+      var onay = el('button', d.onay ? 'ikincil' : '', d.onay ? 'Onayı kaldır' : 'Onayla');
+      onay.onclick = async function () { var x = await sb.rpc('kasif_onay', { p_id: d.id, p_onay: !d.onay }); if (!x.error) kasifYukle(); };
+      var sil = el('button', 'ikincil', 'Sil');
+      sil.onclick = async function () { if (sil.dataset.emin !== '1') { sil.dataset.emin = '1'; sil.textContent = 'Emin misin?'; return; } var x = await sb.rpc('kasif_sil', { p_id: d.id }); if (!x.error) kasifYukle(); };
+      islem.append(onay, sil);
+      k.append(ust, el('p', 'mesaj', d.ad + (d.uyeler ? ' · ' + d.uyeler : '')), islem);
+      kutu.append(k);
+    });
   }
 
   function tas(sayi, yazi) { var d = el('div', 'tas'); d.append(el('b', null, sayi), el('span', null, yazi)); return d; }

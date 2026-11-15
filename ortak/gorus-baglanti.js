@@ -25,4 +25,10 @@
   y.src = '/ortak/yenilikler.js';
   y.defer = true;
   document.head.appendChild(y);
+
+  // Kâşif Defteri: bölümler arası hazine avı (ortak/kasif.js)
+  var k = document.createElement('script');
+  k.src = '/ortak/kasif.js';
+  k.defer = true;
+  document.head.appendChild(k);
 })();

@@ -23,6 +23,18 @@
 
   var YENILIKLER = [
     {
+      id: 'kasif-defteri-b1', tarih: '2026-11-15',
+      baslik: 'Kâşif Defteri: Pamuk\'un yolculuğu',
+      metin: 'Sitenin bölümlerini birbirine bağlayan hazine avı: Şifre Dairesi\'nde notu çöz, dronla Pamuk\'u bul, kargo dronu tasarla, veterinere taşı, Gizli Kod\'u kır. Tek başına ya da takımla; en hızlılar Kâşifler Duvarı\'na.',
+      adres: '/kasif/', sayfalar: ['/kriptoloji/', '/dron-ucus/', '/dron-lab/', '/dron/', '/zeka-oyunlari/']
+    },
+    {
+      id: 'kargo-van-kedisi', tarih: '2026-11-15', oneri: true,
+      baslik: 'Kargo dronu görevi ve Van kedisi Pamuk',
+      metin: 'Yeni görev: ilaç paketini, kitap kolisini ve taşıma kutusundaki Pamuk\'u yerlerine götür; her yük dronu ağırlaştırır. Pamuk artık bacaklı, kızıl kuyruklu, bir gözü mavi bir gözü kehribar bir Van kedisi.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/', '/dron/']
+    },
+    {
       id: 'pamuk-2', tarih: '2026-11-15', oneri: true,
       baslik: 'Pamuk artık her yere saklanıyor',
       metin: 'Gece arama-kurtarmada kedi 185 farklı yerden birine saklanıyor: araba altı, ağaç dalı, apartman çatısı… Gürültüden ürküp kaçabiliyor. Komşu ihbarı çemberi, termal kamera (I tuşu), 4 seviye, Günün Kedisi ve rekorlar eklendi.',

@@ -66,6 +66,7 @@
         api.dallanma(1296);
         st.S = st.S.filter((s) => geri(k, KODLAR[s]) === f);
         matCiz({ onceki, sonra: st.S.length });
+        if (f === 40 && !sessiz && st.mod !== 'bilgisayar') dispatchEvent(new CustomEvent('kasif-olay', { detail: { olay: 'gizlikod-cozuldu', tahmin: st.satir.length } }));   // ortak/kasif.js
         if (f === 40) { st.bitti = true; api.bitti(st.mod === 'bilgisayar' ? `Bilgisayar ${st.satir.length} tahminde buldu.` : `Buldun! ${st.satir.length} tahmin.`); }
         else if (st.satir.length >= 10) { st.bitti = true; api.bitti('10 tahmin bitti. Kod: ' + st.gizli.map((c) => AD[c]).join(', '), true); }
         if (st.mod === 'gunluk') api.yaz('mm.gunluk', { gun: st.gun, tahminler: st.satir.map((x) => x.k) });
