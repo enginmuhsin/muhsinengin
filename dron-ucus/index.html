@@ -186,6 +186,9 @@ body.dokun #gazG{top:38%}
 body.dokun #ok{top:calc(150px + env(safe-area-inset-top,0px))}
 body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe-area-inset-top,0px))}
 @media (max-width:620px){
+  .dugmeler{left:calc(8px + env(safe-area-inset-left,0px));right:calc(8px + env(safe-area-inset-right,0px));overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+  .dugmeler::-webkit-scrollbar{display:none}
+  .dugmeler button{flex:none}
   #gorevP{top:calc(64px + env(safe-area-inset-top,0px));max-width:calc(100vw - 24px);padding:9px 12px}
   #gorevP .hedef{font-size:13px}
   #telem,body.dokun #telem{top:calc(184px + env(safe-area-inset-top,0px));bottom:auto;font-size:11px;padding:7px 10px;gap:2px 10px}
@@ -194,6 +197,22 @@ body.dokun.fizikAcik #fizikP{display:block;bottom:auto;top:calc(150px + env(safe
   #gazG .kolon{height:130px}
   .dugmeler button{padding:0 7px;font-size:12.5px}
   body.dokun.fizikAcik #fizikP{top:auto;bottom:calc(190px + env(safe-area-inset-bottom,0px))}
+}
+
+/* telefon yan tutulunca (alçak ekran): üst düğmeler küçülüp sağa sarılır, gaz göstergesi sol kolun yanına iner,
+   telemetri sağ kolun üstünde kalır; fener paneli iki kolun arasında alttadır (fener.js). Hiçbir şey kollarla çakışmaz. */
+@media (orientation:landscape) and (max-height:560px){
+  .dugmeler{gap:3px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 340px - env(safe-area-inset-left,0px))}
+  .dugmeler button{min-height:30px;padding:0 8px;font-size:12px}
+  #gorevP{max-width:300px;padding:7px 10px}
+  #gorevP .hedef{font-size:12.5px;margin-top:2px}
+  #gorevP .ilerleme{font-size:11.5px;margin-top:4px;gap:8px}
+  #gazG,body.dokun #gazG{top:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:calc(182px + env(safe-area-inset-left,0px));transform:none;padding:6px 5px;width:38px}
+  #gazG .kolon,body.dokun #gazG .kolon{height:86px}
+  body.dokun #telem{top:calc(84px + env(safe-area-inset-top,0px));font-size:10.5px;padding:5px 8px;gap:1px 8px}
+  body.dokun #ok{top:calc(96px + env(safe-area-inset-top,0px))}
+  .kol{width:136px;height:136px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  #bildirim{top:42%;font-size:clamp(18px,3.2vw,26px)}
 }
 
 /* ---------- SONUÇ KARTI ---------- */
@@ -1802,7 +1821,7 @@ function baslat() {
   kameraAni = true;
   if (g.tip !== 'tunel' && g.tip !== 'kurtarma' && !EK[g.tip]) bildir(dokunmatik ? 'İki kolu içe-aşağı indir: otomatik kalkış' : (ayar.mod === 'kolay' ? 'W ile yüksel' : 'W ile gazı aç') + ' · T: otomatik kalkış', 2000);
   ek(g.tip, 'basla', g);
-  FENER.sifirla(g.tip);
+  FENER.sifirla(g.tip); FENER.ac(true, true);   // her görev fener açık başlar
   zamanUygula(g.tip === 'kurtarma');
   if (geceAcik && g.tip !== 'kurtarma') setTimeout(() => { if (durum === 'ucus') bildir(g.tip === 'kurtarma' ? 'Fenerin aşağı bakıyor. Pamuk\'u ışık izinle ara.' : 'Akşam uçuşu: yeşil ışıklar dronun önü, kırmızılar arkası', 2600); }, 1800);
 }

@@ -1,5 +1,5 @@
 /* Dron Uçuş Simülatörü çevrimdışı önbelleği (Oyun Salonu ile aynı yöntem). */
-const SURUM = 'ucus-v22';
+const SURUM = 'ucus-v23';
 const DOSYALAR = ['./', 'index.html', 'ek-gorevler.js', 'kurtarma.js', 'tasima.js', 'hastane-gorev.js', 'fener.js', 'sehir.js', 'cami.js', 'okul.js', 'okul-gorev.js', 'ornek-kayit.csv', 'manifest.webmanifest', '../dron-lab/hesap.js', '../dron-lab/gorunum.js', '../ortak/kutuphane/three-r128.min.js', '../simge.svg'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(SURUM).then((c) => c.addAll(DOSYALAR.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x.startsWith('ucus-') && x !== SURUM).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });

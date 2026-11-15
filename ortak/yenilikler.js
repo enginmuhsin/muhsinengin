@@ -23,6 +23,12 @@
 
   var YENILIKLER = [
     {
+      id: 'fener-yatay', tarih: '2026-11-15',
+      baslik: 'Telefon yan tutulunca rahat kumanda; fener aç/kapa ve katlanır fener paneli',
+      metin: 'Simülatörde telefonu yan tuttuğunda fener paneli artık iki kolun arasına, ekranın altına yerleşiyor; sağ kol serbest. Fener panelini başlığına dokunarak gizleyip açabilirsin, "Işık" düğmesiyle (klavyede H) feneri tamamen kapatabilirsin. Fener kapalıyken Pamuk\'u termal kamerayla (G) arayabilirsin. Üst düğmeler, gaz göstergesi ve telemetri de yan ekrana göre küçüldü.',
+      adres: '/dron-ucus/', sayfalar: ['/dron-ucus/']
+    },
+    {
       id: 'sehir-cami', tarih: '2026-11-15',
       baslik: 'Şehre selatin camii ve mahya; Pamuk yenilendi',
       metin: 'Gençlik Parkı\'nın batısında Süleymaniye örnek alınarak yapılmış büyük bir cami var: 24 pencereli kasnağıyla ana kubbe, yarım kubbeler, dört minare (şerefeleri gece yanar), kubbeli revaklarıyla avlu, şadırvan ve taçkapı. Minareler arasındaki mahyada Yunus Emre\'nin sözü yazıyor: "İLİM İLİM BİLMEKTİR, İLİM KENDİN BİLMEKTİR". En güzel hâli gece, doğudan bakınca! Van kedisi Pamuk da yenilendi: bembeyaz, iri iki renkli gözlü, kırmızı tasmalı. Artık uzaktan kaplana benzemiyor.',
@@ -173,11 +179,40 @@
     '.yn-not .yn-ust{margin-bottom:.25rem}' +
     '.yn-not a{color:var(--murekkep,#1f3a8a);font-weight:600}' +
     '.yn-kapat{position:absolute;top:2px;right:2px;width:44px;height:44px;border:0;background:none;color:inherit;font-size:1.3rem;cursor:pointer}' +
-    '@media (prefers-reduced-motion:reduce){.yn-not{transition:none}}';
+    '@media (prefers-reduced-motion:reduce){.yn-not{transition:none}}' +
+    /* telefon yan tutulunca (ör. simülatörde kollar varken) not ekranın üst ortasında küçük bir şerit olur */
+    '@media (orientation:landscape) and (max-height:560px){.yn-not{left:50%;right:auto;top:calc(6px + env(safe-area-inset-top,0px));bottom:auto;max-width:min(420px,calc(100vw - 360px));padding:.4rem 2.4rem .45rem .75rem;font-size:12.5px;transform:translate(-50%,-10px)}.yn-not.acik{transform:translate(-50%,0)}.yn-not .yn-govde,.yn-not .yn-ust{display:none}.yn-not b{display:inline;font-size:.95rem;margin-right:.4em}.yn-kapat{width:36px;height:36px}}' +
+    /* Yenilikler sekmesi: diğer sekmelerden ayrışan renk; yeni güncelleme varken yanıp söner */
+    '.yn-sekme{background:linear-gradient(135deg,#d6303f,#f08a24)!important;color:#fff!important;font-weight:700!important;text-decoration:none!important;box-shadow:0 1px 4px rgba(214,48,63,.35)}' +
+    '.yn-sekme:hover,.yn-sekme:focus-visible{filter:brightness(1.08);color:#fff!important}' +
+    '.yn-sekme .yn-sayi{background:#fff;color:#c0392b}' +
+    '.yn-sekme .yn-imlec{background:#fff}' +
+    '.yn-sekme.yn-yanip{animation:ynSekme 1.1s ease-in-out infinite}' +
+    '@keyframes ynSekme{0%,100%{box-shadow:0 0 0 0 rgba(240,138,36,.0);filter:none}50%{box-shadow:0 0 0 6px rgba(240,138,36,.45);filter:brightness(1.25)}}' +
+    '.yn-nokta{position:absolute;top:4px;right:4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#d6303f;color:#fff;font:700 10px/16px var(--mono,monospace);text-align:center;box-shadow:0 0 0 2px var(--kagit,#fff)}' +
+    '.yn-yanip .yn-nokta,.yn-nokta.yn-yanip{animation:ynImlec 1s steps(1,end) infinite}' +
+    '@media (prefers-reduced-motion:reduce){.yn-sekme.yn-yanip,.yn-nokta.yn-yanip{animation:none}}';
   function stilEkle() { if (document.getElementById('ynStil')) return; var s = el('style'); s.id = 'ynStil'; s.textContent = STIL; document.head.appendChild(s); }
 
   var yol = location.pathname.replace(/index\.html$/, '');
   var g = gorulenler();
+
+  /* Yanıp sönme kuralı: yeni bir güncelleme yayımlanınca ziyaretçi sitesine her GELİŞİNDE (oturum başına bir kez
+     sayılır) sekme yanıp söner. Ya Yenilikler sayfasını açınca ya da YANIP_ZIYARET kez geldikten sonra yanıp sönme
+     durur; sekme yine renkli kalır ve "yeni" sayısını gösterir. Böylece haber kaçmaz ama sürekli göz de yormaz.
+     Sayaç her yeni güncellemede sıfırlanır. Her şey ziyaretçinin kendi tarayıcısında tutulur. */
+  var YANIP_ZIYARET = 5, ZANAHTAR = 'me.yenilik.ziyaret';
+  var enYeni = (YENILIKLER.filter(function (y) { return yeniMi(y, g); })[0] || {}).id;
+  var ziyaret = (function () {
+    var z; try { z = JSON.parse(localStorage.getItem(ZANAHTAR)) || {}; } catch (e) { z = {}; }
+    if (!enYeni) return z;
+    if (z.son !== enYeni) { z = { son: enYeni, n: 0 }; }
+    var yeniOturum = true; try { yeniOturum = !sessionStorage.getItem(ZANAHTAR); sessionStorage.setItem(ZANAHTAR, '1'); } catch (e) { /* */ }
+    if (yeniOturum) z.n = (z.n || 0) + 1;
+    try { localStorage.setItem(ZANAHTAR, JSON.stringify(z)); } catch (e) { /* */ }
+    return z;
+  })();
+  var yanip = !!enYeni && (ziyaret.n || 0) <= YANIP_ZIYARET;
 
   // 1) Yenilikler sayfası: hepsini listele, sonra hepsini "görüldü" say
   var tam = document.getElementById('yenilikListesi');
@@ -197,15 +232,25 @@
     stilEkle();
     if (kisa) { var u2 = el('ul', 'yn-liste'); var sonGun = YENILIKLER.filter(function (y) { return y.tarih === YENILIKLER[0].tarih; });   // en son günün hepsi, en az 3 duyuru
       (sonGun.length >= 3 ? sonGun : YENILIKLER.slice(0, 3)).forEach(function (y) { u2.appendChild(maddeYap(y, yeniMi(y, g))); }); kisa.appendChild(u2); }
-    if (yeniSayi) document.querySelectorAll('[data-yenilik-sayi]').forEach(function (a) {
+    document.querySelectorAll('[data-yenilik-sayi]').forEach(function (a) {
+      a.classList.add('yn-sekme');                        // her zaman ayrışan renk
+      if (!yeniSayi) return;
       var s = el('span', 'yn-sayi', String(yeniSayi)); s.setAttribute('aria-label', yeniSayi + ' yeni'); a.appendChild(s);
-      // yanıp sönen kırmızı imleç: yeni bir şey var, gidip bak (Yenilikler sayfası açılınca söner)
-      var i = el('span', 'yn-imlec'); i.setAttribute('aria-hidden', 'true'); a.appendChild(i);
-      a.classList.add('yn-canli'); a.title = yeniSayi + ' yeni güncelleme var';
+      a.title = yeniSayi + ' yeni güncelleme var';
+      if (yanip) {                                       // ilk ziyaretlerde yanıp söner, imleç atar
+        var i = el('span', 'yn-imlec'); i.setAttribute('aria-hidden', 'true'); a.appendChild(i);
+        a.classList.add('yn-canli', 'yn-yanip');
+      }
     });
+    // telefonda menü kapalıyken sekme görünmez: "Menü" düğmesine de sayı rozeti
+    var mb = document.querySelector('.mc-menu');
+    if (yeniSayi && mb && !mb.querySelector('.yn-nokta')) {
+      if (getComputedStyle(mb).position === 'static') mb.style.position = 'relative';
+      var n = el('span', 'yn-nokta' + (yanip ? ' yn-yanip' : ''), String(yeniSayi)); n.setAttribute('aria-label', yeniSayi + ' yeni güncelleme'); mb.appendChild(n);
+    }
     // ana sayfadaki "Son yenilikler" başlığına da aynı imleç
     var bas = document.getElementById('yenilikBaslik');
-    if (yeniSayi && bas && !bas.querySelector('.yn-imlec')) { var i2 = el('span', 'yn-imlec'); i2.setAttribute('aria-hidden', 'true'); bas.appendChild(i2); }
+    if (yeniSayi && yanip && bas && !bas.querySelector('.yn-imlec')) { var i2 = el('span', 'yn-imlec'); i2.setAttribute('aria-hidden', 'true'); bas.appendChild(i2); }
     return;
   }
 
@@ -215,12 +260,13 @@
   })[0];
   if (!ilgili) return;
   stilEkle();
+  var alcak = matchMedia('(orientation:landscape) and (max-height:560px)').matches;   // telefon yan: kısa not
   var not = el('aside', 'yn-not'); not.setAttribute('role', 'status'); not.setAttribute('aria-label', 'Yenilik');
   var ust = el('p', 'yn-ust'); ust.appendChild(el('span', 'yn-yeni', 'yeni'));
   if (ilgili.oneri) ust.appendChild(el('span', 'yn-oneri', 'Öğrenci önerisiyle'));
   not.appendChild(ust);
   not.appendChild(el('b', null, ilgili.baslik));
-  not.appendChild(document.createTextNode(ilgili.metin + ' '));
+  not.appendChild(el('span', 'yn-govde', ilgili.metin + ' '));
   var tum = el('a', null, 'Bütün yenilikler →'); tum.href = '/yenilikler/'; not.appendChild(tum);
   var kapat = el('button', 'yn-kapat', '×'); kapat.type = 'button'; kapat.setAttribute('aria-label', 'Notu kapat');
   function kapa() { not.classList.remove('acik'); setTimeout(function () { not.remove(); }, 400); }
@@ -229,5 +275,5 @@
   document.body.appendChild(not);
   requestAnimationFrame(function () { requestAnimationFrame(function () { not.classList.add('acik'); }); });
   gorulduYap([ilgili.id]);         // bir kez gösterilir; tekrar açılınca çıkmaz
-  setTimeout(kapa, 15000);
+  setTimeout(kapa, alcak ? 7000 : 15000);
 })();
