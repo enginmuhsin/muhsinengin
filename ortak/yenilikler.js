@@ -23,6 +23,24 @@
 
   var YENILIKLER = [
     {
+      id: 'haftanin-sorulari-2026-H48', tarih: '2026-11-23',
+      baslik: 'Haftanın Soruları: Ekok eksi ebob ve Çevrel çember ve iç merkez',
+      metin: 'Bu haftanın iki olimpiyat sorusu yayında: matematikte "Ekok eksi ebob", geometride "Çevrel çember ve iç merkez" (★★★, lise). İpuçlarına bakarak çözmeyi dene; çözümler 29 Kasım Pazar akşamı yayımlanacak.',
+      adres: 'https://masterclass.muhsinengin.com/hafta/', sayfalar: []
+    },
+    {
+      id: 'haftanin-sorulari-her-pazartesi', tarih: '2026-11-23',
+      baslik: 'Her pazartesi yeni matematik ve geometri olimpiyat soruları',
+      metin: 'Haftanın Soruları\'nda her pazartesi bir matematik ve bir geometri olimpiyat sorusu yayımlanıyor; çözümü pazar akşamı geliyor. Yeni soruları her hafta buradan da duyuracağız. Eski sorular arşivde duruyor.',
+      adres: 'https://masterclass.muhsinengin.com/hafta/', sayfalar: []
+    },
+    {
+      id: 'pikram-yayinda', tarih: '2026-11-23',
+      baslik: 'PİKRAM yayında: öğretmen ve öğrencilerin hizmetinde',
+      metin: 'Bilim projesi yazım asistanı PİKRAM bu hafta yayına alındı ve öğretmen ve öğrencilerin kullanımına açıldı. Proje fikrini adım adım yazıya dökmek için pikram.muhsinengin.com adresini ziyaret et.',
+      adres: 'https://pikram.muhsinengin.com/', sayfalar: []
+    },
+    {
       id: 'fener-yatay', tarih: '2026-11-15',
       baslik: 'Telefon yan tutulunca rahat kumanda; fener aç/kapa ve katlanır fener paneli',
       metin: 'Simülatörde telefonu yan tuttuğunda fener paneli artık iki kolun arasına, ekranın altına yerleşiyor; sağ kol serbest. Fener panelini başlığına dokunarak gizleyip açabilirsin, "Işık" düğmesiyle (klavyede H) feneri tamamen kapatabilirsin. Fener kapalıyken Pamuk\'u termal kamerayla (G) arayabilirsin. Üst düğmeler, gaz göstergesi ve telemetri de yan ekrana göre küçüldü.',
